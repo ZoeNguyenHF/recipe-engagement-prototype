@@ -1575,7 +1575,7 @@
             </div>
 
             {/* Edit quantities section */}
-            <div style={{ padding: '0 16px 24px' }}>
+            <div style={{ padding: '0 16px 40px' }}>
               <div style={{
                 fontFamily: 'var(--font-body)',
                 fontSize: 'var(--fs-md)',
@@ -1817,7 +1817,7 @@
             </div>
 
             {/* Tastes even better with section */}
-            <div style={{ padding: '0 16px 24px' }}>
+            <div style={{ padding: '0 16px 40px' }}>
               <div style={{
                 fontFamily: 'var(--font-body)',
                 fontSize: 'var(--fs-md)',
@@ -2109,7 +2109,7 @@
                 zIndex: 5,
               }}>
                 {/* Scrollable content inside white card */}
-                <div className="scroll-area" style={{ flex: 1, overflowY: 'auto', padding: '24px 16px 0' }}>
+                <div className="scroll-area" style={{ flex: 1, overflowY: 'auto', padding: '24px 16px 100px' }}>
                     {/* Title */}
                     <h1 style={{
                       fontFamily: 'var(--font-headline)',
@@ -2144,6 +2144,11 @@
                           <path d="M9 12l2 2 4-4"/>
                         </svg>
                       ), title: 'More Nutritious', desc: 'Typically contains higher levels of Omega-3 fatty acids and essential antioxidants.' },
+                      { icon: (
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                        </svg>
+                      ), title: 'Placeholder Title', desc: 'Placeholder description text goes here.' },
                     ].map((benefit, i) => (
                       <div key={i} style={{
                         display: 'flex',
@@ -2176,8 +2181,13 @@
 
               {/* Bottom CTA */}
               <div style={{
+                position: 'absolute',
+                bottom: 0,
+                left: 0,
+                right: 0,
                 padding: '16px',
                 paddingBottom: 8,
+                zIndex: 10,
               }}>
                 <button
                   onClick={() => setShowOrganicInfo(false)}

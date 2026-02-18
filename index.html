@@ -700,6 +700,35 @@
 
     // ========== PRODUCT CARD ==========
     function ProductCard({ meal, quantity, onAdd, onRemove }) {
+      const [isEditing, setIsEditing] = useState(false);
+      const editTimeoutRef = useRef(null);
+
+      const handleAdd = () => {
+        onAdd();
+        setIsEditing(true);
+        // Auto-hide stepper after 3 seconds of inactivity
+        if (editTimeoutRef.current) clearTimeout(editTimeoutRef.current);
+        editTimeoutRef.current = setTimeout(() => setIsEditing(false), 3000);
+      };
+
+      const handleRemove = () => {
+        onRemove();
+        // Reset timeout
+        if (editTimeoutRef.current) clearTimeout(editTimeoutRef.current);
+        editTimeoutRef.current = setTimeout(() => setIsEditing(false), 3000);
+      };
+
+      const handleBadgeClick = () => {
+        setIsEditing(true);
+        if (editTimeoutRef.current) clearTimeout(editTimeoutRef.current);
+        editTimeoutRef.current = setTimeout(() => setIsEditing(false), 3000);
+      };
+
+      // Close editing when quantity becomes 0
+      useEffect(() => {
+        if (quantity === 0) setIsEditing(false);
+      }, [quantity]);
+
       return (
         <div style={{
           background: 'var(--color-elevation-bg)',
@@ -715,7 +744,7 @@
             overflow: 'hidden',
             position: 'relative',
             background: '#e8dcd0',
-            borderRadius: 'var(--radius-md)',
+            borderRadius: '0 6px 0 8px',
           }}>
             {meal.video ? (
               <video
@@ -724,13 +753,13 @@
                 loop
                 muted
                 playsInline
-                style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 'var(--radius-md)' }}
+                style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '0 6px 0 8px' }}
               />
             ) : (
               <img
                 src={meal.img}
                 alt={meal.name}
-                style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 'var(--radius-md)' }}
+                style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '0 6px 0 8px' }}
                 onError={(e) => { e.target.style.display = 'none'; }}
               />
             )}
@@ -748,12 +777,12 @@
                 <span style={{
                   display: 'inline-flex',
                   alignItems: 'center',
-                  padding: '2px 6px',
+                  padding: '3px 8px',
                   borderRadius: 'var(--radius-tag-rect)',
                   background: meal.label === 'Premium' ? '#232323' : ((meal.label === 'New' || meal.label === 'Bestseller') ? 'var(--color-brand-green-500)' : 'var(--color-tag-static-bg-v1)'),
                   color: 'white',
                   fontFamily: 'var(--font-body)',
-                  fontSize: 9,
+                  fontSize: 10,
                   fontWeight: 700,
                   lineHeight: 1.2,
                   textTransform: 'uppercase',
@@ -761,49 +790,79 @@
               </div>
             )}
 
-            {/* Number stepper */}
-            <div style={{ position: 'absolute', top: 8, right: 8 }}>
+            {/* Quantity control */}
+            <div style={{ position: 'absolute', top: 0, right: 0 }}>
               {quantity === 0 ? (
-                <button onClick={onAdd} style={{
+                /* State 1: Not selected - show plus button */
+                <button onClick={handleAdd} style={{
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   width: 36,
                   height: 36,
-                  padding: 10,
                   background: 'var(--color-stepper-bg)',
-                  border: '1px solid var(--color-stepper-border)',
-                  borderRadius: 'var(--radius-stepper)',
+                  borderLeft: '1px solid var(--color-stepper-border)',
+                  borderBottom: '1px solid var(--color-stepper-border)',
+                  borderTop: 'none',
+                  borderRight: 'none',
+                  borderRadius: '0 6px 0 8px',
                   cursor: 'pointer',
                 }}>
-                  {Icons.plus(14, 'var(--color-neutral-fg-darkest)')}
+                  {Icons.plus(16, 'var(--color-neutral-fg-darkest)')}
                 </button>
-              ) : (
+              ) : isEditing ? (
+                /* State 2: Editing - show full stepper */
                 <div style={{
                   display: 'flex',
                   alignItems: 'center',
-                  background: 'var(--color-stepper-selected-bg)',
-                  border: '1px solid var(--color-stepper-border)',
-                  borderRadius: 'var(--radius-stepper)',
+                  background: 'var(--color-brand-primary)',
+                  borderLeft: '1px solid var(--color-stepper-border)',
+                  borderBottom: '1px solid var(--color-stepper-border)',
+                  borderTop: 'none',
+                  borderRight: 'none',
+                  borderRadius: '0 6px 0 8px',
                   overflow: 'hidden',
                 }}>
-                  <button onClick={onRemove} style={{
+                  <button onClick={handleRemove} style={{
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    width: 28, height: 36, background: 'transparent', border: 'none', cursor: 'pointer',
+                    width: 32, height: 34, background: 'transparent', border: 'none', cursor: 'pointer',
                   }}>
-                    {Icons.minus(14, 'var(--color-neutral-fg-darkest)')}
+                    {Icons.minus(16, 'var(--color-neutral-fg-darkest)')}
                   </button>
                   <span style={{
-                    width: 18, textAlign: 'center',
-                    fontFamily: 'var(--font-body)', fontSize: 'var(--fs-xs)', fontWeight: 700,
+                    width: 20, textAlign: 'center',
+                    fontFamily: 'var(--font-body)', fontSize: 'var(--fs-sm)', fontWeight: 700,
+                    color: 'var(--color-neutral-fg-darkest)',
                   }}>{quantity}</span>
-                  <button onClick={onAdd} style={{
+                  <button onClick={handleAdd} style={{
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    width: 28, height: 36, background: 'transparent', border: 'none', cursor: 'pointer',
+                    width: 32, height: 34, background: 'transparent', border: 'none', cursor: 'pointer',
                   }}>
-                    {Icons.plus(14, 'var(--color-neutral-fg-darkest)')}
+                    {Icons.plus(16, 'var(--color-neutral-fg-darkest)')}
                   </button>
                 </div>
+              ) : (
+                /* State 3: Selected but not editing - show quantity badge */
+                <button onClick={handleBadgeClick} style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  width: 36,
+                  height: 36,
+                  background: 'var(--color-brand-primary)',
+                  borderLeft: '1px solid var(--color-stepper-border)',
+                  borderBottom: '1px solid var(--color-stepper-border)',
+                  borderTop: 'none',
+                  borderRight: 'none',
+                  borderRadius: '0 6px 0 8px',
+                  cursor: 'pointer',
+                  fontFamily: 'var(--font-body)',
+                  fontSize: 'var(--fs-sm)',
+                  fontWeight: 700,
+                  color: 'var(--color-neutral-fg-darkest)',
+                }}>
+                  {quantity}
+                </button>
               )}
             </div>
           </div>
@@ -834,19 +893,19 @@
                 fontFamily: 'var(--font-body)',
                 fontSize: 10,
                 fontWeight: 400,
-                color: '#999999',
+                color: '#666666',
               }}>{meal.time}</span>
               <span style={{
                 fontFamily: 'var(--font-body)',
                 fontSize: 10,
                 fontWeight: 400,
-                color: '#999999',
+                color: '#666666',
               }}>{meal.kcal}</span>
               <span style={{
                 fontFamily: 'var(--font-body)',
                 fontSize: 10,
                 fontWeight: 400,
-                color: '#999999',
+                color: '#666666',
               }}>{meal.protein}</span>
             </div>
             {/* Surcharge for Premium */}

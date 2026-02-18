@@ -1,0 +1,2772 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Meal Selection - Storefront Prototype</title>
+  <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      background-color: #e8e8e8;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .phone-frame {
+      width: 375px;
+      height: 812px;
+      background: var(--color-page-bg);
+      border-radius: 40px;
+      overflow: hidden;
+      position: relative;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    }
+
+    /* Zest Design System Tokens */
+    :root {
+      /* Page / Elevation */
+      --color-page-bg: #faf8f3;
+      --color-elevation-bg: #faf8f3;
+      --color-elevation-level-1: #efe9de;
+      --color-elevation-level-2: #e0d9cb;
+      --color-factor-carbon-100: #f9f9f3;
+
+      /* Neutral foreground */
+      --color-neutral-fg-darkest: #232323;
+      --color-neutral-fg-default: #242424;
+      --color-neutral-fg-darker: #454545;
+      --color-neutral-fg-base-alt: #4b4b4b;
+      --color-neutral-fg-inverse: #ffffff;
+      --color-neutral-fg-unselected: #656565;
+
+      /* Brand */
+      --color-brand-primary: #bbf06a;
+      --color-brand-green-500: #067a46;
+      --color-brand-border-subtle: #8ccf9a;
+      --color-selected-bg-primary: #bbf06a;
+
+      /* Tags */
+      --color-tag-interactive-bg: #efe9de;
+      --color-tag-interactive-fg: #242424;
+      --color-tag-static-bg-v0: #e0d9cb;
+      --color-tag-static-fg-v0: #232323;
+      --color-tag-static-bg-v1: #db1d1d;
+      --color-tag-static-fg-v1: #ffffff;
+      --color-tag-static-bg-v2: #067a46;
+      --color-tag-static-fg-v2: #ffffff;
+
+      /* Divider */
+      --color-divider: #c1c1c1;
+
+      /* Bottom nav */
+      --color-bottom-nav-bg: #e0d9cb;
+      --color-bottom-nav-fg-selected: #232323;
+      --color-bottom-nav-fg-unselected: #656565;
+
+      /* Button */
+      --color-button-brand-bg-disabled: #adadad;
+      --color-button-brand-fg: #ffffff;
+      --color-button-border: #232323;
+
+      /* Badge */
+      --color-badge-positive-bg: #007838;
+      --color-badge-border: #faf8f3;
+      --color-badge-fg: #ffffff;
+
+      /* Number stepper */
+      --color-stepper-bg: #efe9de;
+      --color-stepper-border: #232323;
+      --color-stepper-selected-bg: #efe9de;
+
+      /* Icon button toggle */
+      --color-icon-btn-toggle-bg: #232323;
+      --color-icon-btn-toggle-fg: #ffffff;
+
+      /* Benefits */
+      --color-benefits: #b5e7ba;
+      --color-purple-100: #f7e9ff;
+
+      /* Tab group */
+      --color-tab-fg-selected: #232323;
+      --color-tab-fg-unselected: #242424;
+      --color-tab-border-selected: #232323;
+      --color-tab-border-unselected: #e0e0e0;
+
+      /* Dialog */
+      --dialog-overlay: rgba(0, 0, 0, 0.5);
+
+      /* Spacing */
+      --spacing-none: 0px;
+      --spacing-xxs: 4px;
+      --spacing-xs: 8px;
+      --spacing-sm-1: 12px;
+      --spacing-sm-2: 16px;
+      --spacing-md-1: 24px;
+
+      /* Corner radius */
+      --radius-card: 12px;
+      --radius-button: 8px;
+      --radius-tag-rect: 4px;
+      --radius-tag-pill: 999px;
+      --radius-stepper: 8px;
+      --radius-md: 8px;
+      --radius-lg: 12px;
+      --radius-dialog: 16px;
+
+      /* Typography */
+      --font-body: 'Roboto', sans-serif;
+      --font-headline: 'Roboto', sans-serif; /* Agrandir substitute */
+
+      --lh-xs: 16px;
+      --lh-sm: 20px;
+      --lh-md: 24px;
+      --lh-lg: 32px;
+
+      --fs-xs: 12px;
+      --fs-sm: 14px;
+      --fs-md: 16px;
+      --fs-lg: 20px;
+      --fs-xl: 24px;
+    }
+
+    /* Scrollbar styling */
+    .scroll-area::-webkit-scrollbar { display: none; }
+    .scroll-area { -ms-overflow-style: none; scrollbar-width: none; }
+    .h-scroll::-webkit-scrollbar { display: none; }
+    .h-scroll { -ms-overflow-style: none; scrollbar-width: none; }
+
+    /* Quality tag animation */
+    @keyframes qualityFadeSlideIn {
+      0% {
+        opacity: 0;
+        transform: translateX(-50%) translateY(-10px) scale(0.8);
+      }
+      60% {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0) scale(1.1);
+      }
+      100% {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0) scale(1);
+      }
+    }
+    @keyframes qualityWiggle {
+      0%, 100% {
+        transform: translateX(-50%) translateY(0) rotate(0deg);
+      }
+      20% {
+        transform: translateX(calc(-50% + 3px)) translateY(0) rotate(2deg);
+      }
+      40% {
+        transform: translateX(calc(-50% - 3px)) translateY(0) rotate(-2deg);
+      }
+      60% {
+        transform: translateX(calc(-50% + 2px)) translateY(0) rotate(1deg);
+      }
+      80% {
+        transform: translateX(calc(-50% - 2px)) translateY(0) rotate(-1deg);
+      }
+    }
+    @keyframes qualityGlow {
+      0%, 100% {
+        box-shadow: 0 2px 8px rgba(6, 122, 70, 0.3);
+      }
+      50% {
+        box-shadow: 0 4px 16px rgba(6, 122, 70, 0.6), 0 0 24px rgba(6, 122, 70, 0.3);
+      }
+    }
+    @keyframes diamondSparkle {
+      0%, 100% { transform: scale(1) rotate(0deg); opacity: 1; }
+      25% { transform: scale(1.2) rotate(10deg); opacity: 1; }
+      50% { transform: scale(1) rotate(0deg); opacity: 0.8; }
+      75% { transform: scale(1.2) rotate(-10deg); opacity: 1; }
+    }
+    @keyframes sparkleFloat {
+      0% { opacity: 0; transform: scale(0) translateY(0); }
+      50% { opacity: 1; transform: scale(1) translateY(-5px); }
+      100% { opacity: 0; transform: scale(0) translateY(-10px); }
+    }
+    .quality-tag {
+      opacity: 0;
+      animation: qualityFadeSlideIn 0.6s ease-out 1s forwards, qualityWiggle 0.5s ease-in-out 1.6s 2, qualityGlow 2s ease-in-out 2.5s 2;
+    }
+    .quality-icon {
+      animation: diamondSparkle 1.5s ease-in-out 1.6s 3;
+    }
+    .sparkle-left, .sparkle-right {
+      animation: sparkleFloat 0.8s ease-out 1.7s forwards;
+    }
+
+    /* Organic info drawer slide animation */
+    @keyframes slideInFromRight {
+      0% {
+        transform: translateX(100%);
+      }
+      100% {
+        transform: translateX(0);
+      }
+    }
+    .organic-drawer-enter {
+      animation: slideInFromRight 0.3s ease-out forwards;
+    }
+    @keyframes confetti-fall {
+      0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(600px) rotate(720deg);
+        opacity: 0;
+      }
+    }
+    @keyframes cartBounce {
+      0% { transform: translateY(0); }
+      30% { transform: translateY(-4px); }
+      60% { transform: translateY(2px); }
+      100% { transform: translateY(0); }
+    }
+    .cart-bounce {
+      animation: cartBounce 0.3s ease-out;
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useEffect, useRef } = React;
+
+    // ========== MEAL DATA ==========
+    const mealsData = [
+      {
+        id: 2,
+        name: "Homemade Dilly Cheddar Scone Sandos",
+        subtitle: "with Roasted Veggie Filling, Quickl...",
+        label: "Favourite",
+        labelVariant: "promo-orange",
+        time: "30 min",
+        kcal: "750 kcal",
+        protein: "19g protein",
+        img: "https://images.unsplash.com/photo-1528735602780-2552fd46c7af?w=400&h=400&fit=crop",
+      },
+      {
+        id: 3,
+        name: "Garlic Herb Butter Steak",
+        subtitle: "with Roasted Potatoes & Green Beans",
+        label: "Premium",
+        labelVariant: "promo-orange",
+        time: "25 min",
+        kcal: "680 kcal",
+        protein: "22g protein",
+        img: "https://c.stocksy.com/a/YfPA00/za/2481956.jpg",
+        surcharge: "$2.50",
+      },
+      {
+        id: 1,
+        name: "Chicken Bacon Ranch Loaded Potatoes",
+        subtitle: "with Cheddar & Scallions",
+        label: "New",
+        labelVariant: "promo-red",
+        time: "30 min",
+        kcal: "750 kcal",
+        protein: "39g protein",
+        img: "https://images.unsplash.com/photo-1546549032-9571cd6b27df?w=400&h=400&fit=crop",
+      },
+      {
+        id: 4,
+        name: "Sesame Soy Beef Bowls",
+        subtitle: "with Sriracha Mayo & Buttery Rice",
+        label: "",
+        time: "35 min",
+        kcal: "820 kcal",
+        protein: "42g protein",
+        img: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=400&h=400&fit=crop",
+      },
+      {
+        id: 5,
+        name: "Creamy Tuscan Chicken Pasta",
+        subtitle: "with Sun-Dried Tomatoes & Spinach",
+        label: "New",
+        labelVariant: "promo-red",
+        time: "30 min",
+        kcal: "710 kcal",
+        protein: "35g protein",
+        img: "https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?w=400&h=400&fit=crop",
+      },
+      {
+        id: 6,
+        name: "Korean BBQ Pork Tacos",
+        subtitle: "with Pickled Vegetables & Gochujang",
+        label: "",
+        time: "40 min",
+        kcal: "690 kcal",
+        protein: "28g protein",
+        img: "https://images.unsplash.com/photo-1565299585323-38d6b0865b47?w=400&h=400&fit=crop",
+        lowStock: true,
+      },
+      {
+        id: 7,
+        name: "Honey Garlic Salmon",
+        subtitle: "with Roasted Vegetables & Quinoa",
+        label: "Favourite",
+        labelVariant: "promo-orange",
+        time: "30 min",
+        kcal: "620 kcal",
+        protein: "38g protein",
+        img: "https://images.unsplash.com/photo-1467003909585-2f8a72700288?w=400&h=400&fit=crop",
+      },
+      {
+        id: 8,
+        name: "Seared Sirloin Steak",
+        subtitle: "with Chimichurri & Roasted Vegetables",
+        label: "Premium",
+        labelVariant: "promo-orange",
+        time: "25 min",
+        kcal: "620 kcal",
+        protein: "42g protein",
+        img: "https://c.stocksy.com/a/ZiHU00/z9/7217951.jpg",
+        surcharge: "$2.50",
+      },
+    ];
+
+    // ========== ICONS (SVG) ==========
+    const Icons = {
+      arrowLeft: (size = 24, color = 'currentColor') => (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
+          <path d="M19 12H5M5 12L12 19M5 12L12 5" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+        </svg>
+      ),
+      chevronDown: (size = 16, color = 'currentColor') => (
+        <svg width={size} height={size} viewBox="0 0 16 16" fill="none">
+          <path d="M4 6L8 10L12 6" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+        </svg>
+      ),
+      chevronRight: (size = 16, color = 'currentColor') => (
+        <svg width={size} height={size} viewBox="0 0 16 16" fill="none">
+          <path d="M6 4L10 8L6 12" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+        </svg>
+      ),
+      chevronLeft: (size = 24, color = 'currentColor') => (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
+          <path d="M15 6L9 12L15 18" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+        </svg>
+      ),
+      customize: (size = 16, color = 'currentColor') => (
+        <svg width={size} height={size} viewBox="0 0 16 16" fill="none">
+          <path d="M2 4H5M5 4C5 5.1 5.9 6 7 6C8.1 6 9 5.1 9 4C9 2.9 8.1 2 7 2C5.9 2 5 2.9 5 4ZM11 4H14M2 12H9M11 12C11 13.1 11.9 14 13 14C14.1 14 15 13.1 15 12C15 10.9 14.1 10 13 10C11.9 10 11 10.9 11 12ZM11 12H14" stroke={color} strokeWidth="1.5" strokeLinecap="round"/>
+        </svg>
+      ),
+      check: (size = 16, color = 'currentColor') => (
+        <svg width={size} height={size} viewBox="0 0 16 16" fill="none">
+          <path d="M13.5 4.5L6 12L2.5 8.5" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+        </svg>
+      ),
+      star: (size = 16, color = 'currentColor') => (
+        <svg width={size} height={size} viewBox="0 0 16 16" fill={color}>
+          <path d="M8 0L9.79 5.53L16 5.53L11.1 8.94L12.89 14.47L8 11.06L3.11 14.47L4.9 8.94L0 5.53L6.21 5.53L8 0Z"/>
+        </svg>
+      ),
+      diamond: (size = 16, color = 'currentColor') => (
+        <svg width={size} height={size} viewBox="0 0 16 16" fill={color}>
+          <path d="M8 1L15 8L8 15L1 8L8 1Z"/>
+        </svg>
+      ),
+      sparkle: (size = 16, color = 'currentColor') => (
+        <svg width={size} height={size} viewBox="0 0 16 16" fill={color}>
+          <path d="M8 0L9 6L16 8L9 10L8 16L7 10L0 8L7 6L8 0Z"/>
+        </svg>
+      ),
+      leaf: (size = 16, color = 'currentColor') => (
+        <svg width={size} height={size} viewBox="0 0 16 16" fill="none">
+          <path d="M14 2C14 2 12 4 8 8C4 12 2 14 2 14M14 2C10 2 6 4 4 6C2 8 2 12 2 14M14 2C14 6 12 10 10 12C8 14 4 14 2 14" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+        </svg>
+      ),
+      heart: (size = 16, color = 'currentColor') => (
+        <svg width={size} height={size} viewBox="0 0 16 16" fill="none">
+          <path d="M8 14.25C7.8 14.25 7.6 14.18 7.44 14.04L2.08 9.04C0.64 7.68 0.64 5.32 2.08 3.96C3.52 2.6 5.76 2.6 7.2 3.96L8 4.72L8.8 3.96C10.24 2.6 12.48 2.6 13.92 3.96C15.36 5.32 15.36 7.68 13.92 9.04L8.56 14.04C8.4 14.18 8.2 14.25 8 14.25Z" stroke={color} strokeWidth="1.2" fill="none"/>
+        </svg>
+      ),
+      plus: (size = 16, color = 'currentColor') => (
+        <svg width={size} height={size} viewBox="0 0 16 16" fill="none">
+          <path d="M8 3V13M3 8H13" stroke={color} strokeWidth="2" strokeLinecap="round"/>
+        </svg>
+      ),
+      minus: (size = 16, color = 'currentColor') => (
+        <svg width={size} height={size} viewBox="0 0 16 16" fill="none">
+          <path d="M3 8H13" stroke={color} strokeWidth="2" strokeLinecap="round"/>
+        </svg>
+      ),
+      cart: (size = 24, color = 'currentColor') => (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
+          <path d="M9 22C9.55 22 10 21.55 10 21C10 20.45 9.55 20 9 20C8.45 20 8 20.45 8 21C8 21.55 8.45 22 9 22Z" stroke={color} strokeWidth="1.5"/>
+          <path d="M20 22C20.55 22 21 21.55 21 21C21 20.45 20.55 20 20 20C19.45 20 19 20.45 19 21C19 21.55 19.45 22 20 22Z" stroke={color} strokeWidth="1.5"/>
+          <path d="M1 1H5L7.68 14.39C7.77 14.83 8.02 15.22 8.38 15.5C8.74 15.78 9.19 15.92 9.64 15.9H19.36C19.81 15.92 20.26 15.78 20.62 15.5C20.98 15.22 21.23 14.83 21.32 14.39L23 6H6" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+        </svg>
+      ),
+      sort: (size = 16, color = 'currentColor') => (
+        <svg width={size} height={size} viewBox="0 0 16 16" fill={color}>
+          <path d="M2 3.5H14M4 7.5H12M6 11.5H10" stroke={color} strokeWidth="1.8" strokeLinecap="round"/>
+        </svg>
+      ),
+      pause: (size = 16, color = 'currentColor') => (
+        <svg width={size} height={size} viewBox="0 0 16 16" fill={color}>
+          <rect x="3" y="2" width="4" height="12" rx="1" fill={color}/>
+          <rect x="9" y="2" width="4" height="12" rx="1" fill={color}/>
+        </svg>
+      ),
+      home: (size = 20, color = 'currentColor') => (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M3 9L12 2L21 9V20C21 20.55 20.55 21 20 21H4C3.45 21 3 20.55 3 20V9Z"/>
+          <polyline points="9,22 9,12 15,12 15,22"/>
+        </svg>
+      ),
+      fork_knife: (size = 20, color = 'currentColor') => (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill={color}>
+          <path d="M7 2V9C7 10.1 6.1 11 5 11H4V22H2V2H4V9H5V2H7ZM18 2C16.9 2 16 3.8 16 6V11H18V22H20V2H18Z"/>
+        </svg>
+      ),
+      gift: (size = 20, color = 'currentColor') => (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <rect x="3" y="8" width="18" height="4" rx="1"/>
+          <path d="M12 8V22M5 12V20C5 21.1 5.9 22 7 22H17C18.1 22 19 21.1 19 20V12"/>
+          <path d="M12 8C12 8 12 4 9 4C7.5 4 6 5 7 7C8 8 12 8 12 8Z"/>
+          <path d="M12 8C12 8 12 4 15 4C16.5 4 18 5 17 7C16 8 12 8 12 8Z"/>
+        </svg>
+      ),
+      trophy: (size = 20, color = 'currentColor') => (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M6 9H4C3 9 2 8 2 7V6C2 5 3 4 4 4H6"/>
+          <path d="M18 9H20C21 9 22 8 22 7V6C22 5 21 4 20 4H18"/>
+          <path d="M6 4H18V10C18 13.31 15.31 16 12 16C8.69 16 6 13.31 6 10V4Z"/>
+          <path d="M12 16V19M8 22H16M10 19H14"/>
+        </svg>
+      ),
+      profile: (size = 20, color = 'currentColor') => (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <circle cx="12" cy="8" r="4"/>
+          <path d="M20 21C20 17.13 16.42 14 12 14C7.58 14 4 17.13 4 21"/>
+        </svg>
+      ),
+    };
+
+    // ========== STATUS BAR ==========
+    function StatusBar() {
+      return (
+        <div style={{
+          height: 50,
+          padding: '14px 24px 6px',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          background: 'var(--color-brand-green-500)',
+        }}>
+          <span style={{ fontFamily: 'var(--font-body)', fontSize: 15, fontWeight: 600, color: 'white' }}>9:41</span>
+          <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
+            <svg width="16" height="12" viewBox="0 0 16 12" fill="none">
+              <path d="M1 4C2.5 1.5 5 0 8 0C11 0 13.5 1.5 15 4" stroke="white" strokeWidth="1.5"/>
+              <path d="M3.5 6.5C4.5 5 6 3.5 8 3.5C10 3.5 11.5 5 12.5 6.5" stroke="white" strokeWidth="1.5"/>
+              <circle cx="8" cy="9.5" r="1.5" fill="white"/>
+            </svg>
+            <svg width="17" height="12" viewBox="0 0 17 12" fill="white">
+              <rect x="0" y="4" width="3" height="7" rx="0.5"/>
+              <rect x="4.5" y="2" width="3" height="9" rx="0.5"/>
+              <rect x="9" y="0" width="3" height="11" rx="0.5"/>
+              <rect x="13.5" y="0" width="3" height="11" rx="0.5" fillOpacity="0.3"/>
+            </svg>
+            <svg width="25" height="12" viewBox="0 0 27 13" fill="none">
+              <rect x="1" y="1" width="22" height="11" rx="2.5" stroke="white" strokeOpacity="0.35"/>
+              <rect x="2.5" y="2.5" width="19" height="8" rx="1.5" fill="white"/>
+              <path d="M25 5V8.5C25.6 8 25.8 7 25.8 6.5C25.8 6 25.6 5.5 25 5Z" fill="white" fillOpacity="0.4"/>
+            </svg>
+          </div>
+        </div>
+      );
+    }
+
+    // ========== WEEK NAVIGATION ==========
+    function WeekNavigation() {
+      const weeks = [
+        { dayLabel: 'Past\nDeliveries', isPast: true },
+        { dayLabel: 'Wed', title: 'March 1st', selected: true },
+        { dayLabel: 'Skipped', title: 'March 8th', skipped: true },
+        { dayLabel: 'Wed', title: 'March 15th' },
+        { dayLabel: 'Wed', title: 'March 22nd' },
+        { dayLabel: 'Wed', title: 'March 29th' },
+        { dayLabel: 'Wed', title: 'April 5th' },
+      ];
+
+      return (
+        <div style={{
+          background: 'var(--color-brand-green-500)',
+          padding: '0 16px 8px',
+          display: 'flex',
+          gap: 8,
+          overflowX: 'auto',
+          alignItems: 'center',
+        }} className="h-scroll">
+          {weeks.map((w, i) => {
+            if (w.isPast) {
+              return (
+                <div key={i} style={{
+                  flexShrink: 0,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  padding: '4px 16px',
+                  height: 44,
+                  cursor: 'pointer',
+                }}>
+                  <span style={{
+                    fontFamily: 'var(--font-body)',
+                    fontSize: 'var(--fs-xs)',
+                    lineHeight: 'var(--lh-xs)',
+                    color: 'var(--color-neutral-fg-inverse)',
+                    textDecoration: 'underline',
+                    textAlign: 'center',
+                    whiteSpace: 'pre-line',
+                  }}>Past{'\n'}Deliveries</span>
+                </div>
+              );
+            }
+
+            const isSelected = w.selected;
+            const isSkipped = w.skipped;
+
+            return (
+              <div key={i} style={{
+                flexShrink: 0,
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                padding: '4px 24px',
+                borderRadius: 'var(--radius-md)',
+                background: isSelected ? 'var(--color-selected-bg-primary)' :
+                             isSkipped ? 'var(--color-selected-bg-primary)' : 'transparent',
+                border: (!isSelected && !isSkipped) ? '1px solid var(--color-brand-border-subtle)' : 'none',
+                cursor: 'pointer',
+              }}>
+                <span style={{
+                  fontFamily: 'var(--font-body)',
+                  fontSize: 'var(--fs-xs)',
+                  lineHeight: 'var(--lh-xs)',
+                  color: isSelected || isSkipped ? 'var(--color-neutral-fg-darkest)' : 'var(--color-neutral-fg-inverse)',
+                  textAlign: 'center',
+                }}>{w.dayLabel}</span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                  {isSkipped && (
+                    <span style={{ display: 'flex', alignItems: 'center' }}>
+                      {Icons.pause(14, isSkipped ? '#232323' : 'white')}
+                    </span>
+                  )}
+                  <span style={{
+                    fontFamily: 'var(--font-headline)',
+                    fontSize: 'var(--fs-md)',
+                    fontWeight: 700,
+                    lineHeight: 'var(--lh-sm)',
+                    color: isSelected || isSkipped ? 'var(--color-neutral-fg-darkest)' : 'var(--color-neutral-fg-inverse)',
+                    textAlign: 'center',
+                    whiteSpace: 'nowrap',
+                  }}>{w.title}</span>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      );
+    }
+
+    // ========== TAB GROUP (CATEGORIES) ==========
+    function TabGroup() {
+      const tabs = ['All meals', 'My favorites', 'Top rated', 'New', 'Quick & Easy', 'Veggie'];
+      const [active, setActive] = useState(0);
+
+      return (
+        <div style={{
+          background: 'var(--color-factor-carbon-100)',
+          padding: '4px 16px 0',
+          display: 'flex',
+          overflowX: 'auto',
+        }} className="h-scroll">
+          {tabs.map((tab, i) => (
+            <button
+              key={i}
+              onClick={() => setActive(i)}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 8,
+                padding: '12px 16px',
+                border: 'none',
+                borderBottom: `4px solid ${i === active ? 'var(--color-tab-border-selected)' : 'var(--color-tab-border-unselected)'}`,
+                background: 'transparent',
+                cursor: 'pointer',
+                whiteSpace: 'nowrap',
+                fontFamily: 'var(--font-body)',
+                fontSize: 'var(--fs-md)',
+                fontWeight: i === active ? 700 : 400,
+                lineHeight: 'var(--lh-md)',
+                color: i === active ? 'var(--color-tab-fg-selected)' : 'var(--color-tab-fg-unselected)',
+              }}
+            >
+              {tab}
+            </button>
+          ))}
+        </div>
+      );
+    }
+
+    // ========== FILTER TAGS ROW ==========
+    function FilterTagsRow() {
+      const filters = [
+        { label: 'High Protein' },
+        { label: 'Keto' },
+        { label: 'Calorie Smart' },
+        { label: 'Carb Concious' },
+        { label: 'Flexitarian' },
+        { label: 'Vegan & Veggie' },
+      ];
+
+      return (
+        <div style={{
+          background: 'var(--color-factor-carbon-100)',
+          padding: '4px 16px 8px',
+          display: 'flex',
+          alignItems: 'center',
+          gap: 8,
+          overflowX: 'auto',
+        }} className="h-scroll">
+          {/* Sort/Filter button */}
+          <button style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: 4,
+            padding: '4px 8px',
+            background: 'var(--color-tag-interactive-bg)',
+            border: 'none',
+            borderRadius: 'var(--radius-tag-rect)',
+            cursor: 'pointer',
+            height: 28,
+            flexShrink: 0,
+          }}>
+            {Icons.sort(16, 'var(--color-tag-interactive-fg)')}
+          </button>
+
+          {/* Divider */}
+          <div style={{ width: 1, height: 24, background: 'var(--color-divider)', flexShrink: 0 }} />
+
+          {filters.map((f, i) => (
+            <button
+              key={i}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: 4,
+                padding: '4px 8px',
+                background: 'var(--color-tag-interactive-bg)',
+                border: 'none',
+                borderRadius: 'var(--radius-tag-rect)',
+                cursor: 'pointer',
+                whiteSpace: 'nowrap',
+                fontFamily: 'var(--font-body)',
+                fontSize: 'var(--fs-sm)',
+                fontWeight: 700,
+                lineHeight: 'var(--lh-sm)',
+                color: 'var(--color-tag-interactive-fg)',
+                flexShrink: 0,
+              }}
+            >
+              {f.label}
+            </button>
+          ))}
+        </div>
+      );
+    }
+
+    // ========== PRODUCT CARD ==========
+    function ProductCard({ meal, quantity, onAdd, onRemove }) {
+      return (
+        <div style={{
+          background: 'var(--color-elevation-bg)',
+          borderRadius: 'var(--radius-card)',
+          overflow: 'hidden',
+          display: 'flex',
+          flexDirection: 'column',
+        }}>
+          {/* Image area */}
+          <div style={{
+            width: '100%',
+            aspectRatio: '4/5',
+            overflow: 'hidden',
+            position: 'relative',
+            background: '#e8dcd0',
+            borderRadius: 'var(--radius-md)',
+          }}>
+            {meal.video ? (
+              <video
+                src={meal.video}
+                autoPlay
+                loop
+                muted
+                playsInline
+                style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 'var(--radius-md)' }}
+              />
+            ) : (
+              <img
+                src={meal.img}
+                alt={meal.name}
+                style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 'var(--radius-md)' }}
+                onError={(e) => { e.target.style.display = 'none'; }}
+              />
+            )}
+
+            {/* Promo label on image - bottom left */}
+            {meal.label && (
+              <div style={{
+                position: 'absolute',
+                bottom: 0,
+                left: 8,
+                background: 'rgba(255, 255, 255, 0.9)',
+                borderRadius: 'var(--radius-tag-rect) var(--radius-tag-rect) 0 0',
+                padding: '0 3px 0 3px',
+              }}>
+                <span style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  padding: '2px 6px',
+                  borderRadius: 'var(--radius-tag-rect)',
+                  background: meal.label === 'Premium' ? '#232323' : (meal.labelVariant === 'promo-orange' ? '#ce4500' : 'var(--color-tag-static-bg-v1)'),
+                  color: 'white',
+                  fontFamily: 'var(--font-body)',
+                  fontSize: 9,
+                  fontWeight: 700,
+                  lineHeight: 1.2,
+                  textTransform: 'uppercase',
+                }}>{meal.label}</span>
+              </div>
+            )}
+
+            {/* Number stepper */}
+            <div style={{ position: 'absolute', bottom: 8, right: 8 }}>
+              {quantity === 0 ? (
+                <button onClick={onAdd} style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  width: 36,
+                  height: 36,
+                  padding: 10,
+                  background: 'var(--color-stepper-bg)',
+                  border: '1px solid var(--color-stepper-border)',
+                  borderRadius: 'var(--radius-stepper)',
+                  cursor: 'pointer',
+                }}>
+                  {Icons.plus(14, 'var(--color-neutral-fg-darkest)')}
+                </button>
+              ) : (
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  background: 'var(--color-stepper-selected-bg)',
+                  border: '1px solid var(--color-stepper-border)',
+                  borderRadius: 'var(--radius-stepper)',
+                  overflow: 'hidden',
+                }}>
+                  <button onClick={onRemove} style={{
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    width: 28, height: 36, background: 'transparent', border: 'none', cursor: 'pointer',
+                  }}>
+                    {Icons.minus(14, 'var(--color-neutral-fg-darkest)')}
+                  </button>
+                  <span style={{
+                    width: 18, textAlign: 'center',
+                    fontFamily: 'var(--font-body)', fontSize: 'var(--fs-xs)', fontWeight: 700,
+                  }}>{quantity}</span>
+                  <button onClick={onAdd} style={{
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    width: 28, height: 36, background: 'transparent', border: 'none', cursor: 'pointer',
+                  }}>
+                    {Icons.plus(14, 'var(--color-neutral-fg-darkest)')}
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Details */}
+          <div style={{
+            padding: '8px',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 4,
+          }}>
+            {/* Title */}
+            <span style={{
+              fontFamily: 'var(--font-headline)',
+              fontSize: 13,
+              fontWeight: 700,
+              lineHeight: 1.2,
+              color: 'var(--color-neutral-fg-darkest)',
+              overflow: 'hidden',
+              display: '-webkit-box',
+              WebkitLineClamp: 2,
+              WebkitBoxOrient: 'vertical',
+            }}>{meal.name}</span>
+
+            {/* Quick info row */}
+            <div style={{ display: 'flex', gap: 6, alignItems: 'center', flexWrap: 'wrap' }}>
+              <span style={{
+                fontFamily: 'var(--font-body)',
+                fontSize: 10,
+                fontWeight: 400,
+                color: '#999999',
+              }}>{meal.time}</span>
+              <span style={{
+                fontFamily: 'var(--font-body)',
+                fontSize: 10,
+                fontWeight: 400,
+                color: '#999999',
+              }}>{meal.kcal}</span>
+              <span style={{
+                fontFamily: 'var(--font-body)',
+                fontSize: 10,
+                fontWeight: 400,
+                color: '#999999',
+              }}>{meal.protein}</span>
+            </div>
+            {/* Surcharge for Premium */}
+            {meal.surcharge && (
+              <span style={{
+                fontFamily: 'var(--font-body)',
+                fontSize: 11,
+                fontWeight: 700,
+                color: 'var(--color-neutral-fg-default)',
+              }}>+{meal.surcharge}</span>
+            )}
+            {/* Low stock message */}
+            {meal.lowStock && (
+              <span style={{
+                fontFamily: 'var(--font-body)',
+                fontSize: 12,
+                fontWeight: 700,
+                color: '#d32f2f',
+              }}>Few items left</span>
+            )}
+          </div>
+        </div>
+      );
+    }
+
+    // ========== BENEFITS WIDGET ==========
+    function BenefitsWidget() {
+      return (
+        <div style={{ padding: '12px 0 24px' }}>
+          <div style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            marginBottom: 8,
+          }}>
+            <span style={{
+              fontFamily: 'var(--font-headline)',
+              fontSize: 'var(--fs-lg)',
+              fontWeight: 700,
+              lineHeight: 'var(--lh-md)',
+              color: 'var(--color-neutral-fg-darkest)',
+            }}>This week's Benefits</span>
+            <button style={{
+              background: 'transparent',
+              border: 'none',
+              cursor: 'pointer',
+              padding: '4px 0',
+            }}>
+              <span style={{
+                fontFamily: 'var(--font-body)',
+                fontSize: 'var(--fs-sm)',
+                fontWeight: 700,
+                lineHeight: 'var(--lh-sm)',
+                color: 'var(--color-neutral-fg-darkest)',
+                textDecoration: 'underline',
+              }}>Browse all</span>
+            </button>
+          </div>
+
+          <div style={{
+            display: 'flex',
+            gap: 12,
+            overflowX: 'auto',
+          }} className="h-scroll">
+            {[
+              { text: '$30 off', sub: 'Meals', bg: 'var(--color-benefits)' },
+              { text: 'Free dessert', sub: 'Add-ons', bg: 'var(--color-purple-100)' },
+              { text: '20% off', sub: 'Market', bg: 'var(--color-benefits)' },
+            ].map((item, i) => (
+              <div key={i} style={{
+                flexShrink: 0,
+                width: 240,
+                padding: '12px 16px',
+                background: item.bg,
+                borderRadius: '24px 0 24px 0',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+              }}>
+                <div>
+                  <div style={{
+                    fontFamily: 'var(--font-headline)',
+                    fontSize: 'var(--fs-lg)',
+                    fontWeight: 700,
+                    lineHeight: 'var(--lh-md)',
+                  }}>{item.text}</div>
+                  <div style={{
+                    fontFamily: 'var(--font-body)',
+                    fontSize: 'var(--fs-sm)',
+                    fontWeight: 700,
+                    lineHeight: 'var(--lh-sm)',
+                  }}>{item.sub}</div>
+                </div>
+                <span style={{
+                  fontFamily: 'var(--font-body)',
+                  fontSize: 'var(--fs-sm)',
+                  fontWeight: 700,
+                  textDecoration: 'underline',
+                }}>Select &rsaquo;</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      );
+    }
+
+    // ========== MEAL SELECTION GUIDANCE ==========
+    function MealSelectionGuidance({ totalItems, mealsNeeded, onCartClick }) {
+      const remaining = Math.max(0, mealsNeeded - totalItems);
+      const isComplete = remaining === 0;
+      const [isAnimating, setIsAnimating] = useState(false);
+      const prevTotalRef = useRef(totalItems);
+
+      useEffect(() => {
+        if (prevTotalRef.current !== totalItems) {
+          setIsAnimating(true);
+          const timer = setTimeout(() => setIsAnimating(false), 400);
+          prevTotalRef.current = totalItems;
+          return () => clearTimeout(timer);
+        }
+      }, [totalItems]);
+
+      return (
+        <div style={{
+          position: 'absolute',
+          bottom: 83,
+          left: 8,
+          right: 8,
+          background: 'var(--color-elevation-level-1)',
+          borderRadius: 'var(--radius-md)',
+          padding: 16,
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 16,
+          zIndex: 10,
+        }}>
+          {/* Action row */}
+          <div style={{ display: 'flex', gap: 8, alignItems: 'stretch' }}>
+            {/* Cart CTA */}
+            <button
+              onClick={onCartClick}
+              className={isAnimating ? 'cart-bounce' : ''}
+              style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 8,
+              padding: '8px 24px',
+              border: '1px solid var(--color-button-border)',
+              borderRadius: 'var(--radius-button)',
+              background: 'var(--color-elevation-level-1)',
+              cursor: 'pointer',
+              position: 'relative',
+              flexShrink: 0,
+            }}>
+              {Icons.cart(24, 'var(--color-neutral-fg-darkest)')}
+
+              {/* Badge */}
+              {totalItems >= 0 && (
+                <span
+                  style={{
+                    position: 'absolute',
+                    top: 2,
+                    left: 37,
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    minWidth: 16,
+                    height: 16,
+                    padding: '0 4px',
+                    background: 'var(--color-badge-positive-bg)',
+                    color: 'var(--color-badge-fg)',
+                    borderRadius: 'var(--radius-tag-pill)',
+                    border: '2px solid var(--color-badge-border)',
+                    fontFamily: 'var(--font-body)',
+                    fontSize: 'var(--fs-xs)',
+                    fontWeight: 400,
+                    lineHeight: 'var(--lh-xs)',
+                  }}>{totalItems}</span>
+              )}
+            </button>
+
+            {/* Continue button */}
+            <button style={{
+              flex: 1,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: 8,
+              padding: '8px 24px',
+              minWidth: 88,
+              border: 'none',
+              borderRadius: 'var(--radius-button)',
+              background: 'var(--color-neutral-fg-darkest)',
+              color: 'var(--color-button-brand-fg)',
+              cursor: 'pointer',
+              fontFamily: 'var(--font-body)',
+              fontSize: 'var(--fs-md)',
+              fontWeight: 700,
+              lineHeight: 'var(--lh-md)',
+            }}>
+              Continue
+            </button>
+          </div>
+        </div>
+      );
+    }
+
+    // ========== BOTTOM NAVIGATION ==========
+    function BottomNavigation({ onNavClick }) {
+      const items = [
+        { icon: 'home', label: 'Home', active: false },
+        { icon: 'fork_knife', label: 'Menu', active: true },
+        { icon: 'gift', label: 'HelloFriends', active: false },
+        { icon: 'trophy', label: 'Rewards', active: false },
+        { icon: 'profile', label: 'Profile', active: false },
+      ];
+
+      return (
+        <div style={{
+          position: 'absolute',
+          bottom: 0,
+          left: 0,
+          right: 0,
+          background: 'var(--color-bottom-nav-bg)',
+          zIndex: 20,
+        }}>
+          {/* Divider */}
+          <div style={{ height: 1, background: 'var(--color-divider)' }} />
+
+          <div style={{
+            display: 'flex',
+            justifyContent: 'space-around',
+            padding: '4px 0',
+          }}>
+            {items.map((item, i) => (
+              <div
+                key={item.label}
+                onClick={() => !item.active && onNavClick && onNavClick(item.label)}
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  padding: '4px 4px 4px',
+                  cursor: item.active ? 'default' : 'pointer',
+                  flex: 1,
+                }}
+              >
+                <div style={{
+                  width: 48,
+                  height: 24,
+                  borderRadius: 'var(--radius-tag-pill)',
+                  background: item.active ? 'var(--color-selected-bg-primary)' : 'transparent',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}>
+                  {Icons[item.icon](20, item.active ? 'var(--color-bottom-nav-fg-selected)' : 'var(--color-bottom-nav-fg-unselected)')}
+                </div>
+                <span style={{
+                  fontFamily: 'var(--font-body)',
+                  fontSize: 'var(--fs-xs)',
+                  fontWeight: 700,
+                  lineHeight: 'var(--lh-xs)',
+                  color: item.active ? 'var(--color-bottom-nav-fg-selected)' : 'var(--color-bottom-nav-fg-unselected)',
+                  textAlign: 'center',
+                }}>{item.label}</span>
+              </div>
+            ))}
+          </div>
+
+          {/* Home indicator */}
+          <div style={{ display: 'flex', justifyContent: 'center', paddingBottom: 8, paddingTop: 4 }}>
+            <div style={{ width: 134, height: 5, background: 'black', borderRadius: 100 }} />
+          </div>
+        </div>
+      );
+    }
+
+    // ========== DIALOG ==========
+    function Dialog({ isOpen, headerText, bodyText, confirmText, cancelText, onConfirm, onCancel }) {
+      if (!isOpen) return null;
+      return (
+        <div style={{
+          position: 'absolute', inset: 0,
+          background: 'var(--dialog-overlay)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          zIndex: 999, padding: 12,
+        }}>
+          <div role="dialog" aria-modal="true" style={{
+            background: 'white',
+            borderRadius: 'var(--radius-dialog)',
+            padding: 24, width: '100%', maxWidth: 350,
+            display: 'flex', flexDirection: 'column', gap: 12,
+          }}>
+            {headerText && <span style={{
+              fontFamily: 'var(--font-body)', fontSize: 'var(--fs-lg)', fontWeight: 700,
+              lineHeight: 'var(--lh-lg)', textAlign: 'center',
+            }}>{headerText}</span>}
+            {bodyText && <span style={{
+              fontFamily: 'var(--font-body)', fontSize: 'var(--fs-sm)', fontWeight: 400,
+              lineHeight: 'var(--lh-sm)', textAlign: 'center', color: 'black',
+            }}>{bodyText}</span>}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginTop: 12 }}>
+              {confirmText && <button onClick={onConfirm} style={{
+                padding: '12px 24px', borderRadius: 'var(--radius-button)',
+                border: 'none', background: 'var(--color-neutral-fg-darkest)', color: 'white',
+                fontFamily: 'var(--font-body)', fontSize: 'var(--fs-md)', fontWeight: 700,
+                cursor: 'pointer', width: '100%',
+              }}>{confirmText}</button>}
+              {cancelText && <button onClick={onCancel} style={{
+                padding: '12px 24px', borderRadius: 'var(--radius-button)',
+                border: '1px solid var(--color-neutral-fg-darkest)', background: 'transparent',
+                color: 'var(--color-neutral-fg-darkest)',
+                fontFamily: 'var(--font-body)', fontSize: 'var(--fs-md)', fontWeight: 700,
+                cursor: 'pointer', width: '100%',
+              }}>{cancelText}</button>}
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    // ========== CUSTOMIZATION DRAWER ==========
+    function CustomizationDrawer({ meal, isOpen, onClose, onAdd }) {
+      const [selectedProtein, setSelectedProtein] = useState(0);
+      const [pairingSelected, setPairingSelected] = useState(false);
+      const [showOrganicInfo, setShowOrganicInfo] = useState(false);
+      const [potatoServings, setPotatoServings] = useState(2);
+      const [baconServings, setBaconServings] = useState(2);
+      const [chickenServings, setChickenServings] = useState(2);
+      const [showBanner, setShowBanner] = useState(true);
+      const [showSuccessBanner, setShowSuccessBanner] = useState(false);
+      const [showConfetti, setShowConfetti] = useState(false);
+
+      // Auto-hide success banner after 3 seconds, then hide banner completely
+      React.useEffect(() => {
+        if (showSuccessBanner) {
+          const timer = setTimeout(() => {
+            setShowSuccessBanner(false);
+            setShowBanner(false);
+          }, 3000);
+          return () => clearTimeout(timer);
+        }
+      }, [showSuccessBanner]);
+
+      if (!isOpen || !meal) return null;
+
+      const proteinOptions = [
+        { name: 'Chicken', weight: '200 g', price: null, isOrganic: false, img: 'https://c.stocksy.com/a/KZnA00/z9/2573826.jpg' },
+        { name: 'Organic Chicken', weight: '200 g', price: '+$0.99', isOrganic: true, img: 'https://c.stocksy.com/a/KZnA00/z9/2573826.jpg' },
+      ];
+
+      return (
+        <div style={{
+          position: 'absolute',
+          inset: 0,
+          zIndex: 1000,
+        }}>
+          {/* Backdrop overlay */}
+          <div
+            onClick={onClose}
+            style={{
+              position: 'absolute',
+              inset: 0,
+              background: 'rgba(0, 0, 0, 0.5)',
+            }}
+          />
+          {/* Bottom drawer */}
+          <div style={{
+            position: 'absolute',
+            bottom: 0,
+            left: 0,
+            right: 0,
+            height: '90%',
+            background: 'var(--color-page-bg)',
+            borderRadius: '16px 16px 0 0',
+            display: 'flex',
+            flexDirection: 'column',
+            overflow: 'hidden',
+          }}>
+          {/* Drag handle */}
+          <div
+            onClick={onClose}
+            style={{ display: 'flex', justifyContent: 'center', padding: '12px 0 8px', cursor: 'pointer' }}
+          >
+            <div style={{
+              width: 40,
+              height: 5,
+              background: '#c1c1c1',
+              borderRadius: 4,
+            }} />
+          </div>
+
+          {/* Scrollable content */}
+          <div className="scroll-area" style={{ flex: 1, overflowY: 'auto', paddingBottom: 120 }}>
+            {/* Header */}
+            <div style={{ padding: '8px 16px 12px' }}>
+              <h1 style={{
+                fontFamily: 'var(--font-headline)',
+                fontSize: 'var(--fs-xl)',
+                fontWeight: 700,
+                lineHeight: 'var(--lh-lg)',
+                color: 'var(--color-neutral-fg-default)',
+                margin: 0,
+              }}>Adjust for your table!</h1>
+            </div>
+
+            {/* Recipe row */}
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 12,
+              padding: '0 16px 24px',
+            }}>
+              <div style={{
+                width: 72,
+                height: 72,
+                borderRadius: 'var(--radius-card)',
+                overflow: 'hidden',
+                flexShrink: 0,
+                background: '#e8dcd0',
+              }}>
+                <img
+                  src={meal.img}
+                  alt={meal.name}
+                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                />
+              </div>
+              <div style={{ flex: 1 }}>
+                <div style={{
+                  fontFamily: 'var(--font-body)',
+                  fontSize: 'var(--fs-sm)',
+                  fontWeight: 700,
+                  lineHeight: 'var(--lh-sm)',
+                  color: 'var(--color-neutral-fg-default)',
+                }}>{meal.name}</div>
+                <div style={{
+                  fontFamily: 'var(--font-body)',
+                  fontSize: 'var(--fs-sm)',
+                  fontWeight: 400,
+                  lineHeight: 'var(--lh-sm)',
+                  color: 'var(--color-neutral-fg-unselected)',
+                }}>{meal.subtitle}</div>
+              </div>
+              <div style={{ flexShrink: 0 }}>
+                {Icons.chevronRight(16, 'var(--color-neutral-fg-default)')}
+              </div>
+            </div>
+
+            {/* Pick your protein section */}
+            <div style={{ padding: '0 16px 24px' }}>
+              {/* Section header */}
+              <div style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                marginBottom: 8,
+              }}>
+                <span style={{
+                  fontFamily: 'var(--font-body)',
+                  fontSize: 'var(--fs-md)',
+                  fontWeight: 700,
+                  lineHeight: 'var(--lh-md)',
+                  color: 'var(--color-neutral-fg-default)',
+                }}>Pick your protein</span>
+                <span style={{
+                  fontFamily: 'var(--font-body)',
+                  fontSize: 'var(--fs-xs)',
+                  fontWeight: 400,
+                  lineHeight: 'var(--lh-xs)',
+                  color: 'var(--color-neutral-fg-unselected)',
+                }}>for 2 servings</span>
+              </div>
+
+              {/* Protein options */}
+              <div style={{
+                display: 'flex',
+                gap: 12,
+                paddingTop: 8,
+              }}>
+                {proteinOptions.map((option, i) => (
+                  <button
+                    key={i}
+                    onClick={() => setSelectedProtein(i)}
+                    style={{
+                      flex: 1,
+                      padding: 0,
+                      border: selectedProtein === i
+                        ? '2px solid var(--color-neutral-fg-darkest)'
+                        : '1px solid var(--color-divider)',
+                      borderRadius: 'var(--radius-card)',
+                      background: 'var(--color-page-bg)',
+                      cursor: 'pointer',
+                      position: 'relative',
+                      textAlign: 'left',
+                      overflow: option.isOrganic ? 'visible' : 'hidden',
+                    }}
+                  >
+                    {/* Top Quality tag for organic - positioned at top edge */}
+                    {option.isOrganic && (
+                      <div
+                        className="quality-tag"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setShowOrganicInfo(true);
+                        }}
+                        style={{
+                          position: 'absolute',
+                          top: -14,
+                          left: '50%',
+                          transform: 'translateX(-50%)',
+                          padding: '5px 10px 5px 14px',
+                          background: 'linear-gradient(135deg, #067a46 0%, #0a9956 100%)',
+                          borderRadius: 'var(--radius-tag-pill)',
+                          zIndex: 10,
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: 4,
+                          boxShadow: '0 2px 8px rgba(6, 122, 70, 0.3)',
+                          whiteSpace: 'nowrap',
+                          cursor: 'pointer',
+                        }}>
+                        {/* Left sparkle */}
+                        <span className="sparkle-left" style={{ position: 'absolute', left: -8, top: -4 }}>
+                          {Icons.sparkle(10, 'rgba(255,255,255,0.8)')}
+                        </span>
+                        <span className="quality-icon" style={{ display: 'flex' }}>
+                          <img src="https://www.figma.com/api/mcp/asset/7da1392f-2ad3-4846-933b-58f120b05fa2" width="12" height="12" alt="" style={{ filter: 'brightness(0) invert(1)' }} />
+                        </span>
+                        <span style={{
+                          fontFamily: 'var(--font-body)',
+                          fontSize: 'var(--fs-xs)',
+                          fontWeight: 700,
+                          color: 'white',
+                          textTransform: 'uppercase',
+                          letterSpacing: '0.5px',
+                        }}>Organic</span>
+                        <span style={{ display: 'flex', marginLeft: 2 }}>
+                          {Icons.chevronRight(12, 'white')}
+                        </span>
+                        {/* Right sparkle */}
+                        <span className="sparkle-right" style={{ position: 'absolute', right: -8, top: -4 }}>
+                          {Icons.sparkle(10, 'rgba(255,255,255,0.8)')}
+                        </span>
+                      </div>
+                    )}
+                    {/* Checkmark for selected */}
+                    {selectedProtein === i && (
+                      <div style={{
+                        position: 'absolute',
+                        top: 8,
+                        right: 8,
+                        width: 16,
+                        height: 16,
+                        background: 'var(--color-neutral-fg-darkest)',
+                        borderRadius: '50%',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        zIndex: 1,
+                      }}>
+                        {Icons.check(10, 'white')}
+                      </div>
+                    )}
+                    {/* Image */}
+                    <div style={{
+                      width: '100%',
+                      height: 92,
+                      background: '#efe9de',
+                      overflow: 'hidden',
+                      borderRadius: '10px 10px 0 0',
+                      position: 'relative',
+                    }}>
+                      <img
+                        src={option.img}
+                        alt={option.name}
+                        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                        onError={(e) => { e.target.style.display = 'none'; }}
+                      />
+                    </div>
+                    {/* Content */}
+                    <div style={{ padding: 12 }}>
+                      <div style={{
+                        fontFamily: 'var(--font-headline)',
+                        fontSize: 'var(--fs-md)',
+                        fontWeight: 700,
+                        lineHeight: 'var(--lh-sm)',
+                        color: 'var(--color-neutral-fg-default)',
+                        marginBottom: 4,
+                      }}>{option.name}</div>
+                      <div style={{
+                        fontFamily: 'var(--font-body)',
+                        fontSize: 'var(--fs-sm)',
+                        color: 'var(--color-neutral-fg-unselected)',
+                        marginBottom: 8,
+                      }}>
+                        {option.weight}
+                      </div>
+                      <div style={{ minHeight: 36 }}>
+                        {option.price ? (
+                          <div>
+                            <div style={{
+                              fontFamily: 'var(--font-body)',
+                              fontSize: 'var(--fs-sm)',
+                              fontWeight: 700,
+                              color: 'var(--color-neutral-fg-default)',
+                            }}>{option.price}</div>
+                            <div style={{
+                              fontFamily: 'var(--font-body)',
+                              fontSize: 'var(--fs-xs)',
+                              color: 'var(--color-neutral-fg-unselected)',
+                            }}>per serving</div>
+                          </div>
+                        ) : (
+                          <div style={{
+                            fontFamily: 'var(--font-body)',
+                            fontSize: 'var(--fs-sm)',
+                            fontWeight: 700,
+                            color: 'var(--color-neutral-fg-default)',
+                          }}>Included</div>
+                        )}
+                      </div>
+                    </div>
+                  </button>
+                ))}
+              </div>
+
+            </div>
+
+            {/* Edit quantities section */}
+            <div style={{ padding: '0 16px 24px' }}>
+              <div style={{
+                fontFamily: 'var(--font-body)',
+                fontSize: 'var(--fs-md)',
+                fontWeight: 700,
+                lineHeight: 'var(--lh-md)',
+                color: 'var(--color-neutral-fg-default)',
+                marginBottom: 4,
+              }}>Edit quantities</div>
+
+              {/* Potatoes with stepper */}
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                padding: '12px 0',
+              }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                  <div style={{
+                    width: 48,
+                    height: 48,
+                    borderRadius: 'var(--radius-md)',
+                    overflow: 'hidden',
+                    background: '#e8dcd0',
+                    flexShrink: 0,
+                  }}>
+                    <img
+                      src="https://c.stocksy.com/a/1hd400/z9/1105895.jpg"
+                      alt="Potatoes"
+                      style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'left top' }}
+                    />
+                  </div>
+                  <div>
+                    <div style={{
+                      fontFamily: 'var(--font-body)',
+                      fontSize: 'var(--fs-sm)',
+                      fontWeight: 700,
+                      color: 'var(--color-neutral-fg-default)',
+                    }}>Potatoes</div>
+                    <div style={{
+                      fontFamily: 'var(--font-body)',
+                      fontSize: 'var(--fs-xs)',
+                      color: 'var(--color-neutral-fg-unselected)',
+                    }}>300g per serving</div>
+                    <div style={{
+                      fontFamily: 'var(--font-body)',
+                      fontSize: 'var(--fs-xs)',
+                      fontWeight: 700,
+                      color: 'var(--color-neutral-fg-default)',
+                      marginTop: 2,
+                    }}>+$0.85 per serving</div>
+                  </div>
+                </div>
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  background: 'var(--color-stepper-bg)',
+                  border: '1px solid var(--color-stepper-border)',
+                  borderRadius: 'var(--radius-stepper)',
+                }}>
+                  <button
+                    onClick={() => setPotatoServings(Math.max(1, potatoServings - 1))}
+                    style={{
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      width: 36, height: 36, background: 'transparent', border: 'none', cursor: 'pointer',
+                    }}
+                  >
+                    {Icons.minus(16, 'var(--color-neutral-fg-darkest)')}
+                  </button>
+                  <span style={{
+                    width: 28, textAlign: 'center',
+                    fontFamily: 'var(--font-body)', fontSize: 'var(--fs-md)', fontWeight: 700,
+                  }}>{potatoServings}</span>
+                  <button
+                    onClick={() => setPotatoServings(Math.min(6, potatoServings + 1))}
+                    style={{
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      width: 36, height: 36, background: 'transparent', border: 'none', cursor: 'pointer',
+                    }}
+                  >
+                    {Icons.plus(16, 'var(--color-neutral-fg-darkest)')}
+                  </button>
+                </div>
+              </div>
+
+              {/* Bacon with stepper */}
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                padding: '12px 0',
+              }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                  <div style={{
+                    width: 48,
+                    height: 48,
+                    borderRadius: 'var(--radius-md)',
+                    overflow: 'hidden',
+                    background: '#e8dcd0',
+                    flexShrink: 0,
+                  }}>
+                    <img
+                      src="https://c.stocksy.com/a/J9gD00/za/3260289.jpg"
+                      alt="Bacon"
+                      style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                    />
+                  </div>
+                  <div>
+                    <div style={{
+                      fontFamily: 'var(--font-body)',
+                      fontSize: 'var(--fs-sm)',
+                      fontWeight: 700,
+                      color: 'var(--color-neutral-fg-default)',
+                    }}>Bacon</div>
+                    <div style={{
+                      fontFamily: 'var(--font-body)',
+                      fontSize: 'var(--fs-xs)',
+                      color: 'var(--color-neutral-fg-unselected)',
+                    }}>50g per serving</div>
+                    <div style={{
+                      fontFamily: 'var(--font-body)',
+                      fontSize: 'var(--fs-xs)',
+                      fontWeight: 700,
+                      color: 'var(--color-neutral-fg-default)',
+                      marginTop: 2,
+                    }}>+$1.25 per serving</div>
+                  </div>
+                </div>
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  background: 'var(--color-stepper-bg)',
+                  border: '1px solid var(--color-stepper-border)',
+                  borderRadius: 'var(--radius-stepper)',
+                }}>
+                  <button
+                    onClick={() => setBaconServings(Math.max(1, baconServings - 1))}
+                    style={{
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      width: 36, height: 36, background: 'transparent', border: 'none', cursor: 'pointer',
+                    }}
+                  >
+                    {Icons.minus(16, 'var(--color-neutral-fg-darkest)')}
+                  </button>
+                  <span style={{
+                    width: 28, textAlign: 'center',
+                    fontFamily: 'var(--font-body)', fontSize: 'var(--fs-md)', fontWeight: 700,
+                  }}>{baconServings}</span>
+                  <button
+                    onClick={() => setBaconServings(Math.min(6, baconServings + 1))}
+                    style={{
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      width: 36, height: 36, background: 'transparent', border: 'none', cursor: 'pointer',
+                    }}
+                  >
+                    {Icons.plus(16, 'var(--color-neutral-fg-darkest)')}
+                  </button>
+                </div>
+              </div>
+
+              {/* Chicken with stepper */}
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                padding: '12px 0',
+              }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                  <div style={{
+                    width: 48,
+                    height: 48,
+                    borderRadius: 'var(--radius-md)',
+                    overflow: 'hidden',
+                    background: '#e8dcd0',
+                    flexShrink: 0,
+                  }}>
+                    <img
+                      src="https://c.stocksy.com/a/KZnA00/z9/2573826.jpg"
+                      alt="Chicken"
+                      style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                    />
+                  </div>
+                  <div>
+                    <div style={{
+                      fontFamily: 'var(--font-body)',
+                      fontSize: 'var(--fs-sm)',
+                      fontWeight: 700,
+                      color: 'var(--color-neutral-fg-default)',
+                    }}>Chicken</div>
+                    <div style={{
+                      fontFamily: 'var(--font-body)',
+                      fontSize: 'var(--fs-xs)',
+                      color: 'var(--color-neutral-fg-unselected)',
+                    }}>200g per serving</div>
+                    <div style={{
+                      fontFamily: 'var(--font-body)',
+                      fontSize: 'var(--fs-xs)',
+                      fontWeight: 700,
+                      color: 'var(--color-neutral-fg-default)',
+                      marginTop: 2,
+                    }}>+$1.50 per serving</div>
+                  </div>
+                </div>
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  background: 'var(--color-stepper-bg)',
+                  border: '1px solid var(--color-stepper-border)',
+                  borderRadius: 'var(--radius-stepper)',
+                }}>
+                  <button
+                    onClick={() => setChickenServings(Math.max(1, chickenServings - 1))}
+                    style={{
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      width: 36, height: 36, background: 'transparent', border: 'none', cursor: 'pointer',
+                    }}
+                  >
+                    {Icons.minus(16, 'var(--color-neutral-fg-darkest)')}
+                  </button>
+                  <span style={{
+                    width: 28, textAlign: 'center',
+                    fontFamily: 'var(--font-body)', fontSize: 'var(--fs-md)', fontWeight: 700,
+                  }}>{chickenServings}</span>
+                  <button
+                    onClick={() => {
+                      setChickenServings(Math.min(6, chickenServings + 1));
+                      setShowSuccessBanner(true);
+                      setShowConfetti(true);
+                      setTimeout(() => setShowConfetti(false), 2000);
+                    }}
+                    style={{
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      width: 36, height: 36, background: 'transparent', border: 'none', cursor: 'pointer',
+                    }}
+                  >
+                    {Icons.plus(16, 'var(--color-neutral-fg-darkest)')}
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* Tastes even better with section */}
+            <div style={{ padding: '0 16px 24px' }}>
+              <div style={{
+                fontFamily: 'var(--font-body)',
+                fontSize: 'var(--fs-md)',
+                fontWeight: 700,
+                lineHeight: 'var(--lh-md)',
+                color: 'var(--color-neutral-fg-default)',
+                marginBottom: 16,
+              }}>Tastes even better with</div>
+
+              {/* Pairing item */}
+              <button
+                onClick={() => setPairingSelected(!pairingSelected)}
+                style={{
+                  width: '100%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  padding: 0,
+                  paddingRight: 16,
+                  background: 'white',
+                  border: 'none',
+                  borderRadius: 'var(--radius-md)',
+                  cursor: 'pointer',
+                  textAlign: 'left',
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+                  <div style={{
+                    width: 100,
+                    height: 80,
+                    borderRadius: '8px 0 0 8px',
+                    overflow: 'hidden',
+                    background: '#e8dcd0',
+                  }}>
+                    <img
+                      src="https://images.unsplash.com/photo-1547592166-23ac45744acd?w=300&h=200&fit=crop"
+                      alt="Creamy Tomato Soup"
+                      style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                      onError={(e) => { e.target.style.display = 'none'; }}
+                    />
+                  </div>
+                  <div style={{ padding: '16px 0' }}>
+                    <div style={{
+                      fontFamily: 'var(--font-headline)',
+                      fontSize: 'var(--fs-md)',
+                      fontWeight: 700,
+                      lineHeight: 'var(--lh-sm)',
+                      color: 'var(--color-neutral-fg-default)',
+                    }}>Creamy Tomato Soup</div>
+                    <div style={{
+                      fontFamily: 'var(--font-body)',
+                      fontSize: 'var(--fs-sm)',
+                      fontWeight: 700,
+                      color: 'var(--color-neutral-fg-default)',
+                      marginTop: 4,
+                    }}>+$1.29</div>
+                    <div style={{
+                      fontFamily: 'var(--font-body)',
+                      fontSize: 'var(--fs-xs)',
+                      color: 'var(--color-neutral-fg-unselected)',
+                    }}>per serving</div>
+                  </div>
+                </div>
+                {/* Checkbox */}
+                <div style={{
+                  width: 20,
+                  height: 20,
+                  border: '1px solid var(--color-neutral-fg-darkest)',
+                  borderRadius: 4,
+                  background: pairingSelected ? 'var(--color-neutral-fg-darkest)' : 'var(--color-page-bg)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}>
+                  {pairingSelected && Icons.check(12, 'white')}
+                </div>
+              </button>
+
+              {/* Helper text */}
+              <div style={{
+                fontFamily: 'var(--font-body)',
+                fontSize: 'var(--fs-sm)',
+                color: 'var(--color-neutral-fg-unselected)',
+                marginTop: 8,
+                lineHeight: 'var(--lh-sm)',
+              }}>
+                You'll receive the right amount of this item to go with the recipe.
+              </div>
+            </div>
+          </div>
+
+          {/* Confetti overlay */}
+          {showConfetti && (
+            <div style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              height: '100%',
+              pointerEvents: 'none',
+              overflow: 'hidden',
+              zIndex: 100,
+            }}>
+              {[...Array(50)].map((_, i) => (
+                <div
+                  key={i}
+                  className="confetti"
+                  style={{
+                    position: 'absolute',
+                    top: -20,
+                    left: `${Math.random() * 100}%`,
+                    width: Math.random() * 10 + 5,
+                    height: Math.random() * 10 + 5,
+                    background: ['#067a46', '#91C788', '#FFD700', '#FF6B6B', '#4ECDC4', '#45B7D1'][Math.floor(Math.random() * 6)],
+                    borderRadius: Math.random() > 0.5 ? '50%' : '2px',
+                    animation: `confetti-fall ${Math.random() * 2 + 2}s ease-out forwards`,
+                    animationDelay: `${Math.random() * 0.5}s`,
+                  }}
+                />
+              ))}
+            </div>
+          )}
+
+          {/* Floating bottom CTA */}
+          <div style={{
+            position: 'absolute',
+            bottom: 0,
+            left: 0,
+            right: 0,
+            padding: '16px',
+            paddingBottom: 8,
+            pointerEvents: 'none',
+          }}>
+            {/* Banner with CTA inside */}
+            <div style={{
+              background: showBanner
+                ? (showSuccessBanner ? '#bbf06a' : '#FFF3E0')
+                : 'transparent',
+              borderRadius: 'var(--radius-md)',
+              padding: showBanner ? '12px 10px 10px' : '0',
+              boxShadow: showBanner ? '0 2px 12px rgba(0, 0, 0, 0.15)' : 'none',
+              pointerEvents: 'auto',
+              transition: 'all 0.3s ease',
+            }}>
+              {showBanner && (
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: 12,
+                  marginBottom: 10,
+                }}>
+                  {showSuccessBanner ? (
+                    <>
+                      <div style={{ textAlign: 'center' }}>
+                        <div style={{
+                          fontFamily: 'var(--font-body)',
+                          fontSize: 'var(--fs-sm)',
+                          fontWeight: 700,
+                          color: '#232323',
+                        }}>You've reached your daily goal!</div>
+                        <div style={{
+                          fontFamily: 'var(--font-body)',
+                          fontSize: 'var(--fs-xs)',
+                          color: '#454545',
+                        }}>{chickenServings * 40}g protein per serving</div>
+                      </div>
+                      <div style={{ fontSize: 24 }}>🎉</div>
+                    </>
+                  ) : (
+                    <>
+                      <div style={{ textAlign: 'center' }}>
+                        <div style={{
+                          fontFamily: 'var(--font-body)',
+                          fontSize: 'var(--fs-sm)',
+                          fontWeight: 700,
+                          color: 'var(--color-neutral-fg-default)',
+                        }}>40g protein per serving</div>
+                        <div style={{
+                          fontFamily: 'var(--font-body)',
+                          fontSize: 'var(--fs-xs)',
+                          color: 'var(--color-neutral-fg-unselected)',
+                        }}>Add more chicken to reach your daily goal</div>
+                      </div>
+                      <div style={{ fontSize: 24 }}>💪</div>
+                    </>
+                  )}
+                </div>
+              )}
+              <button
+                onClick={() => {
+                  onAdd();
+                  onClose();
+                }}
+                style={{
+                  width: '100%',
+                  padding: '12px 24px',
+                  border: 'none',
+                  borderRadius: 'var(--radius-button)',
+                  background: 'var(--color-neutral-fg-darkest)',
+                  color: 'white',
+                  fontFamily: 'var(--font-body)',
+                  fontSize: 'var(--fs-md)',
+                  fontWeight: 700,
+                  cursor: 'pointer',
+                  boxShadow: showBanner ? 'none' : '0 4px 16px rgba(0, 0, 0, 0.2)',
+                }}
+              >
+                Add to box
+              </button>
+            </div>
+            {/* Home indicator */}
+            <div style={{
+              display: 'flex',
+              justifyContent: 'center',
+              paddingTop: 12,
+              paddingBottom: 4,
+            }}>
+              <div style={{
+                width: 134,
+                height: 5,
+                background: 'var(--color-neutral-fg-default)',
+                borderRadius: 10,
+              }} />
+            </div>
+          </div>
+
+          {/* Organic Info Drawer - full screen */}
+          {showOrganicInfo && (
+            <div
+              className="organic-drawer-enter"
+              style={{
+                position: 'absolute',
+                inset: 0,
+                background: 'white',
+                zIndex: 20,
+                display: 'flex',
+                flexDirection: 'column',
+                overflow: 'hidden',
+              }}
+            >
+              {/* Fixed video at top */}
+              <div style={{
+                flexShrink: 0,
+                height: 220,
+                background: '#efe9de',
+                position: 'relative',
+              }}>
+                <video
+                  src="https://c.stocksy.com/a/RQwG00/y2/4037839.mp4"
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                />
+                {/* Back button */}
+                <button
+                  onClick={() => setShowOrganicInfo(false)}
+                  style={{
+                    position: 'absolute',
+                    top: 50,
+                    left: 16,
+                    width: 40,
+                    height: 40,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    background: 'rgba(255,255,255,0.9)',
+                    border: 'none',
+                    borderRadius: '50%',
+                    cursor: 'pointer',
+                  }}
+                >
+                  {Icons.arrowLeft(20, 'var(--color-neutral-fg-darkest)')}
+                </button>
+              </div>
+
+              {/* White content card with rounded corners */}
+              <div style={{
+                flex: 1,
+                background: 'white',
+                borderRadius: '24px 24px 0 0',
+                marginTop: -24,
+                display: 'flex',
+                flexDirection: 'column',
+                overflow: 'hidden',
+                position: 'relative',
+                zIndex: 5,
+              }}>
+                {/* Scrollable content inside white card */}
+                <div className="scroll-area" style={{ flex: 1, overflowY: 'auto', padding: '24px 16px 24px' }}>
+                    {/* Title */}
+                    <h1 style={{
+                      fontFamily: 'var(--font-headline)',
+                      fontSize: 'var(--fs-xl)',
+                      fontWeight: 700,
+                      lineHeight: 'var(--lh-lg)',
+                      color: 'var(--color-neutral-fg-darkest)',
+                      margin: '0 0 24px',
+                    }}>The Organic Difference</h1>
+
+                    {/* Benefit items with black icons */}
+                    {[
+                      { icon: (
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <circle cx="12" cy="12" r="10"/>
+                          <path d="M4.93 4.93l14.14 14.14"/>
+                        </svg>
+                      ), title: 'No Hidden Chemicals', desc: 'Raised without synthetic pesticides, GMOs, or routine antibiotics for a cleaner, safer meal.' },
+                      { icon: (
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <circle cx="12" cy="12" r="10"/>
+                          <path d="M2 12h20"/>
+                          <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                        </svg>
+                      ), title: 'Better for the Planet', desc: 'Organic farming practices protect soil health and support local ecosystems.' },
+                      { icon: (
+                        <img src="https://www.figma.com/api/mcp/asset/df75b21c-7245-4e8c-a35e-9e18f2eca515" width="24" height="24" alt="Chicken" style={{ filter: 'brightness(0)' }} />
+                      ), title: 'Higher Welfare Standards', desc: 'Our birds have guaranteed outdoor access and more space to roam freely.' },
+                      { icon: (
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M12 22V12"/>
+                          <path d="M12 12C12 12 8 10 8 6c0-2 1-4 4-4"/>
+                          <path d="M12 12C12 12 16 10 16 6c0-2-1-4-4-4"/>
+                          <path d="M12 12c-2 0-5 1-7 3"/>
+                          <path d="M12 12c2 0 5 1 7 3"/>
+                          <path d="M5 22c0-3 2-5 4-6"/>
+                          <path d="M19 22c0-3-2-5-4-6"/>
+                        </svg>
+                      ), title: 'Richer, Natural Flavor', desc: 'A natural diet and slower growth cycles result in a deeper, more authentic taste.' },
+                      { icon: (
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76z"/>
+                          <path d="M9 12l2 2 4-4"/>
+                        </svg>
+                      ), title: 'More Nutritious', desc: 'Typically contains higher levels of Omega-3 fatty acids and essential antioxidants.' },
+                    ].map((benefit, i) => (
+                      <div key={i} style={{
+                        display: 'flex',
+                        gap: 16,
+                        marginBottom: 24,
+                      }}>
+                        <div style={{
+                          flexShrink: 0,
+                          color: 'var(--color-neutral-fg-darkest)',
+                        }}>{benefit.icon}</div>
+                        <div>
+                          <div style={{
+                            fontFamily: 'var(--font-body)',
+                            fontSize: 'var(--fs-sm)',
+                            fontWeight: 700,
+                            color: 'var(--color-neutral-fg-darkest)',
+                            marginBottom: 4,
+                          }}>{benefit.title}</div>
+                          <div style={{
+                            fontFamily: 'var(--font-body)',
+                            fontSize: 'var(--fs-sm)',
+                            color: 'var(--color-neutral-fg-unselected)',
+                            lineHeight: 'var(--lh-sm)',
+                          }}>{benefit.desc}</div>
+                        </div>
+                      </div>
+                    ))}
+                </div>
+              </div>
+
+              {/* Bottom CTA */}
+              <div style={{
+                padding: '16px',
+                paddingBottom: 8,
+              }}>
+                <button
+                  onClick={() => setShowOrganicInfo(false)}
+                  style={{
+                    width: '100%',
+                    padding: '12px 24px',
+                    border: 'none',
+                    borderRadius: 'var(--radius-button)',
+                    background: 'var(--color-neutral-fg-darkest)',
+                    color: 'white',
+                    fontFamily: 'var(--font-body)',
+                    fontSize: 'var(--fs-md)',
+                    fontWeight: 700,
+                    cursor: 'pointer',
+                  }}
+                >
+                  Back to the product
+                </button>
+                {/* Home indicator */}
+                <div style={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  paddingTop: 12,
+                  paddingBottom: 4,
+                }}>
+                  <div style={{
+                    width: 134,
+                    height: 5,
+                    background: 'var(--color-neutral-fg-default)',
+                    borderRadius: 10,
+                  }} />
+                </div>
+              </div>
+            </div>
+          )}
+          </div>
+        </div>
+      );
+    }
+
+    // ========== CART DRAWER ==========
+    function CartDrawer({ isOpen, onClose, cart, mealsData, onRemove, onAdd }) {
+      const [addonQuantities, setAddonQuantities] = useState({ addon1: 1, addon2: 1 });
+
+      if (!isOpen) return null;
+
+      const cartItems = Object.entries(cart).map(([id, qty]) => ({
+        ...mealsData.find(m => m.id === parseInt(id)),
+        quantity: qty
+      })).filter(item => item.id);
+
+      const addOns = [
+        { id: 'addon1', name: 'Fresh Strawberry Pack', price: '$6.99', originalPrice: null, subscription: 'Subscribed to 1 per box', img: 'https://images.unsplash.com/photo-1464965911861-746a04b4bca6?w=200&h=200&fit=crop' },
+        { id: 'addon2', name: 'Everything Bagels 6 pack', price: 'FREE', originalPrice: '$9.99', badge: null, img: 'https://images.unsplash.com/photo-1608198093002-ad4e005484ec?w=200&h=200&fit=crop' },
+      ];
+
+      const totalMeals = Object.values(cart).reduce((sum, q) => sum + q, 0);
+      const mealsPrice = totalMeals * 9.99;
+      const addonsPrice = 131.95;
+      const shipping = 0;
+
+      return (
+        <div style={{
+          position: 'absolute',
+          inset: 0,
+          zIndex: 1000,
+          background: 'var(--color-page-bg)',
+          display: 'flex',
+          flexDirection: 'column',
+          overflow: 'hidden',
+        }}>
+          {/* Top navigation bar with Your cart */}
+          <div style={{
+            padding: '12px 16px',
+            borderBottom: '1px solid var(--color-divider)',
+            position: 'relative',
+          }}>
+            <button
+              onClick={onClose}
+              style={{
+                position: 'absolute',
+                left: 16,
+                top: '50%',
+                transform: 'translateY(-50%)',
+                display: 'flex',
+                alignItems: 'center',
+                background: 'transparent',
+                border: 'none',
+                cursor: 'pointer',
+                padding: 0,
+              }}
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-neutral-fg-darkest)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <polyline points="15 18 9 12 15 6"></polyline>
+              </svg>
+            </button>
+            <div style={{ textAlign: 'center' }}>
+              <h2 style={{
+                fontFamily: 'var(--font-headline)',
+                fontSize: 'var(--fs-xl)',
+                fontWeight: 700,
+                margin: '0 0 4px 0',
+                color: 'var(--color-neutral-fg-default)',
+              }}>Your cart</h2>
+              <div style={{
+                fontFamily: 'var(--font-body)',
+                fontSize: 'var(--fs-sm)',
+                color: 'var(--color-neutral-fg-default)',
+                textDecoration: 'underline',
+              }}>Edit delivery by Wed, May 5</div>
+            </div>
+          </div>
+
+          <div style={{ flex: 1, display: 'flex', flexDirection: 'column', position: 'relative', overflow: 'hidden' }}>
+            {/* Scrollable content */}
+            <div className="scroll-area" style={{ flex: 1, overflowY: 'auto', paddingBottom: 100 }}>
+              {/* Meals section */}
+              <div style={{ padding: '16px 16px 16px' }}>
+                <div style={{
+                  fontFamily: 'var(--font-headline)',
+                  fontSize: 'var(--fs-lg)',
+                  fontWeight: 700,
+                  color: 'var(--color-neutral-fg-default)',
+                  marginBottom: 8,
+                }}>{totalMeals} Meals</div>
+
+                {cartItems.map((item) => (
+                  <div key={item.id} style={{
+                    display: 'flex',
+                    gap: 12,
+                    padding: '12px 0',
+                    alignItems: 'flex-start',
+                  }}>
+                    <div style={{
+                      width: 56,
+                      height: 56,
+                      borderRadius: 'var(--radius-md)',
+                      overflow: 'hidden',
+                      flexShrink: 0,
+                    }}>
+                      <img src={item.img} alt={item.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    </div>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div style={{
+                        fontFamily: 'var(--font-body)',
+                        fontSize: 'var(--fs-sm)',
+                        fontWeight: 700,
+                        color: 'var(--color-neutral-fg-default)',
+                        lineHeight: 1.3,
+                      }}>{item.name}</div>
+                      {item.id === 1 && (
+                        <div style={{
+                          fontFamily: 'var(--font-body)',
+                          fontSize: 'var(--fs-xs)',
+                          color: '#067a46',
+                          marginTop: 4,
+                        }}>+ Organic Chicken +$4.98</div>
+                      )}
+                    </div>
+                    <div style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      background: 'var(--color-stepper-bg)',
+                      border: '1px solid var(--color-stepper-border)',
+                      borderRadius: 'var(--radius-stepper)',
+                      height: 32,
+                      flexShrink: 0,
+                    }}>
+                      <button onClick={() => onRemove(item.id)} style={{
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        width: 32, height: 32, background: 'transparent', border: 'none', cursor: 'pointer',
+                      }}>{Icons.minus(14, 'var(--color-neutral-fg-darkest)')}</button>
+                      <span style={{
+                        width: 24, textAlign: 'center',
+                        fontFamily: 'var(--font-body)', fontSize: 'var(--fs-sm)', fontWeight: 700,
+                      }}>{item.quantity}</span>
+                      <button onClick={() => onAdd(item.id)} style={{
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        width: 32, height: 32, background: 'transparent', border: 'none', cursor: 'pointer',
+                      }}>{Icons.plus(14, 'var(--color-neutral-fg-darkest)')}</button>
+                    </div>
+                  </div>
+                ))}
+
+                {/* Add more meals banner */}
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 8,
+                  padding: '12px 16px',
+                  background: '#EFE9DE',
+                  borderRadius: 'var(--radius-md)',
+                  marginTop: 8,
+                }}>
+                  <span style={{ fontSize: 18 }}>+</span>
+                  <span style={{
+                    fontFamily: 'var(--font-body)',
+                    fontSize: 'var(--fs-sm)',
+                    color: 'var(--color-neutral-fg-default)',
+                  }}>
+                    Add a 4th meal for only <span style={{ textDecoration: 'line-through', color: 'var(--color-neutral-fg-unselected)' }}>$11.99</span> <span style={{ color: '#d32f2f', fontWeight: 700 }}>$9.99</span>
+                  </span>
+                </div>
+              </div>
+
+              {/* Add-ons section */}
+              <div style={{ padding: '0 16px 16px', marginTop: 16 }}>
+                <div style={{
+                  fontFamily: 'var(--font-headline)',
+                  fontSize: 'var(--fs-lg)',
+                  fontWeight: 700,
+                  color: 'var(--color-neutral-fg-default)',
+                  marginBottom: 8,
+                  marginTop: 4,
+                }}>Add-ons</div>
+
+                {addOns.map((addon, idx) => (
+                  <div key={addon.id} style={{
+                    display: 'flex',
+                    gap: 12,
+                    padding: '12px 0',
+                    alignItems: 'flex-start',
+                  }}>
+                    <div style={{
+                      width: 56,
+                      height: 56,
+                      borderRadius: 'var(--radius-md)',
+                      overflow: 'hidden',
+                      flexShrink: 0,
+                    }}>
+                      <img src={addon.img} alt={addon.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    </div>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div style={{
+                        fontFamily: 'var(--font-body)',
+                        fontSize: 'var(--fs-sm)',
+                        fontWeight: 700,
+                        color: 'var(--color-neutral-fg-default)',
+                      }}>{addon.name}</div>
+                      {addon.badge && (
+                        <div style={{
+                          display: 'inline-block',
+                          padding: '2px 8px',
+                          background: '#e8f5e9',
+                          borderRadius: 4,
+                          fontFamily: 'var(--font-body)',
+                          fontSize: 'var(--fs-xs)',
+                          color: '#067a46',
+                          fontWeight: 700,
+                          marginTop: 4,
+                        }}>{addon.badge}</div>
+                      )}
+                      {addon.subscription && (
+                        <div style={{
+                          fontFamily: 'var(--font-body)',
+                          fontSize: 'var(--fs-xs)',
+                          color: 'var(--color-neutral-fg-unselected)',
+                          marginTop: 4,
+                        }}>{addon.subscription}</div>
+                      )}
+                      <div style={{ marginTop: 4 }}>
+                        {addon.originalPrice && (
+                          <span style={{
+                            fontFamily: 'var(--font-body)',
+                            fontSize: 'var(--fs-sm)',
+                            color: 'var(--color-neutral-fg-unselected)',
+                            textDecoration: 'line-through',
+                            marginRight: 4,
+                          }}>{addon.originalPrice}</span>
+                        )}
+                        <span style={{
+                          fontFamily: 'var(--font-body)',
+                          fontSize: 'var(--fs-sm)',
+                          fontWeight: 700,
+                          color: addon.price === 'FREE' ? '#067a46' : 'var(--color-neutral-fg-default)',
+                        }}>{addon.price}</span>
+                      </div>
+                    </div>
+                    <div style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      background: 'var(--color-stepper-bg)',
+                      border: '1px solid var(--color-stepper-border)',
+                      borderRadius: 'var(--radius-stepper)',
+                      height: 32,
+                      flexShrink: 0,
+                    }}>
+                      <button onClick={() => setAddonQuantities(prev => ({...prev, [addon.id]: Math.max(0, (prev[addon.id] || 1) - 1)}))} style={{
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        width: 32, height: 32, background: 'transparent', border: 'none', cursor: 'pointer',
+                      }}>{Icons.minus(14, 'var(--color-neutral-fg-darkest)')}</button>
+                      <span style={{
+                        width: 24, textAlign: 'center',
+                        fontFamily: 'var(--font-body)', fontSize: 'var(--fs-sm)', fontWeight: 700,
+                      }}>{addonQuantities[addon.id] || 1}</span>
+                      <button onClick={() => setAddonQuantities(prev => ({...prev, [addon.id]: (prev[addon.id] || 1) + 1}))} style={{
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        width: 32, height: 32, background: 'transparent', border: 'none', cursor: 'pointer',
+                      }}>{Icons.plus(14, 'var(--color-neutral-fg-darkest)')}</button>
+                    </div>
+                  </div>
+                ))}
+
+                {/* Shop for more banner */}
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  padding: '12px 16px',
+                  background: '#EFE9DE',
+                  borderRadius: 'var(--radius-md)',
+                  marginTop: 8,
+                }}>
+                  <span style={{
+                    fontFamily: 'var(--font-body)',
+                    fontSize: 'var(--fs-sm)',
+                    fontWeight: 700,
+                    color: 'var(--color-neutral-fg-default)',
+                  }}>Shop for desserts, sides, and more</span>
+                  {Icons.chevronRight(16, 'var(--color-neutral-fg-default)')}
+                </div>
+              </div>
+
+              {/* Round out your weekly menu section */}
+              <div style={{ padding: '16px 16px 24px', background: '#EFE9DE', margin: '16px 0 16px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 8 }}>
+                  <h3 style={{
+                    fontFamily: 'var(--font-headline)',
+                    fontSize: 'var(--fs-lg)',
+                    fontWeight: 700,
+                    color: 'var(--color-neutral-fg-default)',
+                    margin: 0,
+                    lineHeight: 1.3,
+                  }}>Round out your weekly menu</h3>
+                  <span style={{
+                    fontFamily: 'var(--font-body)',
+                    fontSize: 'var(--fs-sm)',
+                    fontWeight: 700,
+                    color: 'var(--color-neutral-fg-default)',
+                    textDecoration: 'underline',
+                    whiteSpace: 'nowrap',
+                    marginLeft: 16,
+                  }}>Show more</span>
+                </div>
+                <p style={{
+                  fontFamily: 'var(--font-body)',
+                  fontSize: 'var(--fs-sm)',
+                  color: 'var(--color-neutral-fg-unselected)',
+                  margin: '0 0 16px 0',
+                  lineHeight: 1.4,
+                }}>3 nights are covered with your home-cooked kits. Grab a few ready-to-eat meals to stay fueled for the rest of the week.</p>
+
+                <div style={{ display: 'flex', gap: 12 }}>
+                  {/* Product card 1 */}
+                  <div style={{ flex: 1 }}>
+                    <div style={{
+                      width: '100%',
+                      aspectRatio: '4/5',
+                      borderRadius: 'var(--radius-md)',
+                      overflow: 'hidden',
+                      marginBottom: 8,
+                    }}>
+                      <img
+                        src="https://c.stocksy.com/a/Xt0O00/z9/5723315.jpg"
+                        alt="Chicken Teriyaki Bowl"
+                        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                      />
+                    </div>
+                    <div style={{
+                      fontFamily: 'var(--font-body)',
+                      fontSize: 'var(--fs-sm)',
+                      fontWeight: 700,
+                      color: 'var(--color-neutral-fg-default)',
+                      marginBottom: 4,
+                      lineHeight: 1.3,
+                    }}>Chicken Teriyaki Bowl</div>
+                    <div style={{
+                      fontFamily: 'var(--font-body)',
+                      fontSize: 'var(--fs-sm)',
+                      color: 'var(--color-neutral-fg-default)',
+                      marginBottom: 8,
+                    }}>+$12.99 <span style={{ color: 'var(--color-neutral-fg-unselected)', fontWeight: 400 }}>per serving</span></div>
+                    <button style={{
+                      padding: '8px 16px',
+                      border: '1px solid var(--color-neutral-fg-darkest)',
+                      borderRadius: 'var(--radius-button)',
+                      background: 'transparent',
+                      fontFamily: 'var(--font-body)',
+                      fontSize: 'var(--fs-sm)',
+                      fontWeight: 700,
+                      cursor: 'pointer',
+                      width: '100%',
+                    }}>Add to cart</button>
+                  </div>
+
+                  {/* Product card 2 */}
+                  <div style={{ flex: 1 }}>
+                    <div style={{
+                      width: '100%',
+                      aspectRatio: '4/5',
+                      borderRadius: 'var(--radius-md)',
+                      overflow: 'hidden',
+                      marginBottom: 8,
+                    }}>
+                      <img
+                        src="https://c.stocksy.com/a/5WYA00/z9/2515965.jpg"
+                        alt="Thai Basil Chicken Rice"
+                        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                      />
+                    </div>
+                    <div style={{
+                      fontFamily: 'var(--font-body)',
+                      fontSize: 'var(--fs-sm)',
+                      fontWeight: 700,
+                      color: 'var(--color-neutral-fg-default)',
+                      marginBottom: 4,
+                      lineHeight: 1.3,
+                    }}>Thai Basil Chicken Rice</div>
+                    <div style={{
+                      fontFamily: 'var(--font-body)',
+                      fontSize: 'var(--fs-sm)',
+                      color: 'var(--color-neutral-fg-default)',
+                      marginBottom: 8,
+                    }}>+$12.99 <span style={{ color: 'var(--color-neutral-fg-unselected)', fontWeight: 400 }}>per serving</span></div>
+                    <button style={{
+                      padding: '8px 16px',
+                      border: '1px solid var(--color-neutral-fg-darkest)',
+                      borderRadius: 'var(--radius-button)',
+                      background: 'transparent',
+                      fontFamily: 'var(--font-body)',
+                      fontSize: 'var(--fs-sm)',
+                      fontWeight: 700,
+                      cursor: 'pointer',
+                      width: '100%',
+                    }}>Add to cart</button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Ordering & delivery section */}
+              <div style={{ padding: '16px', background: '#FAF8F3', marginBottom: 16 }}>
+                <div style={{
+                  fontFamily: 'var(--font-headline)',
+                  fontSize: 'var(--fs-lg)',
+                  fontWeight: 700,
+                  color: 'var(--color-neutral-fg-default)',
+                  marginBottom: 8,
+                }}>Ordering & delivery</div>
+                <div style={{
+                  fontFamily: 'var(--font-body)',
+                  fontSize: 'var(--fs-sm)',
+                  color: 'var(--color-neutral-fg-unselected)',
+                  marginBottom: 8,
+                }}>Your order will be placed on Wednesday, May 5 11:59 PM</div>
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 12,
+                  background: '#EFE9DE',
+                  borderRadius: 'var(--radius-md)',
+                  padding: '12px 16px',
+                }}>
+                  <span style={{ fontSize: 24 }}>🚚</span>
+                  <div>
+                    <div style={{
+                      fontFamily: 'var(--font-body)',
+                      fontSize: 'var(--fs-sm)',
+                      color: 'var(--color-neutral-fg-default)',
+                    }}>Delivery window</div>
+                    <div style={{
+                      fontFamily: 'var(--font-body)',
+                      fontSize: 'var(--fs-sm)',
+                      fontWeight: 700,
+                      color: 'var(--color-neutral-fg-default)',
+                    }}>Sat, May 8, 8:00 AM - 12:00 PM</div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Order total */}
+              <div style={{ padding: '0 16px 16px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
+                  <span style={{
+                    fontFamily: 'var(--font-headline)',
+                    fontSize: 'var(--fs-lg)',
+                    fontWeight: 700,
+                    color: 'var(--color-neutral-fg-default)',
+                  }}>Order total</span>
+                  <span style={{
+                    padding: '2px 8px',
+                    background: '#e8f5e9',
+                    borderRadius: 4,
+                    fontFamily: 'var(--font-body)',
+                    fontSize: 'var(--fs-xs)',
+                    color: '#067a46',
+                    fontWeight: 700,
+                  }}>$53.57 saved!</span>
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6 }}>
+                  <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--fs-sm)', color: 'var(--color-neutral-fg-unselected)' }}>{totalMeals} Meals for 2 people</span>
+                  <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--fs-sm)', color: 'var(--color-neutral-fg-default)' }}>${(totalMeals * 9.99).toFixed(2)}</span>
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6 }}>
+                  <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--fs-sm)', color: 'var(--color-neutral-fg-unselected)' }}>1 Specialties or custom</span>
+                  <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--fs-sm)', color: 'var(--color-neutral-fg-default)' }}>$22.95</span>
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6 }}>
+                  <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--fs-sm)', color: 'var(--color-neutral-fg-unselected)' }}>3 Add-ons</span>
+                  <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--fs-sm)', color: 'var(--color-neutral-fg-default)' }}>$131.95</span>
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6 }}>
+                  <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--fs-sm)', color: '#d32f2f' }}>Free item</span>
+                  <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--fs-sm)', color: '#d32f2f' }}>-$5.99</span>
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6 }}>
+                  <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--fs-sm)', color: 'var(--color-neutral-fg-unselected)' }}>Shipping</span>
+                  <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--fs-sm)', color: '#d32f2f', fontWeight: 700 }}>FREE</span>
+                </div>
+                <div style={{ borderTop: '1px solid var(--color-divider)', paddingTop: 8, marginTop: 8, display: 'flex', justifyContent: 'space-between' }}>
+                  <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--fs-md)', fontWeight: 700, color: 'var(--color-neutral-fg-default)' }}>Total</span>
+                  <div style={{ textAlign: 'right' }}>
+                    <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--fs-sm)', color: 'var(--color-neutral-fg-unselected)', textDecoration: 'line-through', marginRight: 8 }}>$225.88</span>
+                    <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--fs-md)', fontWeight: 700, color: 'var(--color-neutral-fg-default)' }}>$178.27</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Floating Bottom CTA */}
+            <div style={{
+              position: 'absolute',
+              bottom: 0,
+              left: 0,
+              right: 0,
+              padding: '16px 16px 8px',
+              background: 'linear-gradient(to top, var(--color-page-bg) 80%, transparent)',
+              pointerEvents: 'none',
+            }}>
+              <button onClick={onClose} style={{
+                width: '100%',
+                padding: '14px 24px',
+                border: 'none',
+                borderRadius: 'var(--radius-button)',
+                background: 'var(--color-neutral-fg-darkest)',
+                color: 'white',
+                fontFamily: 'var(--font-body)',
+                fontSize: 'var(--fs-md)',
+                fontWeight: 700,
+                cursor: 'pointer',
+                boxShadow: '0 4px 16px rgba(0, 0, 0, 0.2)',
+                pointerEvents: 'auto',
+              }}>Confirm</button>
+              <div style={{ display: 'flex', justifyContent: 'center', paddingTop: 12, paddingBottom: 4 }}>
+                <div style={{ width: 134, height: 5, background: 'var(--color-neutral-fg-default)', borderRadius: 10 }} />
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    // ========== MAIN APP ==========
+    function App() {
+      const [cart, setCart] = useState({ 2: 1, 3: 1 });
+      const [showExitDialog, setShowExitDialog] = useState(false);
+      const [customizeMeal, setCustomizeMeal] = useState(null);
+      const [showCart, setShowCart] = useState(false);
+      const MEALS_NEEDED = 6;
+
+      const totalItems = Object.values(cart).reduce((sum, q) => sum + q, 0);
+      const mealsRemaining = Math.max(0, MEALS_NEEDED - totalItems);
+
+      const addToCart = (id) => setCart(prev => ({ ...prev, [id]: (prev[id] || 0) + 1 }));
+      const removeFromCart = (id) => setCart(prev => {
+        const c = { ...prev };
+        if (c[id] > 1) c[id] -= 1;
+        else delete c[id];
+        return c;
+      });
+
+      const handleAddMeal = (meal) => {
+        // Meal ID 1 is customizable - open drawer
+        if (meal.id === 1 && (cart[meal.id] || 0) === 0) {
+          setCustomizeMeal(meal);
+        } else {
+          addToCart(meal.id);
+        }
+      };
+
+      const handleNavClick = (label) => {
+        if (totalItems > 0 && mealsRemaining > 0) setShowExitDialog(true);
+        else alert(`Navigating to ${label}...`);
+      };
+
+      return (
+        <div className="phone-frame">
+          <StatusBar />
+          <WeekNavigation />
+
+          {/* Scrollable content area */}
+          <div className="scroll-area" style={{
+            position: 'absolute',
+            top: 118,
+            left: 0,
+            right: 0,
+            bottom: 83,
+            overflowY: 'auto',
+          }}>
+            <TabGroup />
+            <FilterTagsRow />
+
+            {/* Cards */}
+            <div style={{ padding: '12px 8px 0' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+                {mealsData.slice(0, 4).map(meal => (
+                  <ProductCard
+                    key={meal.id}
+                    meal={meal}
+                    quantity={cart[meal.id] || 0}
+                    onAdd={() => handleAddMeal(meal)}
+                    onRemove={() => removeFromCart(meal.id)}
+                  />
+                ))}
+              </div>
+
+              <BenefitsWidget />
+
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, paddingBottom: 120 }}>
+                {mealsData.slice(4).map(meal => (
+                  <ProductCard
+                    key={meal.id}
+                    meal={meal}
+                    quantity={cart[meal.id] || 0}
+                    onAdd={() => handleAddMeal(meal)}
+                    onRemove={() => removeFromCart(meal.id)}
+                  />
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <MealSelectionGuidance totalItems={totalItems} mealsNeeded={MEALS_NEEDED} onCartClick={() => setShowCart(true)} />
+          <BottomNavigation onNavClick={handleNavClick} />
+
+          <Dialog
+            isOpen={showExitDialog}
+            headerText="You have meals to choose!"
+            bodyText="If you don't choose any more meals, we'll select the best meals for you."
+            confirmText={`Select ${mealsRemaining} more meal${mealsRemaining !== 1 ? 's' : ''}`}
+            cancelText="Discard my selection"
+            onConfirm={() => setShowExitDialog(false)}
+            onCancel={() => { setCart({}); setShowExitDialog(false); }}
+          />
+
+          <CustomizationDrawer
+            meal={customizeMeal}
+            isOpen={customizeMeal !== null}
+            onClose={() => setCustomizeMeal(null)}
+            onAdd={() => addToCart(customizeMeal.id)}
+          />
+
+          <CartDrawer
+            isOpen={showCart}
+            onClose={() => setShowCart(false)}
+            cart={cart}
+            mealsData={mealsData}
+            onRemove={removeFromCart}
+            onAdd={addToCart}
+          />
+        </div>
+      );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<App />);
+  </script>
+</body>
+</html>

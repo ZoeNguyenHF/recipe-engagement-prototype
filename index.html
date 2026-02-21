@@ -2057,105 +2057,130 @@
 
               {/* Protein Dashboard Visualization */}
               <div style={{
-                background: 'linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%)',
+                background: 'white',
                 borderRadius: 12,
                 padding: 16,
                 marginTop: 16,
+                boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
               }}>
                 {/* Header */}
                 <div style={{
-                  fontFamily: 'var(--font-body)',
-                  fontSize: 'var(--fs-sm)',
-                  fontWeight: 700,
-                  color: 'var(--color-neutral-fg-default)',
-                  marginBottom: 16,
-                }}>Hit your protein goals</div>
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  marginBottom: 12,
+                }}>
+                  <span style={{
+                    fontFamily: 'var(--font-body)',
+                    fontSize: 'var(--fs-sm)',
+                    fontWeight: 700,
+                    color: 'var(--color-neutral-fg-default)',
+                  }}>Power Up Your Protein</span>
+                  <span style={{
+                    fontFamily: 'var(--font-body)',
+                    fontSize: 'var(--fs-sm)',
+                    color: 'var(--color-neutral-fg-unselected)',
+                  }}>Daily goal: 80g</span>
+                </div>
 
-                {/* Now - progress bar */}
-                <div style={{ marginBottom: 12 }}>
-                  <div style={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    marginBottom: 6,
-                  }}>
-                    <span style={{
-                      fontFamily: 'var(--font-body)',
-                      fontSize: 'var(--fs-xs)',
-                      color: 'var(--color-neutral-fg-unselected)',
-                    }}>Now</span>
-                    <span style={{
-                      fontFamily: 'var(--font-body)',
-                      fontSize: 'var(--fs-sm)',
-                      fontWeight: 700,
-                      color: 'var(--color-neutral-fg-default)',
-                    }}>40g <span style={{ fontWeight: 400, color: 'var(--color-neutral-fg-unselected)' }}>· 50%</span></span>
-                  </div>
+                {/* Single bar with markers */}
+                <div style={{ position: 'relative', paddingTop: 24, paddingBottom: 8 }}>
+                  {/* Progress bar */}
                   <div style={{
                     height: 8,
-                    background: 'rgba(255,255,255,0.6)',
+                    background: '#E8E8E8',
                     borderRadius: 4,
-                    overflow: 'hidden',
+                    overflow: 'visible',
+                    position: 'relative',
                   }}>
+                    {/* Filled portion up to "now" (50%) */}
                     <div style={{
                       width: '50%',
                       height: '100%',
-                      background: '#7cb342',
+                      background: 'linear-gradient(90deg, #C6E953 0%, #C6E953 100%)',
                       borderRadius: 4,
                     }} />
-                  </div>
-                </div>
 
-                {/* Double - progress bar */}
-                <div style={{
-                  background: 'rgba(6, 122, 70, 0.1)',
-                  borderRadius: 8,
-                  padding: 12,
-                  border: '2px solid #067a46',
-                }}>
-                  <div style={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    marginBottom: 6,
-                  }}>
-                    <span style={{
-                      fontFamily: 'var(--font-body)',
-                      fontSize: 'var(--fs-xs)',
-                      fontWeight: 700,
-                      color: '#067a46',
-                    }}>Double your protein</span>
-                    <span style={{
-                      fontFamily: 'var(--font-body)',
-                      fontSize: 'var(--fs-sm)',
-                      fontWeight: 700,
-                      color: '#067a46',
-                    }}>80g <span style={{ fontWeight: 400 }}>· 100%</span></span>
+                    {/* Now marker at 50% */}
+                    <div style={{
+                      position: 'absolute',
+                      left: '50%',
+                      top: '50%',
+                      transform: 'translate(-50%, -50%)',
+                      width: 3,
+                      height: 16,
+                      background: '#666666',
+                      borderRadius: 2,
+                    }} />
+
+                    {/* Double marker at 100% with fire */}
+                    <div style={{
+                      position: 'absolute',
+                      right: 0,
+                      top: '50%',
+                      transform: 'translate(50%, -50%)',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                    }}>
+                      <div style={{
+                        width: 3,
+                        height: 16,
+                        background: '#C6E953',
+                        borderRadius: 2,
+                      }} />
+                    </div>
                   </div>
+
+                  {/* Now label */}
                   <div style={{
-                    height: 8,
-                    background: 'rgba(255,255,255,0.6)',
-                    borderRadius: 4,
-                    overflow: 'hidden',
-                    marginBottom: 8,
+                    position: 'absolute',
+                    left: '50%',
+                    top: 0,
+                    transform: 'translateX(-50%)',
+                    textAlign: 'center',
                   }}>
                     <div style={{
-                      width: '100%',
-                      height: '100%',
-                      background: '#067a46',
-                      borderRadius: 4,
-                    }} />
+                      fontFamily: 'var(--font-body)',
+                      fontSize: 11,
+                      color: '#666666',
+                      fontWeight: 600,
+                    }}>Now</div>
+                    <div style={{
+                      fontFamily: 'var(--font-body)',
+                      fontSize: 10,
+                      color: 'var(--color-neutral-fg-unselected)',
+                    }}>40g</div>
                   </div>
+
+                  {/* Double label with fire */}
                   <div style={{
-                    fontFamily: 'var(--font-body)',
-                    fontSize: 11,
-                    color: '#067a46',
+                    position: 'absolute',
+                    right: 0,
+                    top: 0,
+                    transform: 'translateX(50%)',
+                    textAlign: 'center',
                     display: 'flex',
+                    flexDirection: 'column',
                     alignItems: 'center',
-                    gap: 4,
                   }}>
-                    <span>✓</span>
-                    <span>Reach your recommended daily intake of 80g</span>
+                    <div style={{
+                      fontFamily: 'var(--font-body)',
+                      fontSize: 11,
+                      color: '#067a46',
+                      fontWeight: 600,
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 2,
+                    }}>
+                      <span>🔥</span>
+                      <span>Double</span>
+                    </div>
+                    <div style={{
+                      fontFamily: 'var(--font-body)',
+                      fontSize: 10,
+                      color: 'var(--color-neutral-fg-unselected)',
+                    }}>80g</div>
                   </div>
                 </div>
               </div>
@@ -5416,10 +5441,10 @@
 
                   <div style={{ display: 'flex', gap: 12, overflowX: 'auto', paddingLeft: 16, paddingRight: 16 }} className="h-scroll">
                     {[
-                      { id: 'sale-1', name: 'Creamy Pesto Chicken', time: '25 min', kcal: '680 kcal', protein: '32g protein', newPrice: '$9.99', oldPrice: '$12.99', img: 'recipes/HelloFresh Main Image (15).jpg' },
-                      { id: 'sale-2', name: 'Honey Garlic Salmon', time: '20 min', kcal: '720 kcal', protein: '38g protein', newPrice: '$10.49', oldPrice: '$13.99', img: 'recipes/HelloFresh Main Image (16).jpg' },
-                      { id: 'sale-3', name: 'Garlic Butter Shrimp', time: '20 min', kcal: '520 kcal', protein: '28g protein', newPrice: '$11.49', oldPrice: '$14.99', img: 'recipes/HelloFresh Main Image (10).jpg' },
-                      { id: 'sale-4', name: 'Tuscan Chicken Pasta', time: '25 min', kcal: '680 kcal', protein: '35g protein', newPrice: '$8.99', oldPrice: '$11.99', img: 'recipes/HelloFresh Main Image (11).jpg' },
+                      { id: 'sale-1', name: 'Sesame Beef Noodle Stir-Fry', time: '25 min', kcal: '680 kcal', protein: '32g protein', newPrice: '$9.99', oldPrice: '$12.99', img: 'recipes/HelloFresh Main Image (15).jpg' },
+                      { id: 'sale-2', name: 'Glazed Sirloin with Fresh Greens', time: '20 min', kcal: '720 kcal', protein: '38g protein', newPrice: '$10.49', oldPrice: '$13.99', img: 'recipes/HelloFresh Main Image (16).jpg' },
+                      { id: 'sale-3', name: 'Crispy Chicken with Sweet Potato Wedges', time: '20 min', kcal: '520 kcal', protein: '28g protein', newPrice: '$11.49', oldPrice: '$14.99', img: 'recipes/HelloFresh Main Image (10).jpg' },
+                      { id: 'sale-4', name: 'Pork Tacos with Lime Slaw', time: '25 min', kcal: '680 kcal', protein: '35g protein', newPrice: '$8.99', oldPrice: '$11.99', img: 'recipes/HelloFresh Main Image (11).jpg' },
                     ].map((meal) => (
                       <div key={meal.id} style={{
                         flexShrink: 0,

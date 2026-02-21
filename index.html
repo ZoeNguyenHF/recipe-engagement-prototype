@@ -7,6 +7,7 @@
   <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="https://mcp.figma.com/mcp/html-to-design/capture.js" async></script>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
   <style>
     * {
@@ -45,7 +46,7 @@
       --color-factor-carbon-100: #f9f9f3;
 
       /* Neutral foreground */
-      --color-neutral-fg-darkest: #232323;
+      --color-neutral-fg-darkest: #024426;
       --color-neutral-fg-default: #242424;
       --color-neutral-fg-darker: #454545;
       --color-neutral-fg-base-alt: #4b4b4b;
@@ -62,7 +63,7 @@
       --color-tag-interactive-bg: #efe9de;
       --color-tag-interactive-fg: #242424;
       --color-tag-static-bg-v0: #e0d9cb;
-      --color-tag-static-fg-v0: #232323;
+      --color-tag-static-fg-v0: #024426;
       --color-tag-static-bg-v1: #db1d1d;
       --color-tag-static-fg-v1: #ffffff;
       --color-tag-static-bg-v2: #067a46;
@@ -73,13 +74,13 @@
 
       /* Bottom nav */
       --color-bottom-nav-bg: #e0d9cb;
-      --color-bottom-nav-fg-selected: #232323;
+      --color-bottom-nav-fg-selected: #024426;
       --color-bottom-nav-fg-unselected: #656565;
 
       /* Button */
       --color-button-brand-bg-disabled: #adadad;
       --color-button-brand-fg: #ffffff;
-      --color-button-border: #232323;
+      --color-button-border: #024426;
 
       /* Badge */
       --color-badge-positive-bg: #007838;
@@ -88,11 +89,11 @@
 
       /* Number stepper */
       --color-stepper-bg: #efe9de;
-      --color-stepper-border: #232323;
+      --color-stepper-border: #024426;
       --color-stepper-selected-bg: #efe9de;
 
       /* Icon button toggle */
-      --color-icon-btn-toggle-bg: #232323;
+      --color-icon-btn-toggle-bg: #024426;
       --color-icon-btn-toggle-fg: #ffffff;
 
       /* Benefits */
@@ -100,9 +101,9 @@
       --color-purple-100: #f7e9ff;
 
       /* Tab group */
-      --color-tab-fg-selected: #232323;
+      --color-tab-fg-selected: #024426;
       --color-tab-fg-unselected: #242424;
-      --color-tab-border-selected: #232323;
+      --color-tab-border-selected: #024426;
       --color-tab-border-unselected: #e0e0e0;
 
       /* Dialog */
@@ -240,6 +241,56 @@
     .badge-pulse {
       animation: badgePulse 0.3s ease-out;
     }
+    @keyframes featureTagGlow {
+      0%, 100% { box-shadow: 0 0 4px rgba(255, 213, 79, 0.4); }
+      50% { box-shadow: 0 0 12px rgba(255, 213, 79, 0.8); }
+    }
+    .feature-tag-pulse {
+      animation: featureTagGlow 2s ease-in-out infinite;
+    }
+
+    /* Laurel wreath animation for premium ingredients */
+    @keyframes laurelSeparateLeft {
+      0% { transform: translateX(8px); }
+      100% { transform: translateX(0); }
+    }
+    @keyframes laurelSeparateRight {
+      0% { transform: translateX(-8px); }
+      100% { transform: translateX(0); }
+    }
+    @keyframes laurelTextFadeIn {
+      0% { opacity: 0; transform: scale(0.8); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+    .laurel-left {
+      animation: laurelSeparateLeft 0.5s ease-out 0.3s forwards;
+      transform: translateX(8px);
+    }
+    @keyframes laurelSeparateRightMirrored {
+      0% { transform: scaleX(-1) translateX(8px); }
+      100% { transform: scaleX(-1) translateX(0); }
+    }
+    .laurel-right {
+      animation: laurelSeparateRightMirrored 0.5s ease-out 0.3s forwards;
+      transform: scaleX(-1) translateX(8px);
+    }
+    .laurel-text {
+      opacity: 0;
+      animation: laurelTextFadeIn 0.4s ease-out 0.7s forwards;
+    }
+    @keyframes slideUpFromBottom {
+      0% {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    .promo-banner-animate {
+      animation: slideUpFromBottom 0.4s ease-out forwards;
+    }
   </style>
 </head>
 <body>
@@ -250,16 +301,50 @@
 
     // ========== MEAL DATA ==========
     const mealsData = [
+      // First grid section (0-3): 4 regular items = 2 rows
       {
         id: 2,
-        name: "Homemade Dilly Cheddar Scone Sandos",
-        subtitle: "with Roasted Veggie Filling, Quickl...",
+        name: "Avocado Chicken Salad",
+        subtitle: "with Green Goddess Dressing",
         label: "",
         time: "30 min",
         kcal: "750 kcal",
         protein: "19g protein",
-        img: "https://images.unsplash.com/photo-1528735602780-2552fd46c7af?w=400&h=400&fit=crop",
+        img: "recipes/HelloFresh Main Image (3).jpg",
       },
+      {
+        id: 4,
+        name: "Buffalo Chicken Bowl",
+        subtitle: "with Avocado & Ranch Drizzle",
+        label: "",
+        time: "35 min",
+        kcal: "820 kcal",
+        protein: "42g protein",
+        img: "recipes/HelloFresh Main Image (5).jpg",
+      },
+      {
+        id: 1,
+        name: "Cheesy Meatballs",
+        subtitle: "with Roasted Potatoes & Carrots",
+        label: "",
+        time: "30 min",
+        kcal: "750 kcal",
+        protein: "39g protein",
+        img: "recipes/HelloFresh Main Image (2).jpg",
+      },
+      {
+        id: 5,
+        name: "Grilled Chicken Salad",
+        subtitle: "with Jalapeños & Chipotle Dressing",
+        label: "New",
+        labelVariant: "promo-red",
+        time: "30 min",
+        kcal: "710 kcal",
+        protein: "35g protein",
+        img: "recipes/HelloFresh Main Edit.jpg",
+        customizable: true,
+      },
+      // Second grid section starts (4-5): Premium + regular, then FeatureIntroCard
       {
         id: 3,
         name: "Garlic Herb Butter Steak",
@@ -269,117 +354,169 @@
         time: "25 min",
         kcal: "680 kcal",
         protein: "22g protein",
-        img: "https://c.stocksy.com/a/YfPA00/za/2481956.jpg",
+        img: "https://c.stocksy.com/a/Xc3H00/z9/4065497.jpg",
+        video: "https://c.stocksy.com/a/qZ1R00/y2/3843424.mp4",
         surcharge: "$2.50",
       },
       {
-        id: 1,
-        name: "Chicken Bacon Ranch Loaded Potatoes",
-        subtitle: "with Cheddar & Scallions",
-        label: "New",
-        labelVariant: "promo-red",
-        time: "30 min",
-        kcal: "750 kcal",
-        protein: "39g protein",
-        img: "https://images.unsplash.com/photo-1546549032-9571cd6b27df?w=400&h=400&fit=crop",
-      },
-      {
-        id: 4,
-        name: "Sesame Soy Beef Bowls",
-        subtitle: "with Sriracha Mayo & Buttery Rice",
-        label: "",
-        time: "35 min",
-        kcal: "820 kcal",
-        protein: "42g protein",
-        img: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=400&h=400&fit=crop",
-      },
-      {
-        id: 5,
-        name: "Creamy Tuscan Chicken Pasta",
-        subtitle: "with Sun-Dried Tomatoes & Spinach",
-        label: "New",
-        labelVariant: "promo-red",
-        time: "30 min",
-        kcal: "710 kcal",
-        protein: "35g protein",
-        img: "https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?w=400&h=400&fit=crop",
-      },
-      {
         id: 6,
-        name: "Korean BBQ Pork Tacos",
-        subtitle: "with Pickled Vegetables & Gochujang",
+        name: "Shrimp Po'Boy",
+        subtitle: "with Crispy Fries & Remoulade",
         label: "",
         time: "40 min",
         kcal: "690 kcal",
         protein: "28g protein",
-        img: "https://images.unsplash.com/photo-1565299585323-38d6b0865b47?w=400&h=400&fit=crop",
+        img: "recipes/HelloFresh Main Image (1).jpg",
         lowStock: true,
       },
+      // Remaining items (6+): after FeatureIntroCard
       {
         id: 7,
-        name: "Honey Garlic Salmon",
-        subtitle: "with Roasted Vegetables & Quinoa",
+        name: "Crispy Chicken Schnitzel",
+        subtitle: "with Slaw & Sweet Potato Fries",
         label: "Bestseller",
         labelVariant: "promo-orange",
         time: "30 min",
         kcal: "620 kcal",
         protein: "38g protein",
-        img: "https://images.unsplash.com/photo-1467003909585-2f8a72700288?w=400&h=400&fit=crop",
+        img: "recipes/HelloFresh Main Image.jpg",
+      },
+      {
+        id: 9,
+        name: "Spicy Chicken Salad",
+        subtitle: "with Avocado & Creamy Dressing",
+        label: "",
+        time: "35 min",
+        kcal: "580 kcal",
+        protein: "18g protein",
+        img: "recipes/HelloFresh Brand Image.jpg",
       },
       {
         id: 8,
-        name: "Seared Sirloin Steak",
-        subtitle: "with Chimichurri & Roasted Vegetables",
+        name: "Roasted lamb chops with sauce",
+        subtitle: "with Herbs & Roasted Vegetables",
         label: "Premium",
         labelVariant: "promo-orange",
         time: "25 min",
         kcal: "620 kcal",
         protein: "42g protein",
-        img: "https://c.stocksy.com/a/ZiHU00/z9/7217951.jpg",
+        img: "https://c.stocksy.com/a/HQzR00/z9/6670969.jpg",
+        video: "https://c.stocksy.com/a/iq7G00/y2/3843424.mp4",
         surcharge: "$2.50",
       },
       {
-        id: 9,
-        name: "Mediterranean Falafel Bowl",
-        subtitle: "with Hummus, Tzatziki & Fresh Veggies",
-        label: "",
-        time: "35 min",
-        kcal: "580 kcal",
-        protein: "18g protein",
-        img: "https://images.unsplash.com/photo-1544025162-d76694265947?w=400&h=400&fit=crop",
-      },
-      {
         id: 10,
-        name: "Lemon Herb Grilled Chicken",
-        subtitle: "with Couscous & Roasted Zucchini",
+        name: "Mediterranean chicken bowl",
+        subtitle: "with Couscous & Roasted Vegetables",
         label: "Bestseller",
         labelVariant: "promo-orange",
         time: "30 min",
         kcal: "520 kcal",
         protein: "36g protein",
-        img: "https://images.unsplash.com/photo-1532550907401-a500c9a57435?w=400&h=400&fit=crop",
+        img: "recipes/HelloFresh Main Image (4).jpg",
       },
       {
         id: 11,
-        name: "Spicy Thai Basil Noodles",
-        subtitle: "with Crispy Tofu & Vegetables",
-        label: "New",
-        labelVariant: "promo-red",
+        name: "Creamy tomato soup",
+        subtitle: "with Garlic Croutons",
+        label: "",
         time: "25 min",
         kcal: "640 kcal",
         protein: "22g protein",
-        img: "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?w=400&h=400&fit=crop",
+        img: "recipes/HelloFresh Main Image (3).jpg",
       },
       {
         id: 12,
-        name: "BBQ Pulled Pork Sandwich",
-        subtitle: "with Coleslaw & Sweet Potato Fries",
+        name: "Herb butter steak",
+        subtitle: "with Broccoli & Roasted Carrots",
         label: "",
         time: "40 min",
         kcal: "780 kcal",
         protein: "32g protein",
-        img: "https://images.unsplash.com/photo-1529006557810-274b9b2fc783?w=400&h=400&fit=crop",
-        lowStock: true,
+        img: "recipes/HelloFresh Main Image (2).jpg",
+      },
+      {
+        id: 13,
+        name: "Creamy mushroom ravioli",
+        subtitle: "with Parmesan & Fresh Herbs",
+        label: "New",
+        labelVariant: "promo-red",
+        time: "45 min",
+        kcal: "590 kcal",
+        protein: "14g protein",
+        img: "recipes/HelloFresh Main Image (1).jpg",
+      },
+      {
+        id: 14,
+        name: "Loaded Nachos",
+        subtitle: "with Pulled Pork & Cheese",
+        label: "",
+        time: "30 min",
+        kcal: "680 kcal",
+        protein: "38g protein",
+        img: "recipes/HelloFresh Main High (2).jpg",
+      },
+      {
+        id: 15,
+        name: "Crispy Chicken",
+        subtitle: "with Creamy Mash & Peas",
+        label: "New",
+        labelVariant: "promo-red",
+        time: "25 min",
+        kcal: "720 kcal",
+        protein: "34g protein",
+        img: "recipes/HelloFresh Main High (3).jpg",
+      },
+      {
+        id: 16,
+        name: "Shrimp & Chickpea Curry",
+        subtitle: "with Zucchini & Creamy Sauce",
+        label: "",
+        time: "35 min",
+        kcal: "650 kcal",
+        protein: "36g protein",
+        img: "recipes/HelloFresh Main High (4).jpg",
+      },
+      {
+        id: 17,
+        name: "Sweet Potato Fritters",
+        subtitle: "with Purple Cabbage Slaw",
+        label: "",
+        time: "30 min",
+        kcal: "520 kcal",
+        protein: "42g protein",
+        img: "recipes/HelloFresh Main High (5).jpg",
+      },
+      {
+        id: 18,
+        name: "Crispy Chicken Rice Bowl",
+        subtitle: "with Cucumber & Creamy Sauce",
+        label: "Bestseller",
+        labelVariant: "promo-orange",
+        time: "25 min",
+        kcal: "580 kcal",
+        protein: "18g protein",
+        img: "recipes/HelloFresh Main High (6).jpg",
+      },
+      {
+        id: 19,
+        name: "Garlic Shrimp Rice Bowl",
+        subtitle: "with Carrots & Avocado Cream",
+        label: "",
+        time: "40 min",
+        kcal: "750 kcal",
+        protein: "44g protein",
+        img: "recipes/HelloFresh Main High (7).jpg",
+      },
+      {
+        id: 20,
+        name: "Beef Udon Noodles",
+        subtitle: "with Mushrooms & Bok Choy",
+        label: "",
+        time: "30 min",
+        kcal: "720 kcal",
+        protein: "38g protein",
+        img: "recipes/HelloFresh Main Edit (1).jpg",
       },
     ];
 
@@ -508,7 +645,7 @@
       return (
         <div style={{
           height: 50,
-          padding: '14px 24px 6px',
+          padding: '14px 16px 6px',
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
@@ -542,7 +679,7 @@
       const weeks = [
         { dayLabel: 'Past\nDeliveries', isPast: true },
         { dayLabel: 'Wed', title: 'March 1st', selected: true },
-        { dayLabel: 'Skipped', title: 'March 8th', skipped: true },
+        { dayLabel: 'Wed', title: 'March 8th' },
         { dayLabel: 'Wed', title: 'March 15th' },
         { dayLabel: 'Wed', title: 'March 22nd' },
         { dayLabel: 'Wed', title: 'March 29th' },
@@ -585,7 +722,6 @@
             }
 
             const isSelected = w.selected;
-            const isSkipped = w.skipped;
 
             return (
               <div key={i} style={{
@@ -594,36 +730,28 @@
                 flexDirection: 'column',
                 alignItems: 'center',
                 justifyContent: 'center',
-                padding: '4px 24px',
+                padding: '4px 16px',
                 borderRadius: 'var(--radius-md)',
-                background: isSelected ? 'var(--color-selected-bg-primary)' :
-                             isSkipped ? 'var(--color-selected-bg-primary)' : 'transparent',
-                border: (!isSelected && !isSkipped) ? '1px solid var(--color-brand-border-subtle)' : 'none',
+                background: isSelected ? 'var(--color-selected-bg-primary)' : 'transparent',
+                border: !isSelected ? '1px solid var(--color-brand-border-subtle)' : 'none',
                 cursor: 'pointer',
               }}>
                 <span style={{
                   fontFamily: 'var(--font-body)',
-                  fontSize: 'var(--fs-xs)',
+                  fontSize: 10,
                   lineHeight: 'var(--lh-xs)',
-                  color: isSelected || isSkipped ? 'var(--color-neutral-fg-darkest)' : 'var(--color-neutral-fg-inverse)',
+                  color: isSelected ? 'var(--color-neutral-fg-darkest)' : 'var(--color-neutral-fg-inverse)',
                   textAlign: 'center',
                 }}>{w.dayLabel}</span>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-                  {isSkipped && (
-                    <span style={{ display: 'flex', alignItems: 'center' }}>
-                      {Icons.pause(14, isSkipped ? '#232323' : 'white')}
-                    </span>
-                  )}
-                  <span style={{
-                    fontFamily: 'var(--font-headline)',
-                    fontSize: 'var(--fs-md)',
-                    fontWeight: 700,
-                    lineHeight: 'var(--lh-sm)',
-                    color: isSelected || isSkipped ? 'var(--color-neutral-fg-darkest)' : 'var(--color-neutral-fg-inverse)',
-                    textAlign: 'center',
-                    whiteSpace: 'nowrap',
-                  }}>{w.title}</span>
-                </div>
+                <span style={{
+                  fontFamily: 'var(--font-headline)',
+                  fontSize: 'var(--fs-sm)',
+                  fontWeight: 700,
+                  lineHeight: 'var(--lh-xs)',
+                  color: isSelected ? 'var(--color-neutral-fg-darkest)' : 'var(--color-neutral-fg-inverse)',
+                  textAlign: 'center',
+                  whiteSpace: 'nowrap',
+                }}>{w.title}</span>
               </div>
             );
           })}
@@ -639,7 +767,7 @@
       return (
         <div style={{
           background: 'var(--color-factor-carbon-100)',
-          padding: '4px 16px 0',
+          padding: '0 16px 0',
           display: 'flex',
           overflowX: 'auto',
         }} className="h-scroll">
@@ -651,9 +779,9 @@
                 display: 'flex',
                 alignItems: 'center',
                 gap: 8,
-                padding: '12px 16px',
+                padding: '8px 16px',
                 border: 'none',
-                borderBottom: `4px solid ${i === active ? 'var(--color-tab-border-selected)' : 'var(--color-tab-border-unselected)'}`,
+                borderBottom: 'none',
                 background: 'transparent',
                 cursor: 'pointer',
                 whiteSpace: 'nowrap',
@@ -661,7 +789,9 @@
                 fontSize: 'var(--fs-md)',
                 fontWeight: i === active ? 700 : 400,
                 lineHeight: 'var(--lh-md)',
-                color: i === active ? 'var(--color-tab-fg-selected)' : 'var(--color-tab-fg-unselected)',
+                color: 'black',
+                textDecoration: i === active ? 'underline' : 'none',
+                textUnderlineOffset: 4,
               }}
             >
               {tab}
@@ -741,7 +871,7 @@
     }
 
     // ========== PRODUCT CARD ==========
-    function ProductCard({ meal, quantity, onAdd, onRemove }) {
+    function ProductCard({ meal, quantity, onAdd, onRemove, fullWidth = false }) {
       const [isEditing, setIsEditing] = useState(false);
       const editTimeoutRef = useRef(null);
 
@@ -750,20 +880,20 @@
         setIsEditing(true);
         // Auto-hide stepper after 3 seconds of inactivity
         if (editTimeoutRef.current) clearTimeout(editTimeoutRef.current);
-        editTimeoutRef.current = setTimeout(() => setIsEditing(false), 3000);
+        editTimeoutRef.current = setTimeout(() => setIsEditing(false), 800);
       };
 
       const handleRemove = () => {
         onRemove();
         // Reset timeout
         if (editTimeoutRef.current) clearTimeout(editTimeoutRef.current);
-        editTimeoutRef.current = setTimeout(() => setIsEditing(false), 3000);
+        editTimeoutRef.current = setTimeout(() => setIsEditing(false), 800);
       };
 
       const handleBadgeClick = () => {
         setIsEditing(true);
         if (editTimeoutRef.current) clearTimeout(editTimeoutRef.current);
-        editTimeoutRef.current = setTimeout(() => setIsEditing(false), 3000);
+        editTimeoutRef.current = setTimeout(() => setIsEditing(false), 800);
       };
 
       // Close editing when quantity becomes 0
@@ -771,6 +901,242 @@
         if (quantity === 0) setIsEditing(false);
       }, [quantity]);
 
+      // Quantity control component (shared between layouts)
+      const QuantityControl = () => (
+        <div style={{ position: 'absolute', top: 0, right: 0 }}>
+          {quantity === 0 ? (
+            <button onClick={handleAdd} style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: 36,
+              height: 36,
+              background: 'var(--color-stepper-bg)',
+              border: 'none',
+              borderRadius: '0 8px 0 8px',
+              cursor: 'pointer',
+            }}>
+              {Icons.plus(16, 'var(--color-neutral-fg-darkest)')}
+            </button>
+          ) : isEditing ? (
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              background: 'var(--color-stepper-bg)',
+              border: 'none',
+              borderRadius: '0 8px 0 8px',
+              overflow: 'hidden',
+            }}>
+              <button onClick={handleRemove} style={{
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                width: 32, height: 34, background: 'transparent', border: 'none', cursor: 'pointer',
+              }}>
+                {Icons.minus(16, 'var(--color-neutral-fg-darkest)')}
+              </button>
+              <span style={{
+                width: 20, textAlign: 'center',
+                fontFamily: 'var(--font-body)', fontSize: 'var(--fs-sm)', fontWeight: 700,
+                color: 'var(--color-neutral-fg-darkest)',
+              }}>{quantity}</span>
+              <button onClick={handleAdd} style={{
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                width: 32, height: 34, background: 'transparent', border: 'none', cursor: 'pointer',
+              }}>
+                {Icons.plus(16, 'var(--color-neutral-fg-darkest)')}
+              </button>
+            </div>
+          ) : (
+            <button onClick={handleBadgeClick} style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: 36,
+              height: 36,
+              background: 'var(--color-brand-primary)',
+              border: 'none',
+              borderRadius: '0 8px 0 8px',
+              cursor: 'pointer',
+              fontFamily: 'var(--font-body)',
+              fontSize: 'var(--fs-sm)',
+              fontWeight: 700,
+              color: 'var(--color-neutral-fg-darkest)',
+            }}>
+              {quantity}
+            </button>
+          )}
+        </div>
+      );
+
+      // Full-width layout for Premium items - image with text overlay
+      if (fullWidth) {
+        return (
+          <div style={{
+            gridColumn: 'span 2',
+            background: 'transparent',
+          }}>
+            {/* Full-width image */}
+            <div style={{
+              width: '100%',
+              aspectRatio: '16/9',
+              overflow: 'hidden',
+              position: 'relative',
+              background: '#e8dcd0',
+              borderRadius: 12,
+            }}>
+              {meal.video ? (
+                <video
+                  src={meal.video}
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  poster={meal.img}
+                  style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 12 }}
+                  onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling && (e.target.nextSibling.style.display = 'block'); }}
+                />
+              ) : null}
+              <img
+                src={meal.img}
+                alt={meal.name}
+                style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 12, display: meal.video ? 'none' : 'block' }}
+                onError={(e) => { e.target.style.display = 'none'; }}
+              />
+              {/* Premium label - bottom left, with white background on top and right */}
+              {meal.label && (
+                <div style={{
+                  position: 'absolute',
+                  bottom: 0,
+                  left: 0,
+                  background: 'white',
+                  padding: '2px 2px 0 0',
+                  borderRadius: '0 6px 0 12px',
+                }}>
+                  <span style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    padding: '5px 10px',
+                    borderRadius: '0 4px 0 12px',
+                    background: '#024426',
+                    color: 'white',
+                    fontFamily: 'var(--font-body)',
+                    fontSize: 10,
+                    fontWeight: 700,
+                    lineHeight: 1.2,
+                    textTransform: 'uppercase',
+                  }}>{meal.label}</span>
+                </div>
+              )}
+              {/* Quantity control - top right */}
+              <QuantityControl />
+            </div>
+            {/* Details below image - aligned with image edge */}
+            <div style={{
+              padding: '10px 0 4px 0',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 4,
+            }}>
+              {/* Title row with ingredient badge on right */}
+              <div style={{
+                display: 'flex',
+                alignItems: 'flex-start',
+                justifyContent: 'space-between',
+                gap: 8,
+              }}>
+                <span style={{
+                  fontFamily: 'var(--font-headline)',
+                  fontSize: 16,
+                  fontWeight: 700,
+                  lineHeight: 1.2,
+                  color: 'black',
+                  flex: 1,
+                }}>{meal.name}</span>
+                {/* Premium ingredient badge with laurel animation */}
+                {meal.highlightedIngredient && (
+                  <span style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    padding: '4px 6px',
+                    borderRadius: 4,
+                    background: '#F5F0E8',
+                    flexShrink: 0,
+                    minWidth: 70,
+                    overflow: 'hidden',
+                  }}>
+                    {/* Left laurel branch */}
+                    <svg className="laurel-left" width="12" height="20" viewBox="0 0 12 20" fill="none" style={{ flexShrink: 0 }}>
+                      <path d="M10 19C10 19 9 15 7 12C5 9 3 7 3 7" stroke="#8B7355" strokeWidth="1" strokeLinecap="round"/>
+                      <path d="M3 3C5 4.5 6 6 7 8" stroke="#8B7355" strokeWidth="1" strokeLinecap="round"/>
+                      <ellipse cx="2" cy="3" rx="1.8" ry="2.5" transform="rotate(-20 2 3)" fill="#8B7355"/>
+                      <ellipse cx="1.5" cy="6" rx="1.8" ry="2.5" transform="rotate(-35 1.5 6)" fill="#8B7355"/>
+                      <ellipse cx="2" cy="9" rx="1.8" ry="2.5" transform="rotate(-45 2 9)" fill="#8B7355"/>
+                      <ellipse cx="3" cy="12" rx="1.8" ry="2.5" transform="rotate(-55 3 12)" fill="#8B7355"/>
+                      <ellipse cx="5" cy="15" rx="1.5" ry="2" transform="rotate(-65 5 15)" fill="#8B7355"/>
+                    </svg>
+                    {/* Ingredient text */}
+                    <span className="laurel-text" style={{
+                      fontFamily: 'var(--font-body)',
+                      fontSize: 9,
+                      fontWeight: 700,
+                      color: '#8B7355',
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.5px',
+                      margin: '0 2px',
+                      whiteSpace: 'nowrap',
+                    }}>
+                      {meal.highlightedIngredient}
+                    </span>
+                    {/* Right laurel branch (mirrored) */}
+                    <svg className="laurel-right" width="12" height="20" viewBox="0 0 12 20" fill="none" style={{ flexShrink: 0 }}>
+                      <path d="M10 19C10 19 9 15 7 12C5 9 3 7 3 7" stroke="#8B7355" strokeWidth="1" strokeLinecap="round"/>
+                      <path d="M3 3C5 4.5 6 6 7 8" stroke="#8B7355" strokeWidth="1" strokeLinecap="round"/>
+                      <ellipse cx="2" cy="3" rx="1.8" ry="2.5" transform="rotate(-20 2 3)" fill="#8B7355"/>
+                      <ellipse cx="1.5" cy="6" rx="1.8" ry="2.5" transform="rotate(-35 1.5 6)" fill="#8B7355"/>
+                      <ellipse cx="2" cy="9" rx="1.8" ry="2.5" transform="rotate(-45 2 9)" fill="#8B7355"/>
+                      <ellipse cx="3" cy="12" rx="1.8" ry="2.5" transform="rotate(-55 3 12)" fill="#8B7355"/>
+                      <ellipse cx="5" cy="15" rx="1.5" ry="2" transform="rotate(-65 5 15)" fill="#8B7355"/>
+                    </svg>
+                  </span>
+                )}
+              </div>
+              <div style={{ display: 'flex', gap: 8, alignItems: 'center', marginTop: 2, justifyContent: 'space-between' }}>
+                <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+                  <span style={{
+                    fontFamily: 'var(--font-body)',
+                    fontSize: 11,
+                    fontWeight: 400,
+                    color: '#666666',
+                  }}>{meal.time}</span>
+                  <span style={{ fontSize: 4, color: '#666666' }}>●</span>
+                  <span style={{
+                    fontFamily: 'var(--font-body)',
+                    fontSize: 11,
+                    fontWeight: 400,
+                    color: '#666666',
+                  }}>{meal.kcal}</span>
+                  <span style={{ fontSize: 4, color: '#666666' }}>●</span>
+                  <span style={{
+                    fontFamily: 'var(--font-body)',
+                    fontSize: 11,
+                    fontWeight: 400,
+                    color: '#666666',
+                  }}>{meal.protein}</span>
+                </div>
+                {meal.surcharge && (
+                  <span style={{
+                    fontFamily: 'var(--font-body)',
+                    fontSize: 11,
+                    color: '#666666',
+                  }}><span style={{ fontWeight: 700 }}>+{meal.surcharge}</span> per serving</span>
+                )}
+              </div>
+            </div>
+          </div>
+        );
+      }
+
+      // Default vertical layout
       return (
         <div style={{
           background: 'var(--color-elevation-bg)',
@@ -806,22 +1172,22 @@
               />
             )}
 
-            {/* Promo label on image - bottom left */}
+            {/* Promo label on image - bottom left, with white background on top and right */}
             {meal.label && (
               <div style={{
                 position: 'absolute',
                 bottom: 0,
-                left: 8,
-                background: 'rgba(255, 255, 255, 0.9)',
-                borderRadius: 'var(--radius-tag-rect) var(--radius-tag-rect) 0 0',
-                padding: '0 3px 0 3px',
+                left: 0,
+                background: 'white',
+                padding: '2px 2px 0 0',
+                borderRadius: '0 6px 0 8px',
               }}>
                 <span style={{
                   display: 'inline-flex',
                   alignItems: 'center',
-                  padding: '3px 8px',
-                  borderRadius: 'var(--radius-tag-rect)',
-                  background: meal.label === 'Premium' ? '#232323' : ((meal.label === 'New' || meal.label === 'Bestseller') ? 'var(--color-brand-green-500)' : 'var(--color-tag-static-bg-v1)'),
+                  padding: '5px 10px',
+                  borderRadius: '0 4px 0 8px',
+                  background: meal.label === 'Premium' ? '#024426' : (meal.label === 'New' ? 'var(--color-brand-green-500)' : (meal.label === 'Bestseller' ? 'var(--color-brand-green-500)' : 'var(--color-tag-static-bg-v1)')),
                   color: 'white',
                   fontFamily: 'var(--font-body)',
                   fontSize: 10,
@@ -832,77 +1198,12 @@
               </div>
             )}
 
-            {/* Quantity control */}
-            <div style={{ position: 'absolute', top: 0, right: 0 }}>
-              {quantity === 0 ? (
-                /* State 1: Not selected - show plus button */
-                <button onClick={handleAdd} style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  width: 36,
-                  height: 36,
-                  background: 'var(--color-stepper-bg)',
-                  border: 'none',
-                  borderRadius: '0 8px 0 8px',
-                  cursor: 'pointer',
-                }}>
-                  {Icons.plus(16, 'var(--color-neutral-fg-darkest)')}
-                </button>
-              ) : isEditing ? (
-                /* State 2: Editing - show full stepper */
-                <div style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  background: 'var(--color-stepper-bg)',
-                  border: 'none',
-                  borderRadius: '0 8px 0 8px',
-                  overflow: 'hidden',
-                }}>
-                  <button onClick={handleRemove} style={{
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    width: 32, height: 34, background: 'transparent', border: 'none', cursor: 'pointer',
-                  }}>
-                    {Icons.minus(16, 'var(--color-neutral-fg-darkest)')}
-                  </button>
-                  <span style={{
-                    width: 20, textAlign: 'center',
-                    fontFamily: 'var(--font-body)', fontSize: 'var(--fs-sm)', fontWeight: 700,
-                    color: 'var(--color-neutral-fg-darkest)',
-                  }}>{quantity}</span>
-                  <button onClick={handleAdd} style={{
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    width: 32, height: 34, background: 'transparent', border: 'none', cursor: 'pointer',
-                  }}>
-                    {Icons.plus(16, 'var(--color-neutral-fg-darkest)')}
-                  </button>
-                </div>
-              ) : (
-                /* State 3: Selected but not editing - show quantity badge */
-                <button onClick={handleBadgeClick} style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  width: 36,
-                  height: 36,
-                  background: 'var(--color-brand-primary)',
-                  border: 'none',
-                  borderRadius: '0 8px 0 8px',
-                  cursor: 'pointer',
-                  fontFamily: 'var(--font-body)',
-                  fontSize: 'var(--fs-sm)',
-                  fontWeight: 700,
-                  color: 'var(--color-neutral-fg-darkest)',
-                }}>
-                  {quantity}
-                </button>
-              )}
-            </div>
+            <QuantityControl />
           </div>
 
           {/* Details */}
           <div style={{
-            padding: '8px',
+            padding: '8px 0',
             display: 'flex',
             flexDirection: 'column',
             gap: 4,
@@ -910,10 +1211,10 @@
             {/* Title */}
             <span style={{
               fontFamily: 'var(--font-headline)',
-              fontSize: 13,
+              fontSize: 15,
               fontWeight: 700,
               lineHeight: 1.2,
-              color: 'var(--color-neutral-fg-darkest)',
+              color: 'black',
               overflow: 'hidden',
               display: '-webkit-box',
               WebkitLineClamp: 2,
@@ -924,31 +1225,33 @@
             <div style={{ display: 'flex', gap: 6, alignItems: 'center', flexWrap: 'wrap' }}>
               <span style={{
                 fontFamily: 'var(--font-body)',
-                fontSize: 10,
+                fontSize: 11,
                 fontWeight: 400,
                 color: '#666666',
               }}>{meal.time}</span>
+              <span style={{ fontSize: 4, color: '#666666' }}>●</span>
               <span style={{
                 fontFamily: 'var(--font-body)',
-                fontSize: 10,
+                fontSize: 11,
                 fontWeight: 400,
                 color: '#666666',
               }}>{meal.kcal}</span>
+              <span style={{ fontSize: 4, color: '#666666' }}>●</span>
               <span style={{
                 fontFamily: 'var(--font-body)',
-                fontSize: 10,
+                fontSize: 11,
                 fontWeight: 400,
                 color: '#666666',
               }}>{meal.protein}</span>
             </div>
             {/* Surcharge for Premium */}
             {meal.surcharge && (
-              <span style={{
+              <div style={{
                 fontFamily: 'var(--font-body)',
                 fontSize: 11,
-                fontWeight: 700,
-                color: 'var(--color-neutral-fg-default)',
-              }}>+{meal.surcharge}</span>
+                color: '#666666',
+                textAlign: 'right',
+              }}><span style={{ fontWeight: 700 }}>+{meal.surcharge}</span> per serving</div>
             )}
             {/* Low stock message */}
             {meal.lowStock && (
@@ -959,6 +1262,106 @@
                 color: '#d32f2f',
               }}>Few items left</span>
             )}
+          </div>
+        </div>
+      );
+    }
+
+    // ========== FEATURE INTRO CARD ==========
+    function FeatureIntroCard({ onClick }) {
+      return (
+        <div
+          onClick={onClick}
+          style={{
+            background: 'var(--color-elevation-bg)',
+            borderRadius: 'var(--radius-card)',
+            overflow: 'hidden',
+            display: 'flex',
+            flexDirection: 'column',
+            cursor: 'pointer',
+          }}
+        >
+          {/* Video area - taller to match ProductCard total height */}
+          <div style={{
+            width: '100%',
+            aspectRatio: '3/5',
+            overflow: 'hidden',
+            position: 'relative',
+            borderRadius: 8,
+          }}>
+            {/* Background video */}
+            <video
+              src="https://c.stocksy.com/a/HllH00/y2/4235175.mp4"
+              autoPlay
+              loop
+              muted
+              playsInline
+              style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 8 }}
+            />
+
+            {/* Dark gradient overlay at bottom */}
+            <div style={{
+              position: 'absolute',
+              inset: 0,
+              background: 'linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.2) 40%, rgba(0,0,0,0.1) 100%)',
+              borderRadius: 8,
+            }} />
+
+            {/* Content - bottom left */}
+            <div style={{
+              position: 'absolute',
+              bottom: 12,
+              left: 12,
+              right: 12,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'flex-start',
+              gap: 8,
+            }}>
+              {/* New Feature badge with animation */}
+              <span className="feature-tag-pulse" style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 4,
+                padding: '4px 10px',
+                borderRadius: 'var(--radius-tag-pill)',
+                background: '#FFD54F',
+                color: 'black',
+                fontFamily: 'var(--font-body)',
+                fontSize: 10,
+                fontWeight: 700,
+                lineHeight: 1.2,
+                textTransform: 'uppercase',
+              }}>
+                New Feature
+              </span>
+
+              {/* Title - left aligned */}
+              <span style={{
+                fontFamily: 'var(--font-headline)',
+                fontSize: 'var(--fs-md)',
+                fontWeight: 700,
+                lineHeight: 'var(--lh-sm)',
+                color: 'white',
+                textAlign: 'left',
+              }}>Meal prep made easy</span>
+            </div>
+
+            {/* Chevron button - top right */}
+            <div style={{ position: 'absolute', top: 0, right: 0 }}>
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: 36,
+                height: 36,
+                background: 'var(--color-stepper-bg)',
+                border: 'none',
+                borderRadius: '0 8px 0 8px',
+              }}>
+                {Icons.chevronRight(16, 'var(--color-neutral-fg-darkest)')}
+              </div>
+            </div>
           </div>
         </div>
       );
@@ -979,7 +1382,7 @@
               fontSize: 'var(--fs-lg)',
               fontWeight: 700,
               lineHeight: 'var(--lh-md)',
-              color: 'var(--color-neutral-fg-darkest)',
+              color: 'black',
             }}>This week's Benefits</span>
             <button style={{
               background: 'transparent',
@@ -992,7 +1395,7 @@
                 fontSize: 'var(--fs-sm)',
                 fontWeight: 700,
                 lineHeight: 'var(--lh-sm)',
-                color: 'var(--color-neutral-fg-darkest)',
+                color: 'black',
                 textDecoration: 'underline',
               }}>Browse all</span>
             </button>
@@ -1046,7 +1449,7 @@
     }
 
     // ========== MEAL SELECTION GUIDANCE ==========
-    function MealSelectionGuidance({ totalItems, mealsNeeded, onCartClick, isHidden }) {
+    function MealSelectionGuidance({ totalItems, mealsNeeded, onCartClick, isHidden, onContinue }) {
       const remaining = Math.max(0, mealsNeeded - totalItems);
       const isComplete = remaining === 0;
       const [isAnimating, setIsAnimating] = useState(false);
@@ -1089,14 +1492,14 @@
               alignItems: 'center',
               gap: 8,
               padding: '8px 24px',
-              border: '1px solid var(--color-button-border)',
+              border: '1px solid black',
               borderRadius: 'var(--radius-button)',
               background: 'var(--color-elevation-level-1)',
               cursor: 'pointer',
               position: 'relative',
               flexShrink: 0,
             }}>
-              {Icons.cart(24, 'var(--color-neutral-fg-darkest)')}
+              {Icons.cart(24, 'black')}
 
               {/* Badge */}
               {totalItems >= 0 && (
@@ -1124,24 +1527,26 @@
             </button>
 
             {/* Continue button */}
-            <button style={{
-              flex: 1,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: 8,
-              padding: '8px 24px',
-              minWidth: 88,
-              border: 'none',
-              borderRadius: 'var(--radius-button)',
-              background: 'var(--color-neutral-fg-darkest)',
-              color: 'var(--color-button-brand-fg)',
-              cursor: 'pointer',
-              fontFamily: 'var(--font-body)',
-              fontSize: 'var(--fs-md)',
-              fontWeight: 700,
-              lineHeight: 'var(--lh-md)',
-            }}>
+            <button
+              onClick={onContinue}
+              style={{
+                flex: 1,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: 8,
+                padding: '8px 24px',
+                minWidth: 88,
+                border: 'none',
+                borderRadius: 'var(--radius-button)',
+                background: 'black',
+                color: 'white',
+                cursor: 'pointer',
+                fontFamily: 'var(--font-body)',
+                fontSize: 'var(--fs-md)',
+                fontWeight: 700,
+                lineHeight: 'var(--lh-md)',
+              }}>
               Continue
             </button>
           </div>
@@ -1285,7 +1690,7 @@
           const timer = setTimeout(() => {
             setShowSuccessBanner(false);
             setShowBanner(false);
-          }, 3000);
+          }, 800);
           return () => clearTimeout(timer);
         }
       }, [showSuccessBanner]);
@@ -1293,9 +1698,68 @@
       if (!isOpen || !meal) return null;
 
       const proteinOptions = [
-        { name: 'Chicken', weight: '200 g', price: null, isOrganic: false, img: 'https://c.stocksy.com/a/KZnA00/z9/2573826.jpg' },
-        { name: 'Organic Chicken', weight: '200 g', price: '+$0.99', isOrganic: true, img: 'https://c.stocksy.com/a/KZnA00/z9/2573826.jpg' },
+        { name: 'Chicken', weight: '200 g', price: null, isOrganic: false, img: 'chicken.png' },
+        { name: 'Organic Chicken', weight: '200 g', price: '+$0.99', isOrganic: true, img: 'chicken.png' },
+        { name: 'Beef', weight: '180 g', price: '+$1.49', isOrganic: false, img: 'beef.png' },
       ];
+
+      // 3D-style SVG illustrations
+      const ChickenFilletIcon = ({ size = 48 }) => (
+        <svg width={size} height={size} viewBox="0 0 48 48" fill="none">
+          <ellipse cx="24" cy="26" rx="18" ry="14" fill="url(#chickenGrad)" />
+          <ellipse cx="24" cy="24" rx="16" ry="12" fill="url(#chickenGrad2)" />
+          <ellipse cx="20" cy="22" rx="8" ry="5" fill="#FFECD2" opacity="0.6" />
+          <defs>
+            <linearGradient id="chickenGrad" x1="6" y1="12" x2="42" y2="40">
+              <stop stopColor="#F5D0A9" />
+              <stop offset="1" stopColor="#D4A574" />
+            </linearGradient>
+            <linearGradient id="chickenGrad2" x1="8" y1="12" x2="40" y2="36">
+              <stop stopColor="#FFE4C4" />
+              <stop offset="1" stopColor="#E8C39E" />
+            </linearGradient>
+          </defs>
+        </svg>
+      );
+
+      const PotatoIcon = ({ size = 48 }) => (
+        <svg width={size} height={size} viewBox="0 0 48 48" fill="none">
+          <ellipse cx="24" cy="28" rx="16" ry="12" fill="url(#potatoShadow)" />
+          <ellipse cx="24" cy="24" rx="16" ry="12" fill="url(#potatoGrad)" />
+          <ellipse cx="20" cy="20" rx="6" ry="4" fill="#E8D4A8" opacity="0.7" />
+          <circle cx="28" cy="26" r="2" fill="#8B7355" opacity="0.4" />
+          <circle cx="18" cy="28" r="1.5" fill="#8B7355" opacity="0.3" />
+          <circle cx="30" cy="22" r="1" fill="#8B7355" opacity="0.3" />
+          <defs>
+            <linearGradient id="potatoGrad" x1="8" y1="12" x2="40" y2="36">
+              <stop stopColor="#D4B896" />
+              <stop offset="1" stopColor="#A67C52" />
+            </linearGradient>
+            <linearGradient id="potatoShadow" x1="8" y1="16" x2="40" y2="40">
+              <stop stopColor="#8B7355" />
+              <stop offset="1" stopColor="#6B5344" />
+            </linearGradient>
+          </defs>
+        </svg>
+      );
+
+      const BaconIcon = ({ size = 48 }) => (
+        <svg width={size} height={size} viewBox="0 0 48 48" fill="none">
+          <path d="M8 16C12 14 16 18 20 16C24 14 28 18 32 16C36 14 40 18 40 18L40 22C40 22 36 18 32 20C28 22 24 18 20 20C16 22 12 18 8 20L8 16Z" fill="url(#baconFat)" />
+          <path d="M8 20C12 18 16 22 20 20C24 18 28 22 32 20C36 18 40 22 40 22L40 28C40 28 36 24 32 26C28 28 24 24 20 26C16 28 12 24 8 26L8 20Z" fill="url(#baconMeat)" />
+          <path d="M8 26C12 24 16 28 20 26C24 24 28 28 32 26C36 24 40 28 40 28L40 32C40 32 36 28 32 30C28 32 24 28 20 30C16 32 12 28 8 30L8 26Z" fill="url(#baconFat)" />
+          <defs>
+            <linearGradient id="baconMeat" x1="8" y1="20" x2="40" y2="28">
+              <stop stopColor="#C41E3A" />
+              <stop offset="1" stopColor="#8B0000" />
+            </linearGradient>
+            <linearGradient id="baconFat" x1="8" y1="16" x2="40" y2="32">
+              <stop stopColor="#FFF5EE" />
+              <stop offset="1" stopColor="#FFE4E1" />
+            </linearGradient>
+          </defs>
+        </svg>
+      );
 
       return (
         <div style={{
@@ -1419,31 +1883,30 @@
                 }}>for 2 servings</span>
               </div>
 
-              {/* Protein options */}
-              <div style={{
-                display: 'flex',
-                gap: 12,
-                paddingTop: 8,
-              }}>
+              {/* Protein options - vertical list */}
+              <div style={{ paddingTop: 8 }}>
                 {proteinOptions.map((option, i) => (
                   <button
                     key={i}
                     onClick={() => setSelectedProtein(i)}
                     style={{
-                      flex: 1,
-                      padding: 0,
-                      border: selectedProtein === i
-                        ? '2px solid var(--color-neutral-fg-darkest)'
-                        : '1px solid var(--color-divider)',
-                      borderRadius: 'var(--radius-card)',
-                      background: 'var(--color-page-bg)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      width: '100%',
+                      padding: '12px 16px',
+                      marginTop: option.isOrganic ? 16 : 0,
+                      background: 'var(--color-elevation-level-1)',
+                      border: selectedProtein === i ? '2px solid var(--color-brand-green-500)' : '2px solid transparent',
+                      borderRadius: 12,
                       cursor: 'pointer',
-                      position: 'relative',
                       textAlign: 'left',
-                      overflow: option.isOrganic ? 'visible' : 'hidden',
+                      gap: 12,
+                      position: 'relative',
+                      marginBottom: 12,
+                      boxSizing: 'border-box',
                     }}
                   >
-                    {/* Top Quality tag for organic - positioned at top edge */}
+                    {/* Organic badge on top - centered */}
                     {option.isOrganic && (
                       <div
                         className="quality-tag"
@@ -1453,10 +1916,10 @@
                         }}
                         style={{
                           position: 'absolute',
-                          top: -14,
+                          top: -8,
                           left: '50%',
                           transform: 'translateX(-50%)',
-                          padding: '5px 10px 5px 14px',
+                          padding: '4px 10px 4px 12px',
                           background: 'linear-gradient(135deg, #067a46 0%, #0a9956 100%)',
                           borderRadius: 'var(--radius-tag-pill)',
                           zIndex: 10,
@@ -1468,105 +1931,97 @@
                           cursor: 'pointer',
                         }}>
                         {/* Left sparkle */}
-                        <span className="sparkle-left" style={{ position: 'absolute', left: -8, top: -4 }}>
-                          {Icons.sparkle(10, 'rgba(255,255,255,0.8)')}
+                        <span className="sparkle-left" style={{ position: 'absolute', left: -6, top: -3 }}>
+                          {Icons.sparkle(8, 'rgba(255,255,255,0.8)')}
                         </span>
-                        <span className="quality-icon" style={{ display: 'flex' }}>
-                          <img src="https://www.figma.com/api/mcp/asset/7da1392f-2ad3-4846-933b-58f120b05fa2" width="12" height="12" alt="" style={{ filter: 'brightness(0) invert(1)' }} />
-                        </span>
+                        <img src="https://www.figma.com/api/mcp/asset/7da1392f-2ad3-4846-933b-58f120b05fa2" width="10" height="10" alt="" style={{ filter: 'brightness(0) invert(1)' }} />
                         <span style={{
                           fontFamily: 'var(--font-body)',
-                          fontSize: 'var(--fs-xs)',
+                          fontSize: '10px',
                           fontWeight: 700,
                           color: 'white',
                           textTransform: 'uppercase',
                           letterSpacing: '0.5px',
                         }}>Organic</span>
-                        <span style={{ display: 'flex', marginLeft: 2 }}>
-                          {Icons.chevronRight(12, 'white')}
-                        </span>
+                        {Icons.chevronRight(10, 'white')}
                         {/* Right sparkle */}
-                        <span className="sparkle-right" style={{ position: 'absolute', right: -8, top: -4 }}>
-                          {Icons.sparkle(10, 'rgba(255,255,255,0.8)')}
+                        <span className="sparkle-right" style={{ position: 'absolute', right: -6, top: -3 }}>
+                          {Icons.sparkle(8, 'rgba(255,255,255,0.8)')}
                         </span>
                       </div>
                     )}
-                    {/* Checkmark for selected */}
-                    {selectedProtein === i && (
-                      <div style={{
-                        position: 'absolute',
-                        top: 8,
-                        right: 8,
-                        width: 16,
-                        height: 16,
-                        background: 'var(--color-neutral-fg-darkest)',
-                        borderRadius: '50%',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        zIndex: 1,
-                      }}>
-                        {Icons.check(10, 'white')}
-                      </div>
-                    )}
+
+                    {/* Radio button on left */}
+                    <div style={{
+                      width: 20,
+                      height: 20,
+                      borderRadius: '50%',
+                      border: selectedProtein === i
+                        ? '6px solid var(--color-brand-green-500)'
+                        : '2px solid var(--color-divider)',
+                      background: 'white',
+                      flexShrink: 0,
+                      boxSizing: 'border-box',
+                    }} />
+
                     {/* Image */}
                     <div style={{
-                      width: '100%',
-                      height: 92,
-                      background: '#efe9de',
+                      width: 48,
+                      height: 48,
+                      borderRadius: 'var(--radius-md)',
                       overflow: 'hidden',
-                      borderRadius: '10px 10px 0 0',
-                      position: 'relative',
+                      background: '#efe9de',
+                      flexShrink: 0,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
                     }}>
-                      <img
-                        src={option.img}
-                        alt={option.name}
-                        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                        onError={(e) => { e.target.style.display = 'none'; }}
-                      />
+                      <img src={option.img} alt={option.name} style={{ width: 48, height: 48, objectFit: 'contain' }} />
                     </div>
+
                     {/* Content */}
-                    <div style={{ padding: 12 }}>
-                      <div style={{
-                        fontFamily: 'var(--font-headline)',
-                        fontSize: 'var(--fs-md)',
-                        fontWeight: 700,
-                        lineHeight: 'var(--lh-sm)',
-                        color: 'var(--color-neutral-fg-default)',
-                        marginBottom: 4,
-                      }}>{option.name}</div>
-                      <div style={{
+                    <div style={{ flex: 1 }}>
+                      <span style={{
                         fontFamily: 'var(--font-body)',
                         fontSize: 'var(--fs-sm)',
+                        fontWeight: 700,
+                        color: 'var(--color-neutral-fg-default)',
+                      }}>{option.name}</span>
+                      <div style={{
+                        fontFamily: 'var(--font-body)',
+                        fontSize: 'var(--fs-xs)',
                         color: 'var(--color-neutral-fg-unselected)',
-                        marginBottom: 8,
-                      }}>
-                        {option.weight}
-                      </div>
-                      <div style={{ minHeight: 36 }}>
-                        {option.price ? (
-                          <div>
-                            <div style={{
-                              fontFamily: 'var(--font-body)',
-                              fontSize: 'var(--fs-sm)',
-                              fontWeight: 700,
-                              color: 'var(--color-neutral-fg-default)',
-                            }}>{option.price}</div>
-                            <div style={{
-                              fontFamily: 'var(--font-body)',
-                              fontSize: 'var(--fs-xs)',
-                              color: 'var(--color-neutral-fg-unselected)',
-                            }}>per serving</div>
-                          </div>
-                        ) : (
+                      }}>{option.weight} per serving</div>
+                    </div>
+
+                    {/* Price on right */}
+                    <div style={{
+                      flexShrink: 0,
+                      textAlign: 'right',
+                    }}>
+                      {option.price ? (
+                        <>
                           <div style={{
                             fontFamily: 'var(--font-body)',
-                            fontSize: 'var(--fs-sm)',
+                            fontSize: 'var(--fs-xs)',
                             fontWeight: 700,
                             color: 'var(--color-neutral-fg-default)',
-                          }}>Included</div>
-                        )}
-                      </div>
+                          }}>{option.price}</div>
+                          <div style={{
+                            fontFamily: 'var(--font-body)',
+                            fontSize: 'var(--fs-xs)',
+                            fontWeight: 400,
+                            color: 'var(--color-neutral-fg-unselected)',
+                          }}>per serving</div>
+                        </>
+                      ) : (
+                        <div style={{
+                          fontFamily: 'var(--font-body)',
+                          fontSize: 'var(--fs-xs)',
+                          fontWeight: 700,
+                          color: 'var(--color-neutral-fg-default)',
+                        }}>Included</div>
+                      )}
                     </div>
                   </button>
                 ))}
@@ -1598,14 +2053,13 @@
                     height: 48,
                     borderRadius: 'var(--radius-md)',
                     overflow: 'hidden',
-                    background: '#e8dcd0',
+                    background: '#efe9de',
                     flexShrink: 0,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
                   }}>
-                    <img
-                      src="https://c.stocksy.com/a/1hd400/z9/1105895.jpg"
-                      alt="Potatoes"
-                      style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'left top' }}
-                    />
+                    <img src="potatos.png" alt="Potatoes" style={{ width: 48, height: 48, objectFit: 'contain' }} />
                   </div>
                   <div>
                     <div style={{
@@ -1622,10 +2076,9 @@
                     <div style={{
                       fontFamily: 'var(--font-body)',
                       fontSize: 'var(--fs-xs)',
-                      fontWeight: 700,
                       color: 'var(--color-neutral-fg-default)',
                       marginTop: 2,
-                    }}>+$0.85 per serving</div>
+                    }}><span style={{ fontWeight: 700 }}>+$0.85</span> <span style={{ fontWeight: 400 }}>per serving</span></div>
                   </div>
                 </div>
                 <div style={{
@@ -1673,14 +2126,13 @@
                     height: 48,
                     borderRadius: 'var(--radius-md)',
                     overflow: 'hidden',
-                    background: '#e8dcd0',
+                    background: '#efe9de',
                     flexShrink: 0,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
                   }}>
-                    <img
-                      src="https://c.stocksy.com/a/J9gD00/za/3260289.jpg"
-                      alt="Bacon"
-                      style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                    />
+                    <img src="bacon.png" alt="Bacon" style={{ width: 48, height: 48, objectFit: 'contain' }} />
                   </div>
                   <div>
                     <div style={{
@@ -1697,10 +2149,9 @@
                     <div style={{
                       fontFamily: 'var(--font-body)',
                       fontSize: 'var(--fs-xs)',
-                      fontWeight: 700,
                       color: 'var(--color-neutral-fg-default)',
                       marginTop: 2,
-                    }}>+$1.25 per serving</div>
+                    }}><span style={{ fontWeight: 700 }}>+$1.25</span> <span style={{ fontWeight: 400 }}>per serving</span></div>
                   </div>
                 </div>
                 <div style={{
@@ -1748,14 +2199,13 @@
                     height: 48,
                     borderRadius: 'var(--radius-md)',
                     overflow: 'hidden',
-                    background: '#e8dcd0',
+                    background: '#efe9de',
                     flexShrink: 0,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
                   }}>
-                    <img
-                      src="https://c.stocksy.com/a/KZnA00/z9/2573826.jpg"
-                      alt="Chicken"
-                      style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                    />
+                    <img src="chicken.png" alt="Chicken" style={{ width: 48, height: 48, objectFit: 'contain' }} />
                   </div>
                   <div>
                     <div style={{
@@ -1772,10 +2222,9 @@
                     <div style={{
                       fontFamily: 'var(--font-body)',
                       fontSize: 'var(--fs-xs)',
-                      fontWeight: 700,
                       color: 'var(--color-neutral-fg-default)',
                       marginTop: 2,
-                    }}>+$1.50 per serving</div>
+                    }}><span style={{ fontWeight: 700 }}>+$1.50</span> per serving</div>
                   </div>
                 </div>
                 <div style={{
@@ -1948,7 +2397,7 @@
             left: 0,
             right: 0,
             padding: '16px',
-            paddingBottom: 8,
+            paddingBottom: 4,
             pointerEvents: 'none',
           }}>
             {/* Banner with CTA inside */}
@@ -1977,7 +2426,7 @@
                           fontFamily: 'var(--font-body)',
                           fontSize: 'var(--fs-sm)',
                           fontWeight: 700,
-                          color: '#232323',
+                          color: '#024426',
                         }}>You've reached your daily goal!</div>
                         <div style={{
                           fontFamily: 'var(--font-body)',
@@ -2017,7 +2466,7 @@
                   padding: '12px 24px',
                   border: 'none',
                   borderRadius: 'var(--radius-button)',
-                  background: 'var(--color-neutral-fg-darkest)',
+                  background: 'black',
                   color: 'white',
                   fontFamily: 'var(--font-body)',
                   fontSize: 'var(--fs-md)',
@@ -2033,8 +2482,8 @@
             <div style={{
               display: 'flex',
               justifyContent: 'center',
-              paddingTop: 12,
-              paddingBottom: 4,
+              paddingTop: 8,
+              paddingBottom: 0,
             }}>
               <div style={{
                 width: 134,
@@ -2109,46 +2558,42 @@
                 zIndex: 5,
               }}>
                 {/* Scrollable content inside white card */}
-                <div className="scroll-area" style={{ flex: 1, overflowY: 'auto', padding: '24px 16px 100px' }}>
+                <div className="scroll-area" style={{ flex: 1, overflowY: 'auto', padding: '16px 16px 100px' }}>
                     {/* Title */}
                     <h1 style={{
                       fontFamily: 'var(--font-headline)',
                       fontSize: 'var(--fs-xl)',
                       fontWeight: 700,
                       lineHeight: 'var(--lh-lg)',
-                      color: 'var(--color-neutral-fg-darkest)',
+                      color: 'black',
                       margin: '0 0 24px',
                     }}>The Organic Difference</h1>
 
                     {/* Benefit items with black icons */}
+                    <div style={{ marginTop: 16 }} />
                     {[
                       { icon: (
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                           <circle cx="12" cy="12" r="10"/>
                           <path d="M4.93 4.93l14.14 14.14"/>
                         </svg>
-                      ), title: 'No Hidden Chemicals', desc: 'Raised without synthetic pesticides, GMOs, or routine antibiotics for a cleaner, safer meal.' },
+                      ), title: 'No hidden chemicals', desc: 'Raised without synthetic pesticides, GMOs, or routine antibiotics for a cleaner, safer meal.' },
                       { icon: (
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                           <circle cx="12" cy="12" r="10"/>
                           <path d="M2 12h20"/>
                           <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
                         </svg>
-                      ), title: 'Better for the Planet', desc: 'Organic farming practices protect soil health and support local ecosystems.' },
+                      ), title: 'Better for the planet', desc: 'Organic farming practices protect soil health and support local ecosystems.' },
                       { icon: (
                         <img src="https://www.figma.com/api/mcp/asset/df75b21c-7245-4e8c-a35e-9e18f2eca515" width="24" height="24" alt="Chicken" style={{ filter: 'brightness(0)' }} />
-                      ), title: 'Higher Welfare Standards', desc: 'Our birds have guaranteed outdoor access and more space to roam freely.' },
+                      ), title: 'Higher welfare standards', desc: 'Our birds have guaranteed outdoor access and more space to roam freely.' },
                       { icon: (
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                           <path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76z"/>
                           <path d="M9 12l2 2 4-4"/>
                         </svg>
-                      ), title: 'More Nutritious', desc: 'Typically contains higher levels of Omega-3 fatty acids and essential antioxidants.' },
-                      { icon: (
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
-                        </svg>
-                      ), title: 'Placeholder Title', desc: 'Placeholder description text goes here.' },
+                      ), title: 'More nutritious', desc: 'Typically contains higher levels of Omega-3 fatty acids and essential antioxidants.' },
                     ].map((benefit, i) => (
                       <div key={i} style={{
                         display: 'flex',
@@ -2164,7 +2609,7 @@
                             fontFamily: 'var(--font-body)',
                             fontSize: 'var(--fs-sm)',
                             fontWeight: 700,
-                            color: 'var(--color-neutral-fg-darkest)',
+                            color: 'black',
                             marginBottom: 4,
                           }}>{benefit.title}</div>
                           <div style={{
@@ -2196,7 +2641,7 @@
                     padding: '12px 24px',
                     border: 'none',
                     borderRadius: 'var(--radius-button)',
-                    background: 'var(--color-neutral-fg-darkest)',
+                    background: 'black',
                     color: 'white',
                     fontFamily: 'var(--font-body)',
                     fontSize: 'var(--fs-md)',
@@ -2243,8 +2688,7 @@
       })).filter(item => item.id);
 
       const addOns = [
-        { id: 'addon1', name: 'Fresh Strawberry Pack', price: '$6.99', originalPrice: null, subscription: 'Subscribed to 1 per box', img: 'https://images.unsplash.com/photo-1464965911861-746a04b4bca6?w=200&h=200&fit=crop' },
-        { id: 'addon2', name: 'Everything Bagels 6 pack', price: 'FREE', originalPrice: '$9.99', badge: null, img: 'https://images.unsplash.com/photo-1608198093002-ad4e005484ec?w=200&h=200&fit=crop' },
+        { id: 'addon2', name: 'Everything bagels 6 pack', price: 'FREE', originalPrice: '$9.99', badge: null, img: 'https://images.unsplash.com/photo-1608198093002-ad4e005484ec?w=200&h=200&fit=crop' },
       ];
 
       const totalMeals = Object.values(cart).reduce((sum, q) => sum + q, 0);
@@ -2465,7 +2909,7 @@
                           fontFamily: 'var(--font-body)',
                           fontSize: 'var(--fs-sm)',
                           fontWeight: 700,
-                          color: addon.price === 'FREE' ? '#067a46' : 'var(--color-neutral-fg-default)',
+                          color: addon.price === 'FREE' ? 'red' : 'var(--color-neutral-fg-default)',
                         }}>{addon.price}</span>
                       </div>
                     </div>
@@ -2494,7 +2938,7 @@
                   </div>
                 ))}
 
-                {/* Upsell items from Round out your weekly menu */}
+                {/* Upsell items from Recommended for you */}
                 {upsellQuantities.upsell1 > 0 && (
                   <div style={{
                     display: 'flex',
@@ -2508,8 +2952,9 @@
                       borderRadius: 'var(--radius-md)',
                       overflow: 'hidden',
                       flexShrink: 0,
+                      background: '#FAF8F3',
                     }}>
-                      <img src="https://c.stocksy.com/a/uA6M00/z9/5266956.jpg" alt="Creamy Fusilli Pasta" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                      <img src="Chicken and Sausage Penne Arrabbiata.png" alt="Chicken and Sausage Penne Arrabbiata" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                     </div>
                     <div style={{ flex: 1, minWidth: 0 }}>
                       <div style={{
@@ -2517,7 +2962,7 @@
                         fontSize: 'var(--fs-sm)',
                         fontWeight: 700,
                         color: 'var(--color-neutral-fg-default)',
-                      }}>Creamy Fusilli Pasta</div>
+                      }}>Chicken and Sausage Penne Arrabbiata</div>
                       <div style={{ marginTop: 4 }}>
                         <span style={{
                           fontFamily: 'var(--font-body)',
@@ -2565,8 +3010,9 @@
                       borderRadius: 'var(--radius-md)',
                       overflow: 'hidden',
                       flexShrink: 0,
+                      background: '#FAF8F3',
                     }}>
-                      <img src="https://c.stocksy.com/a/5WYA00/z9/2515965.jpg" alt="Thai Basil Chicken Rice" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                      <img src="Honey Dijon Chicken and Mashed Potatoes.png" alt="Honey Dijon Chicken and Mashed Potatoes" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                     </div>
                     <div style={{ flex: 1, minWidth: 0 }}>
                       <div style={{
@@ -2574,7 +3020,7 @@
                         fontSize: 'var(--fs-sm)',
                         fontWeight: 700,
                         color: 'var(--color-neutral-fg-default)',
-                      }}>Thai Basil Chicken Rice</div>
+                      }}>Honey Dijon Chicken and Mashed Potatoes</div>
                       <div style={{ marginTop: 4 }}>
                         <span style={{
                           fontFamily: 'var(--font-body)',
@@ -2629,50 +3075,58 @@
                 </div>
               </div>
 
-              {/* Round out your weekly menu section */}
-              <div style={{ padding: '16px 16px 24px', background: '#EFE9DE', margin: '16px 0 16px' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 8 }}>
+              {/* Recommended for you section */}
+              <div style={{ padding: '16px 0 24px', background: '#EFE9DE', margin: '16px 0 16px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8, padding: '0 16px' }}>
                   <h3 style={{
                     fontFamily: 'var(--font-headline)',
                     fontSize: 'var(--fs-lg)',
                     fontWeight: 700,
-                    color: 'var(--color-neutral-fg-default)',
+                    color: 'black',
                     margin: 0,
                     lineHeight: 1.3,
-                  }}>Round out your weekly menu</h3>
+                  }}>Recommended for you</h3>
                   <span style={{
                     fontFamily: 'var(--font-body)',
                     fontSize: 'var(--fs-sm)',
                     fontWeight: 700,
-                    color: 'var(--color-neutral-fg-default)',
+                    color: 'black',
                     textDecoration: 'underline',
                     whiteSpace: 'nowrap',
-                    marginLeft: 16,
+                    cursor: 'pointer',
                   }}>Show more</span>
                 </div>
                 <p style={{
                   fontFamily: 'var(--font-body)',
                   fontSize: 'var(--fs-sm)',
-                  color: 'var(--color-neutral-fg-unselected)',
+                  color: 'black',
                   margin: '0 0 16px 0',
+                  padding: '0 16px',
                   lineHeight: 1.4,
-                }}>3 nights are covered with your home-cooked kits. Grab a few ready-to-eat meals to stay fueled for the rest of the week.</p>
+                }}>Grab a few ready-to-eat meals to stay fueled for the rest of the week.</p>
 
-                <div style={{ display: 'flex', gap: 12 }}>
+                <div style={{ display: 'flex', gap: 12, overflowX: 'auto', paddingLeft: 16, paddingRight: 16 }} className="h-scroll">
                   {/* Product card 1 */}
-                  <div style={{ flex: 1 }}>
+                  <div style={{
+                    flexShrink: 0,
+                    width: 160,
+                    background: '#E0D9CB',
+                    borderRadius: 12,
+                    overflow: 'hidden',
+                    display: 'flex',
+                    flexDirection: 'column',
+                  }}>
                     <div style={{
                       width: '100%',
-                      aspectRatio: '4/5',
-                      borderRadius: 8,
-                      overflow: 'hidden',
-                      marginBottom: 8,
+                      aspectRatio: '1/1',
                       position: 'relative',
+                      padding: 12,
+                      boxSizing: 'border-box',
                     }}>
                       <img
-                        src="https://c.stocksy.com/a/uA6M00/z9/5266956.jpg"
-                        alt="Creamy Fusilli Pasta"
-                        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                        src="Chicken and Sausage Penne Arrabbiata.png"
+                        alt="Chicken and Sausage Penne Arrabbiata"
+                        style={{ width: '100%', height: '100%', objectFit: 'contain' }}
                       />
                       {/* Stepper */}
                       <div style={{ position: 'absolute', top: 0, right: 0 }}>
@@ -2684,7 +3138,7 @@
                               if (upsellTimeoutRef.current.upsell1) clearTimeout(upsellTimeoutRef.current.upsell1);
                               upsellTimeoutRef.current.upsell1 = setTimeout(() => {
                                 setUpsellEditing(prev => ({ ...prev, upsell1: false }));
-                              }, 3000);
+                              }, 800);
                             }}
                             style={{
                               display: 'flex',
@@ -2694,11 +3148,11 @@
                               height: 36,
                               background: 'var(--color-stepper-bg)',
                               border: 'none',
-                              borderRadius: '0 8px 0 8px',
+                              borderRadius: '0 12px 0 8px',
                               cursor: 'pointer',
                             }}
                           >
-                            {Icons.plus(16, 'var(--color-neutral-fg-darkest)')}
+                            {Icons.plus(16, 'black')}
                           </button>
                         ) : upsellEditing.upsell1 ? (
                           <div style={{
@@ -2706,7 +3160,7 @@
                             alignItems: 'center',
                             background: 'var(--color-stepper-bg)',
                             border: 'none',
-                            borderRadius: '0 8px 0 8px',
+                            borderRadius: '0 12px 0 8px',
                             overflow: 'hidden',
                           }}>
                             <button
@@ -2719,29 +3173,29 @@
                                   if (upsellTimeoutRef.current.upsell1) clearTimeout(upsellTimeoutRef.current.upsell1);
                                   upsellTimeoutRef.current.upsell1 = setTimeout(() => {
                                     setUpsellEditing(prev => ({ ...prev, upsell1: false }));
-                                  }, 3000);
+                                  }, 800);
                                 }
                               }}
                               style={{
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'center',
-                                width: 36,
-                                height: 36,
+                                width: 32,
+                                height: 34,
                                 background: 'transparent',
                                 border: 'none',
                                 cursor: 'pointer',
                               }}
                             >
-                              {Icons.minus(16, 'var(--color-neutral-fg-darkest)')}
+                              {Icons.minus(16, 'black')}
                             </button>
                             <span style={{
-                              minWidth: 24,
+                              width: 20,
                               textAlign: 'center',
                               fontFamily: 'var(--font-body)',
                               fontSize: 'var(--fs-sm)',
                               fontWeight: 700,
-                              color: 'var(--color-neutral-fg-darkest)',
+                              color: 'black',
                             }}>{upsellQuantities.upsell1}</span>
                             <button
                               onClick={() => {
@@ -2749,20 +3203,20 @@
                                 if (upsellTimeoutRef.current.upsell1) clearTimeout(upsellTimeoutRef.current.upsell1);
                                 upsellTimeoutRef.current.upsell1 = setTimeout(() => {
                                   setUpsellEditing(prev => ({ ...prev, upsell1: false }));
-                                }, 3000);
+                                }, 800);
                               }}
                               style={{
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'center',
-                                width: 36,
-                                height: 36,
+                                width: 32,
+                                height: 34,
                                 background: 'transparent',
                                 border: 'none',
                                 cursor: 'pointer',
                               }}
                             >
-                              {Icons.plus(16, 'var(--color-neutral-fg-darkest)')}
+                              {Icons.plus(16, 'black')}
                             </button>
                           </div>
                         ) : (
@@ -2772,7 +3226,7 @@
                               if (upsellTimeoutRef.current.upsell1) clearTimeout(upsellTimeoutRef.current.upsell1);
                               upsellTimeoutRef.current.upsell1 = setTimeout(() => {
                                 setUpsellEditing(prev => ({ ...prev, upsell1: false }));
-                              }, 3000);
+                              }, 800);
                             }}
                             style={{
                               display: 'flex',
@@ -2782,12 +3236,12 @@
                               height: 36,
                               background: 'var(--color-brand-primary)',
                               border: 'none',
-                              borderRadius: '0 8px 0 8px',
+                              borderRadius: '0 12px 0 8px',
                               cursor: 'pointer',
                               fontFamily: 'var(--font-body)',
                               fontSize: 'var(--fs-sm)',
                               fontWeight: 700,
-                              color: 'var(--color-neutral-fg-darkest)',
+                              color: 'black',
                             }}
                           >
                             {upsellQuantities.upsell1}
@@ -2795,35 +3249,49 @@
                         )}
                       </div>
                     </div>
-                    <div style={{
-                      fontFamily: 'var(--font-body)',
-                      fontSize: 'var(--fs-sm)',
-                      fontWeight: 700,
-                      color: 'var(--color-neutral-fg-default)',
-                      marginBottom: 4,
-                      lineHeight: 1.3,
-                    }}>Creamy Fusilli Pasta</div>
-                    <div style={{
-                      fontFamily: 'var(--font-body)',
-                      fontSize: 'var(--fs-sm)',
-                      color: 'var(--color-neutral-fg-default)',
-                    }}>+$12.99 <span style={{ color: 'var(--color-neutral-fg-unselected)', fontWeight: 400 }}>per serving</span></div>
+                    {/* Text content below image */}
+                    <div style={{ padding: 12, background: 'rgba(142, 152, 153, 0.3)', flex: 1 }}>
+                      <div style={{
+                        fontFamily: 'var(--font-body)',
+                        fontSize: 'var(--fs-sm)',
+                        fontWeight: 700,
+                        color: 'black',
+                        marginBottom: 4,
+                        lineHeight: 1.3,
+                      }}>Chicken and Sausage Penne Arrabbiata</div>
+                      <div style={{
+                        fontFamily: 'var(--font-body)',
+                        fontSize: 11,
+                        color: '#666666',
+                        marginBottom: 4,
+                      }}>20 min · 680 kcal · 32g protein</div>
+                      <div style={{
+                        fontFamily: 'var(--font-body)',
+                        fontSize: 11,
+                        color: '#666666',
+                      }}><span style={{ fontWeight: 700 }}>+$12.99</span> per serving</div>
+                    </div>
                   </div>
 
                   {/* Product card 2 */}
-                  <div style={{ flex: 1 }}>
+                  <div style={{
+                    flexShrink: 0,
+                    width: 160,
+                    background: '#E0D9CB',
+                    borderRadius: 12,
+                    overflow: 'hidden',
+                  }}>
                     <div style={{
                       width: '100%',
-                      aspectRatio: '4/5',
-                      borderRadius: 8,
-                      overflow: 'hidden',
-                      marginBottom: 8,
+                      aspectRatio: '1/1',
                       position: 'relative',
+                      padding: 12,
+                      boxSizing: 'border-box',
                     }}>
                       <img
-                        src="https://c.stocksy.com/a/5WYA00/z9/2515965.jpg"
-                        alt="Thai Basil Chicken Rice"
-                        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                        src="Honey Dijon Chicken and Mashed Potatoes.png"
+                        alt="Honey Dijon Chicken and Mashed Potatoes"
+                        style={{ width: '100%', height: '100%', objectFit: 'contain' }}
                       />
                       {/* Stepper */}
                       <div style={{ position: 'absolute', top: 0, right: 0 }}>
@@ -2835,7 +3303,7 @@
                               if (upsellTimeoutRef.current.upsell2) clearTimeout(upsellTimeoutRef.current.upsell2);
                               upsellTimeoutRef.current.upsell2 = setTimeout(() => {
                                 setUpsellEditing(prev => ({ ...prev, upsell2: false }));
-                              }, 3000);
+                              }, 800);
                             }}
                             style={{
                               display: 'flex',
@@ -2845,11 +3313,11 @@
                               height: 36,
                               background: 'var(--color-stepper-bg)',
                               border: 'none',
-                              borderRadius: '0 8px 0 8px',
+                              borderRadius: '0 12px 0 8px',
                               cursor: 'pointer',
                             }}
                           >
-                            {Icons.plus(16, 'var(--color-neutral-fg-darkest)')}
+                            {Icons.plus(16, 'black')}
                           </button>
                         ) : upsellEditing.upsell2 ? (
                           <div style={{
@@ -2857,7 +3325,7 @@
                             alignItems: 'center',
                             background: 'var(--color-stepper-bg)',
                             border: 'none',
-                            borderRadius: '0 8px 0 8px',
+                            borderRadius: '0 12px 0 8px',
                             overflow: 'hidden',
                           }}>
                             <button
@@ -2870,29 +3338,29 @@
                                   if (upsellTimeoutRef.current.upsell2) clearTimeout(upsellTimeoutRef.current.upsell2);
                                   upsellTimeoutRef.current.upsell2 = setTimeout(() => {
                                     setUpsellEditing(prev => ({ ...prev, upsell2: false }));
-                                  }, 3000);
+                                  }, 800);
                                 }
                               }}
                               style={{
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'center',
-                                width: 36,
-                                height: 36,
+                                width: 32,
+                                height: 34,
                                 background: 'transparent',
                                 border: 'none',
                                 cursor: 'pointer',
                               }}
                             >
-                              {Icons.minus(16, 'var(--color-neutral-fg-darkest)')}
+                              {Icons.minus(16, 'black')}
                             </button>
                             <span style={{
-                              minWidth: 24,
+                              width: 20,
                               textAlign: 'center',
                               fontFamily: 'var(--font-body)',
                               fontSize: 'var(--fs-sm)',
                               fontWeight: 700,
-                              color: 'var(--color-neutral-fg-darkest)',
+                              color: 'black',
                             }}>{upsellQuantities.upsell2}</span>
                             <button
                               onClick={() => {
@@ -2900,20 +3368,20 @@
                                 if (upsellTimeoutRef.current.upsell2) clearTimeout(upsellTimeoutRef.current.upsell2);
                                 upsellTimeoutRef.current.upsell2 = setTimeout(() => {
                                   setUpsellEditing(prev => ({ ...prev, upsell2: false }));
-                                }, 3000);
+                                }, 800);
                               }}
                               style={{
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'center',
-                                width: 36,
-                                height: 36,
+                                width: 32,
+                                height: 34,
                                 background: 'transparent',
                                 border: 'none',
                                 cursor: 'pointer',
                               }}
                             >
-                              {Icons.plus(16, 'var(--color-neutral-fg-darkest)')}
+                              {Icons.plus(16, 'black')}
                             </button>
                           </div>
                         ) : (
@@ -2923,7 +3391,7 @@
                               if (upsellTimeoutRef.current.upsell2) clearTimeout(upsellTimeoutRef.current.upsell2);
                               upsellTimeoutRef.current.upsell2 = setTimeout(() => {
                                 setUpsellEditing(prev => ({ ...prev, upsell2: false }));
-                              }, 3000);
+                              }, 800);
                             }}
                             style={{
                               display: 'flex',
@@ -2933,12 +3401,12 @@
                               height: 36,
                               background: 'var(--color-brand-primary)',
                               border: 'none',
-                              borderRadius: '0 8px 0 8px',
+                              borderRadius: '0 12px 0 8px',
                               cursor: 'pointer',
                               fontFamily: 'var(--font-body)',
                               fontSize: 'var(--fs-sm)',
                               fontWeight: 700,
-                              color: 'var(--color-neutral-fg-darkest)',
+                              color: 'black',
                             }}
                           >
                             {upsellQuantities.upsell2}
@@ -2946,19 +3414,28 @@
                         )}
                       </div>
                     </div>
-                    <div style={{
-                      fontFamily: 'var(--font-body)',
-                      fontSize: 'var(--fs-sm)',
-                      fontWeight: 700,
-                      color: 'var(--color-neutral-fg-default)',
-                      marginBottom: 4,
-                      lineHeight: 1.3,
-                    }}>Thai Basil Chicken Rice</div>
-                    <div style={{
-                      fontFamily: 'var(--font-body)',
-                      fontSize: 'var(--fs-sm)',
-                      color: 'var(--color-neutral-fg-default)',
-                    }}>+$12.99 <span style={{ color: 'var(--color-neutral-fg-unselected)', fontWeight: 400 }}>per serving</span></div>
+                    {/* Text content below image */}
+                    <div style={{ padding: 12, background: 'rgba(142, 152, 153, 0.3)' }}>
+                      <div style={{
+                        fontFamily: 'var(--font-body)',
+                        fontSize: 'var(--fs-sm)',
+                        fontWeight: 700,
+                        color: 'black',
+                        marginBottom: 4,
+                        lineHeight: 1.3,
+                      }}>Honey Dijon Chicken and Mashed Potatoes</div>
+                      <div style={{
+                        fontFamily: 'var(--font-body)',
+                        fontSize: 11,
+                        color: '#666666',
+                        marginBottom: 4,
+                      }}>25 min · 720 kcal · 38g protein</div>
+                      <div style={{
+                        fontFamily: 'var(--font-body)',
+                        fontSize: 11,
+                        color: '#666666',
+                      }}><span style={{ fontWeight: 700 }}>+$11.99</span> per serving</div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -3067,7 +3544,7 @@
                 padding: '14px 24px',
                 border: 'none',
                 borderRadius: 'var(--radius-button)',
-                background: 'var(--color-neutral-fg-darkest)',
+                background: 'black',
                 color: 'white',
                 fontFamily: 'var(--font-body)',
                 fontSize: 'var(--fs-md)',
@@ -3095,8 +3572,8 @@
           statusColor: '#e0d9cb',
           message: 'Dig in now! Your box was delivered on Tue, Jul. 8, 9:00 AM',
           recipes: [
-            { name: 'Chicken Crusted Parmesan', img: 'https://images.unsplash.com/photo-1632778149955-e80f8ceca2e8?w=200&h=200&fit=crop' },
-            { name: 'Thai-inspired Curry', img: 'https://images.unsplash.com/photo-1455619452474-d2be8b1e70cd?w=200&h=200&fit=crop' },
+            { name: 'Chicken Crusted Parmesan', img: 'https://images.unsplash.com/photo-1598515214211-89d3c73ae83b?w=200&h=200&fit=crop' },
+            { name: 'Thai-inspired Curry', img: 'https://images.unsplash.com/photo-1574484284002-952d92456975?w=200&h=200&fit=crop' },
           ],
           actions: ['Rate', 'Track', 'Get help'],
         },
@@ -3108,7 +3585,7 @@
           message: "We're packing the good stuff. Expect it by Sat, Jul. 8, 9:00 AM",
           recipes: [
             { name: 'Apricot Panza', img: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=200&h=200&fit=crop' },
-            { name: 'Cheesy Black Bean Chicken', img: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=200&h=200&fit=crop' },
+            { name: 'Cheesy Black Bean Chicken', img: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=200&h=200&fit=crop' },
           ],
           actions: ['Browse menu', 'Reschedule'],
         },
@@ -3119,8 +3596,8 @@
           statusColor: '#ffccca',
           message: '6 days to edit',
           recipes: [
-            { name: 'Chicken Shawarma Pita Box', img: 'https://images.unsplash.com/photo-1529006557810-274b9b2fc783?w=200&h=200&fit=crop' },
-            { name: 'Thai-inspired Curry', img: 'https://images.unsplash.com/photo-1455619452474-d2be8b1e70cd?w=200&h=200&fit=crop' },
+            { name: 'Chicken Shawarma Pita Box', img: 'https://images.unsplash.com/photo-1540914124281-342587941389?w=200&h=200&fit=crop' },
+            { name: 'Thai-inspired Curry', img: 'https://images.unsplash.com/photo-1574484284002-952d92456975?w=200&h=200&fit=crop' },
           ],
           actions: ['Unskip'],
           unskipBanner: true,
@@ -3402,13 +3879,199 @@
       const [showExitDialog, setShowExitDialog] = useState(false);
       const [customizeMeal, setCustomizeMeal] = useState(null);
       const [isScrolling, setIsScrolling] = useState(false);
+      const [showMealPrepDrawer, setShowMealPrepDrawer] = useState(false);
+      const [mealPrepActiveStep, setMealPrepActiveStep] = useState(-1);
+      const [showPremiumIrishPage, setShowPremiumIrishPage] = useState(false);
+      const [premiumScrolled, setPremiumScrolled] = useState(false);
+      const [isHeaderCollapsed, setIsHeaderCollapsed] = useState(false);
+      const [showCategoriesPage, setShowCategoriesPage] = useState(false);
       const scrollTimeoutRef = useRef(null);
+
+      // State for small Premium Irish cards stepper
+      const [smallIrishEditing, setSmallIrishEditing] = useState({ card1: false, card2: false, card3: false });
+      const smallIrishTimeoutRef = useRef({ card1: null, card2: null, card3: null });
+
+      // State for On Sale This Week cards stepper
+      const [onSaleEditing, setOnSaleEditing] = useState({ card1: false, card2: false, card3: false });
+      const onSaleTimeoutRef = useRef({ card1: null, card2: null, card3: null });
+
+      // State for Batch cooking cards stepper
+      const [batchEditing, setBatchEditing] = useState({});
+      const batchTimeoutRef = useRef({});
+
+      // Animate meal prep steps when drawer opens
+      useEffect(() => {
+        if (showMealPrepDrawer) {
+          setMealPrepActiveStep(-1);
+          const timers = [];
+          for (let i = 0; i < 4; i++) {
+            timers.push(setTimeout(() => setMealPrepActiveStep(i), 500 + i * 600));
+          }
+          return () => timers.forEach(t => clearTimeout(t));
+        } else {
+          setMealPrepActiveStep(-1);
+        }
+      }, [showMealPrepDrawer]);
+
+      const handlePremiumScroll = (e) => {
+        setPremiumScrolled(e.target.scrollTop > 30);
+      };
+
+      // Premium Irish Recipe Card with stepper functionality
+      const PremiumIrishCard = ({ meal, mealId }) => {
+        const [isEditing, setIsEditing] = useState(false);
+        const editTimeoutRef = useRef(null);
+        const quantity = cart[mealId] || 0;
+
+        const handleAdd = () => {
+          setCart(prev => ({ ...prev, [mealId]: (prev[mealId] || 0) + 1 }));
+          setIsEditing(true);
+          if (editTimeoutRef.current) clearTimeout(editTimeoutRef.current);
+          editTimeoutRef.current = setTimeout(() => setIsEditing(false), 800);
+        };
+
+        const handleRemove = () => {
+          setCart(prev => {
+            const c = { ...prev };
+            if (c[mealId] > 1) c[mealId] -= 1;
+            else delete c[mealId];
+            return c;
+          });
+          if (editTimeoutRef.current) clearTimeout(editTimeoutRef.current);
+          editTimeoutRef.current = setTimeout(() => setIsEditing(false), 800);
+        };
+
+        const handleBadgeClick = () => {
+          setIsEditing(true);
+          if (editTimeoutRef.current) clearTimeout(editTimeoutRef.current);
+          editTimeoutRef.current = setTimeout(() => setIsEditing(false), 800);
+        };
+
+        useEffect(() => {
+          if (quantity === 0) setIsEditing(false);
+        }, [quantity]);
+
+        return (
+          <div style={{
+            background: 'rgba(255,255,255,0.1)',
+            borderRadius: 12,
+            overflow: 'hidden',
+          }}>
+            <div style={{
+              width: '100%',
+              aspectRatio: '1/1',
+              position: 'relative',
+            }}>
+              <img
+                src={meal.img}
+                alt={meal.name}
+                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+              />
+              {/* Quantity control */}
+              <div style={{ position: 'absolute', top: 0, right: 0 }}>
+                {quantity === 0 ? (
+                  <button onClick={handleAdd} style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    width: 36,
+                    height: 36,
+                    background: 'var(--color-stepper-bg)',
+                    border: 'none',
+                    borderRadius: '0 12px 0 8px',
+                    cursor: 'pointer',
+                  }}>
+                    {Icons.plus(16, 'black')}
+                  </button>
+                ) : isEditing ? (
+                  <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    background: 'var(--color-stepper-bg)',
+                    border: 'none',
+                    borderRadius: '0 12px 0 8px',
+                    overflow: 'hidden',
+                  }}>
+                    <button onClick={handleRemove} style={{
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      width: 32, height: 34, background: 'transparent', border: 'none', cursor: 'pointer',
+                    }}>
+                      {Icons.minus(16, 'black')}
+                    </button>
+                    <span style={{
+                      width: 20, textAlign: 'center',
+                      fontFamily: 'var(--font-body)', fontSize: 'var(--fs-sm)', fontWeight: 700,
+                      color: 'black',
+                    }}>{quantity}</span>
+                    <button onClick={handleAdd} style={{
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      width: 32, height: 34, background: 'transparent', border: 'none', cursor: 'pointer',
+                    }}>
+                      {Icons.plus(16, 'black')}
+                    </button>
+                  </div>
+                ) : (
+                  <button onClick={handleBadgeClick} style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    width: 36,
+                    height: 36,
+                    background: 'var(--color-brand-primary)',
+                    border: 'none',
+                    borderRadius: '0 12px 0 8px',
+                    cursor: 'pointer',
+                    fontFamily: 'var(--font-body)',
+                    fontSize: 'var(--fs-sm)',
+                    fontWeight: 700,
+                    color: 'black',
+                  }}>
+                    {quantity}
+                  </button>
+                )}
+              </div>
+            </div>
+            <div style={{ padding: 12 }}>
+              <div style={{
+                fontFamily: 'var(--font-body)',
+                fontSize: 'var(--fs-sm)',
+                fontWeight: 700,
+                color: 'white',
+                marginBottom: 4,
+                lineHeight: 1.3,
+              }}>{meal.name}</div>
+              <div style={{
+                fontFamily: 'var(--font-body)',
+                fontSize: 11,
+                color: 'rgba(255,255,255,0.7)',
+                marginBottom: 4,
+              }}>{meal.time} · 680 kcal · 42g protein</div>
+              <div style={{
+                fontFamily: 'var(--font-body)',
+                fontSize: 11,
+                color: 'rgba(255,255,255,0.7)',
+              }}><span style={{ fontWeight: 700 }}>{meal.price}</span> per serving</div>
+            </div>
+          </div>
+        );
+      };
+
       const MEALS_NEEDED = 6;
 
       const totalItems = Object.values(cart).reduce((sum, q) => sum + q, 0);
       const mealsRemaining = Math.max(0, MEALS_NEEDED - totalItems);
 
-      const handleScroll = () => {
+      const handleScroll = (e) => {
+        const scrollTop = e.target.scrollTop;
+
+        // Collapse header when scrolled past threshold
+        if (scrollTop > 50) {
+          setIsHeaderCollapsed(true);
+        } else {
+          setIsHeaderCollapsed(false);
+        }
+
+        // Hide cart while actively scrolling
         setIsScrolling(true);
         if (scrollTimeoutRef.current) {
           clearTimeout(scrollTimeoutRef.current);
@@ -3427,7 +4090,7 @@
       });
 
       const handleAddMeal = (meal) => {
-        if (meal.id === 1 && (cart[meal.id] || 0) === 0) {
+        if (meal.customizable && (cart[meal.id] || 0) === 0) {
           setCustomizeMeal(meal);
         } else {
           addToCart(meal.id);
@@ -3436,24 +4099,71 @@
 
       return (
         <>
+          {/* Status bar - always visible */}
           <StatusBar />
-          <WeekNavigation />
+
+          {/* Week navigation - hides on scroll */}
+          <div style={{
+            position: 'absolute',
+            top: 44,
+            left: 0,
+            right: 0,
+            zIndex: 20,
+            transition: 'transform 0.2s ease, opacity 0.2s ease',
+            transform: isHeaderCollapsed ? 'translateY(-74px)' : 'translateY(0)',
+            opacity: isHeaderCollapsed ? 0 : 1,
+            pointerEvents: isHeaderCollapsed ? 'none' : 'auto',
+          }}>
+            <WeekNavigation />
+          </div>
+
+          {/* Tab group - hides on scroll */}
+          <div style={{
+            position: 'absolute',
+            top: 100,
+            left: 0,
+            right: 0,
+            zIndex: 15,
+            background: 'var(--color-page-bg)',
+            transition: 'transform 0.2s ease, opacity 0.2s ease',
+            transform: isHeaderCollapsed ? 'translateY(-60px)' : 'translateY(0)',
+            opacity: isHeaderCollapsed ? 0 : 1,
+            pointerEvents: isHeaderCollapsed ? 'none' : 'auto',
+          }}>
+            <TabGroup />
+          </div>
+
+          {/* Filter tags row - hides while scrolling */}
+          <div style={{
+            position: 'absolute',
+            top: isHeaderCollapsed ? 44 : 140,
+            left: 0,
+            right: 0,
+            zIndex: 25,
+            background: 'var(--color-page-bg)',
+            transition: 'top 0.2s ease, opacity 0.2s ease, transform 0.2s ease',
+            opacity: isScrolling ? 0 : 1,
+            transform: isScrolling ? 'translateY(-10px)' : 'translateY(0)',
+            pointerEvents: isScrolling ? 'none' : 'auto',
+          }}>
+            <FilterTagsRow />
+          </div>
 
           {/* Scrollable content area */}
           <div className="scroll-area" onScroll={handleScroll} style={{
             position: 'absolute',
-            top: 118,
+            top: isHeaderCollapsed ? 44 : 180,
             left: 0,
             right: 0,
-            bottom: 83,
+            bottom: isHeaderCollapsed ? 0 : 83,
             overflowY: 'auto',
+            paddingTop: isHeaderCollapsed ? 52 : 0,
+            transition: 'top 0.2s ease, bottom 0.2s ease, padding-top 0.2s ease',
           }}>
-            <TabGroup />
-            <FilterTagsRow />
 
             {/* Cards */}
-            <div style={{ padding: '12px 8px 0' }}>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+            <div style={{ padding: '12px 12px 0' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px 12px' }}>
                 {mealsData.slice(0, 4).map(meal => (
                   <ProductCard
                     key={meal.id}
@@ -3461,27 +4171,313 @@
                     quantity={cart[meal.id] || 0}
                     onAdd={() => handleAddMeal(meal)}
                     onRemove={() => removeFromCart(meal.id)}
+                    fullWidth={meal.label === 'Premium'}
                   />
                 ))}
               </div>
 
               <BenefitsWidget />
 
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, paddingBottom: 120 }}>
-                {mealsData.slice(4).map(meal => (
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px 12px' }}>
+                {mealsData.slice(4, 6).map(meal => (
                   <ProductCard
                     key={meal.id}
                     meal={meal}
                     quantity={cart[meal.id] || 0}
                     onAdd={() => handleAddMeal(meal)}
                     onRemove={() => removeFromCart(meal.id)}
+                    fullWidth={meal.label === 'Premium'}
                   />
                 ))}
+                <FeatureIntroCard onClick={() => setShowMealPrepDrawer(true)} />
+                {mealsData.slice(6, 13).map(meal => (
+                  <ProductCard
+                    key={meal.id}
+                    meal={meal}
+                    quantity={cart[meal.id] || 0}
+                    onAdd={() => handleAddMeal(meal)}
+                    onRemove={() => removeFromCart(meal.id)}
+                    fullWidth={meal.label === 'Premium'}
+                  />
+                ))}
+              </div>
+
+              {/* Premium Irish Meat section */}
+              <div style={{ background: 'linear-gradient(to bottom, #024426 0%, #024426 70%, black 100%)', marginTop: 24, marginBottom: 24, marginLeft: -16, marginRight: -16 }}>
+                {/* Title and subtitle first */}
+                <div style={{ padding: '32px 24px 0 24px' }}>
+                  {/* Title row with chevron */}
+                  <div
+                    onClick={() => setShowPremiumIrishPage(true)}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      cursor: 'pointer',
+                      marginBottom: 8,
+                    }}
+                  >
+                    <h3 style={{
+                      fontFamily: 'var(--font-headline)',
+                      fontSize: 'var(--fs-lg)',
+                      fontWeight: 700,
+                      color: 'white',
+                      margin: 0,
+                      lineHeight: 'var(--lh-md)',
+                    }}>Premium Irish Grass-Fed Beef</h3>
+                    <div style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}>
+                      {Icons.chevronRight(24, 'white')}
+                    </div>
+                  </div>
+                  <p style={{
+                    fontFamily: 'var(--font-body)',
+                    fontSize: 'var(--fs-sm)',
+                    color: 'rgba(255,255,255,0.8)',
+                    margin: '0 0 24px 0',
+                    lineHeight: 1.4,
+                  }}>Sourced from family farms in Ireland. Our grass-fed beef is renowned for its exceptional flavor.</p>
+                </div>
+
+                {/* Video aligned to bottom right with top-left radius */}
+                <div style={{ display: 'flex', justifyContent: 'flex-end', paddingLeft: 24, paddingRight: 0 }}>
+                  <div style={{
+                    width: '100%',
+                    overflow: 'hidden',
+                    borderTopLeftRadius: 8,
+                    borderTopRightRadius: 0,
+                  }}>
+                    <video
+                      src="https://c.stocksy.com/a/Zz8500/y2/1226209.mp4"
+                      autoPlay
+                      loop
+                      muted
+                      playsInline
+                      style={{ width: '100%', display: 'block' }}
+                    />
+                  </div>
+                </div>
+
+              </div>
+
+              {/* Remaining recipes after Irish meat section */}
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px 12px', paddingBottom: 24 }}>
+                {mealsData.slice(13).map(meal => (
+                  <ProductCard
+                    key={meal.id}
+                    meal={meal}
+                    quantity={cart[meal.id] || 0}
+                    onAdd={() => handleAddMeal(meal)}
+                    onRemove={() => removeFromCart(meal.id)}
+                    fullWidth={meal.label === 'Premium'}
+                  />
+                ))}
+              </div>
+
+              {/* Trending Now section */}
+              <div style={{ background: '#F0EBE3', marginLeft: -16, marginRight: -16, marginBottom: 180, padding: '24px 0 32px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16, padding: '0 16px' }}>
+                  <h3 style={{
+                    fontFamily: 'var(--font-headline)',
+                    fontSize: 'var(--fs-lg)',
+                    fontWeight: 700,
+                    color: 'black',
+                    margin: 0,
+                  }}>Trending now</h3>
+                  <img src="Fire Image.png" alt="Fire" style={{ width: 24, height: 24 }} />
+                </div>
+                <div style={{
+                  display: 'flex',
+                  gap: 12,
+                  overflowX: 'auto',
+                  paddingLeft: 16,
+                  paddingRight: 16,
+                  paddingBottom: 8,
+                }} className="h-scroll">
+                  {[
+                    { id: 'trending-1', name: 'Garlic Butter Shrimp', time: '20 min', img: 'recipes/HelloFresh Main Image (10).jpg' },
+                    { id: 'trending-2', name: 'Tuscan Chicken Pasta', time: '25 min', img: 'recipes/HelloFresh Main Image (11).jpg' },
+                    { id: 'trending-3', name: 'Lemon Herb Salmon', time: '30 min', img: 'recipes/HelloFresh Main Image (12).jpg' },
+                    { id: 'trending-4', name: 'Spicy Thai Noodles', time: '25 min', img: 'recipes/HelloFresh Main Image (13).jpg' },
+                  ].map((meal) => (
+                    <div key={meal.id} style={{
+                      flexShrink: 0,
+                      width: 140,
+                      borderRadius: 12,
+                      overflow: 'hidden',
+                      display: 'flex',
+                      flexDirection: 'column',
+                    }}>
+                      <div style={{
+                        width: '100%',
+                        aspectRatio: '1/1',
+                        position: 'relative',
+                      }}>
+                        <img
+                          src={meal.img}
+                          alt={meal.name}
+                          style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                        />
+                        {/* Stepper */}
+                        <div style={{ position: 'absolute', top: 0, right: 0, zIndex: 5 }}>
+                          {(cart[meal.id] || 0) === 0 ? (
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setCart(prev => ({ ...prev, [meal.id]: 1 }));
+                                setOnSaleEditing(prev => ({ ...prev, [meal.id]: true }));
+                                if (onSaleTimeoutRef.current[meal.id]) clearTimeout(onSaleTimeoutRef.current[meal.id]);
+                                onSaleTimeoutRef.current[meal.id] = setTimeout(() => setOnSaleEditing(prev => ({ ...prev, [meal.id]: false })), 800);
+                              }}
+                              style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                width: 36,
+                                height: 36,
+                                background: 'var(--color-stepper-bg)',
+                                border: 'none',
+                                borderRadius: '0 12px 0 8px',
+                                cursor: 'pointer',
+                              }}
+                            >
+                              {Icons.plus(16, 'black')}
+                            </button>
+                          ) : onSaleEditing[meal.id] ? (
+                            <div style={{
+                              display: 'flex',
+                              alignItems: 'center',
+                              background: 'var(--color-stepper-bg)',
+                              borderRadius: '0 12px 0 8px',
+                              overflow: 'hidden',
+                              height: 36,
+                            }}>
+                              <button onClick={(e) => {
+                                e.stopPropagation();
+                                setCart(prev => {
+                                  const c = { ...prev };
+                                  if (c[meal.id] > 1) c[meal.id] -= 1;
+                                  else delete c[meal.id];
+                                  return c;
+                                });
+                                if (onSaleTimeoutRef.current[meal.id]) clearTimeout(onSaleTimeoutRef.current[meal.id]);
+                                onSaleTimeoutRef.current[meal.id] = setTimeout(() => setOnSaleEditing(prev => ({ ...prev, [meal.id]: false })), 800);
+                              }} style={{
+                                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                width: 36, height: 36, background: 'transparent', border: 'none', cursor: 'pointer',
+                              }}>
+                                {Icons.minus(14, 'black')}
+                              </button>
+                              <span style={{ width: 20, textAlign: 'center', fontFamily: 'var(--font-body)', fontSize: 12, fontWeight: 700, color: 'black' }}>{cart[meal.id]}</span>
+                              <button onClick={(e) => {
+                                e.stopPropagation();
+                                setCart(prev => ({ ...prev, [meal.id]: (prev[meal.id] || 0) + 1 }));
+                                if (onSaleTimeoutRef.current[meal.id]) clearTimeout(onSaleTimeoutRef.current[meal.id]);
+                                onSaleTimeoutRef.current[meal.id] = setTimeout(() => setOnSaleEditing(prev => ({ ...prev, [meal.id]: false })), 800);
+                              }} style={{
+                                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                width: 36, height: 36, background: 'transparent', border: 'none', cursor: 'pointer',
+                              }}>
+                                {Icons.plus(14, 'black')}
+                              </button>
+                            </div>
+                          ) : (
+                            <button onClick={(e) => {
+                              e.stopPropagation();
+                              setOnSaleEditing(prev => ({ ...prev, [meal.id]: true }));
+                              if (onSaleTimeoutRef.current[meal.id]) clearTimeout(onSaleTimeoutRef.current[meal.id]);
+                              onSaleTimeoutRef.current[meal.id] = setTimeout(() => setOnSaleEditing(prev => ({ ...prev, [meal.id]: false })), 800);
+                            }} style={{
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              width: 36,
+                              height: 36,
+                              background: 'var(--color-brand-primary)',
+                              border: 'none',
+                              borderRadius: '0 12px 0 8px',
+                              cursor: 'pointer',
+                              fontFamily: 'var(--font-body)',
+                              fontSize: 11,
+                              fontWeight: 700,
+                              color: 'black',
+                            }}>
+                              {cart[meal.id]}
+                            </button>
+                          )}
+                        </div>
+                      </div>
+                      <div style={{ padding: '8px 10px 16px', background: 'rgba(255,255,255,0.7)', flex: 1 }}>
+                        <div style={{
+                          fontFamily: 'var(--font-body)',
+                          fontSize: 'var(--fs-sm)',
+                          fontWeight: 700,
+                          color: 'black',
+                          marginBottom: 4,
+                          lineHeight: 1.3,
+                        }}>{meal.name}</div>
+                        <div style={{
+                          fontFamily: 'var(--font-body)',
+                          fontSize: 11,
+                          color: '#666666',
+                        }}>{meal.time} · 680 kcal</div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
 
-          <MealSelectionGuidance totalItems={totalItems} mealsNeeded={MEALS_NEEDED} onCartClick={onCartClick} isHidden={isScrolling} />
+          {/* Promo banner - floating above cart, shows when 3 items in cart */}
+          {totalItems === 3 && (
+            <div
+              className="promo-banner-animate"
+              style={{
+                position: 'absolute',
+                bottom: 152,
+                left: '5%',
+                right: '5%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                padding: '10px 16px 10px 48px',
+                background: '#FFF3C4',
+                borderRadius: 'var(--radius-md)',
+                zIndex: 15,
+                pointerEvents: 'auto',
+              }}>
+              {/* Food image on left */}
+              <img
+                src="Food Image.png"
+                alt="Food"
+                style={{
+                  position: 'absolute',
+                  left: -14,
+                  top: '50%',
+                  transform: 'translateY(-50%)',
+                  width: 64,
+                  height: 64,
+                  objectFit: 'contain',
+                }}
+              />
+              <div style={{
+                fontFamily: 'var(--font-body)',
+                fontSize: 'var(--fs-xs)',
+                fontWeight: 400,
+                color: 'black',
+                textAlign: 'left',
+              }}>
+                Add a 4th meal for only <span style={{ color: '#d32f2f', fontWeight: 700 }}>$9.59</span> <span style={{ textDecoration: 'line-through', color: '#666' }}>$11.82</span> per serving!
+              </div>
+            </div>
+          )}
+
+          <MealSelectionGuidance totalItems={totalItems} mealsNeeded={MEALS_NEEDED} onCartClick={onCartClick} isHidden={isScrolling} onContinue={() => setShowCategoriesPage(true)} />
 
           <CustomizationDrawer
             meal={customizeMeal}
@@ -3489,14 +4485,1098 @@
             onClose={() => setCustomizeMeal(null)}
             onAdd={() => addToCart(customizeMeal.id)}
           />
+
+          {/* Meal Prep Drawer */}
+          {showMealPrepDrawer && (
+            <div
+              style={{
+                position: 'absolute',
+                inset: 0,
+                background: '#efe9de',
+                zIndex: 1000,
+                overflow: 'hidden',
+              }}
+            >
+              {/* Video background - fixed at top */}
+              <div style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                right: 0,
+                height: 280,
+                zIndex: 1,
+              }}>
+                <video
+                  src="https://c.stocksy.com/a/HllH00/y2/4235175.mp4"
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                />
+              </div>
+
+              {/* Back button */}
+              <button
+                onClick={() => setShowMealPrepDrawer(false)}
+                style={{
+                  position: 'absolute',
+                  top: 50,
+                  left: 16,
+                  width: 40,
+                  height: 40,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  background: 'rgba(255,255,255,0.9)',
+                  border: 'none',
+                  borderRadius: '50%',
+                  cursor: 'pointer',
+                  zIndex: 20,
+                }}
+              >
+                {Icons.arrowLeft(20, 'var(--color-neutral-fg-darkest)')}
+              </button>
+
+              {/* Scrollable content on top of video */}
+              <div className="scroll-area" style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                overflowY: 'auto',
+                zIndex: 2,
+              }}>
+                {/* Spacer to show video at top */}
+                <div style={{ height: 220 }} />
+
+                {/* White content card with rounded corners */}
+                <div style={{
+                  background: 'white',
+                  borderTopLeftRadius: 24,
+                  borderTopRightRadius: 24,
+                  padding: '24px 16px 100px',
+                  minHeight: 'calc(100vh - 220px)',
+                }}>
+                  {/* Title */}
+                  <h1 style={{
+                    fontFamily: 'var(--font-headline)',
+                    fontSize: 'var(--fs-lg)',
+                    fontWeight: 700,
+                    lineHeight: 'var(--lh-md)',
+                    color: 'black',
+                    margin: '0 0 8px',
+                  }}>Meal prep made easy</h1>
+
+                  <p style={{
+                    fontFamily: 'var(--font-body)',
+                    fontSize: 'var(--fs-sm)',
+                    color: 'black',
+                    margin: '0 0 24px',
+                    lineHeight: 1.5,
+                  }}>Plan your week in minutes and say goodbye to the daily cooking stress!</p>
+
+                  {/* Steps with animation */}
+                  <div style={{ position: 'relative', padding: '0 24px 0 8px' }}>
+                    {[
+                      { step: '1', title: 'Select 2-3x portions', desc: 'When choosing your meals, select double or triple portions.' },
+                      { step: '2', title: 'Cook once on Sunday', desc: 'Dedicate just 1-2 hours on Sunday to batch cook all your meals.' },
+                      { step: '3', title: 'Store in portions', desc: 'Divide your cooked meals into individual containers and store in the fridge.' },
+                      { step: '4', title: 'Reheat & enjoy', desc: 'Simply grab a container, reheat, and enjoy a home-cooked meal in minutes.' },
+                    ].map((item, i) => {
+                      const isActive = mealPrepActiveStep >= i;
+                      const isLineActive = mealPrepActiveStep >= i + 1;
+                      return (
+                        <div key={i} style={{
+                          display: 'flex',
+                          gap: 16,
+                          marginBottom: i < 3 ? 8 : 0,
+                          position: 'relative',
+                        }}>
+                          {/* Step number and connecting line */}
+                          <div style={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            flexShrink: 0,
+                            width: 32,
+                          }}>
+                            {/* Number circle */}
+                            <div style={{
+                              width: 32,
+                              height: 32,
+                              borderRadius: '50%',
+                              background: isActive ? 'var(--color-brand-green-500)' : '#d1d1d1',
+                              color: 'white',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              fontFamily: 'var(--font-headline)',
+                              fontSize: 'var(--fs-sm)',
+                              fontWeight: 700,
+                              transition: 'background 0.3s ease',
+                              transform: isActive ? 'scale(1)' : 'scale(0.9)',
+                              boxShadow: isActive ? '0 2px 8px rgba(7, 122, 70, 0.3)' : 'none',
+                            }}>{item.step}</div>
+                            {/* Connecting line (except for last item) */}
+                            {i < 3 && (
+                              <div style={{
+                                width: 2,
+                                height: 36,
+                                background: '#e0e0e0',
+                                marginTop: 4,
+                                position: 'relative',
+                                overflow: 'hidden',
+                              }}>
+                                <div style={{
+                                  position: 'absolute',
+                                  top: 0,
+                                  left: 0,
+                                  width: '100%',
+                                  height: isLineActive ? '100%' : '0%',
+                                  background: 'var(--color-brand-green-500)',
+                                  transition: 'height 0.4s ease',
+                                }} />
+                              </div>
+                            )}
+                          </div>
+                          {/* Content */}
+                          <div style={{ paddingBottom: i < 3 ? 20 : 0 }}>
+                            <div style={{
+                              fontFamily: 'var(--font-body)',
+                              fontSize: 'var(--fs-sm)',
+                              fontWeight: 700,
+                              color: isActive ? 'black' : '#a0a0a0',
+                              marginBottom: 4,
+                              transition: 'color 0.3s ease',
+                            }}>{item.title}</div>
+                            <div style={{
+                              fontFamily: 'var(--font-body)',
+                              fontSize: 'var(--fs-sm)',
+                              color: isActive ? '#444444' : '#c0c0c0',
+                              lineHeight: 'var(--lh-sm)',
+                              transition: 'color 0.3s ease',
+                            }}>{item.desc}</div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+
+                  {/* Recipes for batch cooking */}
+                  <div style={{ marginTop: 40 }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 }}>
+                      <h3 style={{
+                        fontFamily: 'var(--font-headline)',
+                        fontSize: 'var(--fs-md)',
+                        fontWeight: 700,
+                        color: 'black',
+                        margin: 0,
+                      }}>Great for batch cooking</h3>
+                      <span style={{
+                        fontFamily: 'var(--font-body)',
+                        fontSize: 'var(--fs-sm)',
+                        fontWeight: 700,
+                        color: 'black',
+                        textDecoration: 'underline',
+                        cursor: 'pointer',
+                      }}>View more</span>
+                    </div>
+                    <p style={{
+                      fontFamily: 'var(--font-body)',
+                      fontSize: 'var(--fs-sm)',
+                      color: '#666666',
+                      margin: '0 0 16px 0',
+                      lineHeight: 1.4,
+                    }}>Stores well · Reheats perfectly · Quick to prep</p>
+                    <div style={{
+                      display: 'flex',
+                      gap: 12,
+                      overflowX: 'auto',
+                      marginLeft: -16,
+                      marginRight: -16,
+                      paddingLeft: 16,
+                      paddingRight: 16,
+                      paddingBottom: 8,
+                    }} className="h-scroll">
+                      {[
+                        { id: 'batch-1', name: 'Lemon Herb Chicken', price: '+$10.99', time: '30 min', img: 'recipes/HelloFresh Main Image (4).jpg' },
+                        { id: 'batch-2', name: 'Mediterranean Bowl', price: '+$11.99', time: '35 min', img: 'recipes/HelloFresh Main Image (5).jpg' },
+                        { id: 'batch-3', name: 'BBQ Pulled Pork', price: '+$12.99', time: '40 min', img: 'recipes/HelloFresh Main Image (6).jpg' },
+                        { id: 'batch-4', name: 'Thai Basil Chicken', price: '+$10.99', time: '25 min', img: 'recipes/HelloFresh Main Image (7).jpg' },
+                      ].map((meal) => (
+                        <div key={meal.id} style={{
+                          flexShrink: 0,
+                          width: 140,
+                          borderRadius: 12,
+                          overflow: 'hidden',
+                          display: 'flex',
+                          flexDirection: 'column',
+                        }}>
+                          <div style={{
+                            width: '100%',
+                            aspectRatio: '1/1',
+                            position: 'relative',
+                          }}>
+                            <img
+                              src={meal.img}
+                              alt={meal.name}
+                              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                            />
+                            {/* Stepper */}
+                            <div style={{ position: 'absolute', top: 0, right: 0, zIndex: 5 }}>
+                              {(cart[meal.id] || 0) === 0 ? (
+                                <button
+                                  type="button"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    setCart(prev => ({ ...prev, [meal.id]: 1 }));
+                                    setBatchEditing(prev => ({ ...prev, [meal.id]: true }));
+                                    if (batchTimeoutRef.current[meal.id]) clearTimeout(batchTimeoutRef.current[meal.id]);
+                                    batchTimeoutRef.current[meal.id] = setTimeout(() => setBatchEditing(prev => ({ ...prev, [meal.id]: false })), 800);
+                                  }}
+                                  style={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    width: 32,
+                                    height: 32,
+                                    background: 'var(--color-stepper-bg)',
+                                    border: 'none',
+                                    borderRadius: '0 12px 0 8px',
+                                    cursor: 'pointer',
+                                  }}
+                                >
+                                  {Icons.plus(14, 'black')}
+                                </button>
+                              ) : batchEditing[meal.id] ? (
+                                <div style={{
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  background: 'var(--color-stepper-bg)',
+                                  borderRadius: '0 12px 0 8px',
+                                  overflow: 'hidden',
+                                }}>
+                                  <button onClick={(e) => {
+                                    e.stopPropagation();
+                                    setCart(prev => {
+                                      const c = { ...prev };
+                                      if (c[meal.id] > 1) c[meal.id] -= 1;
+                                      else delete c[meal.id];
+                                      return c;
+                                    });
+                                    if (batchTimeoutRef.current[meal.id]) clearTimeout(batchTimeoutRef.current[meal.id]);
+                                    batchTimeoutRef.current[meal.id] = setTimeout(() => setBatchEditing(prev => ({ ...prev, [meal.id]: false })), 800);
+                                  }} style={{
+                                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                    width: 24, height: 28, background: 'transparent', border: 'none', cursor: 'pointer',
+                                  }}>
+                                    {Icons.minus(12, 'black')}
+                                  </button>
+                                  <span style={{ width: 16, textAlign: 'center', fontFamily: 'var(--font-body)', fontSize: 11, fontWeight: 700, color: 'black' }}>{cart[meal.id]}</span>
+                                  <button onClick={(e) => {
+                                    e.stopPropagation();
+                                    setCart(prev => ({ ...prev, [meal.id]: (prev[meal.id] || 0) + 1 }));
+                                    if (batchTimeoutRef.current[meal.id]) clearTimeout(batchTimeoutRef.current[meal.id]);
+                                    batchTimeoutRef.current[meal.id] = setTimeout(() => setBatchEditing(prev => ({ ...prev, [meal.id]: false })), 800);
+                                  }} style={{
+                                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                    width: 24, height: 28, background: 'transparent', border: 'none', cursor: 'pointer',
+                                  }}>
+                                    {Icons.plus(12, 'black')}
+                                  </button>
+                                </div>
+                              ) : (
+                                <button onClick={(e) => {
+                                  e.stopPropagation();
+                                  setBatchEditing(prev => ({ ...prev, [meal.id]: true }));
+                                  if (batchTimeoutRef.current[meal.id]) clearTimeout(batchTimeoutRef.current[meal.id]);
+                                  batchTimeoutRef.current[meal.id] = setTimeout(() => setBatchEditing(prev => ({ ...prev, [meal.id]: false })), 800);
+                                }} style={{
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  justifyContent: 'center',
+                                  width: 32,
+                                  height: 32,
+                                  background: 'var(--color-brand-primary)',
+                                  border: 'none',
+                                  borderRadius: '0 12px 0 8px',
+                                  cursor: 'pointer',
+                                  fontFamily: 'var(--font-body)',
+                                  fontSize: 11,
+                                  fontWeight: 700,
+                                  color: 'black',
+                                }}>
+                                  {cart[meal.id]}
+                                </button>
+                              )}
+                            </div>
+                          </div>
+                          <div style={{ padding: '8px 10px', background: '#EFE9DE', flex: 1 }}>
+                            <div style={{
+                              fontFamily: 'var(--font-body)',
+                              fontSize: 'var(--fs-sm)',
+                              fontWeight: 700,
+                              color: 'black',
+                              marginBottom: 4,
+                              lineHeight: 1.3,
+                            }}>{meal.name}</div>
+                            <div style={{
+                              fontFamily: 'var(--font-body)',
+                              fontSize: 11,
+                              color: '#666666',
+                            }}>{meal.time} · 680 kcal</div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Floating Bottom CTA */}
+              <div style={{
+                position: 'absolute',
+                bottom: 0,
+                left: 0,
+                right: 0,
+                padding: '16px',
+                paddingBottom: 8,
+                zIndex: 10,
+              }}>
+                <button
+                  onClick={() => setShowMealPrepDrawer(false)}
+                  style={{
+                    width: '100%',
+                    padding: '12px 24px',
+                    border: 'none',
+                    borderRadius: 'var(--radius-button)',
+                    background: 'black',
+                    color: 'white',
+                    fontFamily: 'var(--font-body)',
+                    fontSize: 'var(--fs-md)',
+                    fontWeight: 700,
+                    cursor: 'pointer',
+                  }}
+                >
+                  Got it
+                </button>
+                {/* Home indicator */}
+                <div style={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  paddingTop: 8,
+                  paddingBottom: 0,
+                }}>
+                  <div style={{
+                    width: 134,
+                    height: 5,
+                    background: 'var(--color-neutral-fg-default)',
+                    borderRadius: 10,
+                  }} />
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Premium Irish Grass-Fed Beef Page */}
+          {showPremiumIrishPage && (
+            <div
+              style={{
+                position: 'absolute',
+                inset: 0,
+                background: 'black',
+                zIndex: 1000,
+                overflow: 'hidden',
+              }}
+            >
+              {/* Status bar at top */}
+              <div style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                right: 0,
+                height: 50,
+                padding: '14px 16px 6px',
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                zIndex: 15,
+              }}>
+                <span style={{ fontFamily: 'var(--font-body)', fontSize: 15, fontWeight: 600, color: 'white' }}>9:41</span>
+                <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
+                  <svg width="16" height="12" viewBox="0 0 16 12" fill="none">
+                    <path d="M1 4C2.5 1.5 5 0 8 0C11 0 13.5 1.5 15 4" stroke="white" strokeWidth="1.5"/>
+                    <path d="M3.5 6.5C4.5 5 6 3.5 8 3.5C10 3.5 11.5 5 12.5 6.5" stroke="white" strokeWidth="1.5"/>
+                    <circle cx="8" cy="9.5" r="1.5" fill="white"/>
+                  </svg>
+                  <svg width="17" height="12" viewBox="0 0 17 12" fill="white">
+                    <rect x="0" y="4" width="3" height="7" rx="0.5"/>
+                    <rect x="4.5" y="2" width="3" height="9" rx="0.5"/>
+                    <rect x="9" y="0" width="3" height="11" rx="0.5"/>
+                    <rect x="13.5" y="0" width="3" height="11" rx="0.5" fillOpacity="0.3"/>
+                  </svg>
+                  <svg width="25" height="12" viewBox="0 0 27 13" fill="none">
+                    <rect x="1" y="1" width="22" height="11" rx="2.5" stroke="white" strokeOpacity="0.35"/>
+                    <rect x="2.5" y="2.5" width="19" height="8" rx="1.5" fill="white"/>
+                    <path d="M25 5V8.5C25.6 8 25.8 7 25.8 6.5C25.8 6 25.6 5.5 25 5Z" fill="white" fillOpacity="0.4"/>
+                  </svg>
+                </div>
+              </div>
+
+              {/* Video background - fixed at top */}
+              <div style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                right: 0,
+                height: 280,
+                zIndex: 1,
+              }}>
+                <video
+                  src="https://c.stocksy.com/a/Zz8500/y2/1226209.mp4"
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                />
+              </div>
+
+              {/* Always visible back button */}
+              <button
+                onClick={() => { setShowPremiumIrishPage(false); setPremiumScrolled(false); }}
+                style={{
+                  position: 'absolute',
+                  top: 54,
+                  left: 16,
+                  width: 32,
+                  height: 32,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  background: 'rgba(0,0,0,0.3)',
+                  border: 'none',
+                  borderRadius: '50%',
+                  cursor: 'pointer',
+                  zIndex: 5,
+                  opacity: premiumScrolled ? 0 : 1,
+                  pointerEvents: premiumScrolled ? 'none' : 'auto',
+                  transition: 'opacity 0.3s ease',
+                }}
+              >
+                {Icons.arrowLeft(18, 'white')}
+              </button>
+
+              {/* Sticky header - appears when scrolled */}
+              <div style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                right: 0,
+                zIndex: 10,
+                background: '#024426',
+                padding: '50px 16px 12px',
+                opacity: premiumScrolled ? 1 : 0,
+                transform: premiumScrolled ? 'translateY(0)' : 'translateY(-20px)',
+                transition: 'opacity 0.3s ease, transform 0.3s ease',
+                pointerEvents: premiumScrolled ? 'auto' : 'none',
+                display: 'flex',
+                alignItems: 'center',
+                gap: 12,
+              }}>
+                {/* Back button in header */}
+                <button
+                  onClick={() => { setShowPremiumIrishPage(false); setPremiumScrolled(false); }}
+                  style={{
+                    width: 32,
+                    height: 32,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    background: 'rgba(255,255,255,0.2)',
+                    border: 'none',
+                    borderRadius: '50%',
+                    cursor: 'pointer',
+                    flexShrink: 0,
+                  }}
+                >
+                  {Icons.arrowLeft(18, 'white')}
+                </button>
+                <h2 style={{
+                  fontFamily: 'var(--font-headline)',
+                  fontSize: 'var(--fs-md)',
+                  fontWeight: 700,
+                  color: 'white',
+                  margin: 0,
+                }}>Premium Irish Grass-Fed Beef</h2>
+              </div>
+
+              {/* Content area with rounded corners - scrollable on top of video */}
+              <div className="scroll-area" onScroll={handlePremiumScroll} style={{
+                position: 'absolute',
+                top: 50,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                overflowY: 'auto',
+                zIndex: 2,
+              }}>
+                {/* Spacer to show video at top */}
+                <div style={{ height: 170 }} />
+
+                {/* Green content section */}
+                <div style={{
+                  background: 'linear-gradient(to bottom, #024426 0%, #024426 70%, black 100%)',
+                  borderTopLeftRadius: 24,
+                  borderTopRightRadius: 24,
+                  padding: '24px 16px 24px',
+                  minHeight: 'calc(100vh - 220px)',
+                }}>
+                <h1 style={{
+                  fontFamily: 'var(--font-headline)',
+                  fontSize: 'var(--fs-lg)',
+                  fontWeight: 700,
+                  color: 'white',
+                  margin: '8px 0 8px',
+                  lineHeight: 'var(--lh-md)',
+                  opacity: premiumScrolled ? 0 : 1,
+                  height: premiumScrolled ? 0 : 'auto',
+                  overflow: 'hidden',
+                  transition: 'opacity 0.3s ease',
+                }}>Premium Irish Grass-Fed Beef</h1>
+                <p style={{
+                  fontFamily: 'var(--font-body)',
+                  fontSize: 'var(--fs-sm)',
+                  color: 'rgba(255,255,255,0.8)',
+                  margin: '0 0 24px',
+                  lineHeight: 1.5,
+                }}>Sourced from family farms in Ireland. Our grass-fed beef is renowned for its exceptional flavor.</p>
+
+                {/* Premium beef recipes grid */}
+                <div style={{
+                  display: 'grid',
+                  gridTemplateColumns: '1fr 1fr',
+                  gap: '24px 12px',
+                }}>
+                  {[
+                    { id: 'irish-1', name: 'Irish Ribeye Steak', subtitle: 'with Garlic Herb Butter', price: '+$18.99', time: '25 min', img: 'https://c.stocksy.com/a/Xc3H00/z9/4065497.jpg' },
+                    { id: 'irish-2', name: 'Grass-Fed Beef Tenderloin', subtitle: 'with Red Wine Reduction', price: '+$22.99', time: '30 min', img: 'https://images.unsplash.com/photo-1558030006-450675393462?w=400&h=400&fit=crop' },
+                    { id: 'irish-3', name: 'Irish Beef Burger', subtitle: 'with Aged Cheddar & Bacon', price: '+$14.99', time: '20 min', img: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400&h=400&fit=crop' },
+                    { id: 'irish-4', name: 'Beef Stroganoff', subtitle: 'with Egg Noodles & Mushrooms', price: '+$16.99', time: '35 min', img: 'https://images.unsplash.com/photo-1504973960431-1c467e159aa4?w=400&h=400&fit=crop' },
+                    { id: 'irish-5', name: 'Classic Beef Stew', subtitle: 'with Root Vegetables', price: '+$15.99', time: '45 min', img: 'https://images.unsplash.com/photo-1534939561126-855b8675edd7?w=400&h=400&fit=crop' },
+                    { id: 'irish-6', name: 'Pepper Crusted Sirloin', subtitle: 'with Roasted Potatoes', price: '+$19.99', time: '25 min', img: 'https://images.unsplash.com/photo-1600891964092-4316c288032e?w=400&h=400&fit=crop' },
+                    { id: 'irish-7', name: 'Beef Wellington', subtitle: 'with Mushroom Duxelles', price: '+$24.99', time: '50 min', img: 'https://images.unsplash.com/photo-1544025162-d76694265947?w=400&h=400&fit=crop' },
+                    { id: 'irish-8', name: 'Irish Cottage Pie', subtitle: 'with Creamy Mashed Potatoes', price: '+$16.99', time: '40 min', img: 'https://images.unsplash.com/photo-1577906096429-f73c2c312435?w=400&h=400&fit=crop' },
+                    { id: 'irish-9', name: 'Guinness Braised Short Ribs', subtitle: 'with Colcannon', price: '+$21.99', time: '55 min', img: 'https://images.unsplash.com/photo-1432139555190-58524dae6a55?w=400&h=400&fit=crop' },
+                    { id: 'irish-10', name: 'Beef & Ale Pie', subtitle: 'with Flaky Pastry', price: '+$17.99', time: '45 min', img: 'https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?w=400&h=400&fit=crop' },
+                    { id: 'irish-11', name: 'Pan-Seared Filet Mignon', subtitle: 'with Peppercorn Sauce', price: '+$26.99', time: '30 min', img: 'https://images.unsplash.com/photo-1558030137-a56c1b004fa3?w=400&h=400&fit=crop' },
+                    { id: 'irish-12', name: 'Irish Beef Tacos', subtitle: 'with Whiskey Glaze', price: '+$15.99', time: '25 min', img: 'https://images.unsplash.com/photo-1565299585323-38d6b0865b47?w=400&h=400&fit=crop' },
+                  ].map((meal) => (
+                    <PremiumIrishCard key={meal.id} meal={meal} mealId={meal.id} />
+                  ))}
+                </div>
+                </div>
+              </div>
+
+              {/* Back chevron button - top left (hides when scrolled) */}
+              <button
+                onClick={() => { setShowPremiumIrishPage(false); setPremiumScrolled(false); }}
+                style={{
+                  position: 'absolute',
+                  top: 50,
+                  left: 16,
+                  width: 40,
+                  height: 40,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  background: 'rgba(255,255,255,0.9)',
+                  border: 'none',
+                  borderRadius: '50%',
+                  cursor: 'pointer',
+                  zIndex: 20,
+                  opacity: premiumScrolled ? 0 : 1,
+                  pointerEvents: premiumScrolled ? 'none' : 'auto',
+                  transition: 'opacity 0.3s ease',
+                }}
+              >
+                {Icons.arrowLeft(20, 'var(--color-neutral-fg-darkest)')}
+              </button>
+            </div>
+          )}
+
+          {/* Categories Page */}
+          {showCategoriesPage && (
+            <div
+              style={{
+                position: 'absolute',
+                inset: 0,
+                background: 'var(--color-page-bg)',
+                zIndex: 1000,
+                overflow: 'hidden',
+                display: 'flex',
+                flexDirection: 'column',
+              }}
+            >
+              {/* Green Header */}
+              <div style={{
+                background: 'var(--color-brand-green-500)',
+                padding: '50px 16px 16px',
+              }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                  <button
+                    onClick={() => setShowCategoriesPage(false)}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      width: 32,
+                      height: 32,
+                      background: 'transparent',
+                      border: 'none',
+                      cursor: 'pointer',
+                      padding: 0,
+                    }}
+                  >
+                    {Icons.arrowLeft(24, 'white')}
+                  </button>
+                  <h1 style={{
+                    fontFamily: 'var(--font-headline)',
+                    fontSize: 'var(--fs-lg)',
+                    fontWeight: 700,
+                    color: 'white',
+                    margin: 0,
+                  }}>Order add-ons</h1>
+                </div>
+              </div>
+
+              {/* Scrollable content */}
+              <div className="scroll-area" style={{ flex: 1, overflowY: 'auto', padding: '0 16px 180px' }}>
+                {/* Two rows of category tiles */}
+                <div style={{ paddingTop: 16 }}>
+                  {/* First row - 5 tiles */}
+                  <div style={{ display: 'flex', gap: 4, marginBottom: 12, justifyContent: 'center' }}>
+                    {[
+                      { label: 'High protein', img: 'https://www.figma.com/api/mcp/asset/9516eac5-ca13-42a7-80ec-a944e6630ddc' },
+                      { label: 'Keto', img: 'https://www.figma.com/api/mcp/asset/5f7a2ebb-a992-4460-84fe-4e2c76863d86' },
+                      { label: 'Low Calorie', img: 'https://www.figma.com/api/mcp/asset/26af66a0-4ffa-443a-a03f-4c80f779e350' },
+                      { label: 'Vegan', img: 'https://www.figma.com/api/mcp/asset/e82cce08-459b-4373-a8d5-5893e084ace0' },
+                      { label: 'Veggies', img: 'https://www.figma.com/api/mcp/asset/ba96cc9f-72dc-4412-a137-64ec651d7a56' },
+                    ].map((cat, i) => (
+                      <div key={i} style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        gap: 4,
+                        width: 67,
+                        cursor: 'pointer',
+                      }}>
+                        <div style={{
+                          width: 67,
+                          height: 67,
+                          borderRadius: 12,
+                          background: '#EFE9DE',
+                          position: 'relative',
+                          overflow: 'hidden',
+                        }}>
+                          <img
+                            src={cat.img}
+                            alt={cat.label}
+                            style={{
+                              position: 'absolute',
+                              width: 58,
+                              height: 58,
+                              top: 5,
+                              left: 4,
+                              objectFit: 'cover',
+                            }}
+                          />
+                        </div>
+                        <span style={{
+                          fontFamily: 'var(--font-body)',
+                          fontSize: 'var(--fs-xs)',
+                          fontWeight: 400,
+                          color: 'black',
+                          textAlign: 'center',
+                        }}>{cat.label}</span>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Second row - 5 tiles */}
+                  <div style={{ display: 'flex', gap: 4, marginBottom: 24, justifyContent: 'center' }}>
+                    {[
+                      { label: 'Quick meals', img: 'Food Image.png' },
+                      { label: 'Ready to eat', img: 'Bento from Google Drive.png' },
+                      { label: 'Gourmet', img: 'Kale Shrimp Salad.png' },
+                      { label: 'One pot', img: 'Food Health Image.png' },
+                      { label: 'Comfort', img: 'Chicken Leg.png' },
+                    ].map((cat, i) => (
+                      <div key={i} style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        gap: 4,
+                        width: 67,
+                        cursor: 'pointer',
+                      }}>
+                        <div style={{
+                          width: 67,
+                          height: 67,
+                          borderRadius: 12,
+                          background: '#EFE9DE',
+                          position: 'relative',
+                          overflow: 'hidden',
+                        }}>
+                          <img
+                            src={cat.img}
+                            alt={cat.label}
+                            style={{
+                              position: 'absolute',
+                              width: 58,
+                              height: 58,
+                              top: 5,
+                              left: 4,
+                              objectFit: 'cover',
+                            }}
+                          />
+                        </div>
+                        <span style={{
+                          fontFamily: 'var(--font-body)',
+                          fontSize: 'var(--fs-xs)',
+                          fontWeight: 400,
+                          color: 'black',
+                          textAlign: 'center',
+                        }}>{cat.label}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Healthy Bites section */}
+                {/* Recommended for you section */}
+                <div style={{ padding: '16px 0 24px', background: '#EFE9DE', margin: '40px -16px 0' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8, padding: '0 16px' }}>
+                    <h3 style={{
+                      fontFamily: 'var(--font-headline)',
+                      fontSize: 'var(--fs-lg)',
+                      fontWeight: 700,
+                      color: 'black',
+                      margin: 0,
+                      lineHeight: 1.3,
+                    }}>Recommended for you</h3>
+                    <span style={{
+                      fontFamily: 'var(--font-body)',
+                      fontSize: 'var(--fs-sm)',
+                      fontWeight: 700,
+                      color: 'black',
+                      textDecoration: 'underline',
+                      whiteSpace: 'nowrap',
+                      cursor: 'pointer',
+                    }}>Show more</span>
+                  </div>
+                  <p style={{
+                    fontFamily: 'var(--font-body)',
+                    fontSize: 'var(--fs-sm)',
+                    color: 'black',
+                    margin: '0 0 16px 0',
+                    padding: '0 16px',
+                    lineHeight: 1.4,
+                  }}>Grab a few ready-to-eat meals to stay fueled for the rest of the week.</p>
+
+                  <div style={{ display: 'flex', gap: 12, overflowX: 'auto', paddingLeft: 16, paddingRight: 16 }} className="h-scroll">
+                    {/* Product card 1 */}
+                    <div style={{
+                      flexShrink: 0,
+                      width: 160,
+                      background: '#E0D9CB',
+                      borderRadius: 12,
+                      overflow: 'hidden',
+                      display: 'flex',
+                      flexDirection: 'column',
+                    }}>
+                      <div style={{
+                        width: '100%',
+                        aspectRatio: '1/1',
+                        position: 'relative',
+                        padding: 12,
+                        boxSizing: 'border-box',
+                      }}>
+                        <img
+                          src="Chicken and Sausage Penne Arrabbiata.png"
+                          alt="Chicken and Sausage Penne Arrabbiata"
+                          style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+                        />
+                        {/* Add button */}
+                        <div style={{ position: 'absolute', top: 0, right: 0 }}>
+                          <button
+                            style={{
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              width: 36,
+                              height: 36,
+                              background: 'var(--color-stepper-bg)',
+                              border: 'none',
+                              borderRadius: '0 12px 0 8px',
+                              cursor: 'pointer',
+                            }}
+                          >
+                            {Icons.plus(16, 'black')}
+                          </button>
+                        </div>
+                      </div>
+                      {/* Text content below image */}
+                      <div style={{ padding: 12, background: 'rgba(142, 152, 153, 0.3)', flex: 1 }}>
+                        <div style={{
+                          fontFamily: 'var(--font-body)',
+                          fontSize: 'var(--fs-sm)',
+                          fontWeight: 700,
+                          color: 'black',
+                          marginBottom: 4,
+                          lineHeight: 1.3,
+                        }}>Chicken and Sausage Penne Arrabbiata</div>
+                        <div style={{
+                          fontFamily: 'var(--font-body)',
+                          fontSize: 11,
+                          color: '#666666',
+                          marginBottom: 4,
+                        }}>20 min · 680 kcal · 32g protein</div>
+                        <div style={{
+                          fontFamily: 'var(--font-body)',
+                          fontSize: 11,
+                          color: '#666666',
+                        }}><span style={{ fontWeight: 700 }}>+$12.99</span> per serving</div>
+                      </div>
+                    </div>
+
+                    {/* Product card 2 */}
+                    <div style={{
+                      flexShrink: 0,
+                      width: 160,
+                      background: '#E0D9CB',
+                      borderRadius: 12,
+                      overflow: 'hidden',
+                    }}>
+                      <div style={{
+                        width: '100%',
+                        aspectRatio: '1/1',
+                        position: 'relative',
+                        padding: 12,
+                        boxSizing: 'border-box',
+                      }}>
+                        <img
+                          src="Honey Dijon Chicken and Mashed Potatoes.png"
+                          alt="Honey Dijon Chicken and Mashed Potatoes"
+                          style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+                        />
+                        {/* Add button */}
+                        <div style={{ position: 'absolute', top: 0, right: 0 }}>
+                          <button
+                            style={{
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              width: 36,
+                              height: 36,
+                              background: 'var(--color-stepper-bg)',
+                              border: 'none',
+                              borderRadius: '0 12px 0 8px',
+                              cursor: 'pointer',
+                            }}
+                          >
+                            {Icons.plus(16, 'black')}
+                          </button>
+                        </div>
+                      </div>
+                      {/* Text content below image */}
+                      <div style={{ padding: 12, background: 'rgba(142, 152, 153, 0.3)' }}>
+                        <div style={{
+                          fontFamily: 'var(--font-body)',
+                          fontSize: 'var(--fs-sm)',
+                          fontWeight: 700,
+                          color: 'black',
+                          marginBottom: 4,
+                          lineHeight: 1.3,
+                        }}>Honey Dijon Chicken and Mashed Potatoes</div>
+                        <div style={{
+                          fontFamily: 'var(--font-body)',
+                          fontSize: 11,
+                          color: '#666666',
+                          marginBottom: 4,
+                        }}>25 min · 720 kcal · 38g protein</div>
+                        <div style={{
+                          fontFamily: 'var(--font-body)',
+                          fontSize: 11,
+                          color: '#666666',
+                        }}><span style={{ fontWeight: 700 }}>+$11.99</span> per serving</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Floating bottom bar with cart */}
+              <div style={{
+                position: 'absolute',
+                bottom: 83,
+                left: 8,
+                right: 8,
+                background: 'var(--color-elevation-level-1)',
+                borderRadius: 'var(--radius-md)',
+                padding: 16,
+                display: 'flex',
+                flexDirection: 'column',
+                gap: 16,
+                zIndex: 10,
+              }}>
+                {/* Action row */}
+                <div style={{ display: 'flex', gap: 8, alignItems: 'stretch' }}>
+                  {/* Cart CTA */}
+                  <button
+                    onClick={onCartClick}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 8,
+                      padding: '8px 24px',
+                      border: '1px solid black',
+                      borderRadius: 'var(--radius-button)',
+                      background: 'var(--color-elevation-level-1)',
+                      cursor: 'pointer',
+                      position: 'relative',
+                      flexShrink: 0,
+                    }}
+                  >
+                    {Icons.cart(24, 'black')}
+                    {totalItems >= 0 && (
+                      <span style={{
+                        position: 'absolute',
+                        top: 0,
+                        left: 35,
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        minWidth: 20,
+                        height: 20,
+                        padding: '0 6px',
+                        background: 'var(--color-badge-positive-bg)',
+                        color: 'var(--color-badge-fg)',
+                        borderRadius: 'var(--radius-tag-pill)',
+                        border: '2px solid var(--color-badge-border)',
+                        fontFamily: 'var(--font-body)',
+                        fontSize: 'var(--fs-xs)',
+                        fontWeight: 700,
+                      }}>{totalItems}</span>
+                    )}
+                  </button>
+
+                  {/* Continue button */}
+                  <button
+                    onClick={() => setShowCategoriesPage(false)}
+                    style={{
+                      flex: 1,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: 8,
+                      padding: '8px 24px',
+                      minWidth: 88,
+                      border: 'none',
+                      borderRadius: 'var(--radius-button)',
+                      background: 'black',
+                      color: 'white',
+                      cursor: 'pointer',
+                      fontFamily: 'var(--font-body)',
+                      fontSize: 'var(--fs-md)',
+                      fontWeight: 700,
+                      lineHeight: 'var(--lh-md)',
+                    }}
+                  >
+                    Continue
+                  </button>
+                </div>
+              </div>
+
+              {/* Bottom Navigation */}
+              <div style={{
+                position: 'absolute',
+                bottom: 0,
+                left: 0,
+                right: 0,
+                background: 'var(--color-bottom-nav-bg)',
+                zIndex: 20,
+              }}>
+                {/* Divider */}
+                <div style={{ height: 1, background: 'var(--color-divider)' }} />
+
+                <div style={{
+                  display: 'flex',
+                  justifyContent: 'space-around',
+                  padding: '4px 0',
+                }}>
+                  {[
+                    { icon: 'home', label: 'Home' },
+                    { icon: 'fork_knife', label: 'Menu' },
+                    { icon: 'gift', label: 'HelloFriends' },
+                    { icon: 'trophy', label: 'Rewards' },
+                    { icon: 'profile', label: 'Profile' },
+                  ].map((item, i) => {
+                    const isActive = i === 1;
+                    return (
+                      <div
+                        key={i}
+                        onClick={() => setShowCategoriesPage(false)}
+                        style={{
+                          display: 'flex',
+                          flexDirection: 'column',
+                          alignItems: 'center',
+                          padding: '4px 4px 4px',
+                          cursor: isActive ? 'default' : 'pointer',
+                          flex: 1,
+                        }}
+                      >
+                        <div style={{
+                          width: 48,
+                          height: 24,
+                          borderRadius: 'var(--radius-tag-pill)',
+                          background: isActive ? 'var(--color-selected-bg-primary)' : 'transparent',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                        }}>
+                          {Icons[item.icon](20, isActive ? 'var(--color-bottom-nav-fg-selected)' : 'var(--color-bottom-nav-fg-unselected)')}
+                        </div>
+                        <span style={{
+                          fontFamily: 'var(--font-body)',
+                          fontSize: 'var(--fs-xs)',
+                          fontWeight: 700,
+                          lineHeight: 'var(--lh-xs)',
+                          color: isActive ? 'var(--color-bottom-nav-fg-selected)' : 'var(--color-bottom-nav-fg-unselected)',
+                          textAlign: 'center',
+                        }}>{item.label}</span>
+                      </div>
+                    );
+                  })}
+                </div>
+
+                {/* Home indicator */}
+                <div style={{ display: 'flex', justifyContent: 'center', paddingBottom: 8, paddingTop: 4 }}>
+                  <div style={{ width: 134, height: 5, background: 'black', borderRadius: 100 }} />
+                </div>
+              </div>
+            </div>
+          )}
         </>
       );
     }
 
     // ========== MAIN APP ==========
     function App() {
-      const [currentPage, setCurrentPage] = useState('home');
-      const [cart, setCart] = useState({ 2: 1, 3: 1 });
+      const [currentPage, setCurrentPage] = useState('menu');
+      const [cart, setCart] = useState({ 2: 1, 4: 1 });
       const [showCart, setShowCart] = useState(false);
 
       const totalItems = Object.values(cart).reduce((sum, q) => sum + q, 0);

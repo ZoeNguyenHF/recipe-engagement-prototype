@@ -1557,6 +1557,173 @@
       );
     }
 
+    // ========== TRENDING NOW WIDGET ==========
+    function TrendingNowWidget({ cart, setCart }) {
+      const trendingRecipes = [
+        {
+          id: 101,
+          name: 'Garlic Butter Shrimp',
+          image: 'recipes/HelloFresh Main Image (7).jpg',
+          time: '20 min',
+          kcal: '680 kcal',
+        },
+        {
+          id: 102,
+          name: 'Tuscan Chicken Pasta',
+          image: 'recipes/HelloFresh Main Image (8).jpg',
+          time: '25 min',
+          kcal: '680 kcal',
+        },
+        {
+          id: 103,
+          name: 'Lemon Herb Salmon',
+          image: 'recipes/HelloFresh Main Image (9).jpg',
+          time: '30 min',
+          kcal: '620 kcal',
+        },
+        {
+          id: 104,
+          name: 'Beef Stir-Fry',
+          image: 'recipes/HelloFresh Main Image (10).jpg',
+          time: '25 min',
+          kcal: '720 kcal',
+        },
+      ];
+
+      const handleAdd = (recipeId) => {
+        setCart(prev => ({ ...prev, [recipeId]: (prev[recipeId] || 0) + 1 }));
+      };
+
+      return (
+        <div style={{ padding: '12px 0 24px' }}>
+          {/* Title */}
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 8,
+            marginBottom: 16,
+          }}>
+            <span style={{
+              fontFamily: 'var(--font-headline)',
+              fontSize: 'var(--fs-xl)',
+              fontWeight: 700,
+              lineHeight: 'var(--lh-lg)',
+              color: 'black',
+            }}>Trending now</span>
+            <span style={{ fontSize: 28 }}>🔥</span>
+          </div>
+
+          {/* Horizontal Scrolling Cards */}
+          <div style={{
+            display: 'flex',
+            gap: 16,
+            overflowX: 'auto',
+            paddingBottom: 8,
+          }} className="h-scroll">
+            {trendingRecipes.map((recipe) => {
+              const quantity = cart[recipe.id] || 0;
+
+              return (
+                <div key={recipe.id} style={{
+                  flexShrink: 0,
+                  width: 280,
+                  background: 'white',
+                  borderRadius: 12,
+                  overflow: 'hidden',
+                  boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+                }}>
+                  {/* Recipe Image with Plus Button */}
+                  <div style={{
+                    position: 'relative',
+                    width: '100%',
+                    height: 280,
+                  }}>
+                    <img
+                      src={recipe.image}
+                      alt={recipe.name}
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        objectFit: 'cover',
+                      }}
+                    />
+                    {/* Plus Button */}
+                    <button
+                      onClick={() => handleAdd(recipe.id)}
+                      style={{
+                        position: 'absolute',
+                        top: 12,
+                        right: 12,
+                        width: 48,
+                        height: 48,
+                        background: 'white',
+                        border: 'none',
+                        borderRadius: '50%',
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
+                        fontSize: 24,
+                        fontWeight: 300,
+                      }}
+                    >
+                      +
+                    </button>
+                    {/* Quantity Badge */}
+                    {quantity > 0 && (
+                      <div style={{
+                        position: 'absolute',
+                        top: 8,
+                        right: 8,
+                        background: 'var(--color-brand-primary)',
+                        width: 32,
+                        height: 32,
+                        borderRadius: '50%',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        fontSize: 'var(--fs-sm)',
+                        fontWeight: 700,
+                        color: 'black',
+                        boxShadow: '0 2px 4px rgba(0,0,0,0.2)',
+                      }}>
+                        {quantity}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Recipe Info */}
+                  <div style={{ padding: 16 }}>
+                    <h3 style={{
+                      fontFamily: 'var(--font-headline)',
+                      fontSize: 'var(--fs-lg)',
+                      fontWeight: 700,
+                      lineHeight: 'var(--lh-md)',
+                      color: 'black',
+                      margin: '0 0 8px 0',
+                    }}>
+                      {recipe.name}
+                    </h3>
+                    <div style={{
+                      display: 'flex',
+                      gap: 12,
+                      fontSize: 'var(--fs-sm)',
+                      color: '#656565',
+                    }}>
+                      <span>{recipe.time}</span>
+                      <span>•</span>
+                      <span>{recipe.kcal}</span>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      );
+    }
+
     // ========== MERCHANDISING WIDGET ==========
     function MerchandisingWidget({ title = "Back 2 school", description = "Get ready to a new semester with our special menu 30%!", onClick }) {
       return (
@@ -5581,6 +5748,8 @@
               </div>
 
               <BenefitsWidget />
+
+              <TrendingNowWidget cart={cart} setCart={setCart} />
 
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px 12px' }}>
                 {mealsData.slice(4, 6).map(meal => (

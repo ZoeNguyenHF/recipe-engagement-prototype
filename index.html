@@ -1600,17 +1600,38 @@
           <div style={{
             display: 'flex',
             alignItems: 'center',
-            gap: 8,
+            justifyContent: 'space-between',
             marginBottom: 16,
           }}>
-            <span style={{
-              fontFamily: 'var(--font-headline)',
-              fontSize: 'var(--fs-xl)',
-              fontWeight: 700,
-              lineHeight: 'var(--lh-lg)',
-              color: 'black',
-            }}>Your top recipes</span>
-            <span style={{ fontSize: 28 }}>🔥</span>
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 8,
+            }}>
+              <span style={{
+                fontFamily: 'var(--font-headline)',
+                fontSize: 'var(--fs-lg)',
+                fontWeight: 700,
+                lineHeight: 'var(--lh-md)',
+                color: 'black',
+              }}>Your top recipes</span>
+              {Icons.star(20, '#FFC107')}
+            </div>
+            <button style={{
+              background: 'transparent',
+              border: 'none',
+              cursor: 'pointer',
+              padding: '4px 0',
+            }}>
+              <span style={{
+                fontFamily: 'var(--font-body)',
+                fontSize: 'var(--fs-sm)',
+                fontWeight: 700,
+                lineHeight: 'var(--lh-sm)',
+                color: 'black',
+                textDecoration: 'underline',
+              }}>Show more</span>
+            </button>
           </div>
 
           {/* Horizontal Scrolling Cards */}
@@ -1697,9 +1718,9 @@
                   <div style={{ padding: 16 }}>
                     <h3 style={{
                       fontFamily: 'var(--font-headline)',
-                      fontSize: 'var(--fs-lg)',
+                      fontSize: 16,
                       fontWeight: 700,
-                      lineHeight: 'var(--lh-md)',
+                      lineHeight: 1.2,
                       color: 'black',
                       margin: '0 0 8px 0',
                     }}>

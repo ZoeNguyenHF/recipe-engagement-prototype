@@ -358,8 +358,8 @@
         kcal: "750 kcal",
         protein: "19g protein",
         img: "recipes/HelloFresh Main Image (3).jpg",
-        rating: "3.8",
-        reviewCount: "2.1k",
+        rating: "4.0",
+        isPersonalRating: true,
       },
       {
         id: 4,
@@ -382,8 +382,8 @@
         kcal: "750 kcal",
         protein: "39g protein",
         img: "recipes/HelloFresh Main Image (2).jpg",
-        rating: "3.6",
-        reviewCount: "1.8k",
+        rating: "3.0",
+        isPersonalRating: true,
       },
       {
         id: 5,
@@ -426,8 +426,8 @@
         protein: "28g protein",
         img: "recipes/HelloFresh Main Image (1).jpg",
         lowStock: true,
-        rating: "3.5",
-        reviewCount: "2.9k",
+        rating: "3.0",
+        isPersonalRating: true,
       },
       // Remaining items (6+): after FeatureIntroCard
       {
@@ -440,8 +440,8 @@
         kcal: "620 kcal",
         protein: "38g protein",
         img: "recipes/HelloFresh Main Image.jpg",
-        rating: "4.1",
-        reviewCount: "5.6k",
+        rating: "5.0",
+        isPersonalRating: true,
       },
       {
         id: 9,
@@ -482,7 +482,7 @@
         protein: "36g protein",
         img: "recipes/HelloFresh Main Image (4).jpg",
         rating: "4.0",
-        reviewCount: "4.2k",
+        isPersonalRating: true,
       },
       {
         id: 11,
@@ -493,8 +493,8 @@
         kcal: "640 kcal",
         protein: "22g protein",
         img: "recipes/HelloFresh Main Image (3).jpg",
-        rating: "3.2",
-        reviewCount: "980",
+        rating: "3.0",
+        isPersonalRating: true,
       },
       {
         id: 12,
@@ -518,8 +518,8 @@
         kcal: "590 kcal",
         protein: "14g protein",
         img: "recipes/HelloFresh Main Image (1).jpg",
-        rating: "2.8",
-        reviewCount: "543",
+        rating: "3.0",
+        isPersonalRating: true,
       },
       {
         id: 14,
@@ -543,8 +543,8 @@
         kcal: "720 kcal",
         protein: "34g protein",
         img: "recipes/HelloFresh Main High (3).jpg",
-        rating: "3.1",
-        reviewCount: "672",
+        rating: "3.0",
+        isPersonalRating: true,
       },
       {
         id: 16,
@@ -555,8 +555,8 @@
         kcal: "650 kcal",
         protein: "36g protein",
         img: "recipes/HelloFresh Main High (4).jpg",
-        rating: "3.6",
-        reviewCount: "2.3k",
+        rating: "4.0",
+        isPersonalRating: true,
       },
       {
         id: 17,
@@ -1255,8 +1255,10 @@
                   fontSize: 'var(--fs-sm)',
                 }}>
                   <span style={{ fontWeight: 700, color: 'black' }}>{meal.rating}</span>
-                  <span style={{ fontSize: 14 }}>⭐</span>
-                  <span style={{ color: '#656565' }}>({meal.reviewCount})</span>
+                  {Icons.star(14, 'black')}
+                  <span style={{ color: '#656565' }}>
+                    {meal.isPersonalRating ? 'your rating' : `(${meal.reviewCount})`}
+                  </span>
                 </div>
               )}
               <div style={{ display: 'flex', gap: 8, alignItems: 'center', marginTop: 2, justifyContent: 'space-between' }}>
@@ -1389,8 +1391,10 @@
                 fontSize: 'var(--fs-sm)',
               }}>
                 <span style={{ fontWeight: 700, color: 'black' }}>{meal.rating}</span>
-                <span style={{ fontSize: 14 }}>⭐</span>
-                <span style={{ color: '#656565' }}>({meal.reviewCount})</span>
+                {Icons.star(14, 'black')}
+                <span style={{ color: '#656565' }}>
+                  {meal.isPersonalRating ? 'your rating' : `(${meal.reviewCount})`}
+                </span>
               </div>
             )}
 
@@ -1630,8 +1634,8 @@
           image: 'recipes/HelloFresh Main Image (7).jpg',
           time: '20 min',
           kcal: '680 kcal',
-          rating: '4.8',
-          reviewCount: '3.2k',
+          rating: '5.0',
+          isPersonalRating: true,
         },
         {
           id: 102,
@@ -1639,8 +1643,8 @@
           image: 'recipes/HelloFresh Main Image (8).jpg',
           time: '25 min',
           kcal: '680 kcal',
-          rating: '4.6',
-          reviewCount: '5.1k',
+          rating: '4.0',
+          isPersonalRating: true,
         },
         {
           id: 103,
@@ -1648,8 +1652,8 @@
           image: 'recipes/HelloFresh Main Image (9).jpg',
           time: '30 min',
           kcal: '620 kcal',
-          rating: '4.7',
-          reviewCount: '2.8k',
+          rating: '5.0',
+          isPersonalRating: true,
         },
         {
           id: 104,
@@ -1657,8 +1661,8 @@
           image: 'recipes/HelloFresh Main Image (10).jpg',
           time: '25 min',
           kcal: '720 kcal',
-          rating: '4.5',
-          reviewCount: '4.3k',
+          rating: '4.0',
+          isPersonalRating: true,
         },
       ];
 
@@ -1803,8 +1807,10 @@
                       fontSize: 'var(--fs-sm)',
                     }}>
                       <span style={{ fontWeight: 700, color: 'black' }}>{recipe.rating}</span>
-                      <span style={{ fontSize: 14 }}>⭐</span>
-                      <span style={{ color: '#656565' }}>({recipe.reviewCount})</span>
+                      {Icons.star(14, 'black')}
+                      <span style={{ color: '#656565' }}>
+                        {recipe.isPersonalRating ? 'your rating' : `(${recipe.reviewCount})`}
+                      </span>
                     </div>
                     <div style={{
                       display: 'flex',

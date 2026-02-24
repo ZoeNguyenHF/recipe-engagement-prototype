@@ -1380,6 +1380,20 @@
               WebkitBoxOrient: 'vertical',
             }}>{meal.name}</span>
 
+            {/* Rating Component */}
+            {meal.rating && (
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 4,
+                fontSize: 'var(--fs-sm)',
+              }}>
+                <span style={{ fontWeight: 700, color: 'black' }}>{meal.rating}</span>
+                <span style={{ fontSize: 14 }}>⭐</span>
+                <span style={{ color: '#656565' }}>({meal.reviewCount})</span>
+              </div>
+            )}
+
             {/* Quick info row */}
             <div style={{ display: 'flex', gap: 6, alignItems: 'center', flexWrap: 'wrap' }}>
               <span style={{

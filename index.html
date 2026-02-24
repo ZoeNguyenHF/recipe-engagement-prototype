@@ -741,6 +741,11 @@
           <path d="M20 21C20 17.13 16.42 14 12 14C7.58 14 4 17.13 4 21"/>
         </svg>
       ),
+      bookmark: (size = 20, color = 'currentColor', filled = false) => (
+        <svg width={size} height={size} viewBox="0 0 20 20" fill={filled ? color : 'none'} stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M4 2C4 1.44772 4.44772 1 5 1H15C15.5523 1 16 1.44772 16 2V19L10 15.5L4 19V2Z"/>
+        </svg>
+      ),
     };
 
     // ========== STATUS BAR ==========
@@ -1104,6 +1109,27 @@
                 style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 12, display: meal.video ? 'none' : 'block' }}
                 onError={(e) => { e.target.style.display = 'none'; }}
               />
+              {/* Bookmark Button - top left */}
+              <button
+                style={{
+                  position: 'absolute',
+                  top: 8,
+                  left: 8,
+                  width: 32,
+                  height: 32,
+                  background: 'white',
+                  border: 'none',
+                  borderRadius: '50%',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+                  zIndex: 2,
+                }}
+              >
+                {Icons.bookmark(18, 'black')}
+              </button>
               {/* Premium label - bottom left, with white background on top and right */}
               {meal.label && (
                 <div style={{
@@ -1333,6 +1359,27 @@
               />
             )}
 
+            {/* Bookmark Button - top left */}
+            <button
+              style={{
+                position: 'absolute',
+                top: 8,
+                left: 8,
+                width: 32,
+                height: 32,
+                background: 'white',
+                border: 'none',
+                borderRadius: '50%',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+                zIndex: 2,
+              }}
+            >
+              {Icons.bookmark(18, 'black')}
+            </button>
             {/* Promo label on image - bottom left, with white background on top and right */}
             {meal.label && (
               <div style={{
@@ -1742,6 +1789,26 @@
                         objectFit: 'cover',
                       }}
                     />
+                    {/* Bookmark Button */}
+                    <button
+                      style={{
+                        position: 'absolute',
+                        top: 8,
+                        left: 8,
+                        width: 32,
+                        height: 32,
+                        background: 'white',
+                        border: 'none',
+                        borderRadius: '50%',
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+                      }}
+                    >
+                      {Icons.bookmark(18, 'black')}
+                    </button>
                     {/* Plus Button / Quantity Badge */}
                     <div style={{ position: 'absolute', top: 0, right: 0 }}>
                       {quantity === 0 ? (
@@ -1803,7 +1870,6 @@
                       display: 'flex',
                       alignItems: 'center',
                       gap: 4,
-                      marginBottom: 4,
                       fontSize: 'var(--fs-sm)',
                     }}>
                       <span style={{ fontWeight: 700, color: 'black' }}>{recipe.rating}</span>
@@ -1811,16 +1877,6 @@
                       <span style={{ color: '#656565' }}>
                         {recipe.isPersonalRating ? 'your rating' : `(${recipe.reviewCount})`}
                       </span>
-                    </div>
-                    <div style={{
-                      display: 'flex',
-                      gap: 12,
-                      fontSize: 'var(--fs-sm)',
-                      color: '#656565',
-                    }}>
-                      <span>{recipe.time}</span>
-                      <span>•</span>
-                      <span>{recipe.kcal}</span>
                     </div>
                   </div>
                 </div>

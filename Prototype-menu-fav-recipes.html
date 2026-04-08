@@ -198,6 +198,73 @@
       padding: 0;
     }
 
+    /* Edit mode styles */
+    .table-edit-controls {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto 20px;
+      padding: 0 20px;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .edit-btn, .save-btn {
+      padding: 10px 20px;
+      font-family: 'Roboto', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .edit-btn {
+      background: #024426;
+      color: white;
+    }
+
+    .edit-btn:hover {
+      background: #036336;
+    }
+
+    .save-btn {
+      background: #ff8000;
+      color: white;
+      display: none;
+    }
+
+    .save-btn:hover {
+      background: #e67300;
+    }
+
+    .save-btn.active {
+      display: block;
+    }
+
+    .edit-mode-indicator {
+      color: #ff8000;
+      font-weight: 700;
+      font-size: 14px;
+      display: none;
+    }
+
+    .edit-mode-indicator.active {
+      display: block;
+    }
+
+    .logic-table td[contenteditable="true"] {
+      outline: 2px dashed #ff8000;
+      outline-offset: -2px;
+      cursor: text;
+    }
+
+    .logic-table td[contenteditable="true"]:focus {
+      outline: 2px solid #ff8000;
+      background: #fff8f0 !important;
+    }
+
     /* Favorites section fade-out animation */
     .favorites-section-fade-out {
       animation: fadeOutSection 0.5s ease-out forwards;
@@ -827,6 +894,13 @@
         </svg>
       </div>
     </div>
+  </div>
+
+  <!-- Table Edit Controls -->
+  <div class="table-edit-controls">
+    <button class="edit-btn" onclick="toggleEditMode()">Edit Tables</button>
+    <button class="save-btn" onclick="saveChanges()">Save Changes</button>
+    <span class="edit-mode-indicator">✏️ Edit Mode Active - Click cells to edit</span>
   </div>
 
   <!-- Logic Tables Section -->
@@ -22021,6 +22095,63 @@
         });
       });
     });
+
+    // ========== TABLE EDIT MODE ==========
+    let isEditMode = false;
+
+    function toggleEditMode() {
+      isEditMode = !isEditMode;
+      const tables = document.querySelectorAll('.logic-table table tbody td');
+      const editBtn = document.querySelector('.edit-btn');
+      const saveBtn = document.querySelector('.save-btn');
+      const indicator = document.querySelector('.edit-mode-indicator');
+
+      if (isEditMode) {
+        // Enable edit mode
+        tables.forEach(td => {
+          td.setAttribute('contenteditable', 'true');
+        });
+        editBtn.textContent = 'Cancel Edit';
+        editBtn.style.background = '#666';
+        saveBtn.classList.add('active');
+        indicator.classList.add('active');
+      } else {
+        // Disable edit mode
+        tables.forEach(td => {
+          td.setAttribute('contenteditable', 'false');
+        });
+        editBtn.textContent = 'Edit Tables';
+        editBtn.style.background = '#024426';
+        saveBtn.classList.remove('active');
+        indicator.classList.remove('active');
+      }
+    }
+
+    async function saveChanges() {
+      try {
+        // Get the full HTML content
+        const htmlContent = document.documentElement.outerHTML;
+
+        // Create a blob and download link
+        const blob = new Blob([htmlContent], { type: 'text/html' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'Prototype-menu-fav-recipes.html';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+
+        // Show success message
+        alert('✅ Changes saved! The updated file has been downloaded.\n\nTo update the prototype:\n1. Replace the old file with the downloaded one\n2. Commit and push the changes to GitHub');
+
+        // Exit edit mode
+        toggleEditMode();
+      } catch (error) {
+        alert('❌ Error saving changes: ' + error.message);
+      }
+    }
   </script>
 </body>
 </html>

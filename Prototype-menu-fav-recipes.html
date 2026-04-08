@@ -209,7 +209,7 @@
       align-items: center;
     }
 
-    .edit-btn, .save-btn {
+    .edit-btn, .save-btn, .publish-btn, .reset-btn {
       padding: 10px 20px;
       font-family: 'Roboto', sans-serif;
       font-size: 14px;
@@ -243,6 +243,34 @@
       display: block;
     }
 
+    .publish-btn {
+      background: #027a48;
+      color: white;
+      display: none;
+    }
+
+    .publish-btn:hover {
+      background: #025a35;
+    }
+
+    .publish-btn.active {
+      display: block;
+    }
+
+    .reset-btn {
+      background: #dc2626;
+      color: white;
+      display: none;
+    }
+
+    .reset-btn:hover {
+      background: #b91c1c;
+    }
+
+    .reset-btn.active {
+      display: block;
+    }
+
     .edit-mode-indicator {
       color: #ff8000;
       font-weight: 700;
@@ -252,6 +280,19 @@
 
     .edit-mode-indicator.active {
       display: block;
+    }
+
+    .changes-saved-indicator {
+      color: #027a48;
+      font-weight: 700;
+      font-size: 14px;
+      display: none;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .changes-saved-indicator.active {
+      display: flex;
     }
 
     .logic-table td[contenteditable="true"] {
@@ -900,7 +941,10 @@
   <div class="table-edit-controls">
     <button class="edit-btn" onclick="toggleEditMode()">Edit Tables</button>
     <button class="save-btn" onclick="saveChanges()">Save Changes</button>
+    <button class="publish-btn" onclick="publishChanges()">Publish to GitHub</button>
+    <button class="reset-btn" onclick="resetChanges()">Reset to Original</button>
     <span class="edit-mode-indicator">✏️ Edit Mode Active - Click cells to edit</span>
+    <span class="changes-saved-indicator">💾 Changes saved locally (will persist on refresh)</span>
   </div>
 
   <!-- Logic Tables Section -->
@@ -22096,8 +22140,43 @@
       });
     });
 
-    // ========== TABLE EDIT MODE ==========
+    // ========== TABLE EDIT MODE WITH LOCALSTORAGE ==========
     let isEditMode = false;
+    const STORAGE_KEY = 'prototype-table-edits';
+
+    // Load saved changes on page load
+    window.addEventListener('DOMContentLoaded', function() {
+      loadSavedChanges();
+      updatePublishButton();
+    });
+
+    function loadSavedChanges() {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) {
+        try {
+          const data = JSON.parse(saved);
+          const tables = document.querySelectorAll('.logic-table table');
+
+          tables.forEach((table, tableIndex) => {
+            const cells = table.querySelectorAll('tbody td');
+            cells.forEach((cell, cellIndex) => {
+              const key = `table${tableIndex}-cell${cellIndex}`;
+              if (data[key]) {
+                cell.innerHTML = data[key];
+              }
+            });
+          });
+
+          // Show indicator that changes are loaded
+          const savedIndicator = document.querySelector('.changes-saved-indicator');
+          if (savedIndicator) {
+            savedIndicator.classList.add('active');
+          }
+        } catch (error) {
+          console.error('Error loading saved changes:', error);
+        }
+      }
+    }
 
     function toggleEditMode() {
       isEditMode = !isEditMode;
@@ -22127,9 +22206,49 @@
       }
     }
 
-    async function saveChanges() {
+    function saveChanges() {
       try {
-        // Get the full HTML content
+        // Save all table cell content to localStorage
+        const data = {};
+        const tables = document.querySelectorAll('.logic-table table');
+
+        tables.forEach((table, tableIndex) => {
+          const cells = table.querySelectorAll('tbody td');
+          cells.forEach((cell, cellIndex) => {
+            const key = `table${tableIndex}-cell${cellIndex}`;
+            data[key] = cell.innerHTML;
+          });
+        });
+
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+
+        // Show success message
+        alert('✅ Changes saved!\n\nYour edits are now saved in your browser and will persist when you refresh the page.\n\nWhen you\'re ready to publish to GitHub, click "Publish to GitHub".');
+
+        // Update UI
+        const savedIndicator = document.querySelector('.changes-saved-indicator');
+        savedIndicator.classList.add('active');
+
+        const publishBtn = document.querySelector('.publish-btn');
+        publishBtn.classList.add('active');
+
+        const resetBtn = document.querySelector('.reset-btn');
+        resetBtn.classList.add('active');
+
+        // Exit edit mode
+        toggleEditMode();
+      } catch (error) {
+        alert('❌ Error saving changes: ' + error.message);
+      }
+    }
+
+    function publishChanges() {
+      if (!confirm('📤 Publish to GitHub?\n\nThis will download the updated HTML file. You\'ll need to replace the original file and push to GitHub.\n\nContinue?')) {
+        return;
+      }
+
+      try {
+        // Get the full HTML content with current changes
         const htmlContent = document.documentElement.outerHTML;
 
         // Create a blob and download link
@@ -22143,13 +22262,37 @@
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
 
-        // Show success message
-        alert('✅ Changes saved! The updated file has been downloaded.\n\nTo update the prototype:\n1. Replace the old file with the downloaded one\n2. Commit and push the changes to GitHub');
-
-        // Exit edit mode
-        toggleEditMode();
+        // Show success message with instructions
+        alert('✅ File downloaded!\n\nNext steps:\n1. Move the downloaded file to: /Users/zoe.nguyen/Q2 App Prototype/\n2. Tell Claude: "push my changes"\n3. Wait 1-2 minutes for GitHub Pages to update\n4. Refresh the live link to see your changes!');
       } catch (error) {
-        alert('❌ Error saving changes: ' + error.message);
+        alert('❌ Error publishing: ' + error.message);
+      }
+    }
+
+    function resetChanges() {
+      if (!confirm('⚠️ Reset to Original?\n\nThis will delete all your saved changes and reload the original content.\n\nThis action cannot be undone. Continue?')) {
+        return;
+      }
+
+      try {
+        // Clear localStorage
+        localStorage.removeItem(STORAGE_KEY);
+
+        // Reload page to get original content
+        window.location.reload();
+      } catch (error) {
+        alert('❌ Error resetting: ' + error.message);
+      }
+    }
+
+    function updatePublishButton() {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      const publishBtn = document.querySelector('.publish-btn');
+      const resetBtn = document.querySelector('.reset-btn');
+
+      if (saved) {
+        publishBtn.classList.add('active');
+        resetBtn.classList.add('active');
       }
     }
   </script>

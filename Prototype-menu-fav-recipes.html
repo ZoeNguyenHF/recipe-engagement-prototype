@@ -21908,7 +21908,9 @@
               setShowRatingDrawer(false);
               setCurrentPage('menu');
 
-              if (wasOpenedFromRateMeals && wasNoRecipesWithUnrated) {
+              // If in no-recipes-with-unrated flow, ALWAYS show favorites section after rating
+              // (regardless of openedFromRateMeals flag which may get lost)
+              if (wasNoRecipesWithUnrated) {
                 // Special handling for no-recipes-with-unrated flow
                 // After rating, show the top recipes widget
                 console.log('Transitioning no-recipes-with-unrated flow to has-recipes');

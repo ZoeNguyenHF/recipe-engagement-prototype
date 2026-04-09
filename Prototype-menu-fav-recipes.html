@@ -18891,7 +18891,7 @@
                       }}
                       onClick={() => {
                         setShowFlowToast(false);
-                        onShowRating();
+                        onShowRating(true);
                       }}
                     >
                       Rate more
@@ -21834,10 +21834,29 @@
             openedFromRateMeals={openedFromRateMeals}
             onViewTopRecipes={() => {
               const wasOpenedFromRateMeals = openedFromRateMeals;
+              const wasNoRecipesWithUnrated = currentFlow === 'no-recipes-with-unrated';
               setShowRatingDrawer(false);
               setCurrentPage('menu');
 
-              if (wasOpenedFromRateMeals) {
+              if (wasOpenedFromRateMeals && wasNoRecipesWithUnrated) {
+                // Special handling for no-recipes-with-unrated flow
+                // After rating, show the top recipes widget
+                setTimeout(() => {
+                  // Change flow to has-recipes and show favorites section
+                  setCurrentFlow('has-recipes');
+                  setShowFavoritesSection(true);
+                  setShowFlowToast(false);
+                  setOpenedFromRateMeals(false);
+
+                  // Scroll to top recipes section
+                  setTimeout(() => {
+                    const topRecipesSection = document.getElementById('your-top-recipes');
+                    if (topRecipesSection) {
+                      topRecipesSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                  }, 100);
+                }, 300);
+              } else if (wasOpenedFromRateMeals) {
                 // Navigate to rate-meals section if opened from there
                 setTimeout(() => {
                   const rateMealsSection = document.getElementById('rate-meals');

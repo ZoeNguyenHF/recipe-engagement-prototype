@@ -18890,6 +18890,7 @@
                         textDecoration: 'underline',
                       }}
                       onClick={() => {
+                        console.log('Rate more clicked from no-recipes-with-unrated toast');
                         setShowFlowToast(false);
                         onShowRating(true);
                       }}
@@ -21586,7 +21587,26 @@
       React.useEffect(() => {
         const handleFlowChange = (e) => {
           console.log('App received flow change event:', e.detail.flow);
-          setCurrentFlow(e.detail.flow);
+          const newFlow = e.detail.flow;
+          setCurrentFlow(newFlow);
+
+          // Initialize correct state for each flow
+          if (newFlow === 'no-recipes-with-unrated') {
+            // Third flow: Start with favorites section visible, user needs to click "See results" first
+            setShowFavoritesSection(true);
+            setShowFlowToast(false);
+            setOpenedFromRateMeals(false);
+          } else if (newFlow === 'no-recipes') {
+            // Second flow: Same as third but without the unrated recipes prompt
+            setShowFavoritesSection(true);
+            setShowFlowToast(false);
+            setOpenedFromRateMeals(false);
+          } else {
+            // First flow (has-recipes): Show favorites section
+            setShowFavoritesSection(true);
+            setShowFlowToast(false);
+            setOpenedFromRateMeals(false);
+          }
         };
 
         window.addEventListener('flowChange', handleFlowChange);
@@ -21597,8 +21617,13 @@
       React.useEffect(() => {
         const handleResetFlow = (e) => {
           console.log('App received reset flow event:', e.detail.flow);
-          // Reset app-level states but keep the current flow
+          const flow = e.detail.flow;
+
+          // Reset based on current flow
           setShowFlowToast(false);
+          setOpenedFromRateMeals(false);
+
+          // All flows start with favorites section visible
           setShowFavoritesSection(true);
         };
 
@@ -21723,9 +21748,11 @@
               setCart={setCart}
               onCartClick={() => setShowCart(true)}
               onShowRating={(fromRateMeals = false) => {
+                console.log('Opening rating drawer, fromRateMeals:', fromRateMeals, 'currentFlow:', currentFlow);
                 setRatingDrawerSource('menu');
                 setShowRatingDrawer(true);
                 if (fromRateMeals) {
+                  console.log('Setting openedFromRateMeals to true');
                   setOpenedFromRateMeals(true);
                 }
               }}
@@ -21835,12 +21862,20 @@
             onViewTopRecipes={() => {
               const wasOpenedFromRateMeals = openedFromRateMeals;
               const wasNoRecipesWithUnrated = currentFlow === 'no-recipes-with-unrated';
+
+              console.log('View Top Recipes clicked:', {
+                wasOpenedFromRateMeals,
+                wasNoRecipesWithUnrated,
+                currentFlow
+              });
+
               setShowRatingDrawer(false);
               setCurrentPage('menu');
 
               if (wasOpenedFromRateMeals && wasNoRecipesWithUnrated) {
                 // Special handling for no-recipes-with-unrated flow
                 // After rating, show the top recipes widget
+                console.log('Transitioning no-recipes-with-unrated flow to has-recipes');
                 setTimeout(() => {
                   // Change flow to has-recipes and show favorites section
                   setCurrentFlow('has-recipes');

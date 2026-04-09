@@ -21648,23 +21648,12 @@
           const newFlow = e.detail.flow;
           setCurrentFlow(newFlow);
 
-          // Initialize correct state for each flow
-          if (newFlow === 'no-recipes-with-unrated') {
-            // Third flow: Start with favorites section visible, user needs to click "See results" first
-            setShowFavoritesSection(true);
-            setShowFlowToast(false);
-            setOpenedFromRateMeals(false);
-          } else if (newFlow === 'no-recipes') {
-            // Second flow: Same as third but without the unrated recipes prompt
-            setShowFavoritesSection(true);
-            setShowFlowToast(false);
-            setOpenedFromRateMeals(false);
-          } else {
-            // First flow (has-recipes): Show favorites section
-            setShowFavoritesSection(true);
-            setShowFlowToast(false);
-            setOpenedFromRateMeals(false);
-          }
+          // Always reset to clean state when switching flows
+          setShowFavoritesSection(true);
+          setShowFlowToast(false);
+          setOpenedFromRateMeals(false);
+
+          // Note: The resetFlow event will handle resetting the widget's animationPhase
         };
 
         window.addEventListener('flowChange', handleFlowChange);
@@ -22088,6 +22077,11 @@
 
           // Dispatch event to React component
           window.dispatchEvent(new CustomEvent('flowChange', {
+            detail: { flow: flowType }
+          }));
+
+          // Also dispatch reset event to ensure clean state
+          window.dispatchEvent(new CustomEvent('resetFlow', {
             detail: { flow: flowType }
           }));
 

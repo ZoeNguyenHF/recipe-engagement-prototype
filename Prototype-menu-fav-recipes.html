@@ -8832,7 +8832,14 @@
                       {/* CTA button - different for menu vs other sources */}
                       {hideRemindLater ? (
                         <button
-                          onClick={onViewTopRecipes}
+                          onClick={() => {
+                            console.log('Button clicked in drawer (small screen), hideRemindLater:', hideRemindLater, 'openedFromRateMeals:', openedFromRateMeals);
+                            if (onViewTopRecipes) {
+                              onViewTopRecipes();
+                            } else {
+                              console.error('onViewTopRecipes is not defined');
+                            }
+                          }}
                           style={{
                             padding: '12px 24px',
                             background: '#232323',
@@ -8929,7 +8936,14 @@
                       {/* CTA button - different for menu vs other sources */}
                       {hideRemindLater ? (
                         <button
-                          onClick={onViewTopRecipes}
+                          onClick={() => {
+                            console.log('Button clicked in drawer (large screen), hideRemindLater:', hideRemindLater, 'openedFromRateMeals:', openedFromRateMeals);
+                            if (onViewTopRecipes) {
+                              onViewTopRecipes();
+                            } else {
+                              console.error('onViewTopRecipes is not defined');
+                            }
+                          }}
                           style={{
                             padding: '12px 24px',
                             background: '#232323',

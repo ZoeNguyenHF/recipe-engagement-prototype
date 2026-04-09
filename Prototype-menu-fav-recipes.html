@@ -8293,6 +8293,13 @@
       const [trophyCoins, setTrophyCoins] = useState([]);
       const [ratedRecipes, setRatedRecipes] = useState(new Set()); // Track recipes that completed rating animation
 
+      // Debug: Log when drawer receives openedFromRateMeals prop
+      React.useEffect(() => {
+        if (show) {
+          console.log('RatingDrawer opened with openedFromRateMeals:', openedFromRateMeals, 'hideRemindLater:', hideRemindLater);
+        }
+      }, [show, openedFromRateMeals, hideRemindLater]);
+
       // Reset state when drawer closes
       React.useEffect(() => {
         if (!show) {
@@ -8853,7 +8860,11 @@
                             cursor: 'pointer',
                           }}
                         >
-                          {openedFromRateMeals ? "See your new recommendations" : "View your top recipes"}
+                          {(() => {
+                            const buttonText = openedFromRateMeals ? "See your new recommendations" : "View your top recipes";
+                            console.log('Button rendering with text:', buttonText, 'openedFromRateMeals:', openedFromRateMeals);
+                            return buttonText;
+                          })()}
                         </button>
                       ) : (
                         <button
@@ -8957,7 +8968,11 @@
                             cursor: 'pointer',
                           }}
                         >
-                          {openedFromRateMeals ? "See your new recommendations" : "View your top recipes"}
+                          {(() => {
+                            const buttonText = openedFromRateMeals ? "See your new recommendations" : "View your top recipes";
+                            console.log('Button rendering with text:', buttonText, 'openedFromRateMeals:', openedFromRateMeals);
+                            return buttonText;
+                          })()}
                         </button>
                       ) : (
                         <button
@@ -21532,6 +21547,11 @@
       const [showFlowToast, setShowFlowToast] = useState(false);
       const [showFavoritesSection, setShowFavoritesSection] = useState(true);
 
+      // Debug: Track openedFromRateMeals changes
+      React.useEffect(() => {
+        console.log('openedFromRateMeals changed to:', openedFromRateMeals, 'currentFlow:', currentFlow);
+      }, [openedFromRateMeals]);
+
       const toggleBookmark = (recipeId) => {
         setBookmarkedRecipes(prev => {
           const newSet = new Set(prev);
@@ -21841,6 +21861,7 @@
           <RatingDrawer
             show={showRatingDrawer}
             onClose={() => {
+              console.log('Rating drawer closing, openedFromRateMeals:', openedFromRateMeals);
               const hasRatings = Object.keys(recipeRatings).length > 0;
 
               setShowRatingDrawer(false);
@@ -21851,6 +21872,7 @@
 
               // Keep openedFromRateMeals true if user rated recipes, so MenuPage can show toast
               if (!openedFromRateMeals || !hasRatings) {
+                console.log('Resetting openedFromRateMeals to false');
                 setOpenedFromRateMeals(false);
               }
             }}

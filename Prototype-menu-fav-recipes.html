@@ -2330,6 +2330,7 @@
       const [animationPhase, setAnimationPhase] = useState('initial'); // 'initial', 'shrinking', 'cooking', 'transitioning', 'final'
       const [showFinalRecipes, setShowFinalRecipes] = useState([]);
       const [isFadingOut, setIsFadingOut] = useState(false);
+      const [hideKeepExploring, setHideKeepExploring] = useState(false);
 
       // Listen for flow reset event
       useEffect(() => {
@@ -2342,6 +2343,7 @@
           setShowFavoritesSection(true);
           setShowFlowToast(false);
           setRecipeRatings({});
+          setHideKeepExploring(false);
         };
 
         window.addEventListener('resetFlow', handleResetFlow);
@@ -2351,12 +2353,19 @@
       // Listen for show final phase event (from rating completion)
       useEffect(() => {
         const handleShowFinalPhase = (e) => {
-          console.log('Show final phase event received');
+          console.log('Show final phase event received, hideKeepExploring:', e.detail?.hideKeepExploring);
           setAnimationPhase('final');
           setShowFinalRecipes([]);
           setIsFadingOut(false);
           setShowFavoritesSection(true);
           setShowFlowToast(false);
+
+          // Set whether to hide "Keep exploring!" card
+          if (e.detail?.hideKeepExploring) {
+            setHideKeepExploring(true);
+          } else {
+            setHideKeepExploring(false);
+          }
 
           // Show recipes one by one
           setTimeout(() => {
@@ -2498,6 +2507,7 @@
           } else {
             // Normal flow - show results
             setAnimationPhase('final');
+            setHideKeepExploring(false); // Show "Keep exploring!" card for normal flow
             // Show recipes one by one
             trendingRecipes.slice(0, 2).forEach((recipe, index) => {
               setTimeout(() => {
@@ -2781,6 +2791,73 @@
                   </div>
                 )
               ))}
+
+              {/* Navigational card at the end - only show for normal flow, not when coming from third flow */}
+              {!hideKeepExploring && (
+                <div style={{
+                  flexShrink: 0,
+                  width: 180,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  padding: '24px 16px',
+                  background: '#faf8f3',
+                  borderRadius: 8,
+                  animation: `popIn 0.5s ease-out ${0.3}s backwards`,
+                  minHeight: 270,
+                }}>
+                  <img
+                    src="heart.png"
+                    alt="Heart"
+                    style={{
+                      width: 56,
+                      height: 56,
+                      objectFit: 'contain',
+                      marginBottom: 16,
+                    }}
+                  />
+                  <h3 style={{
+                    fontFamily: 'var(--font-headline)',
+                    fontSize: 16,
+                    fontWeight: 700,
+                    color: '#232323',
+                    margin: '0 0 8px',
+                    textAlign: 'center',
+                    lineHeight: '20px',
+                  }}>Keep exploring!</h3>
+                  <p style={{
+                    fontFamily: 'var(--font-body)',
+                    fontSize: 12,
+                    fontWeight: 400,
+                    lineHeight: '16px',
+                    color: '#666666',
+                    margin: '0 0 16px',
+                    textAlign: 'center',
+                  }}>Rate more meals to get better recommendations</p>
+                  <button
+                    onClick={() => {
+                      if (onShowRating) {
+                        onShowRating();
+                      }
+                    }}
+                    style={{
+                      background: '#232323',
+                      color: 'white',
+                      border: 'none',
+                      borderRadius: 8,
+                      padding: '8px 16px',
+                      fontFamily: 'var(--font-body)',
+                      fontSize: 14,
+                      fontWeight: 700,
+                      cursor: 'pointer',
+                      width: '100%',
+                    }}
+                  >
+                    Rate more
+                  </button>
+                </div>
+              )}
             </div>
           )}
 
@@ -21870,7 +21947,10 @@
                   setOpenedFromRateMeals(false);
 
                   // Dispatch event to show final phase (not initial rating phase)
-                  window.dispatchEvent(new CustomEvent('showFinalPhase'));
+                  // Hide "Keep exploring!" card for third flow
+                  window.dispatchEvent(new CustomEvent('showFinalPhase', {
+                    detail: { hideKeepExploring: true }
+                  }));
 
                   // Scroll to top recipes section
                   setTimeout(() => {

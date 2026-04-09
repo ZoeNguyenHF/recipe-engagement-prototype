@@ -2348,6 +2348,30 @@
         return () => window.removeEventListener('resetFlow', handleResetFlow);
       }, [currentFlow]);
 
+      // Listen for show final phase event (from rating completion)
+      useEffect(() => {
+        const handleShowFinalPhase = (e) => {
+          console.log('Show final phase event received');
+          setAnimationPhase('final');
+          setShowFinalRecipes([]);
+          setIsFadingOut(false);
+          setShowFavoritesSection(true);
+          setShowFlowToast(false);
+
+          // Show recipes one by one
+          setTimeout(() => {
+            trendingRecipes.slice(0, 2).forEach((recipe, index) => {
+              setTimeout(() => {
+                setShowFinalRecipes(prev => [...prev, recipe.id]);
+              }, index * 300);
+            });
+          }, 100);
+        };
+
+        window.addEventListener('showFinalPhase', handleShowFinalPhase);
+        return () => window.removeEventListener('showFinalPhase', handleShowFinalPhase);
+      }, []);
+
       const trendingRecipes = [
         {
           id: 101,
@@ -21912,14 +21936,17 @@
               // (regardless of openedFromRateMeals flag which may get lost)
               if (wasNoRecipesWithUnrated) {
                 // Special handling for no-recipes-with-unrated flow
-                // After rating, show the top recipes widget
-                console.log('Transitioning no-recipes-with-unrated flow to has-recipes');
+                // After rating, show the top recipes widget with final results
+                console.log('Transitioning no-recipes-with-unrated flow to has-recipes with final phase');
                 setTimeout(() => {
                   // Change flow to has-recipes and show favorites section
                   setCurrentFlow('has-recipes');
                   setShowFavoritesSection(true);
                   setShowFlowToast(false);
                   setOpenedFromRateMeals(false);
+
+                  // Dispatch event to show final phase (not initial rating phase)
+                  window.dispatchEvent(new CustomEvent('showFinalPhase'));
 
                   // Scroll to top recipes section
                   setTimeout(() => {

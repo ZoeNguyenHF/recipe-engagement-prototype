@@ -50,8 +50,109 @@
       height: fit-content;
       position: fixed;
       top: 20px;
+      left: 20px;
+      z-index: 1000;
+    }
+
+    .design-options-sidebar {
+      background: white;
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      width: 260px;
+      height: fit-content;
+      position: fixed;
+      top: 20px;
       right: 20px;
       z-index: 1000;
+      max-height: calc(100vh - 40px);
+      overflow-y: auto;
+    }
+
+    .design-options-sidebar h2 {
+      font-size: 18px;
+      font-weight: 700;
+      color: #242424;
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid #e8e8e8;
+    }
+
+    .design-option-group {
+      margin-bottom: 16px;
+    }
+
+    .design-option-parent {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 14px;
+      background: #067a46;
+      color: white;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      margin-bottom: 8px;
+    }
+
+    .design-option-parent:hover {
+      background: #055a34;
+    }
+
+    .design-option-parent.expanded {
+      border-radius: 8px 8px 0 0;
+    }
+
+    .design-option-title {
+      font-size: 14px;
+      font-weight: 600;
+      flex: 1;
+    }
+
+    .expand-icon {
+      width: 16px;
+      height: 16px;
+      transition: transform 0.2s ease;
+      flex-shrink: 0;
+    }
+
+    .expand-icon.expanded {
+      transform: rotate(180deg);
+    }
+
+    .design-option-children {
+      display: none;
+      flex-direction: column;
+      gap: 4px;
+      padding: 8px;
+      background: #f9f9f9;
+      border-radius: 0 0 8px 8px;
+    }
+
+    .design-option-children.expanded {
+      display: flex;
+    }
+
+    .design-option-child {
+      padding: 10px 12px;
+      background: white;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border: 2px solid transparent;
+      font-size: 13px;
+      color: #242424;
+    }
+
+    .design-option-child:hover {
+      background: #f0f0f0;
+      border-color: #bbf06a;
+    }
+
+    .design-option-child.active {
+      background: #bbf06a;
+      border-color: #067a46;
+      font-weight: 600;
     }
 
     .flow-sidebar h2 {
@@ -825,6 +926,40 @@
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
         </svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- Design Options Sidebar -->
+  <div class="design-options-sidebar">
+    <h2>Design Options</h2>
+
+    <!-- Option 1: Rate inside menu -->
+    <div class="design-option-group">
+      <div class="design-option-parent" data-parent="option-1">
+        <span class="design-option-title">Option 1: Rate inside menu</span>
+        <svg class="expand-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+        </svg>
+      </div>
+      <div class="design-option-children" data-children="option-1">
+        <div class="design-option-child active" data-option="1a">1.A: Show more at once</div>
+        <div class="design-option-child" data-option="1b">1.B: Show one recipe at once</div>
+      </div>
+    </div>
+
+    <!-- Option 2: CTA to rate -->
+    <div class="design-option-group">
+      <div class="design-option-parent" data-parent="option-2">
+        <span class="design-option-title">Option 2: CTA to rate</span>
+        <svg class="expand-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+        </svg>
+      </div>
+      <div class="design-option-children" data-children="option-2">
+        <div class="design-option-child" data-option="b1">B1: Visual 1</div>
+        <div class="design-option-child" data-option="b2">B2: Visual 2</div>
+        <div class="design-option-child" data-option="b3">B3: Visual 3</div>
       </div>
     </div>
   </div>
@@ -22146,6 +22281,54 @@
               favoritesSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }
           }, 100);
+        });
+      });
+
+      // ========== DESIGN OPTIONS SIDEBAR ==========
+      const designParents = document.querySelectorAll('.design-option-parent');
+      const designChildren = document.querySelectorAll('.design-option-child');
+
+      // Handle parent clicks (expand/collapse)
+      designParents.forEach(parent => {
+        parent.addEventListener('click', function() {
+          const parentId = this.getAttribute('data-parent');
+          const children = document.querySelector(`.design-option-children[data-children="${parentId}"]`);
+          const icon = this.querySelector('.expand-icon');
+
+          // Toggle expanded state
+          const isExpanded = children.classList.contains('expanded');
+
+          if (isExpanded) {
+            children.classList.remove('expanded');
+            this.classList.remove('expanded');
+            icon.classList.remove('expanded');
+          } else {
+            children.classList.add('expanded');
+            this.classList.add('expanded');
+            icon.classList.add('expanded');
+          }
+        });
+      });
+
+      // Handle child option clicks
+      designChildren.forEach(child => {
+        child.addEventListener('click', function(e) {
+          e.stopPropagation();
+
+          // Remove active from all children
+          designChildren.forEach(c => c.classList.remove('active'));
+
+          // Add active to clicked child
+          this.classList.add('active');
+
+          // Get the selected option
+          const option = this.getAttribute('data-option');
+          console.log('Design option selected:', option);
+
+          // TODO: You can dispatch an event here to change the design based on the selected option
+          // window.dispatchEvent(new CustomEvent('designOptionChange', {
+          //   detail: { option: option }
+          // }));
         });
       });
     });

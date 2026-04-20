@@ -17964,36 +17964,18 @@
                         </div>
 
                         <script dangerouslySetInnerHTML={{ __html: `
-                          (function() {
-                            // Function to swap from banner to favorites section
-                            function showFavoritesSection() {
-                              console.log('showFavoritesSection called!');
-                              var banner = document.getElementById('rate-recipes-banner');
-                              var favorites = document.getElementById('your-favorites-section');
-                              console.log('Elements:', {banner: !!banner, favorites: !!favorites});
-
-                              if (banner) {
-                                banner.style.display = 'none';
-                                console.log('Banner hidden');
-                              }
-                              if (favorites) {
-                                favorites.style.display = 'block';
-                                console.log('Favorites shown');
-                                // Scroll favorites into view so users can see it perfectly
-                                setTimeout(function() {
-                                  favorites.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                                }, 100);
-                              }
+                          // Global function that React can call directly
+                          window.showFavoritesSection = function() {
+                            var banner = document.getElementById('rate-recipes-banner');
+                            var favorites = document.getElementById('your-favorites-section');
+                            if (banner) banner.style.display = 'none';
+                            if (favorites) {
+                              favorites.style.display = 'block';
+                              setTimeout(function() {
+                                favorites.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                              }, 100);
                             }
-
-                            // Listen for rating completion event
-                            window.addEventListener('showFinalPhase', function(e) {
-                              console.log('showFinalPhase event received!', e);
-                              showFavoritesSection();
-                            });
-
-                            console.log('Banner/Favorites script loaded successfully');
-                          })();
+                          };
                         `}} />
                       </React.Fragment>
                     );
@@ -22214,12 +22196,10 @@
               setCurrentPage('menu');
 
               // ALWAYS show favorites section after rating (for Option 1)
-              console.log('Showing favorites section after rating');
               setTimeout(() => {
-                // Dispatch event to show final phase
-                window.dispatchEvent(new CustomEvent('showFinalPhase', {
-                  detail: { hideKeepExploring: wasNoRecipesWithUnrated }
-                }));
+                if (window.showFavoritesSection) {
+                  window.showFavoritesSection();
+                }
               }, 300);
 
               // Original logic for other flows

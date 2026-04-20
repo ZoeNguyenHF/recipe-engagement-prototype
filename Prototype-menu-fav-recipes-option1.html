@@ -22197,8 +22197,14 @@
 
               // ALWAYS show favorites section after rating (for Option 1)
               setTimeout(() => {
-                if (window.showFavoritesSection) {
-                  window.showFavoritesSection();
+                const banner = document.getElementById('rate-recipes-banner');
+                const favorites = document.getElementById('your-favorites-section');
+                if (banner) banner.style.display = 'none';
+                if (favorites) {
+                  favorites.style.display = 'block';
+                  setTimeout(() => {
+                    favorites.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                  }, 100);
                 }
               }, 300);
 

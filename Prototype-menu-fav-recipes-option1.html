@@ -22223,32 +22223,23 @@
               setShowRatingDrawer(false);
               setCurrentPage('menu');
 
-              // If in no-recipes-with-unrated flow, ALWAYS show favorites section after rating
-              // (regardless of openedFromRateMeals flag which may get lost)
+              // ALWAYS show favorites section after rating (for Option 1)
+              console.log('Showing favorites section after rating');
+              setTimeout(() => {
+                // Dispatch event to show final phase
+                window.dispatchEvent(new CustomEvent('showFinalPhase', {
+                  detail: { hideKeepExploring: wasNoRecipesWithUnrated }
+                }));
+              }, 300);
+
+              // Original logic for other flows
               if (wasNoRecipesWithUnrated) {
                 // Special handling for no-recipes-with-unrated flow
-                // After rating, show the top recipes widget with final results
-                console.log('Transitioning no-recipes-with-unrated flow to has-recipes with final phase');
                 setTimeout(() => {
-                  // Change flow to has-recipes and show favorites section
                   setCurrentFlow('has-recipes');
                   setShowFavoritesSection(true);
                   setShowFlowToast(false);
                   setOpenedFromRateMeals(false);
-
-                  // Dispatch event to show final phase (not initial rating phase)
-                  // Hide "Keep exploring!" card for third flow
-                  window.dispatchEvent(new CustomEvent('showFinalPhase', {
-                    detail: { hideKeepExploring: true }
-                  }));
-
-                  // Scroll to top recipes section
-                  setTimeout(() => {
-                    const topRecipesSection = document.getElementById('your-top-recipes');
-                    if (topRecipesSection) {
-                      topRecipesSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    }
-                  }, 100);
                 }, 300);
               } else if (wasOpenedFromRateMeals) {
                 // Navigate to rate-meals section if opened from there

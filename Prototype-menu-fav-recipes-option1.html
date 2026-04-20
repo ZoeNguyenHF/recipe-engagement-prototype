@@ -17858,13 +17858,6 @@
                               <span
                                 onClick={() => {
                                   onShowRating();
-                                  // After opening rating drawer, show favorites section after 5 seconds
-                                  setTimeout(function() {
-                                    var banner = document.getElementById('rate-recipes-banner');
-                                    var favorites = document.getElementById('your-favorites-section');
-                                    if (banner) banner.style.display = 'none';
-                                    if (favorites) favorites.style.display = 'block';
-                                  }, 5000);
                                 }}
                                 style={{
                                   fontWeight: 700,
@@ -22411,11 +22404,17 @@
             detail: { option: optionType }
           }));
 
-          // Scroll to the "find your favorites" section
+          // Reset to initial state: show banner, hide favorites
+          const banner = document.getElementById('rate-recipes-banner');
+          const favorites = document.getElementById('your-favorites-section');
+          if (banner) banner.style.display = 'block';
+          if (favorites) favorites.style.display = 'none';
+
+          // Scroll to the banner position
           setTimeout(() => {
-            const favoritesSection = document.getElementById('your-top-recipes');
-            if (favoritesSection) {
-              favoritesSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            const bannerElement = document.getElementById('rate-recipes-banner');
+            if (bannerElement) {
+              bannerElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }
           }, 100);
         });
@@ -22449,11 +22448,17 @@
             detail: { flow: flowType }
           }));
 
-          // Scroll to the "find your favorites" section
+          // Reset to initial state: show banner, hide favorites
+          const banner = document.getElementById('rate-recipes-banner');
+          const favorites = document.getElementById('your-favorites-section');
+          if (banner) banner.style.display = 'block';
+          if (favorites) favorites.style.display = 'none';
+
+          // Scroll to the banner position
           setTimeout(() => {
-            const favoritesSection = document.getElementById('your-top-recipes');
-            if (favoritesSection) {
-              favoritesSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            const bannerElement = document.getElementById('rate-recipes-banner');
+            if (bannerElement) {
+              bannerElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }
           }, 100);
         });
@@ -22488,11 +22493,17 @@
             detail: { flow: flowType }
           }));
 
-          // Scroll to the "find your favorites" section
+          // Reset to initial state: show banner, hide favorites
+          const banner = document.getElementById('rate-recipes-banner');
+          const favorites = document.getElementById('your-favorites-section');
+          if (banner) banner.style.display = 'block';
+          if (favorites) favorites.style.display = 'none';
+
+          // Scroll to the banner position
           setTimeout(() => {
-            const favoritesSection = document.getElementById('your-top-recipes');
-            if (favoritesSection) {
-              favoritesSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            const bannerElement = document.getElementById('rate-recipes-banner');
+            if (bannerElement) {
+              bannerElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }
           }, 100);
         });

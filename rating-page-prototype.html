@@ -1,0 +1,3306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rating Page Prototype</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --font-headline: 'Roboto', sans-serif;
+      --font-body: 'Roboto', sans-serif;
+      --color-page-bg: #f9f6f0;
+      --color-divider: #e0d9cb;
+      --color-button-brand-bg-disabled: #e0e0e0;
+    }
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: #f0f0f0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .phone-frame {
+      width: 375px;
+      height: 812px;
+      background: white;
+      border-radius: 40px;
+      overflow: hidden;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+
+    @keyframes emojiJump {
+      0% {
+        opacity: 0;
+        transform: scale(0) translate(-50%, -50%);
+      }
+      50% {
+        opacity: 1;
+        transform: scale(1.3) translate(-30%, -30%);
+      }
+      70% {
+        transform: scale(0.9) translate(0, 0);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1) translate(0, 0);
+      }
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes chipFadeIn {
+      from {
+        opacity: 0;
+        transform: scale(0.9) translateY(8px);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
+    }
+
+    .chip {
+      animation: chipFadeIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
+    }
+
+    .chips-container .chip:nth-child(1) { animation-delay: 0.05s; }
+    .chips-container .chip:nth-child(2) { animation-delay: 0.1s; }
+    .chips-container .chip:nth-child(3) { animation-delay: 0.15s; }
+    .chips-container .chip:nth-child(4) { animation-delay: 0.2s; }
+    .chips-container .chip:nth-child(5) { animation-delay: 0.25s; }
+    .chips-container .chip:nth-child(6) { animation-delay: 0.3s; }
+    .chips-container .chip:nth-child(7) { animation-delay: 0.35s; }
+    .chips-container .chip:nth-child(8) { animation-delay: 0.4s; }
+
+
+    /* Lottie Burst Animations */
+    .lottie-burst {
+      position: absolute;
+      width: 140px;
+      height: 140px;
+      pointer-events: none;
+      z-index: 999;
+      display: none;
+      transform: translate(-50%, -50%);
+    }
+
+    .lottie-burst.playing {
+      display: block;
+    }
+
+    @keyframes emojiToCorner {
+      0% {
+        left: var(--startX);
+        top: var(--startY);
+        transform: scale(1);
+        opacity: 1;
+      }
+      50% {
+        left: calc((var(--startX) + var(--endX)) / 2);
+        top: calc((var(--startY) + var(--endY)) / 2 - 30px);
+        transform: scale(1.8);
+        opacity: 1;
+      }
+      100% {
+        left: var(--endX);
+        top: var(--endY);
+        transform: scale(1.5);
+        opacity: 1;
+      }
+    }
+
+    @keyframes badgeFadeIn {
+      from {
+        opacity: 0;
+        transform: scale(0.8);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    .rating-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background: var(--color-page-bg);
+      overflow: hidden;
+      height: 100%;
+    }
+
+    .rating-scrollable {
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: hidden;
+      display: flex;
+      flex-direction: column;
+      -webkit-overflow-scrolling: touch;
+      min-height: 0;
+    }
+
+    .rating-image-container {
+      position: relative;
+      width: 200px;
+      height: 200px;
+      flex-shrink: 0;
+      margin: 24px auto 0;
+    }
+
+    .rating-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 16px;
+    }
+
+    .emoji-badge {
+      position: absolute;
+      bottom: -12px;
+      right: -12px;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      overflow: visible;
+      visibility: hidden;
+      opacity: 0;
+      transform: scale(0.8);
+      will-change: opacity, transform;
+      pointer-events: none;
+    }
+
+    .emoji-badge img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .flying-emoji {
+      position: absolute;
+      pointer-events: none;
+      will-change: transform, left, top;
+      z-index: 1000;
+    }
+
+    .flying-emoji img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .rating-content {
+      padding: 0 16px 120px;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .rating-top-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      margin-top: 16px;
+      width: 100%;
+    }
+
+    .rating-titles {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .recipe-name {
+      font-family: 'Roboto', sans-serif;
+      font-size: 20px;
+      font-weight: 700;
+      line-height: 24px;
+      color: #232323;
+      margin: 0;
+      text-align: center;
+    }
+
+    .rating-subtitle {
+      font-family: 'Roboto', sans-serif;
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 20px;
+      color: #666666;
+      margin: 0;
+      text-align: center;
+    }
+
+    .stars-container {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 0;
+    }
+
+    /* Photo Upload Component */
+    .photo-upload-prompt {
+      width: 100%;
+      margin: 16px 0 0 0;
+      padding: 16px;
+      background: #F8F8F8;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border: 2px dashed #E0E0E0;
+      opacity: 0;
+      box-sizing: border-box;
+    }
+
+    .photo-upload-prompt:hover {
+      background: #F0F0F0;
+      border-color: #232323;
+    }
+
+    .photo-upload-icon {
+      width: 40px;
+      height: 40px;
+      flex-shrink: 0;
+    }
+
+    .photo-upload-icon img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .photo-upload-text {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .photo-upload-title {
+      font-family: -apple-system, sans-serif;
+      font-size: 15px;
+      font-weight: 600;
+      color: #232323;
+      line-height: 20px;
+    }
+
+    .photo-upload-subtitle {
+      font-family: -apple-system, sans-serif;
+      font-size: 13px;
+      font-weight: 400;
+      color: #656565;
+      line-height: 18px;
+    }
+
+    .star {
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+
+    .star:active {
+      transform: scale(1.1);
+    }
+
+    .feedback-section {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      animation: fadeIn 0.3s ease-out;
+      box-sizing: border-box;
+    }
+
+    .feedback-header {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: transparent;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+    }
+
+    .feedback-title {
+      font-family: 'Roboto', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      line-height: 24px;
+      color: #232323;
+    }
+
+    .chevron {
+      transition: transform 0.2s;
+    }
+
+    .chevron.expanded {
+      transform: rotate(180deg);
+    }
+
+    .chips-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      padding-top: 8px;
+      padding-bottom: 8px;
+    }
+
+    /* Modern Chip Styles - Zest Design System */
+    .chip {
+      height: auto;
+      padding: 8px 16px;
+      border-radius: 20px;
+      background: white;
+      border: 1.5px solid #E0E0E0;
+      cursor: pointer;
+      font-family: 'Roboto', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 20px;
+      color: #232323;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .chip:hover {
+      border-color: #BDBDBD;
+      background: #FAFAFA;
+      transform: translateY(-1px);
+    }
+
+    .chip:active {
+      transform: translateY(0);
+    }
+
+    /* Positive chips - Zest Green */
+    #positiveChips .chip.selected {
+      background: #E8F5E9;
+      border-color: #4CAF50;
+      color: #2E7D32;
+    }
+
+    #positiveChips .chip.selected:hover {
+      background: #C8E6C9;
+      border-color: #43A047;
+    }
+
+    /* Negative chips - Zest Red */
+    #negativeChips .chip.selected {
+      background: #FFEBEE;
+      border-color: #F44336;
+      color: #C62828;
+    }
+
+    #negativeChips .chip.selected:hover {
+      background: #FFCDD2;
+      border-color: #E53935;
+    }
+
+    /* Zest Textarea Styles */
+    .comment-textarea {
+      width: 100%;
+      min-height: 80px;
+      padding: 12px;
+      border: 1.5px solid var(--color-divider);
+      border-radius: 8px;
+      font-family: 'Roboto', sans-serif;
+      font-size: 14px;
+      line-height: 20px;
+      resize: vertical;
+      transition: border-color 0.2s;
+      box-sizing: border-box;
+    }
+
+    .comment-textarea:focus {
+      outline: none;
+      border-color: #232323;
+    }
+
+    .comment-textarea::placeholder {
+      color: #999;
+    }
+
+    .cta-footer {
+      padding: 16px;
+      background: #efe9de;
+      border-top: 1px solid var(--color-divider);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      flex-shrink: 0;
+      position: sticky;
+      bottom: 0;
+      z-index: 10;
+      width: 100%;
+    }
+
+    /* Zest Button Styles */
+    .submit-button {
+      width: 100%;
+      max-width: 343px;
+      height: 40px;
+      background: #232323;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-family: 'Roboto', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      color: white;
+      line-height: 24px;
+      transition: background 0.2s;
+    }
+
+    .submit-button:disabled {
+      background: var(--color-button-brand-bg-disabled);
+      cursor: not-allowed;
+    }
+
+    .submit-button:not(:disabled):hover {
+      background: #404040;
+    }
+
+    /* Zest Text Link Styles */
+    .skip-button {
+      background: transparent;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      font-family: 'Roboto', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      line-height: 20px;
+      color: #232323;
+      text-decoration: underline;
+      margin-bottom: 8px;
+    }
+
+    .skip-button:hover {
+      opacity: 0.8;
+    }
+
+    /* Header Styles */
+    .cooking-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--color-divider);
+      background: white;
+      flex-shrink: 0;
+    }
+
+    .header-button {
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      padding: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .header-title-button {
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .header-title {
+      font-family: 'Roboto', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      color: #232323;
+    }
+
+    /* Cooking Step Styles */
+    .cooking-step-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background: var(--color-page-bg);
+    }
+
+    .cooking-scrollable {
+      flex: 1;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .step-image {
+      width: 100%;
+      height: 240px;
+      object-fit: cover;
+      flex-shrink: 0;
+    }
+
+    .step-content {
+      padding: 24px;
+      flex: 1;
+    }
+
+    .step-badge {
+      display: inline-block;
+      background: #232323;
+      border-radius: 4px;
+      padding: 4px 8px;
+      margin-bottom: 12px;
+    }
+
+    .step-badge-text {
+      font-family: 'Roboto', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      color: white;
+    }
+
+    .step-title {
+      font-family: 'Roboto', sans-serif;
+      font-size: 24px;
+      font-weight: 700;
+      line-height: 28px;
+      color: #232323;
+      margin: 0 0 16px;
+    }
+
+    .step-instructions {
+      font-family: 'Roboto', sans-serif;
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 24px;
+      color: #232323;
+      margin: 0;
+    }
+
+    .cooking-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 24px 32px;
+      border-top: 1px solid var(--color-divider);
+      background: white;
+      flex-shrink: 0;
+    }
+
+    .nav-button-circle {
+      width: 48px;
+      height: 48px;
+      background: transparent;
+      border: 1px solid #232323;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+
+    .nav-button-circle:hover {
+      background: #f5f5f5;
+    }
+
+    .nav-button-circle:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+
+    .mic-button {
+      width: 56px;
+      height: 56px;
+      background: #232323;
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+
+    .mic-button:hover {
+      background: #404040;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    /* ========================================
+       Page Entry Animation Styles
+       ======================================== */
+
+    .page-enter-element {
+      opacity: 0;
+      will-change: transform, opacity;
+    }
+
+    .page-enter-element.animate-in-image {
+      animation-name: pageEnterImage;
+      animation-duration: var(--image-duration, 500ms);
+      animation-timing-function: var(--image-easing, ease-out);
+      animation-delay: var(--image-delay, 0ms);
+      animation-fill-mode: forwards;
+    }
+
+    .page-enter-element.animate-in-title {
+      animation-name: pageEnterTitle;
+      animation-duration: var(--title-duration, 400ms);
+      animation-timing-function: var(--title-easing, ease-out);
+      animation-delay: var(--title-delay, 150ms);
+      animation-fill-mode: forwards;
+    }
+
+    .page-enter-element.animate-in-stars {
+      animation-name: pageEnterStars;
+      animation-duration: var(--stars-duration, 300ms);
+      animation-timing-function: var(--stars-easing, ease-out);
+      animation-delay: var(--stars-delay, 300ms);
+      animation-fill-mode: forwards;
+    }
+
+    .page-enter-element.animate-in-upload {
+      animation-name: pageEnterUpload;
+      animation-duration: 400ms;
+      animation-timing-function: ease-out;
+      animation-delay: 450ms;
+      animation-fill-mode: forwards;
+    }
+
+    @keyframes pageEnterUpload {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .page-enter-element.animate-in-header {
+      animation-name: pageEnterHeader;
+      animation-duration: 300ms;
+      animation-timing-function: ease-out;
+      animation-delay: 0ms;
+      animation-fill-mode: forwards;
+    }
+
+    @keyframes pageEnterImage {
+      from {
+        opacity: var(--image-opacity-start, 0);
+        width: 100%;
+        height: 240px;
+        border-radius: 0;
+        transform:
+          translateY(var(--image-ty, -20px))
+          translateX(var(--image-tx, 0px))
+          scale(var(--image-scale, 1));
+      }
+      to {
+        opacity: 1;
+        width: 160px;
+        height: 160px;
+        border-radius: 50%;
+        transform: translateY(0) translateX(0) scale(1);
+      }
+    }
+
+    @keyframes pageEnterTitle {
+      from {
+        opacity: var(--title-opacity-start, 0);
+        transform:
+          translateY(var(--title-ty, 10px))
+          translateX(var(--title-tx, 0px))
+          scale(var(--title-scale, 1));
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) translateX(0) scale(1);
+      }
+    }
+
+    @keyframes pageEnterStars {
+      from {
+        opacity: var(--stars-opacity-start, 0);
+        transform:
+          translateY(var(--stars-ty, 0px))
+          translateX(var(--stars-tx, 0px))
+          scale(var(--stars-scale, 0.8));
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) translateX(0) scale(1);
+      }
+    }
+
+    @keyframes pageEnterHeader {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Individual star staggering */
+    .stars-container .star {
+      opacity: 0;
+      animation: pageEnterStars var(--stars-duration, 300ms) var(--stars-easing, ease-out) forwards;
+    }
+
+    /* ========================================
+       Animation Control Panel Styles
+       ======================================== */
+
+    /* Accessibility: Reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+      .page-enter-element,
+      .star {
+        animation-duration: 0.01ms !important;
+        animation-delay: 0s !important;
+      }
+    }
+
+    /* ========================================
+       Camera Interface Styles
+       ======================================== */
+
+    .camera-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #000;
+      display: flex;
+      flex-direction: column;
+      z-index: 1000;
+    }
+
+    .camera-container.hidden {
+      display: none;
+    }
+
+    .camera-container .cooking-header {
+      background: rgba(0, 0, 0, 0.8);
+      border-bottom: none;
+    }
+
+    .camera-container .header-title {
+      color: white;
+    }
+
+    .camera-container .header-button svg path {
+      stroke: white;
+    }
+
+    .camera-view {
+      flex: 1;
+      position: relative;
+      overflow: hidden;
+      background: #000;
+    }
+
+    #cameraVideo {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .camera-controls {
+      padding: 32px 16px;
+      background: #000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .capture-button {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      border: 4px solid white;
+      background: transparent;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.1s;
+    }
+
+    .capture-button:active {
+      transform: scale(0.95);
+    }
+
+    .capture-button-inner {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: white;
+    }
+
+    /* Live Camera Feed Simulation */
+    .camera-live-view {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-size: cover;
+      background-position: center;
+      animation: breathing 3s ease-in-out infinite;
+    }
+
+    @keyframes breathing {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.03); }
+    }
+
+    /* Mode Overlay Container */
+    .mode-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      transition: all 0.5s ease;
+    }
+
+    /* AI Modes Container */
+    .ai-modes-container {
+      position: absolute;
+      bottom: 110px;
+      left: 0;
+      right: 0;
+      padding: 0 16px;
+      z-index: 10;
+    }
+
+    .ai-modes-selector {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-radius: 24px;
+      padding: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .mode-button {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      padding: 12px 20px;
+      background: transparent;
+      border: 2px solid transparent;
+      border-radius: 16px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      min-width: 80px;
+    }
+
+    .mode-button:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .mode-button.active {
+      background: rgba(255, 255, 255, 0.25);
+      border-color: rgba(255, 255, 255, 0.6);
+      box-shadow: 0 4px 12px rgba(255, 255, 255, 0.2);
+    }
+
+    .mode-icon {
+      font-size: 28px;
+      line-height: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+    }
+
+    .mode-button span {
+      font-size: 11px;
+      color: white;
+      font-weight: 600;
+      font-family: -apple-system, sans-serif;
+      text-align: center;
+    }
+
+    /* Restaurant Mode Overlay */
+    .restaurant-overlay {
+      background: radial-gradient(circle at center,
+        transparent 30%,
+        rgba(255, 180, 120, 0.12) 60%,
+        rgba(200, 140, 80, 0.25) 100%);
+      box-shadow: inset 0 0 150px rgba(0, 0, 0, 0.4);
+      animation: warmGlow 2s ease-in-out infinite alternate;
+    }
+
+    @keyframes warmGlow {
+      0% { filter: brightness(1); }
+      100% { filter: brightness(1.08); }
+    }
+
+    /* Pro Foodie Mode Overlay */
+    .foodie-guides {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .foodie-circle {
+      width: 260px;
+      height: 260px;
+      border: 3px solid rgba(255, 255, 255, 0.8);
+      border-radius: 50%;
+      box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.5),
+                  0 0 40px rgba(255, 255, 255, 0.3);
+      animation: pulseCircle 2s ease-in-out infinite;
+    }
+
+    @keyframes pulseCircle {
+      0%, 100% { transform: scale(1); opacity: 0.8; }
+      50% { transform: scale(1.02); opacity: 1; }
+    }
+
+    .foodie-grid {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    .foodie-grid-line {
+      position: absolute;
+      background: rgba(255, 255, 255, 0.3);
+    }
+
+    .foodie-grid-line.horizontal {
+      width: 100%;
+      height: 1px;
+    }
+
+    .foodie-grid-line.vertical {
+      width: 1px;
+      height: 100%;
+    }
+
+    .foodie-tip {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(10px);
+      padding: 8px 16px;
+      border-radius: 20px;
+      color: white;
+      font-size: 13px;
+      font-weight: 500;
+      white-space: nowrap;
+    }
+
+    /* Layout Mode Overlay - Photo Collage */
+    .layout-overlay {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 20px;
+      background: rgba(0, 0, 0, 0.3);
+    }
+
+    .layout-collage {
+      display: flex;
+      gap: 8px;
+      width: 100%;
+      max-width: 380px;
+      height: 400px;
+    }
+
+    .layout-side {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .layout-center {
+      flex: 2;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .layout-frame {
+      background-size: cover;
+      background-position: center;
+      border-radius: 12px;
+      border: 3px solid white;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+      animation: frameGlow 2s ease-in-out infinite alternate;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .layout-frame::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 50%);
+    }
+
+    .layout-frame.small {
+      flex: 1;
+      min-height: 0;
+    }
+
+    .layout-frame.large {
+      width: 100%;
+      height: 100%;
+    }
+
+    @keyframes frameGlow {
+      0% { box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4); }
+      100% { box-shadow: 0 4px 20px rgba(255, 255, 255, 0.3); }
+    }
+
+    .layout-label {
+      position: absolute;
+      bottom: 8px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(10px);
+      padding: 6px 12px;
+      border-radius: 12px;
+      color: white;
+      font-size: 11px;
+      font-weight: 600;
+      white-space: nowrap;
+      font-family: -apple-system, sans-serif;
+    }
+
+    /* AI Processing Indicator */
+    .ai-processing {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(0, 0, 0, 0.9);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      padding: 20px 32px;
+      border-radius: 24px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      z-index: 100;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+    }
+
+    .ai-processing.hidden {
+      display: none;
+    }
+
+    .processing-spinner {
+      width: 24px;
+      height: 24px;
+      border: 3px solid rgba(255, 255, 255, 0.2);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .processing-text {
+      color: white;
+      font-size: 15px;
+      font-weight: 600;
+      font-family: -apple-system, sans-serif;
+    }
+
+    .photo-preview {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #000;
+      display: flex;
+      flex-direction: column;
+      z-index: 1001;
+    }
+
+    .photo-preview.hidden {
+      display: none;
+    }
+
+    .photo-preview-content {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 80px 16px 120px;
+    }
+
+    #previewImage {
+      width: 280px;
+      height: 280px;
+      object-fit: cover;
+      border-radius: 16px;
+    }
+
+    .preview-controls {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 16px;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(10px);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .preview-button {
+      width: 100%;
+      padding: 16px 24px;
+      border-radius: 8px;
+      font-family: 'Roboto', sans-serif;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s ease;
+      text-align: center;
+    }
+
+    .preview-button:active {
+      transform: scale(0.98);
+    }
+
+    .preview-button.primary {
+      background: #067a46;
+      color: white;
+    }
+
+    .preview-button.primary:hover {
+      background: #055a33;
+    }
+
+    .preview-button.secondary {
+      background: transparent;
+      color: white;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .preview-button.secondary:hover {
+      border-color: rgba(255, 255, 255, 0.5);
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    /* ========================================
+       Celebration Screen Styles
+       ======================================== */
+
+    .celebration-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--color-page-bg);
+      display: flex;
+      flex-direction: column;
+      z-index: 500;
+      overflow: hidden;
+    }
+
+    .celebration-container.hidden {
+      display: none;
+    }
+
+    .celebration-header {
+      opacity: 0;
+      transition: opacity 0.3s ease-in-out;
+      border-bottom: none !important;
+    }
+
+    .celebration-header:not(.hidden) {
+      opacity: 1;
+    }
+
+    .celebration-content {
+      flex: 1;
+      width: 100%;
+      display: flex;
+      align-items: flex-start;
+      justify-content: flex-start;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .confetti-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 10;
+    }
+
+    .confetti-piece {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      border-radius: 2px;
+      animation: confettiFall 3s linear forwards;
+    }
+
+    @keyframes confettiFall {
+      to {
+        transform: translateY(100vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    .celebration-emoji {
+      font-size: 120px;
+      animation: scaleIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+      margin-bottom: 24px;
+    }
+
+    .celebration-emoji-gif {
+      width: 120px;
+      height: 120px;
+      animation: scaleIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+      margin-bottom: 24px;
+    }
+
+    .celebration-title {
+      font-family: var(--font-headline);
+      font-size: 32px;
+      font-weight: 600;
+      color: #232323;
+      margin: 0;
+      animation: fadeIn 0.8s ease-out 0.3s both;
+    }
+
+    @keyframes scaleIn {
+      from {
+        transform: scale(0);
+        opacity: 0;
+      }
+      to {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    .celebration-phase-1,
+    .celebration-phase-3 {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      opacity: 1;
+      transition: opacity 0.5s ease-in-out;
+    }
+
+    .celebration-phase-1.hidden,
+    .celebration-phase-3.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .celebration-phase-3 {
+      padding: 0 0 40px 0;
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      background: white;
+      min-height: 100%;
+      margin: 0;
+    }
+
+    .celebration-phase-3 .mini-photo-container {
+      width: 100%;
+      height: 450px;
+      border-radius: 0;
+      overflow: hidden;
+      margin: 0;
+      padding: 0;
+      opacity: 0;
+      transform: scale(1);
+      flex-shrink: 0;
+      display: block;
+    }
+
+    .celebration-phase-3 .mini-photo-container.animate-in {
+      animation: celebrationPhotoIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    }
+
+    .celebration-phase-3 .mini-photo {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      margin: 0;
+      padding: 0;
+      border: none;
+    }
+
+    .celebration-phase-3 .celebration-titles {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      margin: 32px 16px 24px 16px;
+      opacity: 0;
+      transform: translateY(10px);
+    }
+
+    .celebration-phase-3 .celebration-titles.animate-in {
+      animation: celebrationTitlesIn 0.4s ease-out 0.2s forwards;
+    }
+
+    .celebration-phase-3 .celebration-main-title {
+      font-family: 'Roboto', sans-serif;
+      font-size: 20px;
+      font-weight: 700;
+      line-height: 24px;
+      color: #232323;
+      margin: 0;
+      text-align: center;
+    }
+
+    .celebration-phase-3 .celebration-subtitle {
+      font-family: 'Roboto', sans-serif;
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 20px;
+      color: #666666;
+      margin: 0;
+      text-align: center;
+    }
+
+    .celebration-stars {
+      display: flex;
+      gap: 8px;
+      opacity: 0;
+      transform: scale(0.9);
+      padding: 0 16px;
+    }
+
+    .celebration-stars.animate-in {
+      animation: celebrationStarsIn 0.3s ease-out 0.4s forwards;
+    }
+
+    @keyframes celebrationPhotoIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
+    @keyframes celebrationTitlesIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes celebrationStarsIn {
+      from {
+        opacity: 0;
+        transform: scale(0.9);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    /* ========================================
+       Success Screen Styles
+       ======================================== */
+
+    .success-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--color-page-bg);
+      display: flex;
+      flex-direction: column;
+      z-index: 600;
+    }
+
+    .success-container.hidden {
+      display: none;
+    }
+
+    .success-scrollable {
+      flex: 1;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .header-icon-button {
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      padding: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      transition: background 0.2s;
+    }
+
+    .header-icon-button:hover {
+      background: rgba(0, 0, 0, 0.05);
+    }
+
+    .header-icon-button:active {
+      transform: scale(0.95);
+    }
+
+    .success-message {
+      padding: 32px 24px 24px;
+      text-align: center;
+    }
+
+    .success-title {
+      font-family: var(--font-headline);
+      font-size: 20px;
+      font-weight: 600;
+      line-height: 24px;
+      color: #232323;
+      margin: 0 0 8px;
+    }
+
+    .success-subtitle {
+      font-family: 'Roboto', sans-serif;
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 20px;
+      color: #666666;
+      margin: 0;
+    }
+
+    .photo-gallery-container {
+      padding: 0 0 24px;
+    }
+
+    .photo-gallery {
+      display: flex;
+      gap: 16px;
+      overflow-x: auto;
+      padding: 0 24px;
+      scroll-snap-type: x mandatory;
+      scroll-padding-left: 24px;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+
+    .photo-gallery::-webkit-scrollbar {
+      display: none;
+    }
+
+    .photo-card {
+      flex-shrink: 0;
+      width: 280px;
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      scroll-snap-align: start;
+    }
+
+    .photo-card-image-container {
+      position: relative;
+      width: 100%;
+      height: 280px;
+      background: #f5f5f5;
+    }
+
+    .photo-card-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .photo-card-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .photo-card-placeholder:hover {
+      background: linear-gradient(135deg, #e8e8e8 0%, #dddddd 100%);
+    }
+
+    .photo-placeholder-icon {
+      width: 48px;
+      height: 48px;
+      margin-bottom: 12px;
+      opacity: 0.4;
+    }
+
+    .photo-placeholder-text {
+      font-family: 'Roboto', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      color: #999999;
+    }
+
+    .photo-card-menu {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      width: 32px;
+      height: 32px;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(8px);
+      border: none;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      z-index: 10;
+    }
+
+    .photo-card-menu:hover {
+      background: rgba(0, 0, 0, 0.8);
+      transform: scale(1.1);
+    }
+
+    .photo-card-menu:active {
+      transform: scale(0.95);
+    }
+
+    .photo-card-content {
+      padding: 16px;
+    }
+
+    .photo-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .photo-card-user {
+      font-family: 'Roboto', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      color: #232323;
+    }
+
+    .photo-card-date {
+      font-family: 'Roboto', sans-serif;
+      font-size: 12px;
+      font-weight: 400;
+      color: #999999;
+    }
+
+    .photo-card-rating {
+      display: flex;
+      gap: 4px;
+      margin-bottom: 8px;
+    }
+
+    .rating-star {
+      width: 16px;
+      height: 16px;
+    }
+
+    .photo-card-comment {
+      font-family: 'Roboto', sans-serif;
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 20px;
+      color: #666666;
+      margin: 0;
+    }
+
+    .view-more-card {
+      flex-shrink: 0;
+      width: 280px;
+      height: 380px;
+      background: linear-gradient(135deg, #067a46 0%, #055a33 100%);
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+      scroll-snap-align: start;
+    }
+
+    .view-more-card:hover {
+      transform: translateY(-4px);
+    }
+
+    .view-more-card:active {
+      transform: translateY(-2px);
+    }
+
+    .view-more-icon {
+      width: 48px;
+      height: 48px;
+      margin-bottom: 16px;
+      color: white;
+    }
+
+    .view-more-text {
+      font-family: 'Roboto', sans-serif;
+      font-size: 18px;
+      font-weight: 600;
+      color: white;
+      text-align: center;
+    }
+
+    .view-more-count {
+      font-family: 'Roboto', sans-serif;
+      font-size: 14px;
+      font-weight: 400;
+      color: rgba(255, 255, 255, 0.8);
+      margin-top: 8px;
+    }
+
+    .success-actions {
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      margin-top: 32px;
+    }
+
+    .action-button {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: #232323;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      color: white;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .action-button:hover {
+      background: #000000;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .action-button:active {
+      transform: translateY(0);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    }
+  </style>
+</head>
+<body>
+  <div class="phone-frame">
+    <!-- Lottie burst animations -->
+    <div class="lottie-burst" id="lottieBurstStar"></div>
+    <div class="lottie-burst" id="lottieBurstHeart"></div>
+    <!-- Cooking Step Screen -->
+    <div class="cooking-step-container" id="cookingStep">
+      <!-- Header -->
+      <div class="cooking-header">
+        <button class="header-button" onclick="goBack()">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <path d="M15 6L9 12L15 18" stroke="#232323" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+
+        <button class="header-title-button">
+          <span class="header-title">Step 6 of 6</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+            <path d="M6 9l6 6 6-6" stroke="#232323" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+
+        <button class="header-button">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <path d="M3 6h18M3 12h18M3 18h18" stroke="#232323" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
+
+      <div class="cooking-scrollable">
+        <!-- Step Image -->
+        <img
+          src="recipes/HelloFresh Main Image.jpg"
+          alt="Plate and serve"
+          class="step-image"
+        />
+
+        <!-- Step Instructions -->
+        <div class="step-content">
+          <div class="step-badge">
+            <span class="step-badge-text">Step 6</span>
+          </div>
+
+          <h3 class="step-title">Plate and serve</h3>
+
+          <p class="step-instructions">
+            Slice the protein and arrange on plates. Add the sautéed vegetables alongside. Garnish with fresh herbs and serve immediately.
+          </p>
+        </div>
+      </div>
+
+      <!-- Navigation Footer -->
+      <div class="cooking-footer">
+        <button class="nav-button-circle" onclick="goBack()">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <path d="M15 6L9 12L15 18" stroke="#232323" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+
+        <!-- Mic Button -->
+        <button class="mic-button" onclick="transitionToRating()">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M19 10v2a7 7 0 01-14 0v-2M12 19v4M8 23h8" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+
+        <button class="nav-button-circle" onclick="transitionToRating()">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M6 4L10 8L6 12" stroke="#232323" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Celebration Screen -->
+    <div class="celebration-container hidden" id="celebrationContainer">
+      <!-- Header (visible only in phase 3) -->
+      <div class="cooking-header celebration-header hidden" id="celebrationHeader">
+        <button class="header-button" onclick="backToCooking()">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <path d="M15 6L9 12L15 18" stroke="#232323" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+
+        <button class="header-title-button">
+          <span class="header-title">Rate your meal</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+            <path d="M6 9l6 6 6-6" stroke="#232323" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+
+        <div style="width: 40px;"></div>
+      </div>
+
+      <div class="celebration-content">
+        <!-- Confetti Container -->
+        <div class="confetti-container" id="confettiContainer"></div>
+
+        <!-- Phase 1: Chef GIF and title -->
+        <div class="celebration-phase-1" id="celebrationPhase1">
+          <img src="Emoji With Chef Hat.gif" alt="Chef" class="celebration-emoji-gif" />
+          <h1 class="celebration-title">Well done, chef!</h1>
+        </div>
+
+        <!-- Phase 2: Rating interface -->
+        <div class="celebration-phase-3 hidden" id="celebrationPhase3">
+          <div class="mini-photo-container">
+            <img src="recipes/HelloFresh Main Image.jpg" alt="Recipe" class="mini-photo" />
+          </div>
+          <div class="celebration-titles">
+            <h2 class="celebration-main-title">How was the meal?</h2>
+            <p class="celebration-subtitle">Share your kitchen success!</p>
+          </div>
+          <div class="celebration-stars" id="celebrationStars"></div>
+
+          <!-- Photo Upload Prompt -->
+          <div style="padding: 0 16px;">
+            <div class="photo-upload-prompt" onclick="openCamera()" style="margin-top: 24px; opacity: 1;">
+              <div class="photo-upload-icon">
+                <img src="camera.png" alt="Camera">
+              </div>
+              <div class="photo-upload-text">
+                <div class="photo-upload-title">Add a photo of your meal</div>
+                <div class="photo-upload-subtitle">Share your creation with the community</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Rating Screen -->
+    <div class="rating-container hidden" id="ratingContainer">
+      <!-- Header -->
+      <div class="cooking-header page-enter-element" data-element="header">
+        <button class="header-button" onclick="backToCooking()">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <path d="M15 6L9 12L15 18" stroke="#232323" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+
+        <button class="header-title-button">
+          <span class="header-title">Rate your meal</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+            <path d="M6 9l6 6 6-6" stroke="#232323" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+
+        <div style="width: 40px;"></div>
+      </div>
+
+      <div class="rating-scrollable">
+        <!-- Food Image with Emoji Badge -->
+        <div class="rating-image-container page-enter-element" data-element="image">
+          <img
+            src="recipes/HelloFresh Main Image.jpg"
+            alt="Cheddar-Crusted Chicken"
+            class="rating-image"
+          />
+
+          <!-- Emoji Badge in Corner -->
+          <div class="emoji-badge">
+            <img src="" alt="rating emoji" />
+          </div>
+        </div>
+
+        <!-- Rating Content -->
+        <div class="rating-content">
+          <div class="rating-top-section">
+            <!-- Recipe name header -->
+            <div class="rating-titles page-enter-element" data-element="title">
+              <h2 class="recipe-name">How was the meal?</h2>
+              <p class="rating-subtitle">Share your kitchen success!</p>
+            </div>
+
+            <!-- Star rating - clickable -->
+            <div class="stars-container page-enter-element" data-element="stars" id="starsContainer">
+              <!-- Stars will be generated by JS -->
+            </div>
+          </div>
+
+          <!-- Photo Upload Prompt -->
+          <div class="photo-upload-prompt page-enter-element" data-element="upload" onclick="openCamera()">
+            <div class="photo-upload-icon">
+              <img src="camera.png" alt="Camera">
+            </div>
+            <div class="photo-upload-text">
+              <div class="photo-upload-title">Add a photo of your meal</div>
+              <div class="photo-upload-subtitle">Share your creation with the community</div>
+            </div>
+          </div>
+
+          <!-- Feedback Section - Only show when rating is selected -->
+          <div class="feedback-section" id="feedbackSection" style="display: none; margin-top: 24px;">
+        <!-- Positive feedback section -->
+        <div style="display: flex; flex-direction: column; gap: 8px;" id="positiveFeedbackSection">
+          <button class="feedback-header" id="positiveFeedbackHeader">
+            <span class="feedback-title">What worked for you?</span>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" class="chevron expanded" id="positiveChevron">
+              <path d="M4 6l4 4 4-4" stroke="#232323" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+
+          <div class="chips-container" id="positiveChips">
+            <!-- Chips will be generated by JS -->
+          </div>
+        </div>
+
+        <!-- Negative feedback section -->
+        <div style="display: flex; flex-direction: column; gap: 8px;" id="negativeFeedbackSection">
+          <button class="feedback-header" id="negativeFeedbackHeader">
+            <span class="feedback-title">What could be better?</span>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" class="chevron" id="negativeChevron">
+              <path d="M4 6l4 4 4-4" stroke="#232323" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+
+          <div class="chips-container" id="negativeChips" style="display: none;">
+            <!-- Chips will be generated by JS -->
+          </div>
+        </div>
+
+        <!-- Comment textarea -->
+        <div style="display: flex; flex-direction: column;" id="commentSection">
+          <textarea
+            id="comment"
+            class="comment-textarea"
+            placeholder="How can we make it better?"
+          ></textarea>
+        </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sticky CTA Footer -->
+      <div class="cta-footer">
+        <button class="submit-button" id="submitButton" disabled>
+          Submit rating
+        </button>
+
+        <button class="skip-button">
+          Skip for now
+        </button>
+      </div>
+    </div>
+
+    <!-- Camera Interface -->
+    <div class="camera-container hidden" id="cameraContainer">
+      <!-- Camera Header -->
+      <div class="cooking-header">
+        <button class="header-button" onclick="closeCamera()">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <path d="M15 6L9 12L15 18" stroke="#232323" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+
+        <span class="header-title">Take a photo</span>
+
+        <div style="width: 40px;"></div>
+      </div>
+
+      <!-- Camera View -->
+      <div class="camera-view" id="cameraView">
+        <!-- Live view will be dynamically inserted here -->
+        <video id="cameraVideo" autoplay playsinline style="display: none;"></video>
+        <canvas id="cameraCanvas" style="display: none;"></canvas>
+
+        <!-- Mode Overlay Container -->
+        <div class="mode-overlay" id="modeOverlay"></div>
+
+        <!-- AI Processing Indicator -->
+        <div class="ai-processing hidden" id="aiProcessing">
+          <div class="processing-spinner"></div>
+          <span class="processing-text">AI enhancing...</span>
+        </div>
+      </div>
+
+      <!-- AI Enhancement Modes -->
+      <div class="ai-modes-container" id="aiModesContainer">
+        <div class="ai-modes-selector">
+          <button class="mode-button active" data-mode="restaurant" onclick="setActiveMode('restaurant')">
+            <div class="mode-icon">
+              <img src="plate.png" alt="Restaurant" style="width: 32px; height: 32px; object-fit: contain;">
+            </div>
+            <span>Restaurant</span>
+          </button>
+          <button class="mode-button" data-mode="foodie" onclick="setActiveMode('foodie')">
+            <div class="mode-icon">
+              <img src="light.png" alt="Pro Foodie" style="width: 32px; height: 32px; object-fit: contain;">
+            </div>
+            <span>Pro Foodie</span>
+          </button>
+          <button class="mode-button" data-mode="layout" onclick="setActiveMode('layout')">
+            <div class="mode-icon">
+              <img src="camera.png" alt="Layout" style="width: 32px; height: 32px; object-fit: contain;">
+            </div>
+            <span>Layout</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Camera Controls -->
+      <div class="camera-controls">
+        <button class="capture-button" id="captureButton" onclick="capturePhoto()">
+          <div class="capture-button-inner"></div>
+        </button>
+      </div>
+
+      <!-- Photo Preview -->
+      <div class="photo-preview hidden" id="photoPreview">
+        <div class="photo-preview-content">
+          <img id="previewImage" src="" alt="Captured photo" />
+        </div>
+        <div class="preview-controls">
+          <button class="preview-button primary" onclick="usePhoto()">
+            Use photo
+          </button>
+          <button class="preview-button secondary" onclick="retakePhoto()">
+            Take again
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Success Screen -->
+    <div class="success-container hidden" id="successContainer">
+      <!-- Header -->
+      <div class="cooking-header">
+        <button class="header-button" onclick="closeSuccess()">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <path d="M6 18L18 6M6 6l12 12" stroke="#232323" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+
+        <button class="header-title-button">
+          <span class="header-title">Your review</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+            <path d="M6 9l6 6 6-6" stroke="#232323" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+
+        <div style="width: 40px;"></div>
+      </div>
+
+      <div class="success-scrollable">
+        <!-- Success Message -->
+        <div class="success-message">
+          <h2 class="success-title">Thanks for sharing your thoughts!</h2>
+          <p class="success-subtitle">Your feedback helps others choose their next meal. See what they think.</p>
+        </div>
+
+        <!-- Photo Gallery -->
+        <div class="photo-gallery-container">
+          <div class="photo-gallery" id="photoGallery">
+            <!-- User's photo card (will be added dynamically) -->
+            <!-- Community photo cards (will be added dynamically) -->
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="success-actions">
+          <button class="action-button" onclick="shareReview()">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <path d="M4 12V20C4 20.5304 4.21071 21.0391 4.58579 21.4142C4.96086 21.7893 5.46957 22 6 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M16 6L12 2L8 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M12 2V15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+          <button class="action-button" onclick="saveRecipe()">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <path d="M19 21L12 16L5 21V5C5 4.46957 5.21071 3.96086 5.58579 3.58579C5.96086 3.21071 6.46957 3 7 3H17C17.5304 3 18.0391 3.21071 18.4142 3.58579C18.7893 3.96086 19 4.46957 19 5V21Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <script>
+    const state = {
+      userRating: 0,
+      selectedPositiveChips: new Set(),
+      selectedNegativeChips: new Set(),
+      isPositiveFeedbackExpanded: true,
+      isNegativeFeedbackExpanded: false,
+      currentScreen: 'cooking', // 'cooking' or 'rating'
+      animatingEmoji: false, // Prevent multiple animations
+      userUploadedPhoto: false, // Track if user went through camera flow
+    };
+
+    function transitionToRating() {
+      const cookingStep = document.getElementById('cookingStep');
+      const celebrationContainer = document.getElementById('celebrationContainer');
+      const celebrationHeader = document.getElementById('celebrationHeader');
+      const phase1 = document.getElementById('celebrationPhase1');
+      const phase3 = document.getElementById('celebrationPhase3');
+
+      // Hide cooking step and show celebration
+      cookingStep.classList.add('hidden');
+      celebrationContainer.classList.remove('hidden');
+
+      // Trigger confetti
+      createConfetti();
+
+      // Phase 1: Show emoji and title (2 seconds)
+      phase1.classList.remove('hidden');
+
+      // Phase 2: Directly transition to rating interface (after 2s)
+      setTimeout(() => {
+        phase1.classList.add('hidden');
+        phase3.classList.remove('hidden');
+
+        // Show header for celebration rating screen
+        celebrationHeader.classList.remove('hidden');
+
+        // Generate stars
+        generateCelebrationStars();
+
+        // Trigger entrance animations for phase 3 elements
+        setTimeout(() => {
+          const miniPhotoContainer = document.querySelector('.mini-photo-container');
+          const celebrationTitles = document.querySelector('.celebration-titles');
+          const celebrationStars = document.querySelector('.celebration-stars');
+
+          if (miniPhotoContainer) miniPhotoContainer.classList.add('animate-in');
+          if (celebrationTitles) celebrationTitles.classList.add('animate-in');
+          if (celebrationStars) celebrationStars.classList.add('animate-in');
+        }, 50);
+      }, 2000);
+
+      // After rating on celebration screen, go to full rating screen
+      // This happens when user clicks a star
+    }
+
+    function createConfetti() {
+      const container = document.getElementById('confettiContainer');
+      container.innerHTML = '';
+      const colors = ['#FFD54F', '#4caf50', '#ff6b6b', '#2196f3', '#ff9800', '#9c27b0'];
+
+      for (let i = 0; i < 30; i++) {
+        const confetti = document.createElement('div');
+        confetti.className = 'confetti-piece';
+        confetti.style.left = `${Math.random() * 100}%`;
+        confetti.style.top = '-10px';
+        confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+        confetti.style.animationDelay = `${Math.random() * 500}ms`;
+        confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
+        container.appendChild(confetti);
+      }
+
+      // Clear confetti after animation
+      setTimeout(() => {
+        container.innerHTML = '';
+      }, 4000);
+    }
+
+    function generateCelebrationStars() {
+      const container = document.getElementById('celebrationStars');
+      container.innerHTML = '';
+
+      for (let i = 1; i <= 5; i++) {
+        // Create SVG star element
+        const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        svg.setAttribute('width', '40');
+        svg.setAttribute('height', '40');
+        svg.setAttribute('viewBox', '0 0 24 24');
+        svg.setAttribute('fill', 'none');
+        svg.style.cursor = 'pointer';
+        svg.style.transition = 'transform 0.2s ease';
+
+        const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        path.setAttribute('d', 'M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z');
+        path.setAttribute('fill', '#E0E0E0');
+        path.setAttribute('stroke', '#E0E0E0');
+        path.setAttribute('stroke-width', '1.5');
+        path.setAttribute('stroke-linejoin', 'round');
+
+        svg.appendChild(path);
+
+        // Add hover effect
+        svg.onmouseenter = () => {
+          svg.style.transform = 'scale(1.1)';
+        };
+        svg.onmouseleave = () => {
+          svg.style.transform = 'scale(1)';
+        };
+
+        // Add click handler to transition to full rating screen
+        svg.onclick = () => {
+          const celebrationContainer = document.getElementById('celebrationContainer');
+          const ratingContainer = document.getElementById('ratingContainer');
+
+          // Set the rating
+          state.userRating = i;
+          state.currentScreen = 'rating';
+
+          // Reset any previous animations
+          const headerElement = document.querySelector('[data-element="header"]');
+          const imageElement = document.querySelector('[data-element="image"]');
+          const titleElement = document.querySelector('[data-element="title"]');
+          const starsElement = document.querySelector('[data-element="stars"]');
+          const uploadElement = document.querySelector('[data-element="upload"]');
+
+          if (headerElement) headerElement.classList.remove('animate-in-header');
+          if (imageElement) imageElement.classList.remove('animate-in-image');
+          if (titleElement) titleElement.classList.remove('animate-in-title');
+          if (starsElement) starsElement.classList.remove('animate-in-stars');
+          if (uploadElement) uploadElement.classList.remove('animate-in-upload');
+
+          // Hide celebration, show rating screen
+          celebrationContainer.classList.add('hidden');
+          ratingContainer.classList.remove('hidden');
+
+          // Force scroll to top and trigger entrance animations
+          setTimeout(() => {
+            const ratingScrollable = document.querySelector('.rating-scrollable');
+            if (ratingScrollable) {
+              ratingScrollable.scrollTop = 0;
+              ratingScrollable.scrollTo({ top: 0, behavior: 'instant' });
+            }
+
+            // Trigger entrance animations for header, image, title, stars, and upload
+            if (headerElement) headerElement.classList.add('animate-in-header');
+            if (imageElement) imageElement.classList.add('animate-in-image');
+            if (titleElement) titleElement.classList.add('animate-in-title');
+            if (starsElement) starsElement.classList.add('animate-in-stars');
+            if (uploadElement) uploadElement.classList.add('animate-in-upload');
+          }, 50);
+
+          // Update all rating screen elements with the selected rating
+          updateStars();
+          updateSubtitle(i);
+          updateFeedbackSection();
+          updateSubmitButton();
+
+          // Show emoji badge with animation
+          setTimeout(() => {
+            animateEmojiToBadge(i);
+          }, 100);
+        };
+
+        container.appendChild(svg);
+      }
+    }
+
+    function backToCooking() {
+      const cookingStep = document.getElementById('cookingStep');
+      const ratingContainer = document.getElementById('ratingContainer');
+      const celebrationContainer = document.getElementById('celebrationContainer');
+      const phase1 = document.getElementById('celebrationPhase1');
+      const phase3 = document.getElementById('celebrationPhase3');
+
+      // Hide rating and celebration screens
+      ratingContainer.classList.add('hidden');
+      celebrationContainer.classList.add('hidden');
+
+      // Reset celebration phases and header
+      phase1.classList.add('hidden');
+      phase3.classList.add('hidden');
+      const celebrationHeader = document.getElementById('celebrationHeader');
+      if (celebrationHeader) {
+        celebrationHeader.classList.add('hidden');
+      }
+
+      // Reset celebration animations
+      const miniPhotoContainer = document.querySelector('.mini-photo-container');
+      const celebrationTitles = document.querySelector('.celebration-titles');
+      const celebrationStars = document.querySelector('.celebration-stars');
+
+      if (miniPhotoContainer) miniPhotoContainer.classList.remove('animate-in');
+      if (celebrationTitles) celebrationTitles.classList.remove('animate-in');
+      if (celebrationStars) celebrationStars.classList.remove('animate-in');
+
+      // Clear confetti
+      const confettiContainer = document.getElementById('confettiContainer');
+      if (confettiContainer) {
+        confettiContainer.innerHTML = '';
+      }
+
+      // Show cooking step
+      cookingStep.classList.remove('hidden');
+      state.currentScreen = 'cooking';
+
+      // Reset rating state
+      state.userRating = 0;
+
+      // Reset UI elements
+      resetSubtitle();
+      hideEmojiBadge();
+      updateStars();
+      updateFeedbackSection();
+      updateSubmitButton();
+
+      // Reset animations
+      const headerElement = document.querySelector('[data-element="header"]');
+      const imageElement = document.querySelector('[data-element="image"]');
+      const titleElement = document.querySelector('[data-element="title"]');
+      const starsElement = document.querySelector('[data-element="stars"]');
+      const uploadElement = document.querySelector('[data-element="upload"]');
+
+      if (headerElement) headerElement.classList.remove('animate-in-header');
+      if (imageElement) imageElement.classList.remove('animate-in-image');
+      if (titleElement) titleElement.classList.remove('animate-in-title');
+      if (starsElement) starsElement.classList.remove('animate-in-stars');
+      if (uploadElement) uploadElement.classList.remove('animate-in-upload');
+    }
+
+    function goBack() {
+      // In a full prototype, this would go to previous step
+      alert('This would go back to the previous cooking step');
+    }
+
+    const ratingTexts = {
+      5: 'Loved it!',
+      4: 'It was good!',
+      3: 'It was okay',
+      2: 'Nothing special',
+      1: 'Not for my taste'
+    };
+
+    const positiveOptions = [
+      { id: 1, label: 'Healthy' },
+      { id: 2, label: 'Clear instructions' },
+      { id: 3, label: 'Tasty / liked flavors' },
+      { id: 4, label: 'Easy to cook' },
+      { id: 5, label: 'Liked certain ingredient(s)' },
+      { id: 6, label: 'Fast to cook' },
+      { id: 7, label: 'Family / kid-friendly' },
+      { id: 8, label: 'Other' },
+    ];
+
+    const negativeOptions = [
+      { id: 1, label: 'Too bland' },
+      { id: 2, label: 'Too complicated' },
+      { id: 3, label: 'Took too long' },
+      { id: 4, label: 'Not enough portion' },
+      { id: 5, label: 'Didn\'t like ingredient(s)' },
+      { id: 6, label: 'Not healthy enough' },
+      { id: 7, label: 'Other' },
+    ];
+
+    function createStars() {
+      const container = document.getElementById('starsContainer');
+      for (let i = 1; i <= 5; i++) {
+        const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        svg.setAttribute('width', '40');
+        svg.setAttribute('height', '40');
+        svg.setAttribute('viewBox', '0 0 24 24');
+        svg.setAttribute('fill', 'none');
+        svg.classList.add('star');
+        svg.dataset.rating = i;
+
+        const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        path.setAttribute('d', 'M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z');
+        path.setAttribute('fill', '#E0E0E0');
+        path.setAttribute('stroke', '#E0E0E0');
+        path.setAttribute('stroke-width', '1.5');
+        path.setAttribute('stroke-linejoin', 'round');
+
+        svg.appendChild(path);
+        svg.addEventListener('click', () => handleStarClick(i));
+        container.appendChild(svg);
+      }
+    }
+
+    function handleStarClick(rating) {
+      // If clicking the same rating, remove it
+      if (state.userRating === rating) {
+        state.userRating = 0;
+        hideEmojiBadge();
+        resetSubtitle();
+      } else {
+        state.userRating = rating;
+        animateEmojiToBadge(rating);
+        updateSubtitle(rating);
+      }
+      updateStars();
+      updateFeedbackSection();
+      updateSubmitButton();
+    }
+
+    function updateSubtitle(rating) {
+      const subtitle = document.querySelector('.rating-subtitle');
+      if (subtitle && ratingTexts[rating]) {
+        subtitle.textContent = ratingTexts[rating];
+      }
+    }
+
+    function resetSubtitle() {
+      const subtitle = document.querySelector('.rating-subtitle');
+      if (subtitle) {
+        subtitle.textContent = 'Share your kitchen success!';
+      }
+    }
+
+    // Lottie animations instances
+    let starBurstAnim = null;
+    let heartBurstAnim = null;
+
+    // Initialize Lottie animations
+    function initLottieAnimations() {
+      const starBurstEl = document.getElementById('lottieBurstStar');
+      const heartBurstEl = document.getElementById('lottieBurstHeart');
+
+      // Star burst animation data (from Cascading effect 2.html)
+      const starJSON = {"nm":"Main Scene","h":512,"w":512,"meta":{"g":"@lottiefiles/creator 1.79.0"},"layers":[{"ty":4,"nm":"Star 10","sr":1,"st":0,"op":150,"ip":0,"hasMask":false,"ao":0,"ks":{"a":{"a":0,"k":[0,0]},"s":{"a":1,"k":[{"o":{"x":0.167,"y":0.167},"i":{"x":0.833,"y":0.833},"s":[95.961,95.961],"t":0},{"o":{"x":0.167,"y":0.167},"i":{"x":0.833,"y":0.833},"s":[183.394,183.394],"t":6},{"s":[61.783,61.783],"t":30}]},"sk":{"a":0,"k":0},"p":{"a":1,"k":[{"o":{"x":0.167,"y":0.167},"i":{"x":0.833,"y":0.833},"s":[256,256],"t":6},{"s":[189.213,120.019],"t":30}]},"r":{"a":0,"k":0},"sa":{"a":0,"k":0},"o":{"a":1,"k":[{"o":{"x":0.167,"y":0.167},"i":{"x":0.833,"y":0.833},"s":[0],"t":0},{"o":{"x":0.167,"y":0.167},"i":{"x":0.833,"y":0.833},"s":[100],"t":6},{"s":[0],"t":30}]}},"shapes":[{"ty":"sr","nm":"Star Shape 1","d":1,"ir":{"a":0,"k":10.25},"is":{"a":0,"k":0},"pt":{"a":0,"k":5},"p":{"a":0,"k":[0,0]},"or":{"a":0,"k":20.5},"os":{"a":0,"k":0},"r":{"a":0,"k":0},"sy":1},{"ty":"fl","nm":"Fill","c":{"a":0,"k":[1,0.914,0]},"r":1,"o":{"a":0,"k":100}}],"ind":1},{"ty":4,"nm":"Star 9","sr":1,"st":0,"op":150,"ip":0,"hasMask":false,"ao":0,"ks":{"a":{"a":0,"k":[0,0]},"s":{"a":1,"k":[{"o":{"x":0,"y":0},"i":{"x":0.36,"y":1},"s":[80.933,80.933],"t":0},{"o":{"x":0.22,"y":0.61},"i":{"x":1,"y":1},"s":[183.394,183.394],"t":6},{"s":[66.746,66.746],"t":30}]},"sk":{"a":0,"k":0},"p":{"a":1,"k":[{"o":{"x":0,"y":0},"i":{"x":0.36,"y":1},"s":[256,256],"t":0},{"o":{"x":0.22,"y":0.61},"i":{"x":1,"y":1},"s":[256,256],"t":6},{"s":[406.972,194.301],"t":30}]},"r":{"a":0,"k":0},"sa":{"a":0,"k":0},"o":{"a":1,"k":[{"o":{"x":0,"y":0},"i":{"x":0.36,"y":1},"s":[0],"t":0},{"o":{"x":0.22,"y":0.61},"i":{"x":1,"y":1},"s":[100],"t":6},{"s":[0],"t":30}]}},"shapes":[{"ty":"sr","nm":"Star Shape 1","d":1,"ir":{"a":0,"k":10.25},"is":{"a":0,"k":0},"pt":{"a":0,"k":5},"p":{"a":0,"k":[0,0]},"or":{"a":0,"k":20.5},"os":{"a":0,"k":0},"r":{"a":0,"k":0},"sy":1},{"ty":"fl","nm":"Fill","c":{"a":0,"k":[1,0.914,0]},"r":1,"o":{"a":0,"k":100}}],"ind":2},{"ty":4,"nm":"Star 8","sr":1,"st":0,"op":150,"ip":0,"hasMask":false,"ao":0,"ks":{"a":{"a":0,"k":[0,0]},"s":{"a":1,"k":[{"o":{"x":0,"y":0},"i":{"x":0.36,"y":1},"s":[80.933,80.933],"t":0},{"o":{"x":0.22,"y":0.61},"i":{"x":1,"y":1},"s":[183.394,183.394],"t":6},{"s":[51.855,51.855],"t":30}]},"sk":{"a":0,"k":0},"p":{"a":1,"k":[{"o":{"x":0,"y":0},"i":{"x":0.36,"y":1},"s":[256,256],"t":0},{"o":{"x":0.22,"y":0.61},"i":{"x":1,"y":1},"s":[256,256],"t":6},{"o":{"x":0.167,"y":0.167},"i":{"x":0.833,"y":0.833},"s":[140.37,325.567],"t":30},{"s":[141.37,325.567],"t":81}]},"r":{"a":0,"k":0},"sa":{"a":0,"k":0},"o":{"a":1,"k":[{"o":{"x":0,"y":0},"i":{"x":0.36,"y":1},"s":[0],"t":0},{"o":{"x":0.22,"y":0.61},"i":{"x":1,"y":1},"s":[100],"t":6},{"s":[0],"t":30}]}},"shapes":[{"ty":"sr","nm":"Star Shape 1","d":1,"ir":{"a":0,"k":10.25},"is":{"a":0,"k":0},"pt":{"a":0,"k":5},"p":{"a":0,"k":[0,0]},"or":{"a":0,"k":20.5},"os":{"a":0,"k":0},"r":{"a":0,"k":0},"sy":1},{"ty":"fl","nm":"Fill","c":{"a":0,"k":[1,0.914,0]},"r":1,"o":{"a":0,"k":100}}],"ind":3},{"ty":4,"nm":"Star 7","sr":1,"st":0,"op":150,"ip":0,"hasMask":false,"ao":0,"ks":{"a":{"a":0,"k":[0,0]},"s":{"a":1,"k":[{"o":{"x":0,"y":0},"i":{"x":0.36,"y":1},"s":[80.933,80.933],"t":0},{"o":{"x":0.22,"y":0.61},"i":{"x":1,"y":1},"s":[183.394,183.394],"t":6},{"s":[54.337,54.337],"t":30}]},"sk":{"a":0,"k":0},"p":{"a":1,"k":[{"o":{"x":0,"y":0},"i":{"x":0.36,"y":1},"s":[256,256],"t":0},{"o":{"x":0.22,"y":0.61},"i":{"x":1,"y":1},"s":[256,256],"t":6},{"o":{"x":0.167,"y":0.167},"i":{"x":0.833,"y":0.833},"s":[306.233,383.568],"t":30},{"s":[307.233,383.568],"t":81}]},"r":{"a":0,"k":0},"sa":{"a":0,"k":0},"o":{"a":1,"k":[{"o":{"x":0,"y":0},"i":{"x":0.36,"y":1},"s":[0],"t":0},{"o":{"x":0.22,"y":0.61},"i":{"x":1,"y":1},"s":[100],"t":6},{"s":[0],"t":30}]}},"shapes":[{"ty":"sr","nm":"Star Shape 1","d":1,"ir":{"a":0,"k":10.25},"is":{"a":0,"k":0},"pt":{"a":0,"k":5},"p":{"a":0,"k":[0,0]},"or":{"a":0,"k":20.5},"os":{"a":0,"k":0},"r":{"a":0,"k":0},"sy":1},{"ty":"fl","nm":"Fill","c":{"a":0,"k":[1,0.914,0]},"r":1,"o":{"a":0,"k":100}}],"ind":4},{"ty":4,"nm":"Star 6","sr":1,"st":0,"op":150,"ip":0,"hasMask":false,"ao":0,"ks":{"a":{"a":0,"k":[0,0]},"s":{"a":1,"k":[{"o":{"x":0,"y":0},"i":{"x":0.36,"y":1},"s":[80.933,80.933],"t":0},{"s":[183.394,183.394],"t":6}]},"sk":{"a":0,"k":0},"p":{"a":1,"k":[{"o":{"x":0,"y":0},"i":{"x":0.36,"y":1},"s":[256,256],"t":0},{"o":{"x":0.22,"y":0.61},"i":{"x":1,"y":1},"s":[256,256],"t":6},{"o":{"x":0.167,"y":0.167},"i":{"x":0.833,"y":0.833},"s":[69.14,57.947],"t":30},{"s":[70.14,57.947],"t":81}]},"r":{"a":0,"k":0},"sa":{"a":0,"k":0},"o":{"a":1,"k":[{"o":{"x":0,"y":0},"i":{"x":0.36,"y":1},"s":[0],"t":0},{"o":{"x":0.22,"y":0.61},"i":{"x":1,"y":1},"s":[100],"t":6},{"s":[0],"t":30}]}},"shapes":[{"ty":"sr","nm":"Star Shape 1","d":1,"ir":{"a":0,"k":10.25},"is":{"a":0,"k":0},"pt":{"a":0,"k":5},"p":{"a":0,"k":[0,0]},"or":{"a":0,"k":20.5},"os":{"a":0,"k":0},"r":{"a":0,"k":0},"sy":1},{"ty":"fl","nm":"Fill","c":{"a":0,"k":[1,0.914,0]},"r":1,"o":{"a":0,"k":100}}],"ind":5},{"ty":4,"nm":"Star 5","sr":1,"st":0,"op":150,"ip":0,"hasMask":false,"ao":0,"ks":{"a":{"a":0,"k":[0,0]},"s":{"a":1,"k":[{"o":{"x":0,"y":0},"i":{"x":0.36,"y":1},"s":[80.933,80.933],"t":0},{"s":[183.394,183.394],"t":6}]},"sk":{"a":0,"k":0},"p":{"a":1,"k":[{"o":{"x":0,"y":0},"i":{"x":0.36,"y":1},"s":[256,256],"t":0},{"o":{"x":0.22,"y":0.61},"i":{"x":1,"y":1},"s":[256,256],"t":6},{"o":{"x":0.167,"y":0.167},"i":{"x":0.833,"y":0.833},"s":[392.999,50.824],"t":30},{"s":[393.999,50.824],"t":81}]},"r":{"a":0,"k":0},"sa":{"a":0,"k":0},"o":{"a":1,"k":[{"o":{"x":0,"y":0},"i":{"x":0.36,"y":1},"s":[0],"t":0},{"o":{"x":0.22,"y":0.61},"i":{"x":1,"y":1},"s":[100],"t":6},{"s":[0],"t":30}]}},"shapes":[{"ty":"sr","nm":"Star Shape 1","d":1,"ir":{"a":0,"k":10.25},"is":{"a":0,"k":0},"pt":{"a":0,"k":5},"p":{"a":0,"k":[0,0]},"or":{"a":0,"k":20.5},"os":{"a":0,"k":0},"r":{"a":0,"k":0},"sy":1},{"ty":"fl","nm":"Fill","c":{"a":0,"k":[1,0.914,0]},"r":1,"o":{"a":0,"k":100}}],"ind":6},{"ty":4,"nm":"Star 4","sr":1,"st":0,"op":150,"ip":0,"hasMask":false,"ao":0,"ks":{"a":{"a":0,"k":[0,0]},"s":{"a":1,"k":[{"o":{"x":0,"y":0},"i":{"x":0.36,"y":1},"s":[80.933,80.933],"t":0},{"s":[183.394,183.394],"t":6}]},"sk":{"a":0,"k":0},"p":{"a":1,"k":[{"o":{"x":0,"y":0},"i":{"x":0.36,"y":1},"s":[256,256],"t":0},{"o":{"x":0.22,"y":0.61},"i":{"x":1,"y":1},"s":[256,256],"t":6},{"o":{"x":0.167,"y":0.167},"i":{"x":0.833,"y":0.833},"s":[104.755,432.684],"t":30},{"s":[105.755,432.684],"t":81}]},"r":{"a":0,"k":0},"sa":{"a":0,"k":0},"o":{"a":1,"k":[{"o":{"x":0,"y":0},"i":{"x":0.36,"y":1},"s":[0],"t":0},{"o":{"x":0.22,"y":0.61},"i":{"x":1,"y":1},"s":[100],"t":6},{"s":[0],"t":30}]}},"shapes":[{"ty":"sr","nm":"Star Shape 1","d":1,"ir":{"a":0,"k":10.25},"is":{"a":0,"k":0},"pt":{"a":0,"k":5},"p":{"a":0,"k":[0,0]},"or":{"a":0,"k":20.5},"os":{"a":0,"k":0},"r":{"a":0,"k":0},"sy":1},{"ty":"fl","nm":"Fill","c":{"a":0,"k":[1,0.914,0]},"r":1,"o":{"a":0,"k":100}}],"ind":7},{"ty":4,"nm":"Star 3","sr":1,"st":0,"op":150,"ip":0,"hasMask":false,"ao":0,"ks":{"a":{"a":0,"k":[0,0]},"s":{"a":1,"k":[{"o":{"x":0,"y":0},"i":{"x":0.36,"y":1},"s":[80.933,80.933],"t":0},{"s":[183.394,183.394],"t":6}]},"sk":{"a":0,"k":0},"p":{"a":1,"k":[{"o":{"x":0,"y":0},"i":{"x":0.36,"y":1},"s":[256,256],"t":0},{"o":{"x":0.22,"y":0.61},"i":{"x":1,"y":1},"s":[256,256],"t":6},{"o":{"x":0.167,"y":0.167},"i":{"x":0.833,"y":0.833},"s":[402.157,459.141],"t":30},{"s":[403.157,459.141],"t":81}]},"r":{"a":0,"k":0},"sa":{"a":0,"k":0},"o":{"a":1,"k":[{"o":{"x":0,"y":0},"i":{"x":0.36,"y":1},"s":[0],"t":0},{"o":{"x":0.22,"y":0.61},"i":{"x":1,"y":1},"s":[100],"t":6},{"s":[0],"t":30}]}},"shapes":[{"ty":"sr","nm":"Star Shape 1","d":1,"ir":{"a":0,"k":10.25},"is":{"a":0,"k":0},"pt":{"a":0,"k":5},"p":{"a":0,"k":[0,0]},"or":{"a":0,"k":20.5},"os":{"a":0,"k":0},"r":{"a":0,"k":0},"sy":1},{"ty":"fl","nm":"Fill","c":{"a":0,"k":[1,0.914,0]},"r":1,"o":{"a":0,"k":100}}],"ind":8},{"ty":4,"nm":"Star 2","sr":1,"st":0,"op":150,"ip":0,"hasMask":false,"ao":0,"ks":{"a":{"a":0,"k":[0,0]},"s":{"a":1,"k":[{"o":{"x":0,"y":0},"i":{"x":0.36,"y":1},"s":[80.933,80.933],"t":0},{"s":[183.394,183.394],"t":6}]},"sk":{"a":0,"k":0},"p":{"a":1,"k":[{"o":{"x":0,"y":0},"i":{"x":0.36,"y":1},"s":[256,256],"t":0},{"o":{"x":0.22,"y":0.61},"i":{"x":1,"y":1},"s":[256,256],"t":6},{"o":{"x":0.167,"y":0.167},"i":{"x":0.833,"y":0.833},"s":[463.211,309.931],"t":30},{"s":[464.211,309.931],"t":81}]},"r":{"a":0,"k":0},"sa":{"a":0,"k":0},"o":{"a":1,"k":[{"o":{"x":0,"y":0},"i":{"x":0.36,"y":1},"s":[0],"t":0},{"o":{"x":0.22,"y":0.61},"i":{"x":1,"y":1},"s":[100],"t":6},{"s":[0],"t":30}]}},"shapes":[{"ty":"sr","nm":"Star Shape 1","d":1,"ir":{"a":0,"k":10.25},"is":{"a":0,"k":0},"pt":{"a":0,"k":5},"p":{"a":0,"k":[0,0]},"or":{"a":0,"k":20.5},"os":{"a":0,"k":0},"r":{"a":0,"k":0},"sy":1},{"ty":"fl","nm":"Fill","c":{"a":0,"k":[1,0.914,0]},"r":1,"o":{"a":0,"k":100}}],"ind":9},{"ty":4,"nm":"Star 1","sr":1,"st":0,"op":150,"ip":0,"hasMask":false,"ao":0,"ks":{"a":{"a":0,"k":[0,0]},"s":{"a":1,"k":[{"o":{"x":0,"y":0},"i":{"x":0.36,"y":1},"s":[80.933,80.933],"t":0},{"s":[183.394,183.394],"t":6}]},"sk":{"a":0,"k":0},"p":{"a":1,"k":[{"o":{"x":0,"y":0},"i":{"x":0.36,"y":1},"s":[256,256],"t":0},{"o":{"x":0.22,"y":0.61},"i":{"x":1,"y":1},"s":[256,256],"t":6},{"s":[37.596,256],"t":30}]},"r":{"a":0,"k":0},"sa":{"a":0,"k":0},"o":{"a":1,"k":[{"o":{"x":0,"y":0},"i":{"x":0.36,"y":1},"s":[0],"t":0},{"o":{"x":0.22,"y":0.61},"i":{"x":1,"y":1},"s":[100],"t":6},{"s":[0],"t":30}]}},"shapes":[{"ty":"sr","nm":"Star Shape 1","d":1,"ir":{"a":0,"k":10.25},"is":{"a":0,"k":0},"pt":{"a":0,"k":5},"p":{"a":0,"k":[0,0]},"or":{"a":0,"k":20.5},"os":{"a":0,"k":0},"r":{"a":0,"k":0},"sy":1},{"ty":"fl","nm":"Fill","c":{"a":0,"k":[1,0.914,0]},"r":1,"o":{"a":0,"k":100}}],"ind":10}],"v":"5.7.0","fr":30,"op":60,"ip":0,"assets":[]};
+
+      // Heart burst animation data (exact from Cascading effect 2.html)
+      const heartJSON = {"nm":"Main Scene","h":512,"w":512,"meta":{"g":"@lottiefiles/creator 1.79.0"},"layers":[{"ty":4,"nm":"main_heart 20","sr":1,"st":0,"op":36,"ip":0,"hasMask":false,"ao":0,"ks":{"a":{"a":0,"k":[191.763,170.375,0]},"s":{"a":1,"k":[{"o":{"x":0,"y":0},"i":{"x":0.36,"y":1},"s":[95.961,95.961],"t":0},{"o":{"x":0.22,"y":0.61},"i":{"x":1,"y":1},"s":[24.922,24.922],"t":6},{"s":[7.184,7.184],"t":30}]},"sk":{"a":0,"k":180},"p":{"a":1,"k":[{"o":{"x":0,"y":0},"i":{"x":0.36,"y":1},"s":[256,256],"t":1},{"o":{"x":0.22,"y":0.61},"i":{"x":1,"y":1},"s":[256.78,254.816],"t":6},{"s":[200.475,137.678],"t":30}]},"r":{"a":0,"k":1},"sa":{"a":0,"k":0},"o":{"a":1,"k":[{"o":{"x":0,"y":0},"i":{"x":0.36,"y":1},"s":[0],"t":0},{"o":{"x":0.22,"y":0.61},"i":{"x":1,"y":1},"s":[100],"t":6},{"s":[0],"t":30}]}},"shapes":[{"ty":"gr","nm":"Group 1","it":[{"ty":"sh","nm":"Path 1","d":1,"ks":{"a":0,"k":{"c":true,"i":[[0,0],[29.042,-0.225],[17.08,-13.504],[6.834,-9.562],[9.259,7.24],[21.774,-0.097],[19.64,-21.396],[-0.528,-30.016],[-23.537,-25.374],[-33.951,-27.076],[-15.463,-13.491],[-8.455,7.395],[-13.151,11.164],[-29.165,32.169],[-0.871,34.604],[19.998,22.408]],"o":[[-19.64,-21.396],[-21.773,-0.096],[-9.258,7.24],[-6.833,-9.563],[-17.079,-13.505],[-29.043,-0.225],[-19.975,22.412],[0.881,34.6],[29.166,32.174],[13.134,11.198],[8.454,7.395],[15.463,-13.592],[33.952,-27.069],[23.536,-25.381],[0.521,-30.029],[0,0]],"v":[[160.743,-137.462],[84.281,-170.713],[24.267,-150.001],[0.003,-124.667],[-24.26,-150.001],[-84.275,-170.713],[-160.737,-137.462],[-190.982,-55.919],[-153.091,37.143],[-58.26,126.162],[-14.762,163.544],[14.768,163.544],[58.284,126.162],[153.114,37.161],[190.988,-55.919],[160.692,-137.479]]}}},{"ty":"fl","nm":"Fill 1","c":{"a":0,"k":[1,0.255,0.333]},"r":1,"o":{"a":0,"k":100}},{"ty":"tr","a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"sk":{"a":0,"k":0},"p":{"a":0,"k":[191.759,171.189]},"r":{"a":0,"k":0},"sa":{"a":0,"k":0},"o":{"a":0,"k":100}}]}],"ind":1},{"ty":4,"nm":"main_heart 19","sr":1,"st":0,"op":36,"ip":0,"hasMask":false,"ao":0,"ks":{"a":{"a":0,"k":[191.763,170.375,0]},"s":{"a":1,"k":[{"o":{"x":0,"y":0},"i":{"x":0.36,"y":1},"s":[80.933,80.933],"t":0},{"o":{"x":0.22,"y":0.61},"i":{"x":1,"y":1},"s":[24.922,24.922],"t":6},{"s":[7.692,7.692],"t":30}]},"sk":{"a":0,"k":180},"p":{"a":1,"k":[{"o":{"x":0,"y":0},"i":{"x":0.36,"y":1},"s":[256,256],"t":0},{"o":{"x":0.22,"y":0.61},"i":{"x":1,"y":1},"s":[256.78,254.816],"t":6},{"s":[385.088,162.903],"t":30}]},"r":{"a":0,"k":1},"sa":{"a":0,"k":0},"o":{"a":1,"k":[{"o":{"x":0,"y":0},"i":{"x":0.36,"y":1},"s":[0],"t":0},{"o":{"x":0.22,"y":0.61},"i":{"x":1,"y":1},"s":[100],"t":6},{"s":[0],"t":30}]}},"shapes":[{"ty":"gr","nm":"Group 1","it":[{"ty":"sh","nm":"Path 1","d":1,"ks":{"a":0,"k":{"c":true,"i":[[0,0],[29.042,-0.225],[17.08,-13.504],[6.834,-9.562],[9.259,7.24],[21.774,-0.097],[19.64,-21.396],[-0.528,-30.016],[-23.537,-25.374],[-33.951,-27.076],[-15.463,-13.491],[-8.455,7.395],[-13.151,11.164],[-29.165,32.169],[-0.871,34.604],[19.998,22.408]],"o":[[-19.64,-21.396],[-21.773,-0.096],[-9.258,7.24],[-6.833,-9.563],[-17.079,-13.505],[-29.043,-0.225],[-19.975,22.412],[0.881,34.6],[29.166,32.174],[13.134,11.198],[8.454,7.395],[15.463,-13.592],[33.952,-27.069],[23.536,-25.381],[0.521,-30.029],[0,0]],"v":[[160.743,-137.462],[84.281,-170.713],[24.267,-150.001],[0.003,-124.667],[-24.26,-150.001],[-84.275,-170.713],[-160.737,-137.462],[-190.982,-55.919],[-153.091,37.143],[-58.26,126.162],[-14.762,163.544],[14.768,163.544],[58.284,126.162],[153.114,37.161],[190.988,-55.919],[160.692,-137.479]]}}},{"ty":"fl","nm":"Fill 1","c":{"a":0,"k":[1,0.255,0.333]},"r":1,"o":{"a":0,"k":100}},{"ty":"tr","a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"sk":{"a":0,"k":0},"p":{"a":0,"k":[191.759,171.189]},"r":{"a":0,"k":0},"sa":{"a":0,"k":0},"o":{"a":0,"k":100}}]}],"ind":2},{"ty":4,"nm":"main_heart 18","sr":1,"st":0,"op":36,"ip":0,"hasMask":false,"ao":0,"ks":{"a":{"a":0,"k":[191.763,170.375,0]},"s":{"a":1,"k":[{"o":{"x":0,"y":0},"i":{"x":0.36,"y":1},"s":[80.933,80.933],"t":0},{"o":{"x":0.22,"y":0.61},"i":{"x":1,"y":1},"s":[24.922,24.922],"t":6},{"s":[24.273,24.273],"t":30}]},"sk":{"a":0,"k":180},"p":{"a":1,"k":[{"o":{"x":0,"y":0},"i":{"x":0.36,"y":1},"s":[256,256],"t":0},{"o":{"x":0.22,"y":0.61},"i":{"x":1,"y":1},"s":[256.78,254.816],"t":6},{"s":[128.039,407.119],"t":30}]},"r":{"a":0,"k":1},"sa":{"a":0,"k":0},"o":{"a":1,"k":[{"o":{"x":0,"y":0},"i":{"x":0.36,"y":1},"s":[0],"t":0},{"o":{"x":0.22,"y":0.61},"i":{"x":1,"y":1},"s":[100],"t":6},{"s":[0],"t":30}]}},"shapes":[{"ty":"gr","nm":"Group 1","it":[{"ty":"sh","nm":"Path 1","d":1,"ks":{"a":0,"k":{"c":true,"i":[[0,0],[29.042,-0.225],[17.08,-13.504],[6.834,-9.562],[9.259,7.24],[21.774,-0.097],[19.64,-21.396],[-0.528,-30.016],[-23.537,-25.374],[-33.951,-27.076],[-15.463,-13.491],[-8.455,7.395],[-13.151,11.164],[-29.165,32.169],[-0.871,34.604],[19.998,22.408]],"o":[[-19.64,-21.396],[-21.773,-0.096],[-9.258,7.24],[-6.833,-9.563],[-17.079,-13.505],[-29.043,-0.225],[-19.975,22.412],[0.881,34.6],[29.166,32.174],[13.134,11.198],[8.454,7.395],[15.463,-13.592],[33.952,-27.069],[23.536,-25.381],[0.521,-30.029],[0,0]],"v":[[160.743,-137.462],[84.281,-170.713],[24.267,-150.001],[0.003,-124.667],[-24.26,-150.001],[-84.275,-170.713],[-160.737,-137.462],[-190.982,-55.919],[-153.091,37.143],[-58.26,126.162],[-14.762,163.544],[14.768,163.544],[58.284,126.162],[153.114,37.161],[190.988,-55.919],[160.692,-137.479]]}}},{"ty":"fl","nm":"Fill 1","c":{"a":0,"k":[1,0.255,0.333]},"r":1,"o":{"a":0,"k":100}},{"ty":"tr","a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"sk":{"a":0,"k":0},"p":{"a":0,"k":[191.759,171.189]},"r":{"a":0,"k":0},"sa":{"a":0,"k":0},"o":{"a":0,"k":100}}]}],"ind":3},{"ty":4,"nm":"main_heart 17","sr":1,"st":0,"op":36,"ip":0,"hasMask":false,"ao":0,"ks":{"a":{"a":0,"k":[191.763,170.375,0]},"s":{"a":1,"k":[{"o":{"x":0,"y":0},"i":{"x":0.36,"y":1},"s":[80.933,80.933],"t":0},{"o":{"x":0.22,"y":0.61},"i":{"x":1,"y":1},"s":[24.922,24.922],"t":6},{"s":[23.119,23.119],"t":30}]},"sk":{"a":0,"k":180},"p":{"a":1,"k":[{"o":{"x":0,"y":0},"i":{"x":0.36,"y":1},"s":[256,256],"t":0},{"o":{"x":0.22,"y":0.61},"i":{"x":1,"y":1},"s":[256.78,254.816],"t":6},{"s":[414.737,453.48],"t":30}]},"r":{"a":0,"k":1},"sa":{"a":0,"k":0},"o":{"a":1,"k":[{"o":{"x":0,"y":0},"i":{"x":0.36,"y":1},"s":[0],"t":0},{"o":{"x":0.22,"y":0.61},"i":{"x":1,"y":1},"s":[100],"t":6},{"s":[0],"t":30}]}},"shapes":[{"ty":"gr","nm":"Group 1","it":[{"ty":"sh","nm":"Path 1","d":1,"ks":{"a":0,"k":{"c":true,"i":[[0,0],[29.042,-0.225],[17.08,-13.504],[6.834,-9.562],[9.259,7.24],[21.774,-0.097],[19.64,-21.396],[-0.528,-30.016],[-23.537,-25.374],[-33.951,-27.076],[-15.463,-13.491],[-8.455,7.395],[-13.151,11.164],[-29.165,32.169],[-0.871,34.604],[19.998,22.408]],"o":[[-19.64,-21.396],[-21.773,-0.096],[-9.258,7.24],[-6.833,-9.563],[-17.079,-13.505],[-29.043,-0.225],[-19.975,22.412],[0.881,34.6],[29.166,32.174],[13.134,11.198],[8.454,7.395],[15.463,-13.592],[33.952,-27.069],[23.536,-25.381],[0.521,-30.029],[0,0]],"v":[[160.743,-137.462],[84.281,-170.713],[24.267,-150.001],[0.003,-124.667],[-24.26,-150.001],[-84.275,-170.713],[-160.737,-137.462],[-190.982,-55.919],[-153.091,37.143],[-58.26,126.162],[-14.762,163.544],[14.768,163.544],[58.284,126.162],[153.114,37.161],[190.988,-55.919],[160.692,-137.479]]}}},{"ty":"fl","nm":"Fill 1","c":{"a":0,"k":[1,0.255,0.333]},"r":1,"o":{"a":0,"k":100}},{"ty":"tr","a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"sk":{"a":0,"k":0},"p":{"a":0,"k":[191.759,171.189]},"r":{"a":0,"k":0},"sa":{"a":0,"k":0},"o":{"a":0,"k":100}}]}],"ind":4},{"ty":4,"nm":"main_heart 16","sr":1,"st":0,"op":36,"ip":0,"hasMask":false,"ao":0,"ks":{"a":{"a":0,"k":[191.763,170.375,0]},"s":{"a":1,"k":[{"o":{"x":0,"y":0},"i":{"x":0.36,"y":1},"s":[80.933,80.933],"t":0},{"s":[24.922,24.922],"t":6}]},"sk":{"a":0,"k":180},"p":{"a":1,"k":[{"o":{"x":0,"y":0},"i":{"x":0.36,"y":1},"s":[256,256],"t":0},{"o":{"x":0.22,"y":0.61},"i":{"x":1,"y":1},"s":[256.78,254.816],"t":6},{"s":[74.849,75.073],"t":30}]},"r":{"a":0,"k":1},"sa":{"a":0,"k":0},"o":{"a":1,"k":[{"o":{"x":0,"y":0},"i":{"x":0.36,"y":1},"s":[0],"t":0},{"o":{"x":0.22,"y":0.61},"i":{"x":1,"y":1},"s":[100],"t":6},{"s":[0],"t":30}]}},"shapes":[{"ty":"gr","nm":"Group 1","it":[{"ty":"sh","nm":"Path 1","d":1,"ks":{"a":0,"k":{"c":true,"i":[[0,0],[29.042,-0.225],[17.08,-13.504],[6.834,-9.562],[9.259,7.24],[21.774,-0.097],[19.64,-21.396],[-0.528,-30.016],[-23.537,-25.374],[-33.951,-27.076],[-15.463,-13.491],[-8.455,7.395],[-13.151,11.164],[-29.165,32.169],[-0.871,34.604],[19.998,22.408]],"o":[[-19.64,-21.396],[-21.773,-0.096],[-9.258,7.24],[-6.833,-9.563],[-17.079,-13.505],[-29.043,-0.225],[-19.975,22.412],[0.881,34.6],[29.166,32.174],[13.134,11.198],[8.454,7.395],[15.463,-13.592],[33.952,-27.069],[23.536,-25.381],[0.521,-30.029],[0,0]],"v":[[160.743,-137.462],[84.281,-170.713],[24.267,-150.001],[0.003,-124.667],[-24.26,-150.001],[-84.275,-170.713],[-160.737,-137.462],[-190.982,-55.919],[-153.091,37.143],[-58.26,126.162],[-14.762,163.544],[14.768,163.544],[58.284,126.162],[153.114,37.161],[190.988,-55.919],[160.692,-137.479]]}}},{"ty":"fl","nm":"Fill 1","c":{"a":0,"k":[1,0.255,0.333]},"r":1,"o":{"a":0,"k":100}},{"ty":"tr","a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"sk":{"a":0,"k":0},"p":{"a":0,"k":[191.759,171.189]},"r":{"a":0,"k":0},"sa":{"a":0,"k":0},"o":{"a":0,"k":100}}]}],"ind":5},{"ty":4,"nm":"main_heart 15","sr":1,"st":0,"op":36,"ip":0,"hasMask":false,"ao":0,"ks":{"a":{"a":0,"k":[191.763,170.375,0]},"s":{"a":1,"k":[{"o":{"x":0,"y":0},"i":{"x":0.36,"y":1},"s":[80.933,80.933],"t":0},{"s":[24.922,24.922],"t":6}]},"sk":{"a":0,"k":180},"p":{"a":1,"k":[{"o":{"x":0,"y":0},"i":{"x":0.36,"y":1},"s":[256,256],"t":0},{"o":{"x":0.22,"y":0.61},"i":{"x":1,"y":1},"s":[256.78,254.816],"t":6},{"s":[443.427,54.63],"t":30}]},"r":{"a":0,"k":1},"sa":{"a":0,"k":0},"o":{"a":1,"k":[{"o":{"x":0,"y":0},"i":{"x":0.36,"y":1},"s":[0],"t":0},{"o":{"x":0.22,"y":0.61},"i":{"x":1,"y":1},"s":[100],"t":6},{"s":[0],"t":30}]}},"shapes":[{"ty":"gr","nm":"Group 1","it":[{"ty":"sh","nm":"Path 1","d":1,"ks":{"a":0,"k":{"c":true,"i":[[0,0],[29.042,-0.225],[17.08,-13.504],[6.834,-9.562],[9.259,7.24],[21.774,-0.097],[19.64,-21.396],[-0.528,-30.016],[-23.537,-25.374],[-33.951,-27.076],[-15.463,-13.491],[-8.455,7.395],[-13.151,11.164],[-29.165,32.169],[-0.871,34.604],[19.998,22.408]],"o":[[-19.64,-21.396],[-21.773,-0.096],[-9.258,7.24],[-6.833,-9.563],[-17.079,-13.505],[-29.043,-0.225],[-19.975,22.412],[0.881,34.6],[29.166,32.174],[13.134,11.198],[8.454,7.395],[15.463,-13.592],[33.952,-27.069],[23.536,-25.381],[0.521,-30.029],[0,0]],"v":[[160.743,-137.462],[84.281,-170.713],[24.267,-150.001],[0.003,-124.667],[-24.26,-150.001],[-84.275,-170.713],[-160.737,-137.462],[-190.982,-55.919],[-153.091,37.143],[-58.26,126.162],[-14.762,163.544],[14.768,163.544],[58.284,126.162],[153.114,37.161],[190.988,-55.919],[160.692,-137.479]]}}},{"ty":"fl","nm":"Fill 1","c":{"a":0,"k":[1,0.255,0.333]},"r":1,"o":{"a":0,"k":100}},{"ty":"tr","a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"sk":{"a":0,"k":0},"p":{"a":0,"k":[191.759,171.189]},"r":{"a":0,"k":0},"sa":{"a":0,"k":0},"o":{"a":0,"k":100}}]}],"ind":6},{"ty":4,"nm":"main_heart 14","sr":1,"st":0,"op":36,"ip":0,"hasMask":false,"ao":0,"ks":{"a":{"a":0,"k":[191.763,170.375,0]},"s":{"a":1,"k":[{"o":{"x":0,"y":0},"i":{"x":0.36,"y":1},"s":[80.933,80.933],"t":0},{"o":{"x":0.22,"y":0.61},"i":{"x":1,"y":1},"s":[24.922,24.922],"t":6},{"s":[8.105,8.105],"t":30}]},"sk":{"a":0,"k":180},"p":{"a":1,"k":[{"o":{"x":0,"y":0},"i":{"x":0.36,"y":1},"s":[256,256],"t":0},{"o":{"x":0.22,"y":0.61},"i":{"x":1,"y":1},"s":[256.78,254.816],"t":6},{"s":[148.383,313.751],"t":30}]},"r":{"a":0,"k":1},"sa":{"a":0,"k":0},"o":{"a":1,"k":[{"o":{"x":0,"y":0},"i":{"x":0.36,"y":1},"s":[0],"t":0},{"o":{"x":0.22,"y":0.61},"i":{"x":1,"y":1},"s":[100],"t":6},{"s":[0],"t":30}]}},"shapes":[{"ty":"gr","nm":"Group 1","it":[{"ty":"sh","nm":"Path 1","d":1,"ks":{"a":0,"k":{"c":true,"i":[[0,0],[29.042,-0.225],[17.08,-13.504],[6.834,-9.562],[9.259,7.24],[21.774,-0.097],[19.64,-21.396],[-0.528,-30.016],[-23.537,-25.374],[-33.951,-27.076],[-15.463,-13.491],[-8.455,7.395],[-13.151,11.164],[-29.165,32.169],[-0.871,34.604],[19.998,22.408]],"o":[[-19.64,-21.396],[-21.773,-0.096],[-9.258,7.24],[-6.833,-9.563],[-17.079,-13.505],[-29.043,-0.225],[-19.975,22.412],[0.881,34.6],[29.166,32.174],[13.134,11.198],[8.454,7.395],[15.463,-13.592],[33.952,-27.069],[23.536,-25.381],[0.521,-30.029],[0,0]],"v":[[160.743,-137.462],[84.281,-170.713],[24.267,-150.001],[0.003,-124.667],[-24.26,-150.001],[-84.275,-170.713],[-160.737,-137.462],[-190.982,-55.919],[-153.091,37.143],[-58.26,126.162],[-14.762,163.544],[14.768,163.544],[58.284,126.162],[153.114,37.161],[190.988,-55.919],[160.692,-137.479]]}}},{"ty":"fl","nm":"Fill 1","c":{"a":0,"k":[1,0.255,0.333]},"r":1,"o":{"a":0,"k":100}},{"ty":"tr","a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"sk":{"a":0,"k":0},"p":{"a":0,"k":[191.759,171.189]},"r":{"a":0,"k":0},"sa":{"a":0,"k":0},"o":{"a":0,"k":100}}]}],"ind":7},{"ty":4,"nm":"main_heart 13","sr":1,"st":0,"op":36,"ip":0,"hasMask":false,"ao":0,"ks":{"a":{"a":0,"k":[191.763,170.375,0]},"s":{"a":1,"k":[{"o":{"x":0,"y":0},"i":{"x":0.36,"y":1},"s":[80.933,80.933],"t":0},{"o":{"x":0.22,"y":0.61},"i":{"x":1,"y":1},"s":[24.922,24.922],"t":6},{"s":[7.887,7.887],"t":30}]},"sk":{"a":0,"k":180},"p":{"a":1,"k":[{"o":{"x":0,"y":0},"i":{"x":0.36,"y":1},"s":[256,256],"t":0},{"o":{"x":0.22,"y":0.61},"i":{"x":1,"y":1},"s":[256.78,254.816],"t":6},{"s":[339.861,352.921],"t":30}]},"r":{"a":0,"k":1},"sa":{"a":0,"k":0},"o":{"a":1,"k":[{"o":{"x":0,"y":0},"i":{"x":0.36,"y":1},"s":[0],"t":0},{"o":{"x":0.22,"y":0.61},"i":{"x":1,"y":1},"s":[100],"t":6},{"s":[0],"t":30}]}},"shapes":[{"ty":"gr","nm":"Group 1","it":[{"ty":"sh","nm":"Path 1","d":1,"ks":{"a":0,"k":{"c":true,"i":[[0,0],[29.042,-0.225],[17.08,-13.504],[6.834,-9.562],[9.259,7.24],[21.774,-0.097],[19.64,-21.396],[-0.528,-30.016],[-23.537,-25.374],[-33.951,-27.076],[-15.463,-13.491],[-8.455,7.395],[-13.151,11.164],[-29.165,32.169],[-0.871,34.604],[19.998,22.408]],"o":[[-19.64,-21.396],[-21.773,-0.096],[-9.258,7.24],[-6.833,-9.563],[-17.079,-13.505],[-29.043,-0.225],[-19.975,22.412],[0.881,34.6],[29.166,32.174],[13.134,11.198],[8.454,7.395],[15.463,-13.592],[33.952,-27.069],[23.536,-25.381],[0.521,-30.029],[0,0]],"v":[[160.743,-137.462],[84.281,-170.713],[24.267,-150.001],[0.003,-124.667],[-24.26,-150.001],[-84.275,-170.713],[-160.737,-137.462],[-190.982,-55.919],[-153.091,37.143],[-58.26,126.162],[-14.762,163.544],[14.768,163.544],[58.284,126.162],[153.114,37.161],[190.988,-55.919],[160.692,-137.479]]}}},{"ty":"fl","nm":"Fill 1","c":{"a":0,"k":[1,0.255,0.333]},"r":1,"o":{"a":0,"k":100}},{"ty":"tr","a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"sk":{"a":0,"k":0},"p":{"a":0,"k":[191.759,171.189]},"r":{"a":0,"k":0},"sa":{"a":0,"k":0},"o":{"a":0,"k":100}}]}],"ind":8},{"ty":4,"nm":"main_heart 12","sr":1,"st":0,"op":36,"ip":0,"hasMask":false,"ao":0,"ks":{"a":{"a":0,"k":[191.763,170.375,0]},"s":{"a":1,"k":[{"o":{"x":0,"y":0},"i":{"x":0.36,"y":1},"s":[80.933,80.933],"t":0},{"s":[24.922,24.922],"t":6}]},"sk":{"a":0,"k":180},"p":{"a":1,"k":[{"o":{"x":0,"y":0},"i":{"x":0.36,"y":1},"s":[256,256],"t":0},{"o":{"x":0.22,"y":0.61},"i":{"x":1,"y":1},"s":[256.78,254.816],"t":6},{"s":[449.89,289.95],"t":30}]},"r":{"a":0,"k":1},"sa":{"a":0,"k":0},"o":{"a":1,"k":[{"o":{"x":0,"y":0},"i":{"x":0.36,"y":1},"s":[0],"t":0},{"o":{"x":0.22,"y":0.61},"i":{"x":1,"y":1},"s":[100],"t":6},{"s":[0],"t":30}]}},"shapes":[{"ty":"gr","nm":"Group 1","it":[{"ty":"sh","nm":"Path 1","d":1,"ks":{"a":0,"k":{"c":true,"i":[[0,0],[29.042,-0.225],[17.08,-13.504],[6.834,-9.562],[9.259,7.24],[21.774,-0.097],[19.64,-21.396],[-0.528,-30.016],[-23.537,-25.374],[-33.951,-27.076],[-15.463,-13.491],[-8.455,7.395],[-13.151,11.164],[-29.165,32.169],[-0.871,34.604],[19.998,22.408]],"o":[[-19.64,-21.396],[-21.773,-0.096],[-9.258,7.24],[-6.833,-9.563],[-17.079,-13.505],[-29.043,-0.225],[-19.975,22.412],[0.881,34.6],[29.166,32.174],[13.134,11.198],[8.454,7.395],[15.463,-13.592],[33.952,-27.069],[23.536,-25.381],[0.521,-30.029],[0,0]],"v":[[160.743,-137.462],[84.281,-170.713],[24.267,-150.001],[0.003,-124.667],[-24.26,-150.001],[-84.275,-170.713],[-160.737,-137.462],[-190.982,-55.919],[-153.091,37.143],[-58.26,126.162],[-14.762,163.544],[14.768,163.544],[58.284,126.162],[153.114,37.161],[190.988,-55.919],[160.692,-137.479]]}}},{"ty":"fl","nm":"Fill 1","c":{"a":0,"k":[1,0.255,0.333]},"r":1,"o":{"a":0,"k":100}},{"ty":"tr","a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"sk":{"a":0,"k":0},"p":{"a":0,"k":[191.759,171.189]},"r":{"a":0,"k":0},"sa":{"a":0,"k":0},"o":{"a":0,"k":100}}]}],"ind":9},{"ty":4,"nm":"main_heart 11","sr":1,"st":0,"op":36,"ip":0,"hasMask":false,"ao":0,"ks":{"a":{"a":0,"k":[191.763,170.375,0]},"s":{"a":1,"k":[{"o":{"x":0,"y":0},"i":{"x":0.36,"y":1},"s":[80.933,80.933],"t":0},{"o":{"x":0.22,"y":0.61},"i":{"x":1,"y":1},"s":[24.922,24.922],"t":6},{"s":[20.594,20.594],"t":30}]},"sk":{"a":0,"k":0},"p":{"a":1,"k":[{"o":{"x":0,"y":0},"i":{"x":0.36,"y":1},"s":[256,256],"t":0},{"o":{"x":0.22,"y":0.61},"i":{"x":1,"y":1},"s":[256.78,254.816],"t":6},{"s":[51.868,245.534],"t":30}]},"r":{"a":0,"k":0},"sa":{"a":0,"k":0},"o":{"a":1,"k":[{"o":{"x":0,"y":0},"i":{"x":0.36,"y":1},"s":[0],"t":0},{"o":{"x":0.22,"y":0.61},"i":{"x":1,"y":1},"s":[100],"t":6},{"s":[0],"t":30}]}},"shapes":[{"ty":"gr","nm":"Group 1","it":[{"ty":"sh","nm":"Path 1","d":1,"ks":{"a":0,"k":{"c":true,"i":[[0,0],[29.042,-0.225],[17.08,-13.504],[6.834,-9.562],[9.259,7.24],[21.774,-0.097],[19.64,-21.396],[-0.528,-30.016],[-23.537,-25.374],[-33.951,-27.076],[-15.463,-13.491],[-8.455,7.395],[-13.151,11.164],[-29.165,32.169],[-0.871,34.604],[19.998,22.408]],"o":[[-19.64,-21.396],[-21.773,-0.096],[-9.258,7.24],[-6.833,-9.563],[-17.079,-13.505],[-29.043,-0.225],[-19.975,22.412],[0.881,34.6],[29.166,32.174],[13.134,11.198],[8.454,7.395],[15.463,-13.592],[33.952,-27.069],[23.536,-25.381],[0.521,-30.029],[0,0]],"v":[[160.743,-137.462],[84.281,-170.713],[24.267,-150.001],[0.003,-124.667],[-24.26,-150.001],[-84.275,-170.713],[-160.737,-137.462],[-190.982,-55.919],[-153.091,37.143],[-58.26,126.162],[-14.762,163.544],[14.768,163.544],[58.284,126.162],[153.114,37.161],[190.988,-55.919],[160.692,-137.479]]}}},{"ty":"fl","nm":"Fill 1","c":{"a":0,"k":[1,0.255,0.333]},"r":1,"o":{"a":0,"k":100}},{"ty":"tr","a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"sk":{"a":0,"k":0},"p":{"a":0,"k":[191.759,171.189]},"r":{"a":0,"k":0},"sa":{"a":0,"k":0},"o":{"a":0,"k":100}}]}],"ind":10}],"v":"5.7.0","fr":30,"op":60,"ip":0,"assets":[]};
+
+      // Create star burst animation
+      starBurstAnim = lottie.loadAnimation({
+        container: starBurstEl,
+        renderer: 'svg',
+        loop: false,
+        autoplay: false,
+        animationData: starJSON
+      });
+
+      // Create heart burst animation
+      heartBurstAnim = lottie.loadAnimation({
+        container: heartBurstEl,
+        renderer: 'svg',
+        loop: false,
+        autoplay: false,
+        animationData: heartJSON
+      });
+
+      // Hide after animation completes
+      starBurstAnim.addEventListener('complete', () => {
+        starBurstEl.classList.remove('playing');
+      });
+
+      heartBurstAnim.addEventListener('complete', () => {
+        heartBurstEl.classList.remove('playing');
+      });
+    }
+
+    // Position Lottie animation at star location
+    function positionLottie(lottieEl, starElement) {
+      const rect = starElement.getBoundingClientRect();
+      const phoneFrame = document.querySelector('.phone-frame').getBoundingClientRect();
+
+      const x = rect.left + rect.width / 2 - phoneFrame.left;
+      const y = rect.top + rect.height / 2 - phoneFrame.top;
+
+      lottieEl.style.left = x + 'px';
+      lottieEl.style.top = y + 'px';
+    }
+
+    // Trigger burst effect
+    function createBurstEffect(element, rating) {
+      if (rating === 4) {
+        // Star burst for 4 stars
+        const starBurstEl = document.getElementById('lottieBurstStar');
+        positionLottie(starBurstEl, element);
+        starBurstEl.classList.add('playing');
+        starBurstAnim.goToAndStop(0, true);
+        starBurstAnim.play();
+      } else if (rating === 5) {
+        // Heart burst for 5 stars
+        const heartBurstEl = document.getElementById('lottieBurstHeart');
+        positionLottie(heartBurstEl, element);
+        heartBurstEl.classList.add('playing');
+        heartBurstAnim.goToAndStop(0, true);
+        heartBurstAnim.play();
+      }
+    }
+
+    function animateEmojiToBadge(rating) {
+      // Prevent multiple animations
+      if (state.animatingEmoji) {
+        return;
+      }
+      state.animatingEmoji = true;
+
+      // Clean up any existing flying emojis immediately
+      const existingFlying = document.querySelectorAll('.flying-emoji');
+      existingFlying.forEach(el => el.remove());
+
+      // Get badge and clear it
+      const badge = document.querySelector('.emoji-badge');
+      const badgeImg = badge.querySelector('img');
+
+      // Completely hide the badge first
+      badge.style.visibility = 'hidden';
+      badge.style.opacity = '0';
+      badge.style.animation = 'none';
+      badgeImg.src = ''; // Clear previous image
+
+      // Show emoji directly in badge with fade-in (no flying animation)
+      setTimeout(() => {
+        badgeImg.src = `Emoji rating/gif/rate ${rating}.gif`;
+        badge.style.visibility = 'visible';
+        badge.style.animation = 'badgeFadeIn 0.3s ease-out forwards';
+        badge.style.opacity = '1';
+
+        state.animatingEmoji = false;
+      }, 50);
+    }
+
+    function createFlyingEmoji(rating, startRect) {
+      const flying = document.createElement('div');
+      flying.className = 'flying-emoji';
+      flying.innerHTML = `<img src="Emoji rating/gif/rate ${rating}.gif" alt="emoji" />`;
+
+      // Position at star location
+      flying.style.position = 'absolute';
+      flying.style.left = startRect.left + 'px';
+      flying.style.top = startRect.top + 'px';
+      flying.style.width = '32px'; // Match star size
+      flying.style.height = '32px';
+      flying.style.zIndex = '1000';
+
+      document.querySelector('.phone-frame').appendChild(flying);
+      return flying;
+    }
+
+    function animateToCorner(flyingEmoji, startRect, endRect) {
+      // Set CSS custom properties for animation
+      flyingEmoji.style.setProperty('--startX', startRect.left + 'px');
+      flyingEmoji.style.setProperty('--startY', startRect.top + 'px');
+      flyingEmoji.style.setProperty('--endX', endRect.left + 'px');
+      flyingEmoji.style.setProperty('--endY', endRect.top + 'px');
+
+      // Start animation
+      flyingEmoji.style.animation = 'emojiToCorner 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards';
+
+      // On animation end
+      flyingEmoji.addEventListener('animationend', () => {
+        // Remove flying emoji immediately
+        flyingEmoji.remove();
+
+        // Show badge immediately with fade-in
+        const badge = document.querySelector('.emoji-badge');
+        const badgeImg = badge.querySelector('img');
+
+        // Set the image source
+        badgeImg.src = `Emoji rating/gif/rate ${state.userRating}.gif`;
+
+        // Make visible and animate
+        badge.style.visibility = 'visible';
+        badge.style.transform = 'scale(0.8)';
+        badge.style.animation = 'badgeFadeIn 0.3s ease-out forwards';
+        badge.style.opacity = '1';
+
+        state.animatingEmoji = false;
+      });
+    }
+
+    function hideEmojiBadge() {
+      const badge = document.querySelector('.emoji-badge');
+      const badgeImg = badge.querySelector('img');
+      badge.style.visibility = 'hidden';
+      badge.style.opacity = '0';
+      badge.style.animation = 'none';
+      badge.style.transform = 'scale(0.8)';
+      // Clear the image src to prevent flash
+      badgeImg.src = '';
+    }
+
+    function updateStars() {
+      const stars = document.querySelectorAll('.star');
+      stars.forEach((star, index) => {
+        const path = star.querySelector('path');
+        if (index < state.userRating) {
+          path.setAttribute('fill', '#F5C842');
+          path.setAttribute('stroke', '#F5C842');
+        } else {
+          path.setAttribute('fill', '#E0E0E0');
+          path.setAttribute('stroke', '#E0E0E0');
+        }
+      });
+    }
+
+    function updateFeedbackSection() {
+      const feedbackSection = document.getElementById('feedbackSection');
+      const positiveFeedbackSection = document.getElementById('positiveFeedbackSection');
+      const negativeFeedbackSection = document.getElementById('negativeFeedbackSection');
+      const commentSection = document.getElementById('commentSection');
+      const positiveChevron = document.getElementById('positiveChevron');
+      const negativeChevron = document.getElementById('negativeChevron');
+      const positiveChips = document.getElementById('positiveChips');
+      const negativeChips = document.getElementById('negativeChips');
+
+      if (state.userRating > 0) {
+        feedbackSection.style.display = 'flex';
+        feedbackSection.classList.add('show');
+
+        if (state.userRating >= 4) {
+          // For 4-5 stars: Positive feedback first (default order), expand positive
+          feedbackSection.appendChild(positiveFeedbackSection);
+          feedbackSection.appendChild(negativeFeedbackSection);
+          feedbackSection.appendChild(commentSection);
+
+          // Expand positive, collapse negative
+          state.isPositiveFeedbackExpanded = true;
+          state.isNegativeFeedbackExpanded = false;
+          positiveChevron.classList.add('expanded');
+          negativeChevron.classList.remove('expanded');
+          positiveChips.style.display = 'flex';
+          negativeChips.style.display = 'none';
+        } else {
+          // For 1-3 stars: Negative feedback first, then comment, then positive
+          feedbackSection.appendChild(negativeFeedbackSection);
+          feedbackSection.appendChild(commentSection);
+          feedbackSection.appendChild(positiveFeedbackSection);
+
+          // Expand negative, collapse positive
+          state.isPositiveFeedbackExpanded = false;
+          state.isNegativeFeedbackExpanded = true;
+          positiveChevron.classList.remove('expanded');
+          negativeChevron.classList.add('expanded');
+          positiveChips.style.display = 'none';
+          negativeChips.style.display = 'flex';
+        }
+      } else {
+        feedbackSection.style.display = 'none';
+        feedbackSection.classList.remove('show');
+      }
+    }
+
+    function updateSubmitButton() {
+      const submitButton = document.getElementById('submitButton');
+      submitButton.disabled = state.userRating === 0;
+    }
+
+    function createChips() {
+      const positiveContainer = document.getElementById('positiveChips');
+      const negativeContainer = document.getElementById('negativeChips');
+
+      positiveOptions.forEach(option => {
+        const chip = document.createElement('button');
+        chip.className = 'chip';
+        chip.textContent = option.label;
+        chip.dataset.id = option.id;
+        chip.addEventListener('click', () => toggleChip('positive', option.id));
+        positiveContainer.appendChild(chip);
+      });
+
+      negativeOptions.forEach(option => {
+        const chip = document.createElement('button');
+        chip.className = 'chip';
+        chip.textContent = option.label;
+        chip.dataset.id = option.id;
+        chip.addEventListener('click', () => toggleChip('negative', option.id));
+        negativeContainer.appendChild(chip);
+      });
+    }
+
+    function toggleChip(type, id) {
+      const set = type === 'positive' ? state.selectedPositiveChips : state.selectedNegativeChips;
+      const container = type === 'positive' ? document.getElementById('positiveChips') : document.getElementById('negativeChips');
+
+      if (set.has(id)) {
+        set.delete(id);
+      } else {
+        set.add(id);
+      }
+
+      // Update chip appearance with animation
+      const chip = container.querySelector(`[data-id="${id}"]`);
+      if (set.has(id)) {
+        chip.classList.add('selected');
+        // Add a little bounce effect on selection
+        chip.style.animation = 'none';
+        setTimeout(() => {
+          chip.style.animation = '';
+        }, 10);
+      } else {
+        chip.classList.remove('selected');
+      }
+    }
+
+    function setupFeedbackToggle() {
+      const positiveHeader = document.getElementById('positiveFeedbackHeader');
+      const negativeHeader = document.getElementById('negativeFeedbackHeader');
+      const positiveChevron = document.getElementById('positiveChevron');
+      const negativeChevron = document.getElementById('negativeChevron');
+      const positiveChips = document.getElementById('positiveChips');
+      const negativeChips = document.getElementById('negativeChips');
+
+      positiveHeader.addEventListener('click', () => {
+        state.isPositiveFeedbackExpanded = !state.isPositiveFeedbackExpanded;
+        positiveChevron.classList.toggle('expanded');
+        positiveChips.style.display = state.isPositiveFeedbackExpanded ? 'flex' : 'none';
+      });
+
+      negativeHeader.addEventListener('click', () => {
+        state.isNegativeFeedbackExpanded = !state.isNegativeFeedbackExpanded;
+        negativeChevron.classList.toggle('expanded');
+        negativeChips.style.display = state.isNegativeFeedbackExpanded ? 'flex' : 'none';
+      });
+    }
+
+    function setupSubmitButton() {
+      const submitButton = document.getElementById('submitButton');
+      submitButton.addEventListener('click', () => {
+        if (state.userRating > 0) {
+          showSuccessScreen();
+        }
+      });
+    }
+
+    function showSuccessScreen() {
+      const ratingContainer = document.getElementById('ratingContainer');
+      const successContainer = document.getElementById('successContainer');
+
+      // Hide rating screen, show success screen
+      ratingContainer.classList.add('hidden');
+      successContainer.classList.remove('hidden');
+
+      // Generate photo gallery
+      generatePhotoGallery();
+    }
+
+    function generatePhotoGallery() {
+      const photoGallery = document.getElementById('photoGallery');
+      photoGallery.innerHTML = '';
+
+      const ratingImage = document.querySelector('.rating-image');
+      // Only show user's photo if they went through camera flow
+      const userHasPhoto = state.userUploadedPhoto;
+      const commentText = document.getElementById('comment').value || "This recipe was amazing! Perfect for a weeknight dinner.";
+
+      // User's photo card
+      const userCard = createPhotoCard({
+        isUserPhoto: true,
+        hasPhoto: userHasPhoto,
+        photoSrc: userHasPhoto ? ratingImage.src : null,
+        username: 'You',
+        date: 'Just now',
+        rating: state.userRating,
+        comment: commentText
+      });
+      photoGallery.appendChild(userCard);
+
+      // Community photo cards
+      const communityReviews = [
+        {
+          photoSrc: 'recipes/HelloFresh Main Image (2).jpg',
+          username: 'Sarah M.',
+          date: '2 days ago',
+          rating: 5,
+          comment: 'Absolutely delicious! My family loved it. Will definitely make again.'
+        },
+        {
+          photoSrc: 'recipes/HelloFresh Main Image (3).jpg',
+          username: 'Mike R.',
+          date: '1 week ago',
+          rating: 4,
+          comment: 'Great flavors! Added extra spice and it turned out perfect.'
+        },
+        {
+          photoSrc: 'recipes/HelloFresh Main Image (4).jpg',
+          username: 'Emily K.',
+          date: '2 weeks ago',
+          rating: 5,
+          comment: 'Easy to follow recipe. The presentation looked restaurant-quality!'
+        }
+      ];
+
+      communityReviews.forEach(review => {
+        const card = createPhotoCard({
+          isUserPhoto: false,
+          hasPhoto: true,
+          ...review
+        });
+        photoGallery.appendChild(card);
+      });
+
+      // Add "View more reviews" tile
+      const viewMoreCard = createViewMoreCard();
+      photoGallery.appendChild(viewMoreCard);
+    }
+
+    function createPhotoCard({ isUserPhoto, hasPhoto, photoSrc, username, date, rating, comment }) {
+      console.log('createPhotoCard called with:', { isUserPhoto, hasPhoto, photoSrc, username });
+
+      const card = document.createElement('div');
+      card.className = 'photo-card';
+
+      // Photo section
+      const imageContainer = document.createElement('div');
+      imageContainer.className = 'photo-card-image-container';
+
+      if (hasPhoto) {
+        const img = document.createElement('img');
+        img.src = photoSrc;
+        img.className = 'photo-card-image';
+        img.alt = `${username}'s photo`;
+        console.log('Creating img element with src:', photoSrc);
+        imageContainer.appendChild(img);
+
+        if (isUserPhoto) {
+          const menuIcon = document.createElement('button');
+          menuIcon.className = 'photo-card-menu';
+          menuIcon.onclick = (e) => {
+            e.stopPropagation();
+            openCamera();
+          };
+          menuIcon.innerHTML = `
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+              <circle cx="12" cy="5" r="1.5" fill="white"/>
+              <circle cx="12" cy="12" r="1.5" fill="white"/>
+              <circle cx="12" cy="19" r="1.5" fill="white"/>
+            </svg>
+          `;
+          imageContainer.appendChild(menuIcon);
+        }
+      } else {
+        // Placeholder for user without photo
+        const placeholder = document.createElement('div');
+        placeholder.className = 'photo-card-placeholder';
+        placeholder.onclick = openCamera;
+
+        const icon = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        icon.setAttribute('class', 'photo-placeholder-icon');
+        icon.setAttribute('viewBox', '0 0 24 24');
+        icon.setAttribute('fill', 'none');
+        icon.innerHTML = `
+          <rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" stroke-width="2"/>
+          <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/>
+          <path d="M9 5L10 3h4l1 2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        `;
+        placeholder.appendChild(icon);
+
+        const text = document.createElement('div');
+        text.className = 'photo-placeholder-text';
+        text.textContent = 'Add your photo';
+        placeholder.appendChild(text);
+
+        imageContainer.appendChild(placeholder);
+      }
+
+      card.appendChild(imageContainer);
+
+      // Content section
+      const content = document.createElement('div');
+      content.className = 'photo-card-content';
+
+      // Header with username and date
+      const header = document.createElement('div');
+      header.className = 'photo-card-header';
+
+      const userEl = document.createElement('div');
+      userEl.className = 'photo-card-user';
+      userEl.textContent = username;
+      header.appendChild(userEl);
+
+      const dateEl = document.createElement('div');
+      dateEl.className = 'photo-card-date';
+      dateEl.textContent = date;
+      header.appendChild(dateEl);
+
+      content.appendChild(header);
+
+      // Star rating
+      const ratingContainer = document.createElement('div');
+      ratingContainer.className = 'photo-card-rating';
+
+      for (let i = 1; i <= 5; i++) {
+        const star = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        star.setAttribute('class', 'rating-star');
+        star.setAttribute('viewBox', '0 0 24 24');
+        star.setAttribute('fill', i <= rating ? '#F5C842' : '#E0E0E0');
+        star.innerHTML = `
+          <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+        `;
+        ratingContainer.appendChild(star);
+      }
+
+      content.appendChild(ratingContainer);
+
+      // Comment
+      const commentEl = document.createElement('p');
+      commentEl.className = 'photo-card-comment';
+      commentEl.textContent = comment;
+      content.appendChild(commentEl);
+
+      card.appendChild(content);
+
+      return card;
+    }
+
+    function createViewMoreCard() {
+      const card = document.createElement('div');
+      card.className = 'view-more-card';
+      card.onclick = () => {
+        alert('View more reviews functionality would open here');
+      };
+
+      // Icon
+      const icon = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+      icon.setAttribute('class', 'view-more-icon');
+      icon.setAttribute('viewBox', '0 0 24 24');
+      icon.setAttribute('fill', 'none');
+      icon.innerHTML = `
+        <path d="M9 5H7C6.46957 5 5.96086 5.21071 5.58579 5.58579C5.21071 5.96086 5 6.46957 5 7V19C5 19.5304 5.21071 20.0391 5.58579 20.4142C5.96086 20.7893 6.46957 21 7 21H17C17.5304 21 18.0391 20.7893 18.4142 20.4142C18.7893 20.0391 19 19.5304 19 19V7C19 6.46957 18.7893 5.96086 18.4142 5.58579C18.0391 5.21071 17.5304 5 17 5H15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M9 5C9 4.46957 9.21071 3.96086 9.58579 3.58579C9.96086 3.21071 10.4696 3 11 3H13C13.5304 3 14.0391 3.21071 14.4142 3.58579C14.7893 3.96086 15 4.46957 15 5C15 5.53043 14.7893 6.03914 14.4142 6.41421C14.0391 6.78929 13.5304 7 13 7H11C10.4696 7 9.96086 6.78929 9.58579 6.41421C9.21071 6.03914 9 5.53043 9 5Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M9 12H15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M9 16H15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      `;
+      card.appendChild(icon);
+
+      // Text
+      const text = document.createElement('div');
+      text.className = 'view-more-text';
+      text.textContent = 'View more reviews';
+      card.appendChild(text);
+
+      // Count
+      const count = document.createElement('div');
+      count.className = 'view-more-count';
+      count.textContent = '2,847 reviews';
+      card.appendChild(count);
+
+      return card;
+    }
+
+    function closeSuccess() {
+      const successContainer = document.getElementById('successContainer');
+      const cookingStep = document.getElementById('cookingStep');
+
+      successContainer.classList.add('hidden');
+      cookingStep.classList.remove('hidden');
+      state.currentScreen = 'cooking';
+
+      // Reset rating state
+      state.userRating = 0;
+      state.selectedPositiveChips.clear();
+      state.selectedNegativeChips.clear();
+      state.userUploadedPhoto = false;
+      document.getElementById('comment').value = '';
+    }
+
+    function shareReview() {
+      alert('Share functionality would open share sheet here');
+    }
+
+    function saveRecipe() {
+      alert('Recipe saved to your cookbook!');
+    }
+
+    // ========================================
+    // Animation Control Functions
+    // ========================================
+
+    // ========================================
+    //   AI-Powered Camera Functionality
+    // ========================================
+
+    let cameraStream = null;
+    let capturedPhotoDataUrl = null;
+    let currentMode = 'restaurant';
+
+    async function openCamera() {
+      const cameraContainer = document.getElementById('cameraContainer');
+      const cameraView = document.getElementById('cameraView');
+      const photoPreview = document.getElementById('photoPreview');
+
+      // Show camera container
+      cameraContainer.classList.remove('hidden');
+
+      // Hide preview initially
+      photoPreview.classList.add('hidden');
+
+      // Create fake live view with food image
+      createFakeLiveView(cameraView);
+
+      // Set default mode (restaurant)
+      setActiveMode('restaurant');
+    }
+
+    function createFakeLiveView(container) {
+      // Remove any existing live view
+      const existing = container.querySelector('.camera-live-view');
+      if (existing) existing.remove();
+
+      // Create image element with breathing animation
+      const liveView = document.createElement('div');
+      liveView.className = 'camera-live-view';
+      liveView.style.backgroundImage = "url('user%20photo.png')";
+      liveView.style.backgroundSize = 'cover';
+      liveView.style.backgroundPosition = 'center';
+      container.insertBefore(liveView, container.firstChild);
+    }
+
+    function setActiveMode(mode) {
+      currentMode = mode;
+
+      // Update button states
+      document.querySelectorAll('.mode-button').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.mode === mode);
+      });
+
+      // Apply mode-specific overlay
+      applyModeEffect(mode);
+    }
+
+    function applyModeEffect(mode) {
+      const overlay = document.getElementById('modeOverlay');
+      overlay.innerHTML = ''; // Clear previous overlay
+
+      switch(mode) {
+        case 'restaurant':
+          showRestaurantEffect(overlay);
+          break;
+        case 'foodie':
+          showFoodieGuides(overlay);
+          break;
+        case 'layout':
+          showLayoutEffect(overlay);
+          break;
+      }
+    }
+
+    function showRestaurantEffect(overlay) {
+      overlay.className = 'mode-overlay restaurant-overlay';
+    }
+
+    function showFoodieGuides(overlay) {
+      overlay.className = 'mode-overlay foodie-guides';
+
+      // Create composition circle
+      const circle = document.createElement('div');
+      circle.className = 'foodie-circle';
+      overlay.appendChild(circle);
+
+      // Create rule of thirds grid
+      const grid = document.createElement('div');
+      grid.className = 'foodie-grid';
+
+      // Horizontal lines
+      for (let i = 1; i <= 2; i++) {
+        const line = document.createElement('div');
+        line.className = 'foodie-grid-line horizontal';
+        line.style.top = `${(i * 33.33)}%`;
+        grid.appendChild(line);
+      }
+
+      // Vertical lines
+      for (let i = 1; i <= 2; i++) {
+        const line = document.createElement('div');
+        line.className = 'foodie-grid-line vertical';
+        line.style.left = `${(i * 33.33)}%`;
+        grid.appendChild(line);
+      }
+
+      overlay.appendChild(grid);
+
+      // Add tip text
+      const tip = document.createElement('div');
+      tip.className = 'foodie-tip';
+      tip.textContent = 'Center your dish in the circle';
+      overlay.appendChild(tip);
+    }
+
+    function showLayoutEffect(overlay) {
+      overlay.className = 'mode-overlay layout-overlay';
+
+      // Create collage container
+      const collage = document.createElement('div');
+      collage.className = 'layout-collage';
+
+      // Left side - two small frames
+      const leftSide = document.createElement('div');
+      leftSide.className = 'layout-side';
+
+      const leftTop = document.createElement('div');
+      leftTop.className = 'layout-frame small';
+      leftTop.style.backgroundImage = "url('user%20photo.png')";
+      leftSide.appendChild(leftTop);
+
+      const leftBottom = document.createElement('div');
+      leftBottom.className = 'layout-frame small';
+      leftBottom.style.backgroundImage = "url('user%20photo.png')";
+      leftSide.appendChild(leftBottom);
+
+      // Center - large frame
+      const center = document.createElement('div');
+      center.className = 'layout-center';
+
+      const centerFrame = document.createElement('div');
+      centerFrame.className = 'layout-frame large';
+      centerFrame.style.backgroundImage = "url('user%20photo.png')";
+
+      const label = document.createElement('div');
+      label.className = 'layout-label';
+      label.textContent = 'Collage Preview';
+      centerFrame.appendChild(label);
+
+      center.appendChild(centerFrame);
+
+      // Right side - two small frames
+      const rightSide = document.createElement('div');
+      rightSide.className = 'layout-side';
+
+      const rightTop = document.createElement('div');
+      rightTop.className = 'layout-frame small';
+      rightTop.style.backgroundImage = "url('user%20photo.png')";
+      rightSide.appendChild(rightTop);
+
+      const rightBottom = document.createElement('div');
+      rightBottom.className = 'layout-frame small';
+      rightBottom.style.backgroundImage = "url('user%20photo.png')";
+      rightSide.appendChild(rightBottom);
+
+      // Assemble collage
+      collage.appendChild(leftSide);
+      collage.appendChild(center);
+      collage.appendChild(rightSide);
+      overlay.appendChild(collage);
+    }
+
+    function capturePhoto() {
+      const processing = document.getElementById('aiProcessing');
+      const photoPreview = document.getElementById('photoPreview');
+      const previewImage = document.getElementById('previewImage');
+      const aiModesContainer = document.getElementById('aiModesContainer');
+
+      // Show processing indicator
+      processing.classList.remove('hidden');
+
+      // Update processing text based on mode
+      const processingText = processing.querySelector('.processing-text');
+      switch(currentMode) {
+        case 'restaurant':
+          processingText.textContent = 'AI enhancing lighting...';
+          break;
+        case 'foodie':
+          processingText.textContent = 'Optimizing composition...';
+          break;
+        case 'layout':
+          processingText.textContent = 'Creating collage...';
+          break;
+      }
+
+      // Simulate AI processing (1.5 seconds)
+      setTimeout(() => {
+        // Use the user photo as fake capture
+        capturedPhotoDataUrl = 'user%20photo.png';
+        previewImage.src = capturedPhotoDataUrl;
+
+        // Hide processing
+        processing.classList.add('hidden');
+
+        // Hide AI modes container
+        aiModesContainer.style.display = 'none';
+
+        // Show preview
+        photoPreview.classList.remove('hidden');
+      }, 1500);
+    }
+
+    function closeCamera() {
+      const cameraContainer = document.getElementById('cameraContainer');
+      const photoPreview = document.getElementById('photoPreview');
+      const cameraView = document.getElementById('cameraView');
+
+      // Hide camera container and preview
+      cameraContainer.classList.add('hidden');
+      photoPreview.classList.add('hidden');
+      capturedPhotoDataUrl = null;
+
+      // Clean up live view
+      const liveView = cameraView.querySelector('.camera-live-view');
+      if (liveView) liveView.remove();
+
+      // Reset to default mode
+      currentMode = 'restaurant';
+    }
+
+    function retakePhoto() {
+      const photoPreview = document.getElementById('photoPreview');
+      const aiModesContainer = document.getElementById('aiModesContainer');
+
+      // Hide preview to go back to camera view
+      photoPreview.classList.add('hidden');
+
+      // Show AI modes container again
+      aiModesContainer.style.display = 'block';
+
+      // Reset mode overlay
+      applyModeEffect(currentMode);
+    }
+
+    function usePhoto() {
+      if (!capturedPhotoDataUrl) return;
+
+      // Update the rating page image with the captured photo
+      const ratingImage = document.querySelector('.rating-image');
+      ratingImage.src = capturedPhotoDataUrl;
+
+      // Mark that user uploaded a photo via camera flow
+      state.userUploadedPhoto = true;
+
+      // Close camera
+      closeCamera();
+
+      // If success screen is visible, regenerate the gallery to show the uploaded photo
+      const successContainer = document.getElementById('successContainer');
+      if (!successContainer.classList.contains('hidden')) {
+        generatePhotoGallery();
+      }
+    }
+
+    // ========================================
+
+    // Initialize
+    createStars();
+    createChips();
+    initLottieAnimations();
+    setupFeedbackToggle();
+    setupSubmitButton();
+  </script>
+</body>
+</html>

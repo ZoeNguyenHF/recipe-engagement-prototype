@@ -830,11 +830,6 @@
           <path d="M2 3.5H14M4 7.5H12M6 11.5H10" stroke={color} strokeWidth="1.8" strokeLinecap="round"/>
         </svg>
       ),
-      filter: (size = 16, color = 'currentColor') => (
-        <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
-          <path d="M4 6H20M7 12H17M10 18H14" stroke={color} strokeWidth="2" strokeLinecap="round"/>
-        </svg>
-      ),
       pause: (size = 16, color = 'currentColor') => (
         <svg width={size} height={size} viewBox="0 0 16 16" fill={color}>
           <rect x="3" y="2" width="4" height="12" rx="1" fill={color}/>
@@ -1293,8 +1288,8 @@
                 whiteSpace: 'nowrap',
               }}>{meal.subtitle}</span>
 
-              {/* Community Rating */}
-              {meal.customerRating && (
+              {/* Rating as text - under description */}
+              {(meal.rating || meal.customerRating) && (
                 <div style={{
                   display: 'flex',
                   alignItems: 'center',
@@ -1306,7 +1301,7 @@
                     fontWeight: 700,
                     color: 'black',
                   }}>
-                    {meal.customerRating}
+                    {meal.isPersonalRating ? meal.rating : meal.customerRating}
                   </span>
                   {Icons.star(14, 'black')}
                   <span style={{
@@ -1315,7 +1310,7 @@
                     fontWeight: 400,
                     color: '#656565',
                   }}>
-                    ({meal.reviewCount})
+                    {meal.isPersonalRating ? 'your rating' : `(${meal.reviewCount || '23k'})`}
                   </span>
                 </div>
               )}
@@ -1862,18 +1857,6 @@
         setCart(prev => ({ ...prev, [recipeId]: (prev[recipeId] || 0) + 1 }));
       };
 
-      const handleRemove = (recipeId) => {
-        setCart(prev => {
-          const newCart = { ...prev };
-          if (newCart[recipeId] > 1) {
-            newCart[recipeId] = newCart[recipeId] - 1;
-          } else {
-            delete newCart[recipeId];
-          }
-          return newCart;
-        });
-      };
-
       return (
         <div style={{
           background: '#efe9de',
@@ -1957,10 +1940,6 @@
               gap: 8,
               overflowX: 'auto',
               paddingBottom: 16,
-              paddingLeft: 16,
-              paddingRight: 16,
-              marginLeft: -16,
-              marginRight: -16,
               scrollbarWidth: 'none',
               msOverflowStyle: 'none',
             }}
@@ -2073,92 +2052,33 @@
                       </div>
                     )}
 
-                    {/* Add Button or Stepper - bottom right corner */}
-                    {quantity === 0 ? (
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleAdd(recipe.id);
-                        }}
-                        style={{
-                          position: 'absolute',
-                          bottom: 8,
-                          right: 8,
-                          width: 40,
-                          height: 40,
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          background: '#F5F0E8',
-                          border: '1.5px solid #232323',
-                          borderRadius: 12,
-                          cursor: 'pointer',
-                          fontFamily: 'var(--font-body)',
-                          fontSize: 16,
-                          fontWeight: 700,
-                          color: 'black',
-                        }}
-                      >
-                        {Icons.plus(20, 'black')}
-                      </button>
-                    ) : (
-                      <div style={{
+                    {/* Add Button - bottom right corner */}
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleAdd(recipe.id);
+                      }}
+                      style={{
                         position: 'absolute',
                         bottom: 8,
                         right: 8,
+                        width: 40,
+                        height: 40,
                         display: 'flex',
                         alignItems: 'center',
-                        background: '#F5F0E8',
+                        justifyContent: 'center',
+                        background: quantity === 0 ? '#F5F0E8' : 'var(--color-brand-primary)',
                         border: '1.5px solid #232323',
                         borderRadius: 12,
-                        overflow: 'hidden',
-                      }}>
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleRemove(recipe.id);
-                          }}
-                          style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            width: 32,
-                            height: 40,
-                            background: 'transparent',
-                            border: 'none',
-                            cursor: 'pointer',
-                          }}
-                        >
-                          {Icons.minus(16, 'black')}
-                        </button>
-                        <span style={{
-                          fontFamily: 'var(--font-body)',
-                          fontSize: 14,
-                          fontWeight: 700,
-                          color: 'black',
-                          minWidth: 20,
-                          textAlign: 'center',
-                        }}>{quantity}</span>
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleAdd(recipe.id);
-                          }}
-                          style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            width: 32,
-                            height: 40,
-                            background: 'transparent',
-                            border: 'none',
-                            cursor: 'pointer',
-                          }}
-                        >
-                          {Icons.plus(16, 'black')}
-                        </button>
-                      </div>
-                    )}
+                        cursor: 'pointer',
+                        fontFamily: 'var(--font-body)',
+                        fontSize: 16,
+                        fontWeight: 700,
+                        color: 'black',
+                      }}
+                    >
+                      {quantity === 0 ? Icons.plus(20, 'black') : quantity}
+                    </button>
                   </div>
                 </div>
               );
@@ -4643,14 +4563,12 @@
       }, [isOpen, openToSavedRecipes]);
 
       // Update displayed saved recipes only when not animating
-      // Only show recipes that are bookmarked AND not in cart
       useEffect(() => {
         if (!flyingRecipeId) {
-          const savedRecipes = mealsData.filter(meal => bookmarkedRecipes.has(meal.id));
-          const filtered = savedRecipes.filter(meal => !cart[meal.id] || cart[meal.id] === 0);
+          const filtered = mealsData.filter(meal => !cart[meal.id] || cart[meal.id] === 0).slice(0, 5);
           setDisplayedSavedRecipes(filtered);
         }
-      }, [cart, mealsData, flyingRecipeId, bookmarkedRecipes]);
+      }, [cart, mealsData, flyingRecipeId]);
 
       const handleCartScroll = () => {
         setIsCartScrolling(true);
@@ -5263,43 +5181,13 @@
                     cursor: 'pointer',
                   }}>View all</span>
                 </div>
-                {displayedSavedRecipes.length === 0 ? (
-                  <div style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    padding: '24px 16px',
-                    gap: 16,
-                  }}>
-                    <img
-                      src="3D_Beyond_the_Box.png"
-                      alt="All recipes added"
-                      style={{
-                        width: 80,
-                        height: 80,
-                        objectFit: 'contain',
-                      }}
-                    />
-                    <p style={{
-                      fontFamily: 'var(--font-body)',
-                      fontSize: 14,
-                      fontWeight: 400,
-                      color: '#242424',
-                      textAlign: 'center',
-                      margin: 0,
-                    }}>All your saved recipes are added to your cart. Enjoy!</p>
-                  </div>
-                ) : (
                 <div style={{
                   display: 'flex',
                   gap: 8,
                   overflowX: 'auto',
-                  paddingBottom: 8,
                   paddingLeft: 16,
                   paddingRight: 16,
-                  scrollbarWidth: 'none',
-                  msOverflowStyle: 'none',
+                  paddingBottom: 8,
                 }} className="h-scroll">
                   {displayedSavedRecipes.map((meal) => {
                     const quantity = cart[meal.id] || 0;
@@ -5384,98 +5272,44 @@
                             </div>
                           )}
 
-                          {/* Add Button or Stepper - bottom right corner */}
-                          {quantity === 0 ? (
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation();
+                          {/* Add Button - bottom right corner */}
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              if (quantity === 0) {
                                 handleSavedRecipeAdd(meal, e);
-                              }}
-                              style={{
-                                position: 'absolute',
-                                bottom: 8,
-                                right: 8,
-                                width: 40,
-                                height: 40,
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                background: '#F5F0E8',
-                                border: '1.5px solid #232323',
-                                borderRadius: 12,
-                                cursor: 'pointer',
-                                fontFamily: 'var(--font-body)',
-                                fontSize: 16,
-                                fontWeight: 700,
-                                color: 'black',
-                              }}
-                            >
-                              {Icons.plus(20, 'black')}
-                            </button>
-                          ) : (
-                            <div style={{
+                              } else {
+                                setSavedRecipesEditing(prev => ({ ...prev, [meal.id]: true }));
+                                if (savedRecipesTimeoutRef.current[meal.id]) clearTimeout(savedRecipesTimeoutRef.current[meal.id]);
+                                savedRecipesTimeoutRef.current[meal.id] = setTimeout(() => setSavedRecipesEditing(prev => ({ ...prev, [meal.id]: false })), 800);
+                              }
+                            }}
+                            style={{
                               position: 'absolute',
                               bottom: 8,
                               right: 8,
+                              width: 40,
+                              height: 40,
                               display: 'flex',
                               alignItems: 'center',
-                              background: '#F5F0E8',
+                              justifyContent: 'center',
+                              background: quantity === 0 ? '#F5F0E8' : 'var(--color-brand-primary)',
                               border: '1.5px solid #232323',
                               borderRadius: 12,
-                              overflow: 'hidden',
-                            }}>
-                              <button
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  onRemove(meal.id);
-                                }}
-                                style={{
-                                  display: 'flex',
-                                  alignItems: 'center',
-                                  justifyContent: 'center',
-                                  width: 32,
-                                  height: 40,
-                                  background: 'transparent',
-                                  border: 'none',
-                                  cursor: 'pointer',
-                                }}
-                              >
-                                {Icons.minus(16, 'black')}
-                              </button>
-                              <span style={{
-                                fontFamily: 'var(--font-body)',
-                                fontSize: 14,
-                                fontWeight: 700,
-                                color: 'black',
-                                minWidth: 20,
-                                textAlign: 'center',
-                              }}>{quantity}</span>
-                              <button
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  onAdd(meal.id);
-                                }}
-                                style={{
-                                  display: 'flex',
-                                  alignItems: 'center',
-                                  justifyContent: 'center',
-                                  width: 32,
-                                  height: 40,
-                                  background: 'transparent',
-                                  border: 'none',
-                                  cursor: 'pointer',
-                                }}
-                              >
-                                {Icons.plus(16, 'black')}
-                              </button>
-                            </div>
-                          )}
+                              cursor: 'pointer',
+                              fontFamily: 'var(--font-body)',
+                              fontSize: 16,
+                              fontWeight: 700,
+                              color: 'black',
+                            }}
+                          >
+                            {quantity === 0 ? Icons.plus(20, 'black') : quantity}
+                          </button>
                         </div>
                       </div>
                     );
                   })}
                 </div>
-                )}
               </div>
 
               {/* Ordering & delivery section */}
@@ -6389,17 +6223,10 @@
                         animation: isFadingOut ? 'fadeOut 0.5s ease-out forwards' : 'none',
                       }}
                     >
-                      {/* Heart illustration */}
-                      <img
-                        src="heart.png"
-                        alt="Heart"
-                        style={{
-                          width: 80,
-                          height: 80,
-                          objectFit: 'contain',
-                          marginBottom: 24,
-                        }}
-                      />
+                      {/* Heart icon */}
+                      <svg width="64" height="64" viewBox="0 0 24 24" fill="#ff6b6b" style={{ marginBottom: 24 }}>
+                        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                      </svg>
 
                       {/* Thank you text */}
                       <h3 style={{
@@ -6460,17 +6287,10 @@
                         minHeight: 380,
                       }}
                     >
-                      {/* Heart illustration */}
-                      <img
-                        src="heart.png"
-                        alt="Heart"
-                        style={{
-                          width: 80,
-                          height: 80,
-                          objectFit: 'contain',
-                          marginBottom: 20,
-                        }}
-                      />
+                      {/* Heart icon */}
+                      <svg width="64" height="64" viewBox="0 0 24 24" fill="#ff6b6b" style={{ marginBottom: 20 }}>
+                        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                      </svg>
 
                       {/* Thank you text */}
                       <h3 style={{
@@ -6492,7 +6312,10 @@
                         margin: '0 0 24px',
                         textAlign: 'center',
                       }}>
-                        Your highly-rated recipes will be highlighted in your menu. Want to rate more recipes? Visit your past orders.
+                        {hideRemindLater
+                          ? 'Your highly-rated recipes will be highlighted in your menu.'
+                          : 'Want to rate more recipes? Visit your past orders or come back anytime to plan your next week.'
+                        }
                       </p>
 
                       {/* CTAs */}
@@ -6502,9 +6325,9 @@
                         gap: 12,
                         width: '100%',
                       }}>
-                        {/* Primary CTA - Go to past orders */}
+                        {/* Primary CTA */}
                         <button
-                          onClick={onNavigateToPastOrders}
+                          onClick={onClose}
                           style={{
                             width: '100%',
                             padding: '12px 24px',
@@ -6519,8 +6342,30 @@
                             cursor: 'pointer',
                           }}
                         >
-                          Go to past orders
+                          Continue choosing meals
                         </button>
+
+                        {/* Secondary CTA - only show when opened from home */}
+                        {!hideRemindLater && (
+                          <button
+                            onClick={onNavigateToPastOrders}
+                            style={{
+                              width: '100%',
+                              padding: '12px 24px',
+                              background: 'transparent',
+                              border: '1px solid #232323',
+                              borderRadius: 8,
+                              fontFamily: 'var(--font-body)',
+                              fontSize: 14,
+                              fontWeight: 700,
+                              lineHeight: '20px',
+                              color: '#232323',
+                              cursor: 'pointer',
+                            }}
+                          >
+                            View past orders
+                          </button>
+                        )}
                       </div>
                     </div>
                   )}
@@ -6530,6 +6375,32 @@
                 </div>
               </div>
 
+              {/* Bottom CTA - Remind me later */}
+              {!hideRemindLater && (
+                <div style={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  paddingTop: 16,
+                }}>
+                  <button
+                    onClick={onClose}
+                    style={{
+                      background: 'transparent',
+                      border: 'none',
+                      fontFamily: 'var(--font-body)',
+                      fontSize: 14,
+                      fontWeight: 400,
+                      lineHeight: '20px',
+                      color: '#232323',
+                      textDecoration: 'underline',
+                      cursor: 'pointer',
+                      padding: 0,
+                    }}
+                  >
+                    Remind me later
+                  </button>
+                </div>
+              )}
             </div>
 
             {/* Close button */}
@@ -6560,478 +6431,30 @@
       );
     }
 
-    // ========== PROFILE PAGE ==========
-    function ProfilePage({ onNavigateToPastOrders }) {
-      const menuItems = [
-        { icon: 'profile', label: 'Personal info', hasChevron: true },
-        { icon: 'cloche', label: 'Food profile', hasChevron: true, badge: 'New' },
-        { icon: 'percentage', label: 'Benefits', hasChevron: true },
-        { icon: 'recipe', label: 'Past orders', hasChevron: true, onClick: onNavigateToPastOrders },
-        { icon: 'tag', label: 'Redeem Promo Code', hasChevron: true },
-        { icon: 'payment', label: 'Payment methods', hasLock: true, subtext: 'Credit card' },
-        { icon: 'document', label: 'Order history', hasChevron: true },
-      ];
-
-      const helpItems = [
-        { label: 'Help center', hasChevron: true },
-        { label: 'Contact us', hasChevron: true },
-        { label: 'Give us your app feedback', hasChevron: true },
-      ];
-
-      const renderIcon = (iconName, size = 24, color = '#242424') => {
-        const icons = {
-          profile: (
-            <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
-              <circle cx="12" cy="8" r="4" stroke={color} strokeWidth="2"/>
-              <path d="M4 20c0-4 4-6 8-6s8 2 8 6" stroke={color} strokeWidth="2" strokeLinecap="round"/>
-            </svg>
-          ),
-          cloche: (
-            <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
-              <path d="M12 4C7 4 3 8 3 13h18c0-5-4-9-9-9z" stroke={color} strokeWidth="2"/>
-              <path d="M2 16h20M12 4V2" stroke={color} strokeWidth="2" strokeLinecap="round"/>
-            </svg>
-          ),
-          percentage: (
-            <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
-              <circle cx="12" cy="12" r="9" stroke={color} strokeWidth="2"/>
-              <path d="M9 9h.01M15 15h.01M9 15l6-6" stroke={color} strokeWidth="2" strokeLinecap="round"/>
-            </svg>
-          ),
-          trophy: (
-            <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
-              <path d="M8 21h8M12 17v4M17 4v4a5 5 0 01-10 0V4" stroke={color} strokeWidth="2"/>
-              <path d="M17 5h2a2 2 0 012 2v1a4 4 0 01-4 4M7 5H5a2 2 0 00-2 2v1a4 4 0 004 4" stroke={color} strokeWidth="2"/>
-            </svg>
-          ),
-          recipe: (
-            <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
-              <rect x="4" y="3" width="16" height="18" rx="2" stroke={color} strokeWidth="2"/>
-              <path d="M8 7h8M8 11h8M8 15h4" stroke={color} strokeWidth="2" strokeLinecap="round"/>
-            </svg>
-          ),
-          tag: (
-            <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
-              <path d="M12 2l9 9-9 11-9-11 9-9z" stroke={color} strokeWidth="2"/>
-              <circle cx="12" cy="9" r="2" stroke={color} strokeWidth="2"/>
-            </svg>
-          ),
-          payment: (
-            <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
-              <rect x="2" y="6" width="20" height="12" rx="2" stroke={color} strokeWidth="2"/>
-              <path d="M2 10h20M6 14h4" stroke={color} strokeWidth="2" strokeLinecap="round"/>
-            </svg>
-          ),
-          document: (
-            <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
-              <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6z" stroke={color} strokeWidth="2"/>
-              <path d="M14 2v6h6M8 13h8M8 17h8" stroke={color} strokeWidth="2" strokeLinecap="round"/>
-            </svg>
-          ),
-          cards: (
-            <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
-              <rect x="4" y="6" width="16" height="12" rx="2" stroke={color} strokeWidth="2"/>
-              <path d="M8 2h8M6 4h12" stroke={color} strokeWidth="2" strokeLinecap="round"/>
-            </svg>
-          ),
-          chevron: (
-            <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
-              <path d="M9 6l6 6-6 6" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-          ),
-          lock: (
-            <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
-              <rect x="5" y="11" width="14" height="10" rx="2" stroke={color} strokeWidth="2"/>
-              <path d="M8 11V7a4 4 0 018 0v4" stroke={color} strokeWidth="2"/>
-            </svg>
-          ),
-          bell: (
-            <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
-              <path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9" stroke={color} strokeWidth="2"/>
-              <path d="M13.73 21a2 2 0 01-3.46 0" stroke={color} strokeWidth="2"/>
-            </svg>
-          ),
-          edit: (
-            <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
-              <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" stroke={color} strokeWidth="2"/>
-              <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" stroke={color} strokeWidth="2"/>
-            </svg>
-          ),
-        };
-        return icons[iconName] || null;
-      };
-
-      return (
-        <div style={{
-          width: '100%',
-          height: '100%',
-          background: 'var(--color-page-bg)',
-          display: 'flex',
-          flexDirection: 'column',
-          overflow: 'auto',
-          paddingBottom: 83,
-        }}>
-          {/* Header */}
-          <div style={{
-            background: '#067a46',
-            padding: '32px 16px 16px',
-          }}>
-            <h1 style={{
-              fontFamily: 'var(--font-headline)',
-              fontSize: 20,
-              fontWeight: 700,
-              lineHeight: '24px',
-              color: 'white',
-              margin: 0,
-              textAlign: 'center',
-            }}>Profile</h1>
-          </div>
-
-          {/* Profile Section */}
-          <div style={{
-            padding: '24px 16px',
-            display: 'flex',
-            alignItems: 'center',
-            gap: 24,
-          }}>
-            {/* Avatar */}
-            <div style={{
-              width: 82,
-              height: 82,
-              borderRadius: '50%',
-              background: '#e0d9cb',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              flexShrink: 0,
-            }}>
-              <span style={{
-                fontFamily: 'var(--font-headline)',
-                fontSize: 20,
-                fontWeight: 700,
-                color: '#232323',
-              }}>JC</span>
-            </div>
-
-            {/* Name and Stats */}
-            <div style={{ flex: 1, position: 'relative' }}>
-              <h2 style={{
-                fontFamily: 'var(--font-headline)',
-                fontSize: 20,
-                fontWeight: 700,
-                color: '#232323',
-                margin: '0 0 8px 0',
-              }}>Jessica</h2>
-
-              <div style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                maxWidth: 205,
-              }}>
-                <div style={{ textAlign: 'left' }}>
-                  <p style={{
-                    fontFamily: 'var(--font-body)',
-                    fontSize: 16,
-                    fontWeight: 700,
-                    color: '#232323',
-                    margin: 0,
-                  }}>Boxes</p>
-                  <p style={{
-                    fontFamily: 'var(--font-body)',
-                    fontSize: 16,
-                    fontWeight: 700,
-                    color: '#232323',
-                    margin: 0,
-                  }}>0</p>
-                </div>
-                <div style={{ textAlign: 'left' }}>
-                  <p style={{
-                    fontFamily: 'var(--font-body)',
-                    fontSize: 16,
-                    fontWeight: 700,
-                    color: '#232323',
-                    margin: 0,
-                  }}>Box Streak</p>
-                  <p style={{
-                    fontFamily: 'var(--font-body)',
-                    fontSize: 16,
-                    fontWeight: 700,
-                    color: '#232323',
-                    margin: 0,
-                  }}>$0</p>
-                </div>
-                <div style={{ textAlign: 'left' }}>
-                  <p style={{
-                    fontFamily: 'var(--font-body)',
-                    fontSize: 16,
-                    fontWeight: 700,
-                    color: '#232323',
-                    margin: 0,
-                  }}>Credit</p>
-                  <p style={{
-                    fontFamily: 'var(--font-body)',
-                    fontSize: 16,
-                    fontWeight: 700,
-                    color: '#232323',
-                    margin: 0,
-                  }}>$0</p>
-                </div>
-              </div>
-
-              {/* Notification Bell */}
-              <div style={{
-                position: 'absolute',
-                right: 0,
-                top: -9,
-                width: 40,
-                height: 40,
-                borderRadius: '50%',
-                background: '#efe9de',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                cursor: 'pointer',
-              }}>
-                {renderIcon('bell', 24, '#232323')}
-                {/* Red dot badge */}
-                <div style={{
-                  position: 'absolute',
-                  top: 11,
-                  right: 7,
-                  width: 8,
-                  height: 8,
-                  borderRadius: '50%',
-                  background: '#b30000',
-                  border: '2px solid #efe9de',
-                }} />
-              </div>
-            </div>
-          </div>
-
-          {/* Content */}
-          <div style={{
-            padding: '0 16px 32px',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: 32,
-          }}>
-            {/* Plan Settings */}
-            <div style={{
-              background: '#efe9de',
-              borderRadius: 8,
-              height: 48,
-              display: 'flex',
-              alignItems: 'center',
-              padding: '0 10px',
-            }}>
-              {renderIcon('cards', 24, '#242424')}
-              <span style={{
-                fontFamily: 'var(--font-body)',
-                fontSize: 16,
-                fontWeight: 400,
-                color: '#242424',
-                marginLeft: 8,
-                flex: 1,
-              }}>Plan settings</span>
-              <button style={{
-                background: '#232323',
-                color: 'white',
-                border: 'none',
-                borderRadius: 8,
-                padding: '8px 24px',
-                fontFamily: 'var(--font-body)',
-                fontSize: 16,
-                fontWeight: 700,
-                cursor: 'pointer',
-              }}>Edit</button>
-            </div>
-
-            {/* Profile Setting Section */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-              <p style={{
-                fontFamily: 'var(--font-body)',
-                fontSize: 14,
-                fontWeight: 400,
-                color: '#232323',
-                margin: 0,
-              }}>Profile setting</p>
-
-              {menuItems.map((item, index) => (
-                <div
-                  key={index}
-                  onClick={item.onClick}
-                  style={{
-                    background: '#efe9de',
-                    borderRadius: 8,
-                    height: 48,
-                    display: 'flex',
-                    alignItems: 'center',
-                    padding: '0 8px',
-                    gap: 8,
-                    cursor: item.onClick ? 'pointer' : 'default',
-                  }}
-                >
-                  {renderIcon(item.icon, 24, '#242424')}
-                  <span style={{
-                    fontFamily: 'var(--font-body)',
-                    fontSize: 16,
-                    fontWeight: 400,
-                    color: '#242424',
-                    flex: 1,
-                  }}>{item.label}</span>
-                  {item.badge && (
-                    <span style={{
-                      background: '#970000',
-                      color: 'white',
-                      fontFamily: 'var(--font-body)',
-                      fontSize: 12,
-                      fontWeight: 400,
-                      padding: '0 8px',
-                      borderRadius: 999,
-                      lineHeight: '16px',
-                    }}>{item.badge}</span>
-                  )}
-                  {item.subtext && (
-                    <span style={{
-                      fontFamily: 'var(--font-body)',
-                      fontSize: 14,
-                      fontWeight: 400,
-                      color: '#232323',
-                    }}>{item.subtext}</span>
-                  )}
-                  {item.hasChevron && renderIcon('chevron', 24, '#242424')}
-                  {item.hasLock && renderIcon('lock', 24, '#242424')}
-                </div>
-              ))}
-            </div>
-
-            {/* Help & Contact Section */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-              <p style={{
-                fontFamily: 'var(--font-body)',
-                fontSize: 14,
-                fontWeight: 400,
-                color: '#232323',
-                margin: 0,
-              }}>Help & Contact</p>
-
-              {helpItems.map((item, index) => (
-                <div
-                  key={index}
-                  style={{
-                    background: '#efe9de',
-                    borderRadius: 8,
-                    height: 48,
-                    display: 'flex',
-                    alignItems: 'center',
-                    padding: '0 8px',
-                    gap: 8,
-                    cursor: 'pointer',
-                  }}
-                >
-                  <span style={{
-                    fontFamily: 'var(--font-body)',
-                    fontSize: 16,
-                    fontWeight: 400,
-                    color: '#242424',
-                    flex: 1,
-                  }}>{item.label}</span>
-                  {item.hasChevron && renderIcon('chevron', 24, '#242424')}
-                </div>
-              ))}
-            </div>
-
-            {/* Logout Button */}
-            <button style={{
-              background: 'transparent',
-              border: 'none',
-              fontFamily: 'var(--font-body)',
-              fontSize: 16,
-              fontWeight: 700,
-              color: '#242424',
-              textDecoration: 'underline',
-              cursor: 'pointer',
-              padding: '8px 24px',
-              alignSelf: 'center',
-            }}>Logout</button>
-          </div>
-        </div>
-      );
-    }
-
     // ========== PAST ORDERS PAGE ==========
     function PastOrdersPage({ onBack }) {
       const [selectedFilter, setSelectedFilter] = useState('All');
       const [recipeRatings, setRecipeRatings] = useState({});
       const [bookmarkedRecipes, setBookmarkedRecipes] = useState(new Set([2, 4, 7, 10])); // Random initial state
-      const [favoriteRecipes, setFavoriteRecipes] = useState(new Set([2, 7])); // Random initial state for favorites
       const [showToast, setShowToast] = useState(false);
       const [toastAction, setToastAction] = useState('saved');
       const [particles, setParticles] = useState([]);
-      const [activeBanner, setActiveBanner] = useState(0);
-      const [stickyDeliveryDate, setStickyDeliveryDate] = useState(null);
-      const [showDateDrawer, setShowDateDrawer] = useState(false);
-      const [selectedDeliveryDates, setSelectedDeliveryDates] = useState(new Set());
-      const [appliedDeliveryDates, setAppliedDeliveryDates] = useState(new Set());
-      const [dateRangeStart, setDateRangeStart] = useState('');
-      const [dateRangeEnd, setDateRangeEnd] = useState('');
-      const [showSaveDrawer, setShowSaveDrawer] = useState(false);
-      const [showSupportDrawer, setShowSupportDrawer] = useState(false);
-      const [selectedSupportDelivery, setSelectedSupportDelivery] = useState(null);
-      const [currentSavingRecipeId, setCurrentSavingRecipeId] = useState(null);
-      const [selectedCollections, setSelectedCollections] = useState(new Set(['favourite']));
       const toastTimeoutRef = useRef(null);
-      const recipeRefs = useRef({});
-      const scrollContainerRef = useRef(null);
-      const recipeListRef = useRef(null);
-      const filterSectionRef = useRef(null);
 
-      const collections = [
-        { id: 'favourite', name: 'Favourite', count: 8, img: 'heart.png', isRound: true },
-        { id: 'hosting', name: 'Hosting', count: 2, img: 'recipes/HelloFresh Main High.jpg' },
-        { id: 'low-carb', name: 'Low Carbo breakfast', count: 1, img: 'recipes/HelloFresh Main Image.jpg' },
-      ];
-
-      const filters = ['All', 'Top Rated', 'Unrated'];
+      const filters = ['All', 'Top Rated', 'Saved', 'Unrated'];
 
       const toggleBookmark = (recipeId) => {
         const wasSaved = bookmarkedRecipes.has(recipeId);
 
-        if (wasSaved) {
-          // Unsave directly
-          setBookmarkedRecipes(prev => {
-            const newSet = new Set(prev);
+        setBookmarkedRecipes(prev => {
+          const newSet = new Set(prev);
+          if (newSet.has(recipeId)) {
             newSet.delete(recipeId);
-            return newSet;
-          });
-
-          // Clear previous timeout
-          if (toastTimeoutRef.current) {
-            clearTimeout(toastTimeoutRef.current);
+          } else {
+            newSet.add(recipeId);
           }
-
-          // Show toast
-          setToastAction('removed');
-          setShowToast(true);
-          toastTimeoutRef.current = setTimeout(() => setShowToast(false), 5000);
-        } else {
-          // Show save drawer
-          setCurrentSavingRecipeId(recipeId);
-          setSelectedCollections(new Set(['favourite'])); // Default selection
-          setShowSaveDrawer(true);
-        }
-      };
-
-      const handleSaveToCollections = () => {
-        if (currentSavingRecipeId) {
-          setBookmarkedRecipes(prev => {
-            const newSet = new Set(prev);
-            newSet.add(currentSavingRecipeId);
-            return newSet;
-          });
-        }
-        setShowSaveDrawer(false);
-        setCurrentSavingRecipeId(null);
+          return newSet;
+        });
 
         // Clear previous timeout
         if (toastTimeoutRef.current) {
@@ -7039,29 +6462,7 @@
         }
 
         // Show toast
-        setToastAction('saved');
-        setShowToast(true);
-        toastTimeoutRef.current = setTimeout(() => setShowToast(false), 5000);
-      };
-
-      const handleUnsaveFromDrawer = () => {
-        if (currentSavingRecipeId) {
-          setBookmarkedRecipes(prev => {
-            const newSet = new Set(prev);
-            newSet.delete(currentSavingRecipeId);
-            return newSet;
-          });
-        }
-        setShowSaveDrawer(false);
-        setCurrentSavingRecipeId(null);
-
-        // Clear previous timeout
-        if (toastTimeoutRef.current) {
-          clearTimeout(toastTimeoutRef.current);
-        }
-
-        // Show toast
-        setToastAction('removed');
+        setToastAction(wasSaved ? 'removed' : 'saved');
         setShowToast(true);
         toastTimeoutRef.current = setTimeout(() => setShowToast(false), 5000);
       };
@@ -7177,105 +6578,15 @@
               rating: 5,
               hasComment: true
             },
-            {
-              id: 11,
-              name: 'Garlic Herb Butter Steak',
-              subtitle: 'with Mashed Potatoes & Asparagus',
-              img: 'recipes/HelloFresh Main High.jpg',
-              rating: 0,
-              hasComment: false
-            },
-          ]
-        },
-        {
-          date: { day: 'MON', date: '20', month: 'DEC' },
-          status: 'Are you satisfied?',
-          message: '',
-          showHelpButton: false,
-          recipes: [
-            {
-              id: 12,
-              name: 'Lemon Herb Roasted Chicken',
-              subtitle: 'with Fingerling Potatoes & Green Beans',
-              img: 'recipes/HelloFresh Main Image.jpg',
-              rating: 4,
-              hasComment: true
-            },
-            {
-              id: 13,
-              name: 'Spicy Korean BBQ Bowls',
-              subtitle: 'with Pickled Vegetables & Gochujang',
-              img: 'recipes/HelloFresh Main High (1).jpg',
-              rating: 0,
-              hasComment: false
-            },
-            {
-              id: 14,
-              name: 'Tuscan White Bean Soup',
-              subtitle: 'with Crusty Bread & Parmesan',
-              img: 'recipes/HelloFresh Main High (2).jpg',
-              rating: 0,
-              hasComment: false
-            },
-          ]
-        },
-        {
-          date: { day: 'WED', date: '13', month: 'DEC' },
-          status: 'Are you satisfied?',
-          message: '',
-          showHelpButton: false,
-          recipes: [
-            {
-              id: 15,
-              name: 'Maple Glazed Salmon',
-              subtitle: 'with Wild Rice & Roasted Carrots',
-              img: 'recipes/HelloFresh Main Image (1).jpg',
-              rating: 5,
-              hasComment: true
-            },
-            {
-              id: 16,
-              name: 'Chicken Tikka Masala',
-              subtitle: 'with Basmati Rice & Naan Bread',
-              img: 'recipes/HelloFresh Main Image (2).jpg',
-              rating: 0,
-              hasComment: false
-            },
-            {
-              id: 17,
-              name: 'Vegetable Pad Thai',
-              subtitle: 'with Tofu, Peanuts & Lime',
-              img: 'recipes/HelloFresh Main Image (3).jpg',
-              rating: 3,
-              hasComment: false
-            },
-            {
-              id: 18,
-              name: 'BBQ Pulled Pork Tacos',
-              subtitle: 'with Coleslaw & Pickled Onions',
-              img: 'recipes/HelloFresh Main Image (4).jpg',
-              rating: 0,
-              hasComment: false
-            },
           ]
         }
       ];
 
       // Filter recipes based on selected filter
       const getFilteredOrders = () => {
-        let orders = pastOrders;
+        if (selectedFilter === 'All') return pastOrders;
 
-        // Filter by delivery dates if any are selected
-        if (appliedDeliveryDates.size > 0) {
-          orders = orders.filter(order => {
-            const dateKey = `${order.date.day} ${order.date.date} ${order.date.month}`;
-            return appliedDeliveryDates.has(dateKey);
-          });
-        }
-
-        if (selectedFilter === 'All') return orders;
-
-        return orders.map(order => ({
+        return pastOrders.map(order => ({
           ...order,
           recipes: order.recipes.filter(recipe => {
             const currentRating = recipeRatings[recipe.id] || recipe.rating;
@@ -7350,41 +6661,14 @@
         }
       };
 
-      // Scroll handler to update sticky delivery date
-      const handleScroll = (e) => {
-        const scrollTop = e.target.scrollTop;
-        const headerHeight = 180; // Approximate height of header + banner + filters
-
-        if (scrollTop < headerHeight) {
-          setStickyDeliveryDate(null);
-          return;
-        }
-
-        // Find the topmost visible recipe
-        let currentDate = null;
-        Object.values(recipeRefs.current).forEach(({ el, date }) => {
-          if (el) {
-            const rect = el.getBoundingClientRect();
-            if (rect.top <= 150 && rect.bottom > 100) {
-              currentDate = date;
-            }
-          }
-        });
-
-        setStickyDeliveryDate(currentDate);
-      };
-
       return (
-        <div
-          ref={scrollContainerRef}
-          onScroll={handleScroll}
-          style={{
-            width: '100%',
-            height: '100%',
-            overflow: 'auto',
-            background: 'var(--color-page-bg)',
-            position: 'relative',
-          }}>
+        <div style={{
+          width: '100%',
+          height: '100%',
+          overflow: 'auto',
+          background: 'var(--color-page-bg)',
+          position: 'relative',
+        }}>
           {/* Header */}
           <div style={{
             position: 'sticky',
@@ -7435,314 +6719,48 @@
               </div>
             </div>
 
-          </div>
-
-          {/* Banner Carousel */}
-          <div style={{
-            padding: '32px 16px 16px 16px',
-            background: 'var(--color-page-bg)',
-            overflowX: 'clip',
-            overflowY: 'visible',
-          }}>
+            {/* Filter tags - outside green background */}
             <div style={{
-              position: 'relative',
-              overflowX: 'clip',
-              overflowY: 'visible',
-              borderRadius: 12,
-            }}>
-              <div style={{
-                display: 'flex',
-                transition: 'transform 0.3s ease',
-                transform: `translateX(-${activeBanner * 100}%)`,
-              }}>
-                {/* Banner 1: Feedback */}
-                <div style={{
-                  minWidth: '100%',
-                  background: '#D2F895',
-                  borderRadius: 12,
-                  padding: '16px',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: 12,
-                  boxSizing: 'border-box',
-                  position: 'relative',
-                  overflow: 'visible',
-                }}>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: 4, maxWidth: 200 }}>
-                    <p style={{
-                      fontFamily: 'var(--font-headline)',
-                      fontSize: 16,
-                      fontWeight: 700,
-                      lineHeight: '20px',
-                      color: 'black',
-                      margin: 0,
-                    }}>Are you satisfied?</p>
-                    <p style={{
-                      fontFamily: 'var(--font-body)',
-                      fontSize: 14,
-                      fontWeight: 400,
-                      lineHeight: '20px',
-                      color: '#242424',
-                      margin: 0,
-                    }}>Rate recipes to tailor your Menu and recommendations</p>
-                  </div>
-                  <button
-                    onClick={() => {
-                      setSelectedFilter('Unrated');
-                      setTimeout(() => {
-                        if (filterSectionRef.current && scrollContainerRef.current) {
-                          const filterTop = filterSectionRef.current.offsetTop;
-                          const headerHeight = 68; // Account for sticky header
-                          scrollContainerRef.current.scrollTo({
-                            top: filterTop - headerHeight,
-                            behavior: 'smooth'
-                          });
-                        }
-                      }, 100);
-                    }}
-                    style={{
-                      padding: '8px 24px',
-                      border: 'none',
-                      borderRadius: 8,
-                      background: '#232323',
-                      fontFamily: 'var(--font-body)',
-                      fontSize: 16,
-                      fontWeight: 700,
-                      color: 'white',
-                      cursor: 'pointer',
-                      alignSelf: 'flex-start',
-                    }}
-                  >
-                    Rate now
-                  </button>
-                  <img
-                    src="Star.png"
-                    alt="Star"
-                    style={{
-                      width: 100,
-                      height: 100,
-                      objectFit: 'contain',
-                      position: 'absolute',
-                      right: 8,
-                      top: -40,
-                    }}
-                  />
-                </div>
-
-                {/* Banner 2: Delivery Support */}
-                <div style={{
-                  minWidth: '100%',
-                  background: '#D2F895',
-                  borderRadius: 12,
-                  padding: '16px',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: 12,
-                  boxSizing: 'border-box',
-                  position: 'relative',
-                  overflow: 'visible',
-                }}>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: 4, maxWidth: 200 }}>
-                    <p style={{
-                      fontFamily: 'var(--font-headline)',
-                      fontSize: 16,
-                      fontWeight: 700,
-                      lineHeight: '20px',
-                      color: 'black',
-                      margin: 0,
-                    }}>Need help with delivery?</p>
-                    <p style={{
-                      fontFamily: 'var(--font-body)',
-                      fontSize: 14,
-                      fontWeight: 400,
-                      lineHeight: '20px',
-                      color: '#242424',
-                      margin: 0,
-                    }}>We're here to support you with any issues</p>
-                  </div>
-                  <button
-                    onClick={() => setShowSupportDrawer(true)}
-                    style={{
-                      padding: '8px 24px',
-                      border: 'none',
-                      borderRadius: 8,
-                      background: '#232323',
-                      fontFamily: 'var(--font-body)',
-                      fontSize: 16,
-                      fontWeight: 700,
-                      color: 'white',
-                      cursor: 'pointer',
-                      alignSelf: 'flex-start',
-                    }}
-                  >
-                    Get help
-                  </button>
-                  <img
-                    src="3D_Beyond_the_Box.png"
-                    alt="Delivery box"
-                    style={{
-                      width: 100,
-                      height: 100,
-                      objectFit: 'contain',
-                      position: 'absolute',
-                      right: 8,
-                      top: -40,
-                    }}
-                  />
-                </div>
-              </div>
-
-              {/* Carousel dots */}
-              <div style={{
-                display: 'flex',
-                justifyContent: 'center',
-                gap: 6,
-                marginTop: 12,
-              }}>
-                {[0, 1].map((index) => (
-                  <button
-                    key={index}
-                    onClick={() => setActiveBanner(index)}
-                    style={{
-                      width: activeBanner === index ? 16 : 6,
-                      height: 6,
-                      borderRadius: 3,
-                      background: activeBanner === index ? '#232323' : '#c4c4c4',
-                      border: 'none',
-                      cursor: 'pointer',
-                      padding: 0,
-                      transition: 'all 0.2s ease',
-                    }}
-                  />
-                ))}
-              </div>
-            </div>
-          </div>
-
-          {/* Filter tags */}
-          <div
-            ref={filterSectionRef}
-            style={{
               background: 'var(--color-page-bg)',
-              padding: '0 16px 16px',
-            }}
-          >
-            <div style={{
               display: 'flex',
-              alignItems: 'center',
-              gap: 12,
-            }}>
-              <div style={{
-                display: 'flex',
-                gap: 8,
-                overflowX: 'auto',
-                WebkitOverflowScrolling: 'touch',
-                flex: 1,
-              }} className="h-scroll">
-                {filters.map(filter => (
-                  <button
-                    key={filter}
-                    onClick={() => setSelectedFilter(filter)}
-                    style={{
-                      padding: '6px 12px',
-                      borderRadius: 999,
-                      border: '1px solid #7d7561',
-                      background: selectedFilter === filter ? '#bbf06a' : 'var(--color-page-bg)',
-                      color: '#232323',
-                      fontFamily: 'var(--font-body)',
-                      fontSize: 14,
-                      fontWeight: 400,
-                      lineHeight: '20px',
-                      cursor: 'pointer',
-                      whiteSpace: 'nowrap',
-                    }}
-                  >
-                    {filter}
-                  </button>
-                ))}
-              </div>
-              {/* Calendar icon */}
-              <button
-                onClick={() => {
-                  setSelectedDeliveryDates(new Set(appliedDeliveryDates));
-                  setShowDateDrawer(true);
-                }}
-                style={{
-                  width: 32,
-                  height: 32,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  background: 'transparent',
-                  border: 'none',
-                  cursor: 'pointer',
-                  flexShrink: 0,
-                  position: 'relative',
-                }}
-              >
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                  <rect x="3" y="4" width="18" height="18" rx="2" stroke="#232323" strokeWidth="1.5"/>
-                  <path d="M3 10H21" stroke="#232323" strokeWidth="1.5"/>
-                  <path d="M8 2V6" stroke="#232323" strokeWidth="1.5" strokeLinecap="round"/>
-                  <path d="M16 2V6" stroke="#232323" strokeWidth="1.5" strokeLinecap="round"/>
-                </svg>
-                {appliedDeliveryDates.size > 0 && (
-                  <div style={{
-                    position: 'absolute',
-                    top: 4,
-                    right: 4,
-                    width: 8,
-                    height: 8,
-                    background: '#91C03E',
-                    borderRadius: '50%',
-                  }} />
-                )}
-              </button>
-            </div>
-          </div>
-
-          {/* Sticky Delivery Date Header */}
-          {stickyDeliveryDate && (
-            <div style={{
-              position: 'sticky',
-              top: 72,
-              zIndex: 99,
-              background: 'var(--color-page-bg)',
-              padding: '8px 16px',
-              borderBottom: '1px solid #e0e0e0',
-              display: 'flex',
-              alignItems: 'center',
               gap: 8,
-            }}>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                <rect x="3" y="4" width="18" height="18" rx="2" stroke="#232323" strokeWidth="1.5"/>
-                <path d="M3 10H21" stroke="#232323" strokeWidth="1.5"/>
-                <path d="M8 2V6" stroke="#232323" strokeWidth="1.5" strokeLinecap="round"/>
-                <path d="M16 2V6" stroke="#232323" strokeWidth="1.5" strokeLinecap="round"/>
-              </svg>
-              <span style={{
-                fontFamily: 'var(--font-body)',
-                fontSize: 14,
-                fontWeight: 700,
-                color: '#232323',
-              }}>
-                {stickyDeliveryDate}
-              </span>
+              overflowX: 'auto',
+              WebkitOverflowScrolling: 'touch',
+              padding: '16px',
+            }} className="h-scroll">
+              {filters.map(filter => (
+                <button
+                  key={filter}
+                  onClick={() => setSelectedFilter(filter)}
+                  style={{
+                    padding: '6px 12px',
+                    borderRadius: 999,
+                    border: '1px solid #7d7561',
+                    background: selectedFilter === filter ? '#bbf06a' : 'var(--color-page-bg)',
+                    color: '#232323',
+                    fontFamily: 'var(--font-body)',
+                    fontSize: 14,
+                    fontWeight: 400,
+                    lineHeight: '20px',
+                    cursor: 'pointer',
+                    whiteSpace: 'nowrap',
+                  }}
+                >
+                  {filter}
+                </button>
+              ))}
             </div>
-          )}
+          </div>
 
           {/* Order sections */}
-          <div
-            ref={recipeListRef}
-            style={{
-              padding: '8px 16px 24px 16px',
-              display: 'flex',
-              flexDirection: 'column',
-              gap: 8,
-              width: '100%',
-              boxSizing: 'border-box',
-            }}
-          >
+          <div style={{
+            padding: '8px 16px 24px 16px',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 24,
+            width: '100%',
+            boxSizing: 'border-box',
+          }}>
             {filteredOrders.map((order, orderIndex) => {
               // Compute dynamic message for last two deliveries
               let displayMessage = order.message;
@@ -7759,10 +6777,108 @@
                 }
               }
 
-              const deliveryDateFormatted = `${order.date.day.charAt(0) + order.date.day.slice(1).toLowerCase()} ${order.date.date} ${order.date.month.charAt(0) + order.date.month.slice(1).toLowerCase()}`;
+              // For filtered views (not "All"), show flat recipe list
+              const isFilteredView = selectedFilter !== 'All';
 
               return (
               <div key={orderIndex} style={{ width: '100%' }}>
+                {!isFilteredView && (
+                  <>
+                    {/* Date + Status */}
+                    <div style={{
+                      display: 'flex',
+                      gap: 8,
+                      marginBottom: 16,
+                      padding: '0 0 0 0',
+                    }}>
+                  {/* Calendar icon */}
+                  <div style={{
+                    width: 64,
+                    height: 64,
+                    background: '#efe9de',
+                    borderRadius: 8,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    padding: '8px 4px',
+                    flexShrink: 0,
+                  }}>
+                    <p style={{
+                      fontFamily: 'var(--font-body)',
+                      fontSize: 12,
+                      fontWeight: 400,
+                      lineHeight: '16px',
+                      color: '#232323',
+                      margin: 0,
+                    }}>{order.date.day}</p>
+                    <p style={{
+                      fontFamily: 'var(--font-body)',
+                      fontSize: 20,
+                      fontWeight: 700,
+                      lineHeight: '24px',
+                      color: '#232323',
+                      margin: 0,
+                    }}>{order.date.date}</p>
+                    <p style={{
+                      fontFamily: 'var(--font-body)',
+                      fontSize: 12,
+                      fontWeight: 400,
+                      lineHeight: '16px',
+                      color: '#232323',
+                      margin: 0,
+                    }}>{order.date.month}</p>
+                  </div>
+
+                  {/* Text */}
+                  <div style={{
+                    flex: 1,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                  }}>
+                    <h2 style={{
+                      fontFamily: 'var(--font-headline)',
+                      fontSize: 18,
+                      fontWeight: 700,
+                      lineHeight: '22px',
+                      color: '#333332',
+                      margin: 0,
+                    }}>{order.status}</h2>
+                    <p style={{
+                      fontFamily: 'var(--font-body)',
+                      fontSize: 14,
+                      fontWeight: 400,
+                      lineHeight: '20px',
+                      color: '#333332',
+                      margin: '8px 0 0',
+                    }}>{displayMessage}</p>
+                  </div>
+                </div>
+
+                {/* Delivery support button */}
+                {order.showHelpButton && (
+                  <button style={{
+                    width: '100%',
+                    padding: '12px 24px',
+                    border: '1px solid #232323',
+                    borderRadius: 8,
+                    background: 'transparent',
+                    fontFamily: 'var(--font-body)',
+                    fontSize: 14,
+                    fontWeight: 700,
+                    lineHeight: '20px',
+                    color: '#232323',
+                    cursor: 'pointer',
+                    marginBottom: 16,
+                    textAlign: 'center',
+                  }}>
+                    Delivery support
+                  </button>
+                )}
+                  </>
+                )}
+
                 {/* Recipe cards */}
                 <div style={{
                   display: 'flex',
@@ -7776,8 +6892,6 @@
                     return (
                       <div
                         key={recipe.id}
-                        ref={(el) => { recipeRefs.current[recipe.id] = { el, date: deliveryDateFormatted }; }}
-                        data-delivery-date={deliveryDateFormatted}
                         style={{
                           background: 'var(--color-elevation-bg)',
                           borderRadius: 12,
@@ -7860,14 +6974,24 @@
                               fontSize: 12,
                               fontWeight: 400,
                               lineHeight: '16px',
-                              color: '#666666',
+                              color: '#232323',
                               margin: '4px 0 0',
                               overflow: 'hidden',
                               textOverflow: 'ellipsis',
                               whiteSpace: 'nowrap',
-                            }}>
-                              {deliveryDateFormatted}
-                            </p>
+                            }}>{recipe.subtitle}</p>
+                            {isFilteredView && (
+                              <p style={{
+                                fontFamily: 'var(--font-body)',
+                                fontSize: 12,
+                                fontWeight: 400,
+                                lineHeight: '16px',
+                                color: '#666666',
+                                margin: '4px 0 0',
+                              }}>
+                                {order.date.day.charAt(0) + order.date.day.slice(1).toLowerCase()} {order.date.date} {order.date.month.charAt(0) + order.date.month.slice(1).toLowerCase()}
+                              </p>
+                            )}
                           </div>
 
                           {/* Rating & Comment */}
@@ -7985,14 +7109,10 @@
                 padding: '12px 16px',
                 display: 'flex',
                 alignItems: 'center',
-                gap: 8,
+                justifyContent: 'space-between',
+                gap: 12,
                 boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
               }}>
-                {/* Checkmark icon */}
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" style={{ flexShrink: 0 }}>
-                  <circle cx="12" cy="12" r="10" fill="#232323"/>
-                  <path d="M7 12L10.5 15.5L17 9" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
                 <span style={{
                   fontFamily: 'var(--font-body)',
                   fontSize: 14,
@@ -8000,691 +7120,34 @@
                   lineHeight: '20px',
                   color: '#232323',
                 }}>
-                  {toastAction === 'saved' ? 'The recipe collection has been updated.' : 'Recipe removed from collection.'}
+                  {toastAction === 'saved' ? 'Recipe saved' : 'Recipe removed'}
                 </span>
+                {toastAction === 'saved' && (
+                  <button
+                    onClick={() => {
+                      setSelectedFilter('Saved');
+                      setShowToast(false);
+                    }}
+                    style={{
+                      background: 'transparent',
+                      border: 'none',
+                      fontFamily: 'var(--font-body)',
+                      fontSize: 14,
+                      fontWeight: 700,
+                      lineHeight: '20px',
+                      color: '#232323',
+                      textDecoration: 'underline',
+                      cursor: 'pointer',
+                      padding: 0,
+                      flexShrink: 0,
+                    }}
+                  >
+                    View list
+                  </button>
+                )}
               </div>
               </div>
             </div>
-          )}
-
-          {/* Date Filter Drawer */}
-          {showDateDrawer && (
-            <>
-              {/* Backdrop */}
-              <div
-                onClick={() => setShowDateDrawer(false)}
-                style={{
-                  position: 'fixed',
-                  inset: 0,
-                  background: 'rgba(0, 0, 0, 0.4)',
-                  zIndex: 999,
-                  animation: 'fadeIn 0.2s ease-out',
-                }}
-              />
-
-              {/* Drawer Wrapper for centering */}
-              <div style={{
-                position: 'fixed',
-                bottom: 0,
-                left: 0,
-                right: 0,
-                display: 'flex',
-                justifyContent: 'center',
-                zIndex: 1000,
-                pointerEvents: 'none',
-              }}>
-                {/* Drawer */}
-                <div style={{
-                  width: 375,
-                  background: 'white',
-                  borderRadius: '24px 24px 0 0',
-                  animation: 'slideUpDrawer 0.3s ease-out',
-                  boxShadow: '0 -4px 12px rgba(0, 0, 0, 0.1)',
-                  pointerEvents: 'auto',
-                }}>
-                {/* Drag handle */}
-                <div style={{
-                  width: 40,
-                  height: 4,
-                  background: '#E0E0E0',
-                  borderRadius: 2,
-                  margin: '12px auto 16px',
-                }} />
-
-                {/* Content */}
-                <div style={{ padding: '0 24px 24px' }}>
-                  {/* Title with Clear */}
-                  <div style={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    marginBottom: 20,
-                  }}>
-                    <h2 style={{
-                      fontFamily: 'var(--font-headline)',
-                      fontSize: 20,
-                      fontWeight: 700,
-                      lineHeight: '24px',
-                      color: '#232323',
-                      margin: 0,
-                    }}>
-                      Filter by date
-                    </h2>
-                    {selectedDeliveryDates.size > 0 && (
-                      <button
-                        onClick={() => setSelectedDeliveryDates(new Set())}
-                        style={{
-                          background: 'transparent',
-                          border: 'none',
-                          fontFamily: 'var(--font-body)',
-                          fontSize: 14,
-                          fontWeight: 400,
-                          color: '#656565',
-                          textDecoration: 'underline',
-                          cursor: 'pointer',
-                          padding: 0,
-                        }}
-                      >
-                        Clear all
-                      </button>
-                    )}
-                  </div>
-
-                  {/* Delivery Dates Section */}
-                  <div style={{ marginBottom: 24 }}>
-                    <h3 style={{
-                      fontFamily: 'var(--font-body)',
-                      fontSize: 14,
-                      fontWeight: 700,
-                      lineHeight: '20px',
-                      color: '#232323',
-                      margin: '0 0 12px 0',
-                    }}>
-                      Recent deliveries
-                    </h3>
-                    {pastOrders.slice(0, 4).map((order, index) => {
-                      const dateKey = `${order.date.day} ${order.date.date} ${order.date.month}`;
-                      return (
-                        <label
-                          key={index}
-                          style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: 12,
-                            padding: '12px 0',
-                            cursor: 'pointer',
-                            borderBottom: index < 3 ? '1px solid #f0f0f0' : 'none',
-                          }}
-                        >
-                          <input
-                            type="checkbox"
-                            checked={selectedDeliveryDates.has(dateKey)}
-                            onChange={() => {
-                              const newDates = new Set(selectedDeliveryDates);
-                              if (newDates.has(dateKey)) {
-                                newDates.delete(dateKey);
-                              } else {
-                                newDates.add(dateKey);
-                              }
-                              setSelectedDeliveryDates(newDates);
-                            }}
-                            style={{
-                              width: 20,
-                              height: 20,
-                              accentColor: '#232323',
-                              cursor: 'pointer',
-                            }}
-                          />
-                          <span style={{
-                            fontFamily: 'var(--font-body)',
-                            fontSize: 16,
-                            fontWeight: 400,
-                            color: '#232323',
-                          }}>
-                            {order.date.day.charAt(0) + order.date.day.slice(1).toLowerCase()} {order.date.date} {order.date.month.charAt(0) + order.date.month.slice(1).toLowerCase()}
-                          </span>
-                          <span style={{
-                            fontFamily: 'var(--font-body)',
-                            fontSize: 14,
-                            fontWeight: 400,
-                            color: '#656565',
-                            marginLeft: 'auto',
-                          }}>
-                            ({order.recipes.length} items)
-                          </span>
-                        </label>
-                      );
-                    })}
-                  </div>
-
-                  {/* Date Range Section */}
-                  <div style={{ marginBottom: 24 }}>
-                    <h3 style={{
-                      fontFamily: 'var(--font-body)',
-                      fontSize: 14,
-                      fontWeight: 700,
-                      lineHeight: '20px',
-                      color: '#232323',
-                      margin: '0 0 12px 0',
-                    }}>
-                      Date range
-                    </h3>
-                    <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
-                      <div style={{ flex: 1 }}>
-                        <label style={{
-                          fontFamily: 'var(--font-body)',
-                          fontSize: 12,
-                          fontWeight: 400,
-                          color: '#656565',
-                          display: 'block',
-                          marginBottom: 4,
-                        }}>
-                          From
-                        </label>
-                        <input
-                          type="date"
-                          value={dateRangeStart}
-                          onChange={(e) => setDateRangeStart(e.target.value)}
-                          style={{
-                            width: '100%',
-                            padding: '12px',
-                            border: '1px solid #e0e0e0',
-                            borderRadius: 8,
-                            fontFamily: 'var(--font-body)',
-                            fontSize: 14,
-                            color: '#232323',
-                          }}
-                        />
-                      </div>
-                      <div style={{ flex: 1 }}>
-                        <label style={{
-                          fontFamily: 'var(--font-body)',
-                          fontSize: 12,
-                          fontWeight: 400,
-                          color: '#656565',
-                          display: 'block',
-                          marginBottom: 4,
-                        }}>
-                          To
-                        </label>
-                        <input
-                          type="date"
-                          value={dateRangeEnd}
-                          onChange={(e) => setDateRangeEnd(e.target.value)}
-                          style={{
-                            width: '100%',
-                            padding: '12px',
-                            border: '1px solid #e0e0e0',
-                            borderRadius: 8,
-                            fontFamily: 'var(--font-body)',
-                            fontSize: 14,
-                            color: '#232323',
-                          }}
-                        />
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Show Items Button */}
-                  <button
-                    onClick={() => {
-                      setAppliedDeliveryDates(new Set(selectedDeliveryDates));
-                      setShowDateDrawer(false);
-                    }}
-                    style={{
-                      width: '100%',
-                      padding: '16px 24px',
-                      background: '#232323',
-                      border: 'none',
-                      borderRadius: 8,
-                      fontFamily: 'var(--font-body)',
-                      fontSize: 16,
-                      fontWeight: 700,
-                      color: 'white',
-                      cursor: 'pointer',
-                    }}
-                  >
-                    Show items
-                  </button>
-                </div>
-              </div>
-              </div>
-            </>
-          )}
-
-          {/* Save to Cookbook Drawer */}
-          {showSaveDrawer && (
-            <>
-              {/* Backdrop */}
-              <div
-                onClick={() => {
-                  setShowSaveDrawer(false);
-                  setCurrentSavingRecipeId(null);
-                }}
-                style={{
-                  position: 'fixed',
-                  inset: 0,
-                  background: 'rgba(0, 0, 0, 0.4)',
-                  zIndex: 999,
-                  animation: 'fadeIn 0.2s ease-out',
-                }}
-              />
-
-              {/* Drawer Wrapper for centering */}
-              <div style={{
-                position: 'fixed',
-                bottom: 0,
-                left: 0,
-                right: 0,
-                display: 'flex',
-                justifyContent: 'center',
-                zIndex: 1000,
-                pointerEvents: 'none',
-              }}>
-                {/* Drawer */}
-                <div style={{
-                  width: 375,
-                  background: '#faf8f3',
-                  borderRadius: '24px 24px 0 0',
-                  animation: 'slideUpDrawer 0.3s ease-out',
-                  boxShadow: '0 -4px 12px rgba(0, 0, 0, 0.1)',
-                  pointerEvents: 'auto',
-                }}>
-                  {/* Drag handle */}
-                  <div style={{
-                    width: 40,
-                    height: 6,
-                    background: '#E0E0E0',
-                    borderRadius: 4,
-                    margin: '12px auto 16px',
-                  }} />
-
-                  {/* Content */}
-                  <div style={{ padding: '0 24px 24px' }}>
-                    {/* Saved to Cookbook header */}
-                    <div style={{
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                      paddingBottom: 8,
-                      marginBottom: 8,
-                      borderBottom: '1px solid #c1c1c1',
-                    }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                          <path d="M3 2.5C3 2.22386 3.22386 2 3.5 2H12.5C12.7761 2 13 2.22386 13 2.5V14.5C13 14.6894 12.8862 14.8617 12.7112 14.9406C12.5363 15.0195 12.3313 14.9905 12.1856 14.8654L8 11.3356L3.81443 14.8654C3.66865 14.9905 3.46374 15.0195 3.28876 14.9406C3.11379 14.8617 3 14.6894 3 14.5V2.5Z" fill="#232323"/>
-                        </svg>
-                        <span style={{
-                          fontFamily: 'var(--font-body)',
-                          fontSize: 16,
-                          fontWeight: 700,
-                          color: '#242424',
-                        }}>
-                          Saved to Cookbook
-                        </span>
-                      </div>
-                      <button
-                        onClick={handleUnsaveFromDrawer}
-                        style={{
-                          background: 'transparent',
-                          border: 'none',
-                          fontFamily: 'var(--font-body)',
-                          fontSize: 16,
-                          fontWeight: 700,
-                          color: '#232323',
-                          cursor: 'pointer',
-                          padding: '4px 0',
-                        }}
-                      >
-                        Unsave
-                      </button>
-                    </div>
-
-                    {/* Add to collection header */}
-                    <div style={{
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                      marginBottom: 16,
-                    }}>
-                      <h2 style={{
-                        fontFamily: 'var(--font-headline)',
-                        fontSize: 20,
-                        fontWeight: 700,
-                        lineHeight: '24px',
-                        color: '#242424',
-                        margin: 0,
-                      }}>
-                        Add to collection
-                      </h2>
-                      <button style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: 8,
-                        background: 'transparent',
-                        border: 'none',
-                        fontFamily: 'var(--font-body)',
-                        fontSize: 16,
-                        fontWeight: 700,
-                        color: '#232323',
-                        cursor: 'pointer',
-                        padding: '4px 0',
-                      }}>
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                          <path d="M12 5V19M5 12H19" stroke="#232323" strokeWidth="2" strokeLinecap="round"/>
-                        </svg>
-                        New
-                      </button>
-                    </div>
-
-                    {/* Collections list */}
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: 16, marginBottom: 24 }}>
-                      {collections.map((collection) => (
-                        <label
-                          key={collection.id}
-                          style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: 8,
-                            cursor: 'pointer',
-                          }}
-                        >
-                          {/* Thumbnail */}
-                          {collection.img ? (
-                            collection.isRound ? (
-                              <div style={{
-                                width: 48,
-                                height: 48,
-                                borderRadius: '50%',
-                                background: '#f5f5f5',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                overflow: 'hidden',
-                              }}>
-                                <img
-                                  src={collection.img}
-                                  alt=""
-                                  style={{
-                                    width: 36,
-                                    height: 36,
-                                    objectFit: 'contain',
-                                  }}
-                                />
-                              </div>
-                            ) : (
-                              <img
-                                src={collection.img}
-                                alt=""
-                                style={{
-                                  width: 48,
-                                  height: 48,
-                                  borderRadius: 8,
-                                  objectFit: 'cover',
-                                }}
-                              />
-                            )
-                          ) : (
-                            <div style={{
-                              width: 48,
-                              height: 48,
-                              borderRadius: '50%',
-                              background: 'linear-gradient(180deg, #E8E8E8 0%, #D0D0D0 100%)',
-                              display: 'flex',
-                              alignItems: 'center',
-                              justifyContent: 'center',
-                            }}>
-                              <span style={{ fontSize: 24 }}>👨‍🍳</span>
-                            </div>
-                          )}
-
-                          {/* Collection info */}
-                          <div style={{ flex: 1 }}>
-                            <p style={{
-                              fontFamily: 'var(--font-body)',
-                              fontSize: 16,
-                              fontWeight: 700,
-                              color: '#242424',
-                              margin: 0,
-                              lineHeight: '24px',
-                            }}>
-                              {collection.name}
-                            </p>
-                            <p style={{
-                              fontFamily: 'var(--font-body)',
-                              fontSize: 14,
-                              fontWeight: 400,
-                              color: '#656565',
-                              margin: 0,
-                              lineHeight: '20px',
-                            }}>
-                              {collection.count} {collection.count === 1 ? 'recipe' : 'recipes'}
-                            </p>
-                          </div>
-
-                          {/* Checkbox */}
-                          <div style={{
-                            width: 20,
-                            height: 20,
-                            borderRadius: 4,
-                            background: selectedCollections.has(collection.id) ? '#232323' : '#faf8f3',
-                            border: selectedCollections.has(collection.id) ? 'none' : '1px solid #232323',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            cursor: 'pointer',
-                          }}
-                          onClick={(e) => {
-                            e.preventDefault();
-                            setSelectedCollections(prev => {
-                              const newSet = new Set(prev);
-                              if (newSet.has(collection.id)) {
-                                newSet.delete(collection.id);
-                              } else {
-                                newSet.add(collection.id);
-                              }
-                              return newSet;
-                            });
-                          }}
-                          >
-                            {selectedCollections.has(collection.id) && (
-                              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                                <path d="M3.5 8L6.5 11L12.5 5" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                              </svg>
-                            )}
-                          </div>
-                        </label>
-                      ))}
-                    </div>
-
-                    {/* Done Button */}
-                    <button
-                      onClick={handleSaveToCollections}
-                      style={{
-                        width: '100%',
-                        padding: '12px 24px',
-                        background: 'transparent',
-                        border: '1px solid #232323',
-                        borderRadius: 8,
-                        fontFamily: 'var(--font-body)',
-                        fontSize: 16,
-                        fontWeight: 700,
-                        color: '#232323',
-                        cursor: 'pointer',
-                      }}
-                    >
-                      Done
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </>
-          )}
-
-          {/* Delivery Support Drawer */}
-          {showSupportDrawer && (
-            <>
-              {/* Backdrop */}
-              <div
-                onClick={() => {
-                  setShowSupportDrawer(false);
-                  setSelectedSupportDelivery(null);
-                }}
-                style={{
-                  position: 'fixed',
-                  inset: 0,
-                  background: 'rgba(0, 0, 0, 0.4)',
-                  zIndex: 999,
-                  animation: 'fadeIn 0.2s ease-out',
-                }}
-              />
-
-              {/* Drawer Wrapper for centering */}
-              <div style={{
-                position: 'fixed',
-                bottom: 0,
-                left: 0,
-                right: 0,
-                display: 'flex',
-                justifyContent: 'center',
-                zIndex: 1000,
-                pointerEvents: 'none',
-              }}>
-                {/* Drawer */}
-                <div style={{
-                  width: 375,
-                  background: 'white',
-                  borderRadius: '24px 24px 0 0',
-                  animation: 'slideUpDrawer 0.3s ease-out',
-                  boxShadow: '0 -4px 12px rgba(0, 0, 0, 0.1)',
-                  pointerEvents: 'auto',
-                }}>
-                  {/* Drag handle */}
-                  <div style={{
-                    width: 40,
-                    height: 4,
-                    background: '#E0E0E0',
-                    borderRadius: 2,
-                    margin: '12px auto 16px',
-                  }} />
-
-                  {/* Content */}
-                  <div style={{ padding: '0 24px 24px' }}>
-                    {/* Title */}
-                    <h2 style={{
-                      fontFamily: 'var(--font-headline)',
-                      fontSize: 20,
-                      fontWeight: 700,
-                      lineHeight: '24px',
-                      color: '#232323',
-                      margin: '0 0 20px 0',
-                    }}>
-                      Which delivery do you need support?
-                    </h2>
-
-                    {/* Delivery options - two most recent */}
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 24 }}>
-                      {pastOrders.slice(0, 2).map((order, index) => {
-                        const dateKey = `${order.date.day} ${order.date.date} ${order.date.month}`;
-                        const dateFormatted = `${order.date.day.charAt(0) + order.date.day.slice(1).toLowerCase()} ${order.date.date} ${order.date.month.charAt(0) + order.date.month.slice(1).toLowerCase()}`;
-                        return (
-                          <label
-                            key={index}
-                            style={{
-                              display: 'flex',
-                              alignItems: 'center',
-                              gap: 12,
-                              padding: 16,
-                              background: selectedSupportDelivery === dateKey ? '#f5f5f5' : 'transparent',
-                              border: '1px solid #e0e0e0',
-                              borderRadius: 12,
-                              cursor: 'pointer',
-                            }}
-                            onClick={() => setSelectedSupportDelivery(dateKey)}
-                          >
-                            {/* Delivery thumbnail */}
-                            <div style={{
-                              width: 48,
-                              height: 48,
-                              borderRadius: 8,
-                              overflow: 'hidden',
-                              flexShrink: 0,
-                            }}>
-                              <img
-                                src={order.recipes[0]?.img}
-                                alt=""
-                                style={{
-                                  width: '100%',
-                                  height: '100%',
-                                  objectFit: 'cover',
-                                }}
-                              />
-                            </div>
-
-                            {/* Delivery info */}
-                            <div style={{ flex: 1 }}>
-                              <p style={{
-                                fontFamily: 'var(--font-body)',
-                                fontSize: 16,
-                                fontWeight: 700,
-                                color: '#232323',
-                                margin: 0,
-                                lineHeight: '24px',
-                              }}>
-                                {dateFormatted}
-                              </p>
-                              <p style={{
-                                fontFamily: 'var(--font-body)',
-                                fontSize: 14,
-                                fontWeight: 400,
-                                color: '#656565',
-                                margin: 0,
-                                lineHeight: '20px',
-                              }}>
-                                {order.recipes.length} recipes
-                              </p>
-                            </div>
-
-                            {/* Radio button */}
-                            <div style={{
-                              width: 20,
-                              height: 20,
-                              borderRadius: '50%',
-                              border: selectedSupportDelivery === dateKey ? '6px solid #232323' : '2px solid #232323',
-                              background: 'white',
-                              boxSizing: 'border-box',
-                            }} />
-                          </label>
-                        );
-                      })}
-                    </div>
-
-                    {/* Continue Button */}
-                    <button
-                      onClick={() => {
-                        setShowSupportDrawer(false);
-                        // Handle support navigation here
-                      }}
-                      disabled={!selectedSupportDelivery}
-                      style={{
-                        width: '100%',
-                        padding: '16px 24px',
-                        background: selectedSupportDelivery ? '#232323' : '#e0e0e0',
-                        border: 'none',
-                        borderRadius: 8,
-                        fontFamily: 'var(--font-body)',
-                        fontSize: 16,
-                        fontWeight: 700,
-                        color: selectedSupportDelivery ? 'white' : '#999',
-                        cursor: selectedSupportDelivery ? 'pointer' : 'not-allowed',
-                      }}
-                    >
-                      Continue
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </>
           )}
         </div>
       );
@@ -8694,23 +7157,7 @@
     function RecipeDetailPage({ recipe, onClose, onAddToCart, cart }) {
       const [quantity, setQuantity] = useState(cart[recipe.id] || 0);
       const [isCommunityRatingExpanded, setIsCommunityRatingExpanded] = useState(true);
-      const [showAISummaryDrawer, setShowAISummaryDrawer] = useState(false);
-      const [showFeedbackDrawer, setShowFeedbackDrawer] = useState(false);
-      const [editingRating, setEditingRating] = useState(0);
-      const [selectedPositiveChips, setSelectedPositiveChips] = useState(new Set());
-      const [selectedNegativeChips, setSelectedNegativeChips] = useState(new Set());
-      const [feedbackComment, setFeedbackComment] = useState('');
-      const [isPositiveFeedbackExpanded, setIsPositiveFeedbackExpanded] = useState(true);
-      const [isNegativeFeedbackExpanded, setIsNegativeFeedbackExpanded] = useState(false);
-      const [showRatingFilter, setShowRatingFilter] = useState(false);
-      const [selectedRatingFilters, setSelectedRatingFilters] = useState(new Set());
-      const [userSubmittedRating, setUserSubmittedRating] = useState(null);
-      const [userSubmittedFeedback, setUserSubmittedFeedback] = useState({ positive: new Set(), negative: new Set(), comment: '' });
       const customerRatingRef = React.useRef(null);
-
-      // Check if user has a rating (either from recipe data or newly submitted)
-      const hasUserRating = userSubmittedRating !== null || (recipe.rating && recipe.isPersonalRating);
-      const currentUserRating = userSubmittedRating !== null ? userSubmittedRating : (recipe.isPersonalRating ? parseFloat(recipe.rating) : 0);
 
       // Sync local quantity with cart changes
       React.useEffect(() => {
@@ -8840,42 +7287,24 @@
                 <div style={{
                   position: 'absolute',
                   bottom: 0,
-                  left: 12,
-                  background: 'white',
-                  padding: '4px 4px 0 4px',
-                  borderRadius: '8px 8px 0 0',
+                  left: 8,
+                  background: 'var(--color-page-bg)',
+                  borderTopLeftRadius: 5,
+                  borderTopRightRadius: 5,
+                  padding: '8px 8px 0',
                 }}>
-                  <span style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: 6,
-                    padding: '4px 8px',
-                    borderRadius: 'var(--radius-tag-rect)',
-                    background: recipe.labelColor === 'yellow' ? '#9B8B4D' : (recipe.label === 'Premium' ? '#024426' : '#4A90E2'),
-                    fontFamily: 'var(--font-body)',
-                    fontSize: 'var(--fs-xs)',
-                    fontWeight: 700,
-                    color: 'white',
-                    textTransform: 'uppercase',
-                    lineHeight: 'var(--lh-xs)',
+                  <div style={{
+                    background: '#232323',
+                    borderRadius: 4,
+                    padding: '4px 6px',
                   }}>
-                    {recipe.labelIcon === 'star' && (
-                      <svg width="16" height="16" viewBox="0 0 16 16" fill="white">
-                        <path d="M8 0L9.79 5.53L16 5.53L11.1 8.94L12.89 14.47L8 11.06L3.11 14.47L4.9 8.94L0 5.53L6.21 5.53L8 0Z"/>
-                      </svg>
-                    )}
-                    {recipe.labelIcon === 'heart' && (
-                      <svg width="16" height="16" viewBox="0 0 16 16" fill="white">
-                        <path d="M8 14.25C7.8 14.25 7.6 14.18 7.44 14.04L2.08 9.04C0.64 7.68 0.64 5.32 2.08 3.96C3.52 2.6 5.76 2.6 7.2 3.96L8 4.72L8.8 3.96C10.24 2.6 12.48 2.6 13.92 3.96C15.36 5.32 15.36 7.68 13.92 9.04L8.56 14.04C8.4 14.18 8.2 14.25 8 14.25Z"/>
-                      </svg>
-                    )}
-                    {recipe.labelIcon === 'cart' && (
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="white">
-                        <path d="M7 18C5.9 18 5.01 18.9 5.01 20C5.01 21.1 5.9 22 7 22C8.1 22 9 21.1 9 20C9 18.9 8.1 18 7 18ZM1 2V4H3L6.6 11.59L5.25 14.04C5.09 14.32 5 14.65 5 15C5 16.1 5.9 17 7 17H19V15H7.42C7.28 15 7.17 14.89 7.17 14.75L7.2 14.63L8.1 13H15.55C16.3 13 16.96 12.59 17.3 11.97L20.88 5.48C20.96 5.34 21 5.17 21 5C21 4.45 20.55 4 20 4H5.21L4.27 2H1ZM17 18C15.9 18 15.01 18.9 15.01 20C15.01 21.1 15.9 22 17 22C18.1 22 19 21.1 19 20C19 18.9 18.1 18 17 18Z" fill="white"/>
-                      </svg>
-                    )}
-                    {recipe.label}
-                  </span>
+                    <span style={{
+                      fontFamily: 'var(--font-body)',
+                      fontSize: 12,
+                      fontWeight: 700,
+                      color: 'white',
+                    }}>{recipe.label}</span>
+                  </div>
                 </div>
               )}
             </div>
@@ -8903,48 +7332,115 @@
               margin: '0 0 12px',
             }}>{recipe.subtitle || 'with seasonal vegetables'}</p>
 
-            {/* Community Rating */}
-            <div
-              style={{
+            {/* Ratings Section */}
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 8,
+              marginBottom: 16,
+              flexWrap: 'wrap',
+            }}>
+              {/* Variation 1: User has rated */}
+              {recipe.rating && recipe.isPersonalRating && (
+                <>
+                  <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 6,
+                  }}>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                      <path
+                        d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"
+                        fill="#232323"
+                        stroke="#232323"
+                        strokeWidth="1.5"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                    <span style={{
+                      fontFamily: 'var(--font-body)',
+                      fontSize: 14,
+                      fontWeight: 700,
+                      color: '#232323',
+                    }}>{recipe.rating}</span>
+                    <span
+                      onClick={scrollToCustomerRating}
+                      style={{
+                        fontFamily: 'var(--font-body)',
+                        fontSize: 14,
+                        fontWeight: 400,
+                        color: '#656565',
+                        textDecoration: 'underline',
+                        cursor: 'pointer',
+                      }}
+                    >your rating</span>
+                  </div>
+
+                  <span style={{
+                    color: '#656565',
+                    fontSize: 14,
+                  }}>|</span>
+                </>
+              )}
+
+              {/* Customer Rating - shown in all variations unless canRate is false */}
+              <div style={{
                 display: 'flex',
                 alignItems: 'center',
-                gap: 8,
-                marginBottom: 16,
-              }}
-            >
-              {/* 5 Stars */}
-              <div style={{ display: 'flex', gap: 2 }}>
-                {[0, 1, 2, 3, 4].map((i) => renderStar(i, parseFloat(recipe.customerRating || 4.5), 16))}
-              </div>
-              {/* Rating Number */}
-              <span style={{
-                fontFamily: 'var(--font-body)',
-                fontSize: 14,
-                fontWeight: 700,
-                color: '#232323',
-              }}>{recipe.customerRating || '4.5'}</span>
-              {/* Review Count - clickable */}
-              <span
-                onClick={scrollToCustomerRating}
-                style={{
+                gap: 6,
+              }}>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                  <path
+                    d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"
+                    fill="#232323"
+                    stroke="#232323"
+                    strokeWidth="1.5"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+                <span style={{
                   fontFamily: 'var(--font-body)',
                   fontSize: 14,
-                  fontWeight: 400,
-                  color: '#656565',
-                  textDecoration: 'underline',
-                  cursor: 'pointer',
-                }}
-              >({(() => {
-                const count = recipe.reviewCount || '18k';
-                if (count.includes('k')) {
-                  const base = parseFloat(count.replace('k', '')) * 1000;
-                  const randomOffset = Math.floor(Math.random() * 900) + 50;
-                  return (base + randomOffset).toLocaleString();
-                }
-                const num = parseInt(count);
-                const randomOffset = Math.floor(Math.random() * 90) + 10;
-                return (num + randomOffset).toLocaleString();
-              })()})</span>
+                  fontWeight: 700,
+                  color: '#232323',
+                }}>{recipe.customerRating || '4.5'}</span>
+                <span
+                  onClick={scrollToCustomerRating}
+                  style={{
+                    fontFamily: 'var(--font-body)',
+                    fontSize: 14,
+                    fontWeight: 400,
+                    color: '#656565',
+                    textDecoration: 'underline',
+                    cursor: 'pointer',
+                  }}
+                >customer rating</span>
+              </div>
+
+              {/* Variation 3: User can rate but hasn't - show after customer rating */}
+              {(!recipe.rating || !recipe.isPersonalRating) && recipe.canRate !== false && (
+                <>
+                  <span style={{
+                    color: '#656565',
+                    fontSize: 14,
+                  }}>|</span>
+
+                  <button
+                    onClick={scrollToCustomerRating}
+                    style={{
+                      background: 'transparent',
+                      border: 'none',
+                      fontFamily: 'var(--font-body)',
+                      fontSize: 14,
+                      fontWeight: 700,
+                      color: '#232323',
+                      textDecoration: 'underline',
+                      cursor: 'pointer',
+                      padding: 0,
+                    }}
+                  >Add your rating</button>
+                </>
+              )}
             </div>
 
             {/* Divider */}
@@ -9153,6 +7649,91 @@
                 <div style={{
                   paddingBottom: 24,
                 }}>
+                  {/* Variation 1: User has rated - Show their rating */}
+                  {recipe.rating && recipe.isPersonalRating && (
+                    <div style={{
+                      marginBottom: 24,
+                      paddingBottom: 24,
+                      borderBottom: '1px solid #e0e0e0',
+                    }}>
+                      <div style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        marginBottom: 12,
+                      }}>
+                        <div style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: 8,
+                        }}>
+                          <span style={{
+                            fontFamily: 'var(--font-headline)',
+                            fontSize: 32,
+                            fontWeight: 700,
+                            color: '#232323',
+                          }}>{recipe.rating}</span>
+                          <div>
+                            <div style={{ display: 'flex', gap: 2, marginBottom: 4 }}>
+                              {[0, 1, 2, 3, 4].map((i) => renderStar(i, parseFloat(recipe.rating), 20))}
+                            </div>
+                            <span style={{
+                              fontFamily: 'var(--font-body)',
+                              fontSize: 14,
+                              fontWeight: 400,
+                              color: '#656565',
+                            }}>your rating</span>
+                          </div>
+                        </div>
+                        <button style={{
+                          background: 'transparent',
+                          border: 'none',
+                          fontFamily: 'var(--font-body)',
+                          fontSize: 14,
+                          fontWeight: 700,
+                          color: '#232323',
+                          textDecoration: 'underline',
+                          cursor: 'pointer',
+                          padding: 0,
+                        }}>Edit</button>
+                      </div>
+                      <p style={{
+                        fontFamily: 'var(--font-body)',
+                        fontSize: 14,
+                        fontWeight: 400,
+                        lineHeight: '20px',
+                        color: '#232323',
+                        margin: 0,
+                      }}>This was amazing! The Green Goddess dressing really made the dish. My whole family enjoyed it and it was so fresh and healthy. Definitely adding this to our regular rotation!</p>
+                    </div>
+                  )}
+
+                  {/* Variation 3: User can rate but hasn't - Show Add your rating CTA with secondary style */}
+                  {(!recipe.rating || !recipe.isPersonalRating) && recipe.canRate !== false && (
+                    <div style={{
+                      marginBottom: 24,
+                      display: 'flex',
+                      justifyContent: 'center',
+                    }}>
+                      <button style={{
+                        width: '100%',
+                        maxWidth: 343,
+                        height: 40,
+                        background: 'transparent',
+                        border: '1.5px solid #232323',
+                        borderRadius: 8,
+                        fontFamily: 'var(--font-body)',
+                        fontSize: 14,
+                        fontWeight: 700,
+                        color: '#232323',
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}>Add your rating</button>
+                    </div>
+                  )}
+
                   {/* Variation 2: canRate is false - No user rating section shown */}
 
                   {/* Community Rating Overall */}
@@ -9161,162 +7742,28 @@
                     style={{
                       display: 'flex',
                       alignItems: 'center',
-                      justifyContent: 'space-between',
+                      gap: 8,
                       marginBottom: 24,
                     }}
                   >
-                    <div style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: 8,
-                    }}>
-                      <span style={{
-                        fontFamily: 'var(--font-headline)',
-                        fontSize: 32,
-                        fontWeight: 700,
-                        color: '#232323',
-                      }}>{recipe.customerRating || '4.5'}</span>
-                      <div>
-                        <div style={{ display: 'flex', gap: 2, marginBottom: 4 }}>
-                          {[0, 1, 2, 3, 4].map((i) => renderStar(i, parseFloat(recipe.customerRating || 4.5), 20))}
-                        </div>
-                        <span style={{
-                          fontFamily: 'var(--font-body)',
-                          fontSize: 14,
-                          fontWeight: 400,
-                          color: '#656565',
-                        }}>23,456 customer ratings</span>
-                      </div>
-                    </div>
-
-                    {/* Rating Filter */}
-                    <div style={{ position: 'relative' }}>
-                      <button
-                        onClick={() => setShowRatingFilter(!showRatingFilter)}
-                        style={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          position: 'relative',
-                          padding: 8,
-                          background: 'transparent',
-                          border: 'none',
-                          cursor: 'pointer',
-                        }}
-                      >
-                        {Icons.filter(20, '#232323')}
-                        {selectedRatingFilters.size > 0 && (
-                          <span style={{
-                            position: 'absolute',
-                            top: 2,
-                            right: 2,
-                            background: '#232323',
-                            color: 'white',
-                            borderRadius: '50%',
-                            width: 16,
-                            height: 16,
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            fontSize: 10,
-                            fontWeight: 700,
-                          }}>{selectedRatingFilters.size}</span>
-                        )}
-                      </button>
-
-                      {/* Rating Filter Dropdown */}
-                      {showRatingFilter && (
-                        <div style={{
-                          position: 'absolute',
-                          top: '100%',
-                          right: 0,
-                          marginTop: 4,
-                          background: 'white',
-                          border: '1px solid #e0e0e0',
-                          borderRadius: 8,
-                          boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
-                          padding: 12,
-                          zIndex: 100,
-                          minWidth: 150,
-                        }}>
-                          {[
-                            { rating: 5, count: 15234 },
-                            { rating: 4, count: 5821 },
-                            { rating: 3, count: 1456 },
-                            { rating: 2, count: 623 },
-                            { rating: 1, count: 322 },
-                          ].map(({ rating, count }) => (
-                            <label
-                              key={rating}
-                              style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: 8,
-                                padding: '8px 0',
-                                cursor: 'pointer',
-                                borderBottom: rating > 1 ? '1px solid #f0f0f0' : 'none',
-                              }}
-                            >
-                              <input
-                                type="checkbox"
-                                checked={selectedRatingFilters.has(rating)}
-                                onChange={() => {
-                                  const newFilters = new Set(selectedRatingFilters);
-                                  if (newFilters.has(rating)) {
-                                    newFilters.delete(rating);
-                                  } else {
-                                    newFilters.add(rating);
-                                  }
-                                  setSelectedRatingFilters(newFilters);
-                                }}
-                                style={{
-                                  width: 18,
-                                  height: 18,
-                                  accentColor: '#232323',
-                                  cursor: 'pointer',
-                                }}
-                              />
-                              <div style={{ display: 'flex', gap: 2 }}>
-                                {[0, 1, 2, 3, 4].map((i) => renderStar(i, rating, 14))}
-                              </div>
-                              <span style={{
-                                fontFamily: 'var(--font-body)',
-                                fontSize: 14,
-                                fontWeight: 400,
-                                color: '#656565',
-                              }}>({count.toLocaleString()})</span>
-                            </label>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* AI Summary Button */}
-                  <button
-                    onClick={() => setShowAISummaryDrawer(true)}
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: 4,
-                      background: 'transparent',
-                      border: 'none',
-                      fontFamily: 'var(--font-body)',
-                      fontSize: 14,
+                    <span style={{
+                      fontFamily: 'var(--font-headline)',
+                      fontSize: 32,
                       fontWeight: 700,
                       color: '#232323',
-                      textDecoration: 'underline',
-                      cursor: 'pointer',
-                      padding: 0,
-                      marginBottom: 16,
-                    }}>
-                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                      <path d="M8 1L8.5 5.5L13 6L8.5 6.5L8 11L7.5 6.5L3 6L7.5 5.5L8 1Z" fill="#232323"/>
-                      <path d="M12 2L12.3 3.7L14 4L12.3 4.3L12 6L11.7 4.3L10 4L11.7 3.7L12 2Z" fill="#232323"/>
-                      <path d="M4 10L4.3 11.7L6 12L4.3 12.3L4 14L3.7 12.3L2 12L3.7 11.7L4 10Z" fill="#232323"/>
-                    </svg>
-                    AI summary
-                  </button>
+                    }}>{recipe.customerRating || '4.5'}</span>
+                    <div>
+                      <div style={{ display: 'flex', gap: 2, marginBottom: 4 }}>
+                        {[0, 1, 2, 3, 4].map((i) => renderStar(i, parseFloat(recipe.customerRating || 4.5), 20))}
+                      </div>
+                      <span style={{
+                        fontFamily: 'var(--font-body)',
+                        fontSize: 14,
+                        fontWeight: 400,
+                        color: '#656565',
+                      }}>23,456 customer ratings</span>
+                    </div>
+                  </div>
 
                 {/* Community Reviews */}
                 <div style={{
@@ -9324,92 +7771,6 @@
                   flexDirection: 'column',
                   gap: 24,
                 }}>
-                  {/* User's Rating - First Review */}
-                  {hasUserRating && (
-                    <div>
-                      <div style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: 8,
-                        marginBottom: 8,
-                      }}>
-                        <div style={{ display: 'flex', gap: 2 }}>
-                          {[0, 1, 2, 3, 4].map((i) => renderStar(i, currentUserRating, 16))}
-                        </div>
-                        <span style={{
-                          fontFamily: 'var(--font-body)',
-                          fontSize: 14,
-                          fontWeight: 700,
-                          color: '#232323',
-                        }}>Your rating</span>
-                        <span style={{
-                          fontFamily: 'var(--font-body)',
-                          fontSize: 14,
-                          fontWeight: 400,
-                          color: '#656565',
-                        }}>· {userSubmittedRating !== null ? 'Just now' : '3 days ago'}</span>
-                        <span
-                          onClick={() => {
-                            setEditingRating(currentUserRating);
-                            setFeedbackComment(userSubmittedFeedback.comment || '');
-                            setSelectedPositiveChips(new Set(userSubmittedFeedback.positive));
-                            setSelectedNegativeChips(new Set(userSubmittedFeedback.negative));
-                            setIsPositiveFeedbackExpanded(true);
-                            setIsNegativeFeedbackExpanded(false);
-                            setShowFeedbackDrawer(true);
-                          }}
-                          style={{
-                            fontFamily: 'var(--font-body)',
-                            fontSize: 14,
-                            fontWeight: 700,
-                            color: '#232323',
-                            textDecoration: 'underline',
-                            cursor: 'pointer',
-                            marginLeft: 'auto',
-                          }}>Edit</span>
-                      </div>
-                      {/* Like/Dislike text */}
-                      {(userSubmittedFeedback.positive.size > 0 || userSubmittedFeedback.negative.size > 0 || (recipe.isPersonalRating && userSubmittedRating === null)) && (
-                      <div style={{ marginBottom: 8 }}>
-                        {(userSubmittedFeedback.positive.size > 0 || (recipe.isPersonalRating && userSubmittedRating === null)) && (
-                        <p style={{
-                          fontFamily: 'var(--font-body)',
-                          fontSize: 14,
-                          fontWeight: 400,
-                          lineHeight: '20px',
-                          color: '#232323',
-                          margin: '0 0 4px 0',
-                        }}>
-                          <span style={{ fontWeight: 700 }}>Like:</span> {userSubmittedFeedback.positive.size > 0 ? Array.from(userSubmittedFeedback.positive).join(', ') : 'Healthy, Tasty / liked flavors, Family / kid-friendly'}
-                        </p>
-                        )}
-                        {(userSubmittedFeedback.negative.size > 0 || (recipe.isPersonalRating && userSubmittedRating === null)) && (
-                        <p style={{
-                          fontFamily: 'var(--font-body)',
-                          fontSize: 14,
-                          fontWeight: 400,
-                          lineHeight: '20px',
-                          color: '#232323',
-                          margin: 0,
-                        }}>
-                          <span style={{ fontWeight: 700 }}>Dislike:</span> {userSubmittedFeedback.negative.size > 0 ? Array.from(userSubmittedFeedback.negative).join(', ') : "Didn't like ingredient(s)"}
-                        </p>
-                        )}
-                      </div>
-                      )}
-                      {(userSubmittedFeedback.comment || (recipe.isPersonalRating && userSubmittedRating === null)) && (
-                      <p style={{
-                        fontFamily: 'var(--font-body)',
-                        fontSize: 14,
-                        fontWeight: 400,
-                        lineHeight: '20px',
-                        color: '#232323',
-                        margin: 0,
-                      }}>{userSubmittedFeedback.comment || 'This was amazing! The Green Goddess dressing really made the dish. My whole family enjoyed it and it was so fresh and healthy. Definitely adding this to our regular rotation!'}</p>
-                      )}
-                    </div>
-                  )}
-
                   {/* Review 1 */}
                   <div>
                     <div style={{
@@ -9527,43 +7888,6 @@
                   width: '100%',
                   textAlign: 'left',
                 }}>View more reviews</button>
-
-                {/* Add your rating - subtle prompt at the end */}
-                {!hasUserRating && recipe.canRate !== false && (
-                  <div style={{
-                    marginTop: 24,
-                    paddingTop: 16,
-                    borderTop: '1px solid #e0d9cb',
-                  }}>
-                    <p style={{
-                      fontFamily: 'var(--font-body)',
-                      fontSize: 14,
-                      fontWeight: 400,
-                      color: '#656565',
-                      margin: '0 0 12px 0',
-                      textAlign: 'center',
-                    }}>You purchased this meal 2 weeks ago. Add your rating:</p>
-                    <div style={{ display: 'flex', gap: 4, justifyContent: 'center' }}>
-                      {[1, 2, 3, 4, 5].map((star) => (
-                        <span
-                          key={star}
-                          onClick={() => {
-                            setEditingRating(star);
-                            setFeedbackComment('');
-                            setSelectedPositiveChips(new Set());
-                            setSelectedNegativeChips(new Set());
-                            setIsPositiveFeedbackExpanded(true);
-                            setIsNegativeFeedbackExpanded(false);
-                            setShowFeedbackDrawer(true);
-                          }}
-                          style={{ cursor: 'pointer' }}
-                        >
-                          {renderStar(star - 1, 0, 28)}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                )}
               </div>
               )}
             </div>
@@ -9670,621 +7994,17 @@
               marginTop: 13,
             }} />
           </div>
-
-          {/* AI Summary Drawer */}
-          {showAISummaryDrawer && (
-            <>
-              {/* Backdrop */}
-              <div
-                onClick={() => setShowAISummaryDrawer(false)}
-                style={{
-                  position: 'absolute',
-                  inset: 0,
-                  background: 'rgba(0, 0, 0, 0.4)',
-                  zIndex: 999,
-                  animation: 'fadeIn 0.2s ease-out',
-                }}
-              />
-
-              {/* Drawer */}
-              <div style={{
-                position: 'absolute',
-                bottom: 0,
-                left: 0,
-                right: 0,
-                background: 'white',
-                borderRadius: '24px 24px 0 0',
-                zIndex: 1000,
-                animation: 'slideUpDrawer 0.3s ease-out',
-                boxShadow: '0 -4px 12px rgba(0, 0, 0, 0.1)',
-                maxHeight: '85%',
-                overflowY: 'auto',
-              }}>
-                {/* Drag handle */}
-                <div style={{
-                  width: 40,
-                  height: 4,
-                  background: '#E0E0E0',
-                  borderRadius: 2,
-                  margin: '12px auto 16px',
-                }} />
-
-                {/* Content */}
-                <div style={{ padding: '0 24px 24px' }}>
-                  {/* Title */}
-                  <h2 style={{
-                    fontFamily: 'var(--font-headline)',
-                    fontSize: 24,
-                    fontWeight: 700,
-                    lineHeight: '28px',
-                    color: '#232323',
-                    margin: '0 0 8px 0',
-                  }}>
-                    Review summary
-                  </h2>
-
-                  {/* Updated date */}
-                  <p style={{
-                    fontFamily: 'var(--font-body)',
-                    fontSize: 14,
-                    fontWeight: 400,
-                    lineHeight: '20px',
-                    color: '#666666',
-                    margin: '0 0 24px 0',
-                  }}>
-                    Updated on Sep 2025
-                  </p>
-
-                  {/* Summary sections */}
-                  <div style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: 16,
-                  }}>
-                    {/* Flavor */}
-                    <div>
-                      <p style={{
-                        fontFamily: 'var(--font-body)',
-                        fontSize: 16,
-                        fontWeight: 700,
-                        lineHeight: '24px',
-                        color: '#232323',
-                        margin: 0,
-                      }}>
-                        Flavor:{' '}
-                        <span style={{ fontWeight: 400 }}>
-                          Customers rave about the delicious, flavorful chicken. The crispy Parmesan crust is a particular highlight.
-                        </span>
-                      </p>
-                    </div>
-
-                    {/* Ease */}
-                    <div>
-                      <p style={{
-                        fontFamily: 'var(--font-body)',
-                        fontSize: 16,
-                        fontWeight: 700,
-                        lineHeight: '24px',
-                        color: '#232323',
-                        margin: 0,
-                      }}>
-                        Ease:{' '}
-                        <span style={{ fontWeight: 400 }}>
-                          Many find this recipe simple and easy to prepare. It's become a go-to dish for several customers.
-                        </span>
-                      </p>
-                    </div>
-
-                    {/* Tweaks */}
-                    <div>
-                      <p style={{
-                        fontFamily: 'var(--font-body)',
-                        fontSize: 16,
-                        fontWeight: 700,
-                        lineHeight: '24px',
-                        color: '#232323',
-                        margin: 0,
-                      }}>
-                        Tweaks:{' '}
-                        <span style={{ fontWeight: 400 }}>
-                          Some prefer sautéing the green beans in the chicken pan after roasting for better taste and energy efficiency.
-                        </span>
-                      </p>
-                    </div>
-
-                    {/* Leftovers */}
-                    <div>
-                      <p style={{
-                        fontFamily: 'var(--font-body)',
-                        fontSize: 16,
-                        fontWeight: 700,
-                        lineHeight: '24px',
-                        color: '#232323',
-                        margin: 0,
-                      }}>
-                        Leftovers:{' '}
-                        <span style={{ fontWeight: 400 }}>
-                          The dish reheats well, with customers enjoying it as both chicken and fish variations.
-                        </span>
-                      </p>
-                    </div>
-
-                    {/* Texture */}
-                    <div>
-                      <p style={{
-                        fontFamily: 'var(--font-body)',
-                        fontSize: 16,
-                        fontWeight: 700,
-                        lineHeight: '24px',
-                        color: '#232323',
-                        margin: 0,
-                      }}>
-                        Texture:{' '}
-                        <span style={{ fontWeight: 400 }}>
-                          Diners praise the juicy chicken, defying expectations of dryness often associated with breast meat.
-                        </span>
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* AI-generated footer */}
-                  <p style={{
-                    fontFamily: 'var(--font-body)',
-                    fontSize: 12,
-                    fontWeight: 400,
-                    lineHeight: '16px',
-                    color: '#999999',
-                    margin: '24px 0 0 0',
-                    borderTop: '1px solid #E0E0E0',
-                    paddingTop: 16,
-                  }}>
-                    AI-generated from customer reviews
-                  </p>
-                </div>
-              </div>
-            </>
-          )}
-
-          {/* Feedback Drawer - Edit Rating */}
-          {showFeedbackDrawer && (
-            <>
-              {/* Backdrop */}
-              <div
-                onClick={() => setShowFeedbackDrawer(false)}
-                style={{
-                  position: 'absolute',
-                  top: 0,
-                  left: 0,
-                  right: 0,
-                  bottom: 0,
-                  background: 'rgba(0, 0, 0, 0.4)',
-                  zIndex: 999,
-                  animation: 'fadeIn 0.3s ease-out',
-                }}
-              />
-
-              {/* Drawer Container */}
-              <div style={{
-                position: 'absolute',
-                bottom: 0,
-                left: 0,
-                right: 0,
-                zIndex: 1000,
-                animation: 'slideUpDrawer 0.3s ease-out',
-                display: 'flex',
-                flexDirection: 'column',
-              }}>
-                {/* Main Drawer Content */}
-                <div style={{
-                  background: 'white',
-                  borderRadius: '8px 8px 0 0',
-                  boxShadow: '0 4px 16px rgba(0, 0, 0, 0.2)',
-                  padding: 16,
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: 16,
-                  maxHeight: '75vh',
-                  overflowY: 'auto',
-                }}>
-                  {/* Handle bar */}
-                  <div style={{
-                    width: 40,
-                    height: 6,
-                    background: '#e0e0e0',
-                    borderRadius: 4,
-                    margin: '0 auto',
-                  }} />
-
-                  {/* Card with Recipe Info and Rating */}
-                  <div style={{
-                    background: 'transparent',
-                    padding: 0,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    gap: 16,
-                  }}>
-                    {/* Recipe name header */}
-                    <h2 style={{
-                      fontFamily: 'var(--font-headline)',
-                      fontSize: 20,
-                      fontWeight: 500,
-                      lineHeight: '24px',
-                      color: '#232323',
-                      margin: 0,
-                      textAlign: 'center',
-                    }}>{recipe.name}</h2>
-
-                    {/* Emoji + Text + Stars */}
-                    <div style={{
-                      display: 'flex',
-                      flexDirection: 'column',
-                      alignItems: 'center',
-                      gap: 0,
-                    }}>
-                      {/* Emoji rating illustration - only show when rating is selected */}
-                      {editingRating > 0 && (
-                        <>
-                          <div style={{
-                            width: 64,
-                            height: 64,
-                            borderRadius: 6.4,
-                            overflow: 'hidden',
-                            boxShadow: '0 0 0 0 rgba(0, 0, 0, 0.1)',
-                            marginBottom: 0,
-                          }}>
-                            <img
-                              src={`Emoji rating/${Math.round(editingRating)}.png`}
-                              alt="Rating emoji"
-                              style={{
-                                width: '100%',
-                                height: '100%',
-                                objectFit: 'cover',
-                              }}
-                            />
-                          </div>
-
-                          {/* Rating text */}
-                          <p style={{
-                            fontFamily: 'var(--font-body)',
-                            fontSize: 16,
-                            fontWeight: 400,
-                            lineHeight: '24px',
-                            color: '#232323',
-                            margin: 0,
-                          }}>
-                            {editingRating === 5 ? 'Loved it!' :
-                             editingRating === 4 ? 'Really liked it!' :
-                             editingRating === 3 ? 'It was okay' :
-                             editingRating === 2 ? 'Not great' :
-                             editingRating === 1 ? 'Didn\'t like it' : ''}
-                          </p>
-                        </>
-                      )}
-
-                      {/* Star rating - clickable */}
-                      <div style={{
-                        display: 'flex',
-                        gap: 0,
-                        marginTop: 0,
-                      }}>
-                        {[1, 2, 3, 4, 5].map((star) => (
-                          <svg
-                            key={star}
-                            onClick={() => setEditingRating(star)}
-                            width={32}
-                            height={32}
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            style={{ cursor: 'pointer' }}
-                          >
-                            <path
-                              d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"
-                              fill={star <= editingRating ? '#232323' : 'white'}
-                              stroke="#232323"
-                              strokeWidth="1.5"
-                              strokeLinejoin="round"
-                            />
-                          </svg>
-                        ))}
-                      </div>
-                    </div>
-
-                    {/* Divider */}
-                    <div style={{
-                      height: 1,
-                      background: '#c1c1c1',
-                      width: '100%',
-                    }} />
-                  </div>
-
-                  {/* Feedback Section */}
-                  <div style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: 16,
-                  }}>
-                    {/* Positive feedback section */}
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                      <button
-                        onClick={() => setIsPositiveFeedbackExpanded(!isPositiveFeedbackExpanded)}
-                        style={{
-                          width: '100%',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'space-between',
-                          background: 'transparent',
-                          border: 'none',
-                          padding: 0,
-                          cursor: 'pointer',
-                        }}
-                      >
-                        <span style={{
-                          fontFamily: 'var(--font-body)',
-                          fontSize: 16,
-                          fontWeight: 700,
-                          lineHeight: '24px',
-                          color: '#232323',
-                        }}>What worked for you?</span>
-                        <svg
-                          width={16}
-                          height={16}
-                          viewBox="0 0 16 16"
-                          fill="none"
-                          style={{
-                            transform: isPositiveFeedbackExpanded ? 'rotate(180deg)' : 'rotate(0deg)',
-                            transition: 'transform 0.2s',
-                          }}
-                        >
-                          <path
-                            d="M4 6l4 4 4-4"
-                            stroke="#232323"
-                            strokeWidth="1.5"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          />
-                        </svg>
-                      </button>
-
-                      {isPositiveFeedbackExpanded && (
-                        <div style={{
-                          display: 'flex',
-                          flexWrap: 'wrap',
-                          gap: 8,
-                          paddingTop: 8,
-                          paddingBottom: 8,
-                        }}>
-                          {[
-                            { id: 1, label: 'Healthy' },
-                            { id: 2, label: 'Clear instructions' },
-                            { id: 3, label: 'Tasty / liked flavors' },
-                            { id: 4, label: 'Easy to cook' },
-                            { id: 5, label: 'Liked certain ingredient(s)' },
-                            { id: 6, label: 'Fast to cook' },
-                            { id: 7, label: 'Family / kid-friendly' },
-                            { id: 8, label: 'Other' },
-                          ].map((option) => {
-                            const isSelected = selectedPositiveChips.has(option.id);
-                            return (
-                              <button
-                                key={option.id}
-                                onClick={() => {
-                                  const newSet = new Set(selectedPositiveChips);
-                                  if (isSelected) {
-                                    newSet.delete(option.id);
-                                  } else {
-                                    newSet.add(option.id);
-                                  }
-                                  setSelectedPositiveChips(newSet);
-                                }}
-                                style={{
-                                  height: 32,
-                                  padding: '6px 12px',
-                                  background: isSelected ? '#232323' : 'var(--color-page-bg)',
-                                  border: '1px solid #7d7561',
-                                  borderRadius: 999,
-                                  fontFamily: 'var(--font-body)',
-                                  fontSize: 14,
-                                  fontWeight: 400,
-                                  lineHeight: '20px',
-                                  color: isSelected ? 'white' : '#232323',
-                                  cursor: 'pointer',
-                                  transition: 'all 0.2s',
-                                }}
-                              >
-                                {option.label}
-                              </button>
-                            );
-                          })}
-                        </div>
-                      )}
-                    </div>
-
-                    {/* Negative feedback section */}
-                    <div>
-                      <button
-                        onClick={() => setIsNegativeFeedbackExpanded(!isNegativeFeedbackExpanded)}
-                        style={{
-                          width: '100%',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'space-between',
-                          background: 'transparent',
-                          border: 'none',
-                          padding: 0,
-                          cursor: 'pointer',
-                        }}
-                      >
-                        <span style={{
-                          fontFamily: 'var(--font-body)',
-                          fontSize: 16,
-                          fontWeight: 700,
-                          lineHeight: '24px',
-                          color: '#232323',
-                        }}>What didn't work for you?</span>
-                        <svg
-                          width={16}
-                          height={16}
-                          viewBox="0 0 16 16"
-                          fill="none"
-                          style={{
-                            transform: isNegativeFeedbackExpanded ? 'rotate(180deg)' : 'rotate(0deg)',
-                            transition: 'transform 0.2s',
-                          }}
-                        >
-                          <path
-                            d="M4 6l4 4 4-4"
-                            stroke="#232323"
-                            strokeWidth="1.5"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          />
-                        </svg>
-                      </button>
-
-                      {isNegativeFeedbackExpanded && (
-                        <div style={{
-                          display: 'flex',
-                          flexWrap: 'wrap',
-                          gap: 8,
-                          paddingTop: 8,
-                          paddingBottom: 8,
-                        }}>
-                          {[
-                            { id: 9, label: 'Not healthy enough' },
-                            { id: 10, label: 'Confusing instructions' },
-                            { id: 11, label: 'Bland / didn\'t like flavors' },
-                            { id: 12, label: 'Hard to cook' },
-                            { id: 13, label: 'Didn\'t like ingredient(s)' },
-                            { id: 14, label: 'Took too long' },
-                            { id: 15, label: 'Not family / kid-friendly' },
-                            { id: 16, label: 'Other' },
-                          ].map((option) => {
-                            const isSelected = selectedNegativeChips.has(option.id);
-                            return (
-                              <button
-                                key={option.id}
-                                onClick={() => {
-                                  const newSet = new Set(selectedNegativeChips);
-                                  if (isSelected) {
-                                    newSet.delete(option.id);
-                                  } else {
-                                    newSet.add(option.id);
-                                  }
-                                  setSelectedNegativeChips(newSet);
-                                }}
-                                style={{
-                                  height: 32,
-                                  padding: '6px 12px',
-                                  background: isSelected ? '#232323' : 'var(--color-page-bg)',
-                                  border: '1px solid #7d7561',
-                                  borderRadius: 999,
-                                  fontFamily: 'var(--font-body)',
-                                  fontSize: 14,
-                                  fontWeight: 400,
-                                  lineHeight: '20px',
-                                  color: isSelected ? 'white' : '#232323',
-                                  cursor: 'pointer',
-                                  transition: 'all 0.2s',
-                                }}
-                              >
-                                {option.label}
-                              </button>
-                            );
-                          })}
-                        </div>
-                      )}
-                    </div>
-
-                    {/* Comment text area */}
-                    <div style={{
-                      display: 'flex',
-                      flexDirection: 'column',
-                      gap: 4,
-                    }}>
-                      <textarea
-                        value={feedbackComment}
-                        onChange={(e) => setFeedbackComment(e.target.value)}
-                        placeholder="How can we make it better?"
-                        style={{
-                          width: '100%',
-                          height: 96,
-                          border: '1px solid #c1c1c1',
-                          borderRadius: 4,
-                          padding: 12,
-                          fontFamily: 'var(--font-body)',
-                          fontSize: 16,
-                          fontWeight: 400,
-                          lineHeight: '24px',
-                          color: '#232323',
-                          resize: 'none',
-                          boxSizing: 'border-box',
-                        }}
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                {/* CTA Section */}
-                <div style={{
-                  background: '#efe9de',
-                  padding: '16px 16px 32px',
-                }}>
-                  <button
-                    onClick={() => {
-                      // Save the user's rating and feedback
-                      if (editingRating > 0) {
-                        setUserSubmittedRating(editingRating);
-                        setUserSubmittedFeedback({
-                          positive: new Set(selectedPositiveChips),
-                          negative: new Set(selectedNegativeChips),
-                          comment: feedbackComment,
-                        });
-                      }
-                      setShowFeedbackDrawer(false);
-                    }}
-                    style={{
-                      width: '100%',
-                      height: 40,
-                      background: '#232323',
-                      border: 'none',
-                      borderRadius: 8,
-                      fontFamily: 'var(--font-body)',
-                      fontSize: 16,
-                      fontWeight: 700,
-                      lineHeight: '24px',
-                      color: 'white',
-                      cursor: 'pointer',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      gap: 8,
-                      minWidth: 88,
-                    }}
-                  >
-                    Send feedback
-                  </button>
-                </div>
-              </div>
-            </>
-          )}
         </div>
       );
     }
 
     // ========== HOME PAGE ==========
-    function HomePage({ onNavigateToMenu, onShowRating, onNavigateToPastOrders, onRecipeClick, autoOpenCookingStep }) {
+    function HomePage({ onNavigateToMenu, onShowRating, onNavigateToPastOrders, onRecipeClick }) {
       const [promoBannerIndex, setPromoBannerIndex] = useState(1);
       const [isAutoPlaying, setIsAutoPlaying] = useState(false);
       const [expandedCards, setExpandedCards] = useState({});
       const [selectedRecipe, setSelectedRecipe] = useState(null);
       const [cart, setCart] = useState({});
-      const [activeOrderTab, setActiveOrderTab] = useState('current'); // 'current' or 'past'
-      const [pastOrderFilter, setPastOrderFilter] = useState('All'); // Filter for past orders tab
-      const [pastOrderRecipeRatings, setPastOrderRecipeRatings] = useState({});
-      const [pastOrderBookmarkedRecipes, setPastOrderBookmarkedRecipes] = useState(new Set([2, 4]));
-      const [savedRecipeDrawer, setSavedRecipeDrawer] = useState({ open: false, recipe: null });
-      const [favoriteRecipes, setFavoriteRecipes] = useState(new Set());
 
       const promoBanners = [
         { img: 'https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=600&h=300&fit=crop', title: 'Healthy living, stress-free' },
@@ -10300,20 +8020,6 @@
         }, 4000);
         return () => clearInterval(interval);
       }, [isAutoPlaying, promoBanners.length]);
-
-      // Auto-open cooking step 6 when deep-linking
-      React.useEffect(() => {
-        if (autoOpenCookingStep !== null) {
-          const firstRecipe = {
-            id: 1,
-            name: 'Cheddar-Crusted Chicken with Roasted Vegetables',
-            img: 'recipes/HelloFresh Main Image.jpg',
-            isDelivered: true,
-            autoOpenCookingStep
-          };
-          setSelectedRecipe(firstRecipe);
-        }
-      }, [autoOpenCookingStep]);
 
       const deliveries = [
         {
@@ -10479,7 +8185,7 @@
             />
           )}
 
-          <div style={{ display: 'flex', flexDirection: 'column', height: '100%', paddingBottom: 83, position: 'relative' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', height: '100%', paddingBottom: 83 }}>
             {/* Green Header */}
             <div style={{
               background: 'var(--color-brand-green-500)',
@@ -10524,21 +8230,12 @@
                 fontWeight: 700,
                 color: 'white',
               }}>For you</span>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-                {/* Bookmark icon */}
-                <button style={{ background: 'transparent', border: 'none', cursor: 'pointer', padding: 0 }}>
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
-                    <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
-                  </svg>
-                </button>
-                {/* Bell icon */}
-                <button style={{ background: 'transparent', border: 'none', cursor: 'pointer', padding: 0 }}>
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
-                    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
-                    <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
-                  </svg>
-                </button>
-              </div>
+              <button style={{ background: 'transparent', border: 'none', cursor: 'pointer', padding: 0 }}>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
+                  <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+                  <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+                </svg>
+              </button>
             </div>
           </div>
 
@@ -10719,55 +8416,52 @@
               </div>
             </div>
 
-            {/* Current Order Section Header */}
+            {/* Current order header with Past orders button */}
             <div style={{
-              padding: '16px 16px 12px',
               display: 'flex',
-              alignItems: 'center',
               justifyContent: 'space-between',
+              alignItems: 'center',
+              padding: '16px 16px 12px',
             }}>
               <span style={{
                 fontFamily: 'var(--font-headline)',
                 fontSize: 20,
-                fontWeight: 700,
                 lineHeight: '24px',
+                fontWeight: 700,
                 color: '#232323',
               }}>Current order</span>
               <button
                 onClick={onNavigateToPastOrders}
                 style={{
+                  padding: '4px 0',
                   background: 'transparent',
                   border: 'none',
                   fontFamily: 'var(--font-body)',
                   fontSize: 14,
                   fontWeight: 700,
                   color: '#232323',
-                  textDecoration: 'underline',
                   cursor: 'pointer',
-                  padding: 0,
+                  textDecoration: 'underline',
                 }}
               >Past orders</button>
             </div>
 
-            {/* Current Order Card */}
+            {/* Delivery Cards */}
             <div style={{ padding: '0 16px 16px' }}>
               {deliveries.map((delivery, idx) => (
                 <React.Fragment key={delivery.id}>
-
-                  {/* Upcoming Orders Section Header */}
+                  {/* Upcoming orders section header */}
                   {delivery.isFirstUpcoming && (
                     <div style={{
+                      fontFamily: 'var(--font-headline)',
+                      fontSize: 20,
+                      lineHeight: '24px',
+                      fontWeight: 700,
+                      color: '#232323',
+                      marginBottom: 12,
+                      marginTop: idx > 0 ? 24 : 0,
                       paddingTop: 8,
-                      paddingBottom: 12,
-                    }}>
-                      <span style={{
-                        fontFamily: 'var(--font-headline)',
-                        fontSize: 20,
-                        fontWeight: 700,
-                        lineHeight: '24px',
-                        color: '#232323',
-                      }}>Upcoming orders</span>
-                    </div>
+                    }}>Upcoming orders</div>
                   )}
 
                   <div style={{
@@ -11096,222 +8790,9 @@
                   </div>
                 </React.Fragment>
               ))}
-
-              {/* Referral Promo Card */}
-              <div style={{
-                marginTop: 24,
-                background: '#024426',
-                borderRadius: 12,
-                padding: 24,
-                textAlign: 'center',
-              }}>
-                <div style={{
-                  marginBottom: 16,
-                  display: 'flex',
-                  justifyContent: 'center',
-                }}>
-                  <div style={{
-                    width: 120,
-                    height: 120,
-                    background: 'rgba(255,255,255,0.1)',
-                    borderRadius: '50%',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    fontSize: 48,
-                  }}>🎁</div>
-                </div>
-                <h3 style={{
-                  fontFamily: 'var(--font-headline)',
-                  fontSize: 20,
-                  fontWeight: 700,
-                  lineHeight: '28px',
-                  color: 'white',
-                  margin: '0 0 12px 0',
-                }}>Share free meals and get a $15 credit</h3>
-                <p style={{
-                  fontFamily: 'var(--font-body)',
-                  fontSize: 14,
-                  fontWeight: 400,
-                  lineHeight: '20px',
-                  color: 'white',
-                  margin: 0,
-                }}>Give friends a week of free meals and get a $15 credit when they sign up with your personal code.</p>
-              </div>
             </div>
-            )}
           </div>
           </div>
-
-          {/* Mini Drawer - Recipe Saved */}
-          {savedRecipeDrawer.open && (
-            <>
-              {/* Backdrop */}
-              <div
-                onClick={() => setSavedRecipeDrawer({ open: false, recipe: null })}
-                style={{
-                  position: 'absolute',
-                  inset: 0,
-                  background: 'rgba(0, 0, 0, 0.4)',
-                  zIndex: 999,
-                  animation: 'fadeIn 0.2s ease-out',
-                }}
-              />
-
-              {/* Drawer */}
-              <div style={{
-                position: 'absolute',
-                bottom: 0,
-                left: 0,
-                right: 0,
-                background: 'white',
-                borderRadius: '24px 24px 0 0',
-                zIndex: 1000,
-                animation: 'slideUpDrawer 0.3s ease-out',
-                boxShadow: '0 -4px 12px rgba(0, 0, 0, 0.1)',
-              }}>
-                {/* Drag handle */}
-                <div style={{
-                  width: 40,
-                  height: 4,
-                  background: '#E0E0E0',
-                  borderRadius: 2,
-                  margin: '12px auto 16px',
-                }} />
-
-                {/* Content */}
-                <div style={{ padding: '0 24px 24px' }}>
-                  {/* Recipe saved with View list */}
-                  <div style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    marginBottom: 12,
-                  }}>
-                    <div style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: 4,
-                    }}>
-                      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                        <path d="M13.5 4.5L6 12L2.5 8.5" stroke="#232323" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                      </svg>
-                      <span style={{
-                        fontFamily: 'var(--font-body)',
-                        fontSize: 16,
-                        fontWeight: 400,
-                        lineHeight: '24px',
-                        color: '#232323',
-                      }}>
-                        Recipe saved
-                      </span>
-                    </div>
-                    <button
-                      onClick={() => {
-                        // Undo the bookmark
-                        if (savedRecipeDrawer.recipe) {
-                          const newSet = new Set(pastOrderBookmarkedRecipes);
-                          newSet.delete(savedRecipeDrawer.recipe.id);
-                          setPastOrderBookmarkedRecipes(newSet);
-                        }
-                        setSavedRecipeDrawer({ open: false, recipe: null });
-                      }}
-                      style={{
-                        padding: 0,
-                        background: 'transparent',
-                        border: 'none',
-                        fontFamily: 'var(--font-body)',
-                        fontSize: 14,
-                        fontWeight: 700,
-                        lineHeight: '20px',
-                        color: '#232323',
-                        textDecoration: 'underline',
-                        cursor: 'pointer',
-                      }}
-                    >
-                      Undo
-                    </button>
-                  </div>
-
-                  {/* Add to favourite / Remove */}
-                  {savedRecipeDrawer.recipe && favoriteRecipes.has(savedRecipeDrawer.recipe.id) ? (
-                    <div style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'space-between',
-                    }}>
-                      <div style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: 4,
-                      }}>
-                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                          <path d="M13.5 4.5L6 12L2.5 8.5" stroke="#232323" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                        </svg>
-                        <span style={{
-                          fontFamily: 'var(--font-body)',
-                          fontSize: 14,
-                          fontWeight: 400,
-                          lineHeight: '20px',
-                          color: '#232323',
-                        }}>
-                          Added to favourite
-                        </span>
-                      </div>
-                      <button
-                        onClick={() => {
-                          const newFavorites = new Set(favoriteRecipes);
-                          if (savedRecipeDrawer.recipe) {
-                            newFavorites.delete(savedRecipeDrawer.recipe.id);
-                            setFavoriteRecipes(newFavorites);
-                          }
-                        }}
-                        style={{
-                          padding: 0,
-                          background: 'transparent',
-                          border: 'none',
-                          fontFamily: 'var(--font-body)',
-                          fontSize: 14,
-                          fontWeight: 700,
-                          lineHeight: '20px',
-                          color: '#232323',
-                          textDecoration: 'underline',
-                          cursor: 'pointer',
-                        }}
-                      >
-                        Remove
-                      </button>
-                    </div>
-                  ) : (
-                    <button
-                      onClick={() => {
-                        const newFavorites = new Set(favoriteRecipes);
-                        if (savedRecipeDrawer.recipe) {
-                          newFavorites.add(savedRecipeDrawer.recipe.id);
-                          setFavoriteRecipes(newFavorites);
-                        }
-                      }}
-                      style={{
-                        padding: 0,
-                        background: 'transparent',
-                        border: 'none',
-                        fontFamily: 'var(--font-body)',
-                        fontSize: 14,
-                        fontWeight: 400,
-                        lineHeight: '20px',
-                        color: '#232323',
-                        textDecoration: 'underline',
-                        cursor: 'pointer',
-                        textAlign: 'left',
-                      }}
-                    >
-                      Add to favourite
-                    </button>
-                  )}
-                </div>
-              </div>
-            </>
-          )}
         </>
       );
     }
@@ -13113,15 +10594,6 @@
       const [showPastOrders, setShowPastOrders] = useState(false);
       const [bookmarkedRecipes, setBookmarkedRecipes] = useState(new Set([1, 3, 5, 6, 7, 8, 9, 10])); // Initialize with saved recipes (8,9,10 are "not available")
       const [openCartToSavedRecipes, setOpenCartToSavedRecipes] = useState(false);
-      const [autoOpenCookingStep, setAutoOpenCookingStep] = useState(null);
-
-      // Detect hash for deep-linking to cooking step 6
-      React.useEffect(() => {
-        const hash = window.location.hash.slice(1);
-        if (hash === 'cooking-step-6') {
-          setAutoOpenCookingStep(5); // Step 6 is index 5
-        }
-      }, []);
 
       const toggleBookmark = (recipeId) => {
         setBookmarkedRecipes(prev => {
@@ -13157,7 +10629,6 @@
       const handleNavClick = (label) => {
         if (label === 'Home') setCurrentPage('home');
         else if (label === 'Menu') setCurrentPage('menu');
-        else if (label === 'Profile') setCurrentPage('profile');
         else alert(`Navigating to ${label}...`);
       };
 
@@ -13178,8 +10649,6 @@
         <div className="phone-frame">
           {showPastOrders ? (
             <PastOrdersPage onBack={() => setShowPastOrders(false)} />
-          ) : currentPage === 'profile' ? (
-            <ProfilePage onNavigateToPastOrders={() => setShowPastOrders(true)} />
           ) : currentPage === 'home' ? (
             <HomePage
               onNavigateToMenu={() => setCurrentPage('menu')}
@@ -13188,7 +10657,6 @@
                 setShowRatingDrawer(true);
               }}
               onNavigateToPastOrders={() => setShowPastOrders(true)}
-              autoOpenCookingStep={autoOpenCookingStep}
             />
           ) : (
             <MenuPage

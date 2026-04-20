@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Find Your Favorites - Animation Demo</title>
+  <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      background-color: #e8e8e8;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .phone-frame {
+      width: 375px;
+      height: 812px;
+      background: #f5f5f0;
+      border-radius: 40px;
+      overflow: hidden;
+      position: relative;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    }
+
+    /* Animation keyframes */
+    @keyframes shrinkToCenter {
+      0% {
+        transform: translate(0, 0) scale(1);
+        opacity: 1;
+      }
+      100% {
+        transform: translate(var(--tx), var(--ty)) scale(0.3);
+        opacity: 1;
+      }
+    }
+
+    @keyframes panAppear {
+      0% {
+        transform: translate(-50%, -50%) scale(0);
+        opacity: 0;
+      }
+      100% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+      }
+    }
+
+    @keyframes panShake {
+      0%, 100% { transform: translate(-50%, -50%) rotate(0deg); }
+      25% { transform: translate(-50%, -50%) rotate(3deg); }
+      50% { transform: translate(-50%, -50%) rotate(-3deg); }
+      75% { transform: translate(-50%, -50%) rotate(2deg); }
+    }
+
+    @keyframes fadeOut {
+      0% { opacity: 1; }
+      100% { opacity: 0; }
+    }
+
+    @keyframes fadeIn {
+      0% { opacity: 0; }
+      100% { opacity: 1; }
+    }
+
+    @keyframes popIn {
+      0% {
+        transform: scale(0.8) translateY(20px);
+        opacity: 0;
+      }
+      60% {
+        transform: scale(1.05) translateY(-5px);
+      }
+      100% {
+        transform: scale(1) translateY(0);
+        opacity: 1;
+      }
+    }
+
+    .recipe-shrink {
+      animation: shrinkToCenter 1.5s cubic-bezier(0.4, 0.0, 0.2, 1) forwards;
+    }
+
+    .pan-appear {
+      animation: panAppear 0.6s cubic-bezier(0.4, 0.0, 0.2, 1) forwards;
+    }
+
+    .pan-shaking {
+      animation: panShake 1.5s ease-in-out infinite;
+    }
+
+    .fade-out {
+      animation: fadeOut 0.5s ease-out forwards;
+    }
+
+    .fade-in {
+      animation: fadeIn 0.5s ease-out forwards;
+    }
+
+    .pop-in {
+      animation: popIn 0.5s ease-out forwards;
+      opacity: 0;
+    }
+
+    /* Hide scrollbar */
+    .horizontal-scroll::-webkit-scrollbar {
+      display: none;
+    }
+    .horizontal-scroll {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useEffect, useRef } = React;
+
+    function AnimationDemo() {
+      const [phase, setPhase] = useState('initial');
+      const [shownRecipes, setShownRecipes] = useState([]);
+
+      const recipes = [
+        { id: 1, name: 'Garlic Butter Shrimp', img: 'recipes/HelloFresh Main High (1).jpg' },
+        { id: 2, name: 'Tuscan Chicken Pasta', img: 'recipes/HelloFresh Main Image (8).jpg' },
+        { id: 3, name: 'Lemon Herb Salmon', img: 'recipes/HelloFresh Main Image (9).jpg' },
+        { id: 4, name: 'Beef Stir-Fry', img: 'recipes/HelloFresh Main Image (10).jpg' },
+      ];
+
+      const startAnimation = () => {
+        setPhase('initial');
+        setShownRecipes([]);
+
+        // Start shrinking
+        setTimeout(() => setPhase('shrinking'), 100);
+
+        // Show pan when recipes reach center
+        setTimeout(() => setPhase('cooking'), 1700);
+
+        // Transition to final
+        setTimeout(() => setPhase('transitioning'), 4500);
+
+        // Show final state
+        setTimeout(() => {
+          setPhase('final');
+          // Show recipes one by one
+          recipes.forEach((_, index) => {
+            setTimeout(() => {
+              setShownRecipes(prev => [...prev, index]);
+            }, index * 200);
+          });
+        }, 5200);
+      };
+
+      return (
+        <div className="phone-frame">
+          <div style={{
+            width: '100%',
+            height: '100%',
+            position: 'relative',
+            overflow: 'hidden',
+          }}>
+
+            {/* Initial State - Real horizontal scrollable layout */}
+            {phase === 'initial' && (
+              <div style={{
+                width: '100%',
+                height: '100%',
+                background: '#f5f5f0',
+                display: 'flex',
+                flexDirection: 'column',
+              }}>
+                {/* Top nav area */}
+                <div style={{
+                  padding: '60px 16px 16px 16px',
+                  background: '#fff',
+                }}>
+                  <div style={{
+                    display: 'flex',
+                    gap: 8,
+                    marginBottom: 16,
+                  }}>
+                    <button style={{
+                      padding: '8px 16px',
+                      borderRadius: 20,
+                      border: '1px solid #ddd',
+                      background: 'white',
+                      fontSize: 14,
+                    }}>Veggie</button>
+                    <button style={{
+                      padding: '8px 16px',
+                      borderRadius: 20,
+                      border: '1px solid #ddd',
+                      background: 'white',
+                      fontSize: 14,
+                    }}>High Protein</button>
+                  </div>
+                </div>
+
+                {/* Find your favorites section */}
+                <div style={{
+                  background: '#efe9de',
+                  padding: '24px 16px',
+                  flex: 1,
+                }}>
+                  <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    marginBottom: 8,
+                  }}>
+                    <h2 style={{
+                      fontSize: 24,
+                      fontWeight: 700,
+                      margin: 0,
+                    }}>Find your favorites</h2>
+                    <button style={{
+                      width: 32,
+                      height: 32,
+                      background: 'transparent',
+                      border: 'none',
+                      fontSize: 24,
+                      cursor: 'pointer',
+                    }}>×</button>
+                  </div>
+
+                  <p style={{
+                    fontSize: 14,
+                    color: '#666',
+                    marginBottom: 24,
+                  }}>Rate your recipes, we will show your top rated here</p>
+
+                  <div
+                    className="horizontal-scroll"
+                    style={{
+                      display: 'flex',
+                      gap: 16,
+                      overflowX: 'auto',
+                      marginBottom: 24,
+                      paddingBottom: 8,
+                    }}
+                  >
+                    {recipes.map((recipe) => (
+                      <div
+                        key={recipe.id}
+                        style={{
+                          flexShrink: 0,
+                          display: 'flex',
+                          flexDirection: 'column',
+                          alignItems: 'center',
+                          gap: 8,
+                        }}
+                      >
+                        <img
+                          src={recipe.img}
+                          style={{
+                            width: 180,
+                            height: 180,
+                            borderRadius: '50%',
+                            objectFit: 'cover',
+                          }}
+                        />
+                        <div style={{
+                          textAlign: 'center',
+                          width: 180,
+                        }}>
+                          <h3 style={{
+                            fontSize: 16,
+                            fontWeight: 700,
+                            margin: 0,
+                            marginBottom: 4,
+                          }}>{recipe.name}</h3>
+                          <p style={{
+                            fontSize: 12,
+                            color: '#666',
+                            margin: 0,
+                            marginBottom: 8,
+                          }}>Ordered this week</p>
+                          <div style={{
+                            display: 'flex',
+                            justifyContent: 'center',
+                            gap: 8,
+                          }}>
+                            {[1, 2, 3, 4, 5].map((star) => (
+                              <span
+                                key={star}
+                                style={{
+                                  fontSize: 24,
+                                  color: '#ddd',
+                                  cursor: 'pointer',
+                                }}
+                              >★</span>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  <button
+                    onClick={startAnimation}
+                    style={{
+                      width: '100%',
+                      padding: '12px 24px',
+                      background: '#232323',
+                      color: 'white',
+                      border: 'none',
+                      borderRadius: 8,
+                      fontSize: 16,
+                      fontWeight: 700,
+                      cursor: 'pointer',
+                    }}
+                  >
+                    Show results
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* Shrinking Phase - Within section */}
+            {(phase === 'shrinking' || phase === 'cooking') && (
+              <div style={{
+                width: '100%',
+                height: '100%',
+                background: '#f5f5f0',
+                display: 'flex',
+                flexDirection: 'column',
+              }}>
+                {/* Top nav area */}
+                <div style={{
+                  padding: '60px 16px 16px 16px',
+                  background: '#fff',
+                }}>
+                  <div style={{
+                    display: 'flex',
+                    gap: 8,
+                    marginBottom: 16,
+                  }}>
+                    <button style={{
+                      padding: '8px 16px',
+                      borderRadius: 20,
+                      border: '1px solid #ddd',
+                      background: 'white',
+                      fontSize: 14,
+                    }}>Veggie</button>
+                    <button style={{
+                      padding: '8px 16px',
+                      borderRadius: 20,
+                      border: '1px solid #ddd',
+                      background: 'white',
+                      fontSize: 14,
+                    }}>High Protein</button>
+                  </div>
+                </div>
+
+                {/* Find your favorites section - animation happens here */}
+                <div style={{
+                  background: '#efe9de',
+                  padding: '24px 16px',
+                  flex: 1,
+                  position: 'relative',
+                  overflow: 'hidden',
+                }}>
+                  <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    marginBottom: 8,
+                  }}>
+                    <h2 style={{
+                      fontSize: 24,
+                      fontWeight: 700,
+                      margin: 0,
+                    }}>Find your favorites</h2>
+                    <button style={{
+                      width: 32,
+                      height: 32,
+                      background: 'transparent',
+                      border: 'none',
+                      fontSize: 24,
+                      cursor: 'pointer',
+                    }}>×</button>
+                  </div>
+
+                  <p style={{
+                    fontSize: 14,
+                    color: '#666',
+                    marginBottom: 24,
+                  }}>Rate your recipes, we will show your top rated here</p>
+
+                  {/* Animation area */}
+                  <div style={{
+                    position: 'relative',
+                    width: '100%',
+                    height: 400,
+                  }}>
+                    {/* Recipe images */}
+                    <img
+                      src={recipes[0].img}
+                      className={phase === 'shrinking' ? 'recipe-shrink' : ''}
+                      style={{
+                        position: 'absolute',
+                        left: 20,
+                        top: 20,
+                        width: 140,
+                        height: 140,
+                        borderRadius: '50%',
+                        objectFit: 'cover',
+                        '--tx': '130px',
+                        '--ty': '80px',
+                      }}
+                    />
+                    <img
+                      src={recipes[1].img}
+                      className={phase === 'shrinking' ? 'recipe-shrink' : ''}
+                      style={{
+                        position: 'absolute',
+                        right: 30,
+                        top: 50,
+                        width: 120,
+                        height: 120,
+                        borderRadius: '50%',
+                        objectFit: 'cover',
+                        '--tx': '-120px',
+                        '--ty': '80px',
+                      }}
+                    />
+                    <img
+                      src={recipes[2].img}
+                      className={phase === 'shrinking' ? 'recipe-shrink' : ''}
+                      style={{
+                        position: 'absolute',
+                        left: 40,
+                        bottom: 80,
+                        width: 130,
+                        height: 130,
+                        borderRadius: '50%',
+                        objectFit: 'cover',
+                        '--tx': '110px',
+                        '--ty': '-40px',
+                      }}
+                    />
+                    <img
+                      src={recipes[3].img}
+                      className={phase === 'shrinking' ? 'recipe-shrink' : ''}
+                      style={{
+                        position: 'absolute',
+                        right: 20,
+                        bottom: 60,
+                        width: 150,
+                        height: 150,
+                        borderRadius: '50%',
+                        objectFit: 'cover',
+                        '--tx': '-140px',
+                        '--ty': '-60px',
+                      }}
+                    />
+
+                    {/* Pan appears in cooking phase */}
+                    {phase === 'cooking' && (
+                      <>
+                        <img
+                          src="pan mixing.png"
+                          className="pan-appear pan-shaking"
+                          style={{
+                            position: 'absolute',
+                            top: '50%',
+                            left: '50%',
+                            width: 180,
+                            height: 180,
+                            objectFit: 'contain',
+                          }}
+                        />
+                        <p style={{
+                          position: 'absolute',
+                          bottom: 20,
+                          left: 0,
+                          right: 0,
+                          fontSize: 18,
+                          fontWeight: 700,
+                          textAlign: 'center',
+                        }}>Picking your top rated...</p>
+                      </>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Transitioning Phase */}
+            {phase === 'transitioning' && (
+              <div style={{
+                position: 'absolute',
+                inset: 0,
+                background: '#efe9de',
+              }}>
+                <div className="fade-in" style={{
+                  padding: '40px 16px',
+                }}>
+                  <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    marginBottom: 8,
+                  }}>
+                    <h2 style={{
+                      fontSize: 24,
+                      fontWeight: 700,
+                    }}>Your favorite recipes</h2>
+                    <img
+                      src="Star.png"
+                      className="fade-in"
+                      style={{
+                        width: 48,
+                        height: 48,
+                        objectFit: 'contain',
+                      }}
+                    />
+                  </div>
+                  <p style={{
+                    fontSize: 14,
+                    color: '#666',
+                  }}>Based on what you liked before:</p>
+                </div>
+              </div>
+            )}
+
+            {/* Final State */}
+            {phase === 'final' && (
+              <div style={{
+                position: 'absolute',
+                inset: 0,
+                background: '#efe9de',
+                padding: '40px 16px',
+                overflowY: 'auto',
+              }}>
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  marginBottom: 8,
+                }}>
+                  <h2 style={{
+                    fontSize: 24,
+                    fontWeight: 700,
+                  }}>Your favorite recipes</h2>
+                  <img
+                    src="Star.png"
+                    style={{
+                      width: 48,
+                      height: 48,
+                      objectFit: 'contain',
+                    }}
+                  />
+                </div>
+
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  marginBottom: 24,
+                }}>
+                  <p style={{
+                    fontSize: 14,
+                    color: '#666',
+                    flex: 1,
+                  }}>Based on what you liked before:</p>
+                  <button style={{
+                    background: 'transparent',
+                    border: 'none',
+                    fontSize: 16,
+                    fontWeight: 700,
+                    textDecoration: 'underline',
+                    cursor: 'pointer',
+                  }}>Show all</button>
+                </div>
+
+                {/* Recipe cards appearing one by one */}
+                <div style={{
+                  display: 'flex',
+                  gap: 8,
+                  overflowX: 'auto',
+                  marginBottom: 24,
+                }}>
+                  {recipes.map((recipe, index) => (
+                    shownRecipes.includes(index) && (
+                      <div
+                        key={recipe.id}
+                        className="pop-in"
+                        style={{
+                          flexShrink: 0,
+                          width: 180,
+                          background: '#faf8f3',
+                          borderRadius: 8,
+                          overflow: 'hidden',
+                          animationDelay: `${index * 0.05}s`,
+                        }}
+                      >
+                        <img
+                          src={recipe.img}
+                          style={{
+                            width: '100%',
+                            height: 180,
+                            objectFit: 'cover',
+                            borderRadius: 8,
+                          }}
+                        />
+                        <div style={{ padding: 8 }}>
+                          <h3 style={{
+                            fontSize: 16,
+                            fontWeight: 700,
+                            margin: 0,
+                          }}>{recipe.name}</h3>
+                        </div>
+                      </div>
+                    )
+                  ))}
+                </div>
+
+                <button
+                  onClick={() => {
+                    setPhase('initial');
+                    setShownRecipes([]);
+                  }}
+                  style={{
+                    width: '100%',
+                    padding: '12px 24px',
+                    background: '#232323',
+                    color: 'white',
+                    border: 'none',
+                    borderRadius: 8,
+                    fontSize: 16,
+                    fontWeight: 700,
+                    cursor: 'pointer',
+                  }}
+                >
+                  Replay Animation
+                </button>
+              </div>
+            )}
+
+          </div>
+        </div>
+      );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<AnimationDemo />);
+  </script>
+</body>
+</html>

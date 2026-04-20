@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recipe engagement Q2 plan</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="workspace">
+                    <span class="workspace-name">Recipe engagement Q2 plan</span>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <div class="nav-section-title">Rating</div>
+                    <a href="#" class="nav-item active" data-page="community-rating">
+                        <span class="nav-sub-item-text">Community Rating</span>
+                        <span class="nav-refresh-icon" data-page="community-rating" title="Refresh and restart">↻</span>
+                    </a>
+                    <div class="nav-item-parent">
+                        <a href="#" class="nav-item has-dropdown open" data-page="rating-entries">
+                            <span>Rating entries</span>
+                            <span class="dropdown-icon">▼</span>
+                        </a>
+                        <div class="nav-dropdown open">
+                            <a href="#" class="nav-sub-item" data-page="cooking-flow">
+                                <span class="nav-sub-item-text">Cooking flow</span>
+                                <span class="nav-refresh-icon" data-page="cooking-flow" title="Refresh and restart">↻</span>
+                            </a>
+                            <a href="#" class="nav-sub-item" data-page="past-orders-entry">
+                                <span class="nav-sub-item-text">Past Orders</span>
+                                <span class="nav-refresh-icon" data-page="past-orders-entry" title="Refresh and restart">↻</span>
+                            </a>
+                            <a href="#" class="nav-sub-item" data-page="recipe-details">
+                                <span class="nav-sub-item-text">Recipe Details</span>
+                                <span class="nav-refresh-icon" data-page="recipe-details" title="Refresh and restart">↻</span>
+                            </a>
+                            <a href="#" class="nav-sub-item" data-page="loyalty-mission">
+                                <span class="nav-sub-item-text">Loyalty mission</span>
+                                <span class="nav-refresh-icon" data-page="loyalty-mission" title="Refresh and restart">↻</span>
+                            </a>
+                            <a href="#" class="nav-sub-item" data-page="push-notification">
+                                <span class="nav-sub-item-text">Push notification</span>
+                                <span class="nav-refresh-icon" data-page="push-notification" title="Refresh and restart">↻</span>
+                            </a>
+                            <a href="#" class="nav-sub-item" data-page="email">
+                                <span class="nav-sub-item-text">Email</span>
+                                <span class="nav-refresh-icon" data-page="email" title="Refresh and restart">↻</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+
+        </aside>
+
+        <!-- Main Content -->
+        <main class="content">
+            <!-- Community Rating Page -->
+            <div class="page prototype-page active" id="community-rating">
+                <div class="solution-layout">
+                    <div class="prototype-frame">
+                        <iframe src="../q2-prototype-working version.html#menu" title="Community Rating Prototype"></iframe>
+                    </div>
+                    <aside class="solution-sidebar">
+                        <div class="sidebar-item">
+                            <div class="sidebar-label">Feature name</div>
+                            <div class="sidebar-value">Community Rating</div>
+                        </div>
+                        <div class="sidebar-item">
+                            <div class="sidebar-label">Hypothesis</div>
+                            <div class="sidebar-value">If we display community ratings prominently throughout the platform, then users will be motivated to rate recipes because they see their contributions directly influence the community and help others make decisions. This creates a feedback loop: visible ratings drive more rating engagement while providing social proof that supports confident meal selection.</div>
+                        </div>
+                        <div class="sidebar-item">
+                            <div class="sidebar-label">View in prototype</div>
+                            <div class="sidebar-value">Browse recipe cards throughout the interface to see <strong>star ratings and review counts</strong> displayed on each card. Click into recipe details to view expanded rating information.</div>
+                        </div>
+                    </aside>
+                </div>
+            </div>
+
+            <!-- Rating Entries Page -->
+            <div class="page prototype-page" id="rating-entries">
+                <div class="solution-layout">
+                    <div class="prototype-frame">
+                        <iframe src="../q2-prototype-working version.html" title="Rating Entries Prototype"></iframe>
+                    </div>
+                    <aside class="solution-sidebar">
+                        <div class="sidebar-item">
+                            <div class="sidebar-label">Feature name</div>
+                            <div class="sidebar-value">Rating entries</div>
+                        </div>
+                        <div class="sidebar-item">
+                            <div class="sidebar-label">Hypothesis</div>
+                            <div class="sidebar-value">If we provide rating entry points at contextually relevant moments, then we will increase rating submission volume because users can share feedback when they're naturally engaged and their experience is fresh.</div>
+                        </div>
+                        <div class="sidebar-item">
+                            <div class="sidebar-label">View in prototype</div>
+                            <div class="sidebar-value">
+                                Explore rating entry points across multiple touchpoints:
+                                <ul>
+                                    <li><strong>Cooking Flow:</strong> Rate during or after cooking experience</li>
+                                    <li><strong>Past Orders:</strong> Rate completed meals from order history</li>
+                                    <li><strong>Recipe Details:</strong> Rate from delivered recipe detail views</li>
+                                    <li><strong>Push Notification:</strong> Timely reminders to rate meals</li>
+                                    <li><strong>Loyalty Mission:</strong> Incentivized rating through rewards</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </aside>
+                </div>
+            </div>
+
+            <!-- Cooking Flow Page -->
+            <div class="page prototype-page" id="cooking-flow">
+                <div class="solution-layout">
+                    <div class="prototype-frame">
+                        <iframe src="../rating-page-prototype.html" title="Cooking Flow Prototype"></iframe>
+                    </div>
+                    <aside class="solution-sidebar">
+                        <div class="sidebar-item">
+                            <div class="sidebar-label">Feature name</div>
+                            <div class="sidebar-value">Cooking flow rating</div>
+                        </div>
+                        <div class="sidebar-item">
+                            <div class="sidebar-label">Description</div>
+                            <div class="sidebar-value">Integrated rating prompts within the cooking flow capture feedback at the moment of completion when the experience is fresh. This natural timing leads to more authentic, detailed ratings compared to delayed prompts.</div>
+                        </div>
+                        <div class="sidebar-item">
+                            <div class="sidebar-label">View in prototype</div>
+                            <div class="sidebar-value">You're viewing <strong>Step 6 of 6</strong> - the final cooking step. Click the <strong>right arrow</strong> at the bottom to see how the rating flow integrates naturally at completion.</div>
+                        </div>
+                    </aside>
+                </div>
+            </div>
+
+            <!-- Past Orders Entry Page -->
+            <div class="page prototype-page" id="past-orders-entry">
+                <div class="solution-layout">
+                    <div class="prototype-frame">
+                        <iframe src="../q2-prototype-working version.html#past-orders" title="Past Orders Entry Prototype"></iframe>
+                    </div>
+                    <aside class="solution-sidebar">
+                        <div class="sidebar-item">
+                            <div class="sidebar-label">Feature name</div>
+                            <div class="sidebar-value">Past orders rating entries</div>
+                        </div>
+                        <div class="sidebar-item">
+                            <div class="sidebar-label">Description</div>
+                            <div class="sidebar-value">The past orders section provides prominent rating entry points for completed meals, making it easy for users to rate multiple recipes in one session. This centralized approach increases rating volume by reducing the effort required to provide feedback.</div>
+                        </div>
+                        <div class="sidebar-item">
+                            <div class="sidebar-label">View in prototype</div>
+                            <div class="sidebar-value">Navigate to the <strong>past orders</strong> section to see rate buttons next to each completed order, with quick access to rating forms.</div>
+                        </div>
+                    </aside>
+                </div>
+            </div>
+
+            <!-- Recipe Details Page -->
+            <div class="page prototype-page" id="recipe-details">
+                <div class="solution-layout">
+                    <div class="prototype-frame">
+                        <iframe src="../q2-prototype-working version.html#recipe-detail-1" title="Recipe Details Prototype"></iframe>
+                    </div>
+                    <aside class="solution-sidebar">
+                        <div class="sidebar-item">
+                            <div class="sidebar-label">Feature name</div>
+                            <div class="sidebar-value">Recipe details rating entries</div>
+                        </div>
+                        <div class="sidebar-item">
+                            <div class="sidebar-label">Description</div>
+                            <div class="sidebar-value">Rating entry points in delivered recipe detail views allow users to rate meals when they're actively reviewing recipe information. This contextual placement captures feedback from users who are already engaged with the recipe content.</div>
+                        </div>
+                        <div class="sidebar-item">
+                            <div class="sidebar-label">View in prototype</div>
+                            <div class="sidebar-value">Click into any <strong>recipe detail page</strong> from menu, cookbook, or past orders to find rating options integrated into the recipe view.</div>
+                        </div>
+                    </aside>
+                </div>
+            </div>
+
+            <!-- Loyalty Mission Page -->
+            <div class="page prototype-page" id="loyalty-mission">
+                <div class="solution-layout">
+                    <div class="prototype-frame">
+                        <iframe src="../q2-prototype-working version.html#loyalty-rating" title="Loyalty Mission Prototype"></iframe>
+                    </div>
+                    <aside class="solution-sidebar">
+                        <div class="sidebar-item">
+                            <div class="sidebar-label">Feature name</div>
+                            <div class="sidebar-value">Loyalty mission</div>
+                        </div>
+                        <div class="sidebar-item">
+                            <div class="sidebar-label">Hypothesis</div>
+                            <div class="sidebar-value">If we integrate rating activities into loyalty program missions with point rewards, then we will increase both rating volume and engagement because users are motivated by tangible rewards while the gamification makes rating feel more enjoyable and purposeful.</div>
+                        </div>
+                        <div class="sidebar-item">
+                            <div class="sidebar-label">View in prototype</div>
+                            <div class="sidebar-value">You're viewing the <strong>home page</strong> with the <strong>rating drawer automatically opened</strong>. Notice the purple mission card offering <strong>+400 points per rating</strong> and see the rating flow with loyalty mission and trophy coin animation.</div>
+                        </div>
+                    </aside>
+                </div>
+
+            </div>
+
+            <!-- Push Notification Page -->
+            <div class="page prototype-page" id="push-notification">
+                <div class="solution-layout">
+                    <div class="prototype-frame">
+                        <iframe src="../q2-prototype-working version.html#push-notification" title="Push Notification Prototype"></iframe>
+                    </div>
+                    <aside class="solution-sidebar">
+                        <div class="sidebar-item">
+                            <div class="sidebar-label">Feature name</div>
+                            <div class="sidebar-value">Push notification</div>
+                        </div>
+                        <div class="sidebar-item">
+                            <div class="sidebar-label">Hypothesis</div>
+                            <div class="sidebar-value">If we send timely push notifications prompting users to rate their delivered meals, then we will increase rating submission rates because the notification serves as a convenient reminder when the cooking experience is still fresh in their minds.</div>
+                        </div>
+                        <div class="sidebar-item">
+                            <div class="sidebar-label">View in prototype</div>
+                            <div class="sidebar-value">The prototype opens to show an <strong>iOS home screen</strong>. A push notification will appear at the top prompting you to rate your meal. <strong>Tap the notification</strong> to open the past orders page with the rating flow.</div>
+                        </div>
+                    </aside>
+                </div>
+            </div>
+
+            <!-- Email Page -->
+            <div class="page prototype-page" id="email">
+                <div class="solution-layout">
+                    <div class="prototype-frame">
+                        <iframe src="email-mockup.html" title="Email Rating Mockup"></iframe>
+                    </div>
+                    <aside class="solution-sidebar">
+                        <div class="sidebar-item">
+                            <div class="sidebar-label">Feature name</div>
+                            <div class="sidebar-value">Email rating entry</div>
+                        </div>
+                        <div class="sidebar-item">
+                            <div class="sidebar-label">Description</div>
+                            <div class="sidebar-value">Email prompts with embedded rating functionality provide a frictionless way for users to share feedback. By bringing the rating experience directly to their inbox, we remove barriers and capture ratings when users are already thinking about their meals.</div>
+                        </div>
+                        <div class="sidebar-item">
+                            <div class="sidebar-label">View in prototype</div>
+                            <div class="sidebar-value">Scroll through the email to see the <strong>mobile-optimized vertical layout</strong>. Each recipe card includes a mouth-watering photo, recipe name, and <strong>interactive star rating</strong> that allows users to rate directly from the email.</div>
+                        </div>
+                    </aside>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

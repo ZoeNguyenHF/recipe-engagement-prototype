@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Top Rated Recipes Onboarding</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --font-body: 'Roboto', sans-serif;
+      --font-headline: 'Roboto', sans-serif;
+      --color-elevation-bg: #ffffff;
+      --color-primary: #FF6E40;
+    }
+
+    body {
+      font-family: var(--font-body);
+      background: #f5f5f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .phone-frame {
+      width: 375px;
+      height: 812px;
+      background: #232323;
+      border-radius: 40px;
+      overflow: hidden;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+      position: relative;
+    }
+
+    /* Background image */
+    .bg-image {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: blur(20px) brightness(0.7);
+    }
+
+    /* Status bar */
+    .status-bar {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 50px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 16px;
+      color: white;
+      font-size: 14px;
+      font-weight: 500;
+      z-index: 10;
+    }
+
+    /* Backdrop */
+    .backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.4);
+      z-index: 999;
+      opacity: 0;
+      animation: fadeIn 0.3s ease-out forwards;
+    }
+
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
+
+    /* Drawer */
+    .drawer {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--color-elevation-bg);
+      border-radius: 16px 16px 0 0;
+      box-shadow: 0 -4px 20px rgba(0,0,0,0.2);
+      z-index: 1000;
+      max-height: 85%;
+      overflow: hidden;
+      animation: slideUpDrawer 0.3s ease-out;
+      display: flex;
+      flex-direction: column;
+    }
+
+    @keyframes slideUpDrawer {
+      from {
+        transform: translateY(100%);
+      }
+      to {
+        transform: translateY(0);
+      }
+    }
+
+    /* Drag Handle */
+    .drag-handle {
+      width: 40px;
+      height: 6px;
+      background: #e0e0e0;
+      border-radius: 4px;
+      margin: 16px auto 0;
+    }
+
+    /* Story Progress Bars */
+    .story-progress {
+      display: flex;
+      gap: 4px;
+      padding: 12px 16px 8px;
+      position: relative;
+      z-index: 10;
+      background: var(--color-elevation-bg);
+    }
+
+    .progress-bar {
+      flex: 1;
+      height: 3px;
+      background: #e0e0e0;
+      border-radius: 2px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: #232323;
+      border-radius: 2px;
+      width: 0%;
+      transition: width 0.3s ease-out;
+    }
+
+    .progress-bar.completed .progress-fill {
+      width: 100%;
+    }
+
+    /* Story Container */
+    .story-container {
+      flex: 1;
+      display: none;
+      flex-direction: column;
+      overflow-y: auto;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .story-container.active {
+      display: flex;
+      opacity: 1;
+    }
+
+    /* Content Container */
+    .story-content {
+      padding: 24px 32px;
+      flex: 1;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .drawer-title {
+      font-family: var(--font-headline);
+      font-size: 28px;
+      font-weight: 700;
+      color: #232323;
+      text-align: left;
+      margin: 0 0 24px;
+      line-height: 1.2;
+    }
+
+    /* Recipe Cluster */
+    .recipe-cluster {
+      position: relative;
+      width: 100%;
+      height: 360px;
+      margin: 24px 0;
+    }
+
+    .recipe-image {
+      position: absolute;
+      border-radius: 50%;
+      object-fit: cover;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      transition: all 0.6s ease-in-out;
+    }
+
+    .recipe-image.faded {
+      filter: grayscale(100%);
+      opacity: 0.3;
+    }
+
+    .recipe-image.highlighted {
+      box-shadow: 0 8px 24px rgba(255, 110, 64, 0.4);
+    }
+
+    /* Badge */
+    .top-rated-badge {
+      position: absolute;
+      background: #D4960F;
+      color: white;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      opacity: 0;
+      transform: scale(0);
+      transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+      box-shadow: 0 2px 8px rgba(212, 150, 15, 0.3);
+    }
+
+    .top-rated-badge.show {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    /* Pagination dots */
+    .pagination-dots {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      margin: 24px 0;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #e0e0e0;
+      transition: background 0.3s;
+    }
+
+    .dot.active {
+      background: #232323;
+    }
+
+    /* Next Button */
+    .next-button {
+      width: 100%;
+      padding: 16px;
+      background: #232323;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: auto;
+      transition: transform 0.2s;
+    }
+
+    .next-button:active {
+      transform: scale(0.98);
+    }
+
+    /* Rating Step Styles */
+    .rating-scroll-container {
+      overflow-x: auto;
+      overflow-y: hidden;
+      display: flex;
+      gap: 16px;
+      padding: 0 0 16px 0;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      margin-top: 16px;
+    }
+
+    .rating-scroll-container::-webkit-scrollbar {
+      display: none;
+    }
+
+    .rating-card {
+      flex: 0 0 280px;
+      scroll-snap-align: start;
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .rating-card-image {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+    }
+
+    .rating-card-content {
+      padding: 16px;
+    }
+
+    .rating-card-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: #232323;
+      margin-bottom: 8px;
+      line-height: 1.3;
+    }
+
+    .rating-card-subtitle {
+      font-size: 14px;
+      color: #757575;
+      margin-bottom: 16px;
+    }
+
+    .star-rating {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+    }
+
+    .star-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      transition: transform 0.2s;
+    }
+
+    .star-btn:active {
+      transform: scale(0.9);
+    }
+
+    .star-icon {
+      width: 32px;
+      height: 32px;
+      fill: #e0e0e0;
+      transition: fill 0.2s;
+    }
+
+    .star-icon.filled {
+      fill: #D4960F;
+    }
+
+    .drawer-subtitle {
+      font-size: 16px;
+      font-weight: 400;
+      color: #757575;
+      text-align: center;
+      line-height: 1.5;
+      margin-bottom: 16px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="phone-frame">
+    <img class="bg-image" src="recipes/HelloFresh Main Image.jpg" alt="Background">
+
+    <!-- Status Bar -->
+    <div class="status-bar">
+      <span>9:41</span>
+      <span>For you</span>
+      <span>🔔</span>
+    </div>
+
+    <!-- Backdrop -->
+    <div class="backdrop"></div>
+
+    <!-- Drawer -->
+    <div class="drawer">
+      <div class="drag-handle"></div>
+
+      <!-- Story Progress -->
+      <div class="story-progress">
+        <div class="progress-bar" id="progress-1"><div class="progress-fill"></div></div>
+        <div class="progress-bar" id="progress-2"><div class="progress-fill"></div></div>
+        <div class="progress-bar" id="progress-3"><div class="progress-fill"></div></div>
+      </div>
+
+      <!-- Step 1: Recipe Cluster -->
+      <div class="story-container active" id="step-1">
+        <div class="story-content">
+          <h2 class="drawer-title">Your top rated recipes will be highlighted in your Menu</h2>
+
+          <div class="pagination-dots">
+            <div class="dot active"></div>
+            <div class="dot"></div>
+          </div>
+
+          <div class="recipe-cluster">
+            <img class="recipe-image" src="recipes/HelloFresh Main Image.jpg"
+                 style="width: 120px; height: 120px; top: 10px; left: 30px;">
+            <img class="recipe-image" src="recipes/HelloFresh Main High.jpg"
+                 style="width: 140px; height: 140px; top: 0; right: 20px;">
+            <img class="recipe-image" src="recipes/HelloFresh Main High (1).jpg"
+                 style="width: 100px; height: 100px; top: 120px; left: 0;">
+            <img class="recipe-image" src="recipes/HelloFresh Main Image (2).jpg"
+                 style="width: 130px; height: 130px; top: 140px; right: 10px;">
+            <img class="recipe-image" src="recipes/HelloFresh Main Image (3).jpg"
+                 style="width: 110px; height: 110px; bottom: 10px; left: 50px;">
+            <img class="recipe-image" src="recipes/HelloFresh Main High (2).jpg"
+                 style="width: 115px; height: 115px; bottom: 30px; right: 50px;">
+            <img class="recipe-image" src="recipes/HelloFresh Main Image (5).jpg"
+                 style="width: 95px; height: 95px; top: 80px; left: 130px;">
+          </div>
+
+          <button class="next-button" onclick="goToStep2()">Next</button>
+        </div>
+      </div>
+
+      <!-- Step 2: Highlighted Recipes -->
+      <div class="story-container" id="step-2">
+        <div class="story-content">
+          <h2 class="drawer-title">Your top rated recipes will be highlighted in your Menu</h2>
+
+          <div class="pagination-dots">
+            <div class="dot active"></div>
+            <div class="dot"></div>
+          </div>
+
+          <div class="recipe-cluster">
+            <div style="position: absolute; top: 10px; left: 30px;">
+              <img class="recipe-image faded" src="recipes/HelloFresh Main Image.jpg"
+                   style="width: 120px; height: 120px; position: relative;">
+            </div>
+
+            <div style="position: absolute; top: 0; right: 20px;">
+              <img class="recipe-image highlighted" src="recipes/HelloFresh Main High.jpg"
+                   style="width: 140px; height: 140px; position: relative;">
+              <div class="top-rated-badge" style="top: -8px; left: 50%; transform: translateX(-50%);">
+                ⭐ Your top rated
+              </div>
+            </div>
+
+            <div style="position: absolute; top: 120px; left: 0;">
+              <img class="recipe-image faded" src="recipes/HelloFresh Main High (1).jpg"
+                   style="width: 100px; height: 100px; position: relative;">
+            </div>
+
+            <div style="position: absolute; top: 140px; right: 10px;">
+              <img class="recipe-image faded" src="recipes/HelloFresh Main Image (2).jpg"
+                   style="width: 130px; height: 130px; position: relative;">
+            </div>
+
+            <div style="position: absolute; bottom: 10px; left: 50px;">
+              <img class="recipe-image highlighted" src="recipes/HelloFresh Main Image (3).jpg"
+                   style="width: 110px; height: 110px; position: relative;">
+              <div class="top-rated-badge" style="top: -8px; left: 50%; transform: translateX(-50%);">
+                ⭐ Your top rated
+              </div>
+            </div>
+
+            <div style="position: absolute; bottom: 30px; right: 50px;">
+              <img class="recipe-image faded" src="recipes/HelloFresh Main High (2).jpg"
+                   style="width: 115px; height: 115px; position: relative;">
+            </div>
+
+            <div style="position: absolute; top: 80px; left: 130px;">
+              <img class="recipe-image faded" src="recipes/HelloFresh Main Image (5).jpg"
+                   style="width: 95px; height: 95px; position: relative;">
+            </div>
+          </div>
+
+          <button class="next-button" onclick="goToStep3()">Next</button>
+        </div>
+      </div>
+
+      <!-- Step 3: Rating Interface -->
+      <div class="story-container" id="step-3">
+        <div class="story-content">
+          <h2 class="drawer-title" style="font-size: 24px; text-align: center; margin-bottom: 8px;">Rate your recipes</h2>
+          <p class="drawer-subtitle">Your top rated are highlighted in menu whenever they are available!</p>
+
+          <div class="pagination-dots">
+            <div class="dot"></div>
+            <div class="dot active"></div>
+          </div>
+
+          <div class="rating-scroll-container" id="rating-container">
+            <!-- Recipe cards will be added here -->
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    const recipes = [
+      { name: 'Honey Mandarin Chicken & Pepper Stir-Fry', img: 'recipes/HelloFresh Main Image.jpg', orderDate: 'Ordered this week' },
+      { name: 'Pork & Poblano Quesadillas', img: 'recipes/HelloFresh Main High.jpg', orderDate: 'Ordered this week' },
+      { name: 'Creamy Tuscan Shrimp Pasta', img: 'recipes/HelloFresh Main High (1).jpg', orderDate: 'Ordered this week' },
+      { name: 'Mediterranean Chicken Bowl', img: 'recipes/HelloFresh Main High (2).jpg', orderDate: 'Ordered last week' },
+      { name: 'Honey Garlic Glazed Salmon', img: 'recipes/HelloFresh Main Image (2).jpg', orderDate: 'Ordered last week' },
+    ];
+
+    const ratings = [0, 0, 0, 0, 0];
+
+    function goToStep2() {
+      // Mark step 1 as completed
+      document.getElementById('progress-1').classList.add('completed');
+
+      // Hide step 1, show step 2
+      document.getElementById('step-1').classList.remove('active');
+      document.getElementById('step-2').classList.add('active');
+
+      // Trigger the highlight animation after a short delay
+      setTimeout(() => {
+        document.querySelectorAll('#step-2 .top-rated-badge').forEach(badge => {
+          badge.classList.add('show');
+        });
+      }, 300);
+    }
+
+    function goToStep3() {
+      // Mark step 2 as completed
+      document.getElementById('progress-2').classList.add('completed');
+
+      // Hide step 2, show step 3
+      document.getElementById('step-2').classList.remove('active');
+      document.getElementById('step-3').classList.add('active');
+
+      // Initialize rating cards
+      initRatingCards();
+    }
+
+    function initRatingCards() {
+      const container = document.getElementById('rating-container');
+      container.innerHTML = '';
+
+      recipes.forEach((recipe, index) => {
+        const card = document.createElement('div');
+        card.className = 'rating-card';
+        card.innerHTML = `
+          <img class="rating-card-image" src="${recipe.img}" alt="${recipe.name}">
+          <div class="rating-card-content">
+            <div class="rating-card-title">${recipe.name}</div>
+            <div class="rating-card-subtitle">${recipe.orderDate}</div>
+            <div class="star-rating" id="stars-${index}">
+              ${[0,1,2,3,4].map(i => `
+                <button class="star-btn" onclick="setRating(${index}, ${i + 1})">
+                  <svg class="star-icon" viewBox="0 0 24 24">
+                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                  </svg>
+                </button>
+              `).join('')}
+            </div>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+
+      updateStarDisplay();
+    }
+
+    function setRating(recipeIndex, rating) {
+      // If clicking the same rating, remove it
+      if (ratings[recipeIndex] === rating) {
+        ratings[recipeIndex] = 0;
+      } else {
+        ratings[recipeIndex] = rating;
+
+        // Auto-scroll to next recipe after rating
+        setTimeout(() => {
+          const container = document.getElementById('rating-container');
+          const cardWidth = 280 + 16; // card width + gap
+          if (recipeIndex < recipes.length - 1) {
+            container.scrollTo({
+              left: (recipeIndex + 1) * cardWidth,
+              behavior: 'smooth'
+            });
+          }
+        }, 400);
+      }
+
+      updateStarDisplay();
+
+      // Check if all rated
+      const allRated = ratings.every(r => r > 0);
+      if (allRated) {
+        setTimeout(() => {
+          document.getElementById('progress-3').classList.add('completed');
+        }, 600);
+      }
+    }
+
+    function updateStarDisplay() {
+      recipes.forEach((_, recipeIndex) => {
+        const starsContainer = document.getElementById(`stars-${recipeIndex}`);
+        const stars = starsContainer.querySelectorAll('.star-icon');
+        stars.forEach((star, starIndex) => {
+          if (starIndex < ratings[recipeIndex]) {
+            star.classList.add('filled');
+          } else {
+            star.classList.remove('filled');
+          }
+        });
+      });
+    }
+  </script>
+
+</body>
+</html>

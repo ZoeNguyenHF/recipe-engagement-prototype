@@ -18,12 +18,56 @@
 
     body {
       font-family: 'Roboto', sans-serif;
-      background-color: #e8e8e8;
+      background-color: #f5f5f5;
+      min-height: 100vh;
+      padding: 0;
+      margin: 0;
+    }
+
+    /* Top Navigation */
+    .top-nav {
+      background: white;
+      border-bottom: 1px solid #e0e0e0;
+      display: flex;
+      justify-content: center;
+      padding: 0 40px;
+      position: sticky;
+      top: 0;
+      z-index: 1001;
+    }
+
+    .nav-tabs {
+      display: flex;
+      gap: 40px;
+    }
+
+    .nav-tab {
+      padding: 20px 0;
+      font-size: 13px;
+      font-weight: 500;
+      color: #757575;
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      transition: all 0.2s ease;
+    }
+
+    .nav-tab:hover {
+      color: #4f5fef;
+    }
+
+    .nav-tab.active {
+      color: #4f5fef;
+      border-bottom-color: #4f5fef;
+    }
+
+    .prototype-container {
       display: flex;
       justify-content: center;
       align-items: flex-start;
-      min-height: 100vh;
-      padding: 20px;
+      padding: 40px 20px;
+      min-height: calc(100vh - 61px);
     }
 
     .phone-frame {
@@ -33,7 +77,238 @@
       border-radius: 40px;
       overflow: hidden;
       position: relative;
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+    }
+
+    /* Unified Left Sidebar */
+    .left-sidebar {
+      background: white;
+      border-radius: 0;
+      padding: 30px 24px;
+      width: 275px;
+      height: calc(100vh - 61px);
+      position: fixed;
+      top: 61px;
+      left: 0;
+      z-index: 1000;
+      overflow-y: auto;
+      border-right: 1px solid #e0e0e0;
+    }
+
+    .sidebar-section {
+      margin-bottom: 32px;
+    }
+
+    .sidebar-section h2 {
+      font-size: 11px;
+      font-weight: 600;
+      color: #9e9e9e;
+      margin-bottom: 16px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    /* Design Options in Sidebar */
+    .design-option-item {
+      padding: 12px 16px;
+      background: #f5f5f5;
+      border: 2px solid transparent;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      margin-bottom: 8px;
+      font-size: 14px;
+      color: #424242;
+    }
+
+    .design-option-item:hover {
+      background: #eeeeee;
+    }
+
+    .design-option-item.active {
+      background: white;
+      border-color: #4f5fef;
+      color: #4f5fef;
+      font-weight: 500;
+    }
+
+    /* User Flows in Sidebar */
+    .flow-item {
+      padding: 12px 16px;
+      background: #f5f5f5;
+      border: 2px solid transparent;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      margin-bottom: 8px;
+      font-size: 14px;
+      color: #424242;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .flow-item:hover {
+      background: #eeeeee;
+    }
+
+    .flow-item.active {
+      background: white;
+      border-color: #4f5fef;
+      color: #4f5fef;
+      font-weight: 500;
+    }
+
+    .flow-title {
+      flex: 1;
+      line-height: 1.4;
+    }
+
+    .reload-icon {
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+      color: currentColor;
+      transition: transform 0.3s ease;
+      flex-shrink: 0;
+      opacity: 0.6;
+    }
+
+    .reload-icon:hover {
+      transform: rotate(180deg);
+      opacity: 1;
+    }
+
+    .reload-icon svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    /* Content Area */
+    .content-area {
+      margin-left: 275px;
+      padding: 40px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .content-section {
+      display: none;
+    }
+
+    .content-section.active {
+      display: flex;
+      justify-content: center;
+      width: 100%;
+    }
+
+    /* Logic tables styling */
+    .logic-tables-container {
+      width: 100%;
+      max-width: 1000px;
+      padding: 20px;
+    }
+
+    .logic-table {
+      width: 100%;
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      margin-bottom: 30px;
+    }
+
+    .logic-table table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .logic-table th {
+      background: #024426;
+      color: white;
+      font-family: 'Roboto', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      text-align: left;
+      padding: 16px 20px;
+      border-right: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .logic-table th:last-child {
+      border-right: none;
+    }
+
+    .logic-table td {
+      font-family: 'Roboto', sans-serif;
+      font-size: 14px;
+      line-height: 1.6;
+      padding: 20px;
+      vertical-align: top;
+      border-bottom: 1px solid #e0e0e0;
+      border-right: 1px solid #e0e0e0;
+      background: white;
+    }
+
+    .logic-table tbody tr:nth-child(even) td {
+      background: #f9f9f9;
+    }
+
+    .logic-table td:last-child {
+      border-right: none;
+    }
+
+    .logic-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .logic-table ul {
+      margin: 0;
+      padding-left: 20px;
+    }
+
+    .logic-table li {
+      margin-bottom: 12px;
+    }
+
+    .logic-table li:last-child {
+      margin-bottom: 0;
+    }
+
+    .table-title {
+      font-family: 'Roboto', sans-serif;
+      font-size: 20px;
+      font-weight: 700;
+      color: #024426;
+      margin: 0 0 16px 0;
+      padding: 0;
+    }
+
+    /* Favorites section fade-out animation */
+    .favorites-section-fade-out {
+      animation: fadeOutSection 0.5s ease-out forwards;
+    }
+
+    @keyframes fadeOutSection {
+      0% {
+        opacity: 1;
+        transform: scale(1);
+      }
+      100% {
+        opacity: 0;
+        transform: scale(0.95);
+      }
+    }
+
+    @keyframes slideUp {
+      from {
+        transform: translateY(20px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
     }
 
     /* Zest Design System Tokens */
@@ -605,7 +880,177 @@
   </style>
 </head>
 <body>
-  <div id="root"></div>
+  <!-- Top Navigation -->
+  <div class="top-nav">
+    <div class="nav-tabs">
+      <div class="nav-tab active" data-tab="prototype">Design Prototype</div>
+      <div class="nav-tab" data-tab="logic">Logic</div>
+      <div class="nav-tab" data-tab="flow">Flow</div>
+    </div>
+  </div>
+
+  <!-- Left Sidebar -->
+  <div class="left-sidebar">
+    <!-- Design Options Section -->
+    <div class="sidebar-section">
+      <h2>Design Options</h2>
+      <div class="design-option-item" data-option="option1">Option 1: Minimal Nudge</div>
+      <div class="design-option-item" data-option="option2">Option 2: Rating in Carousel</div>
+      <div class="design-option-item" data-option="option3">Option 3: Rating with Cards</div>
+      <div class="design-option-item active" data-option="reference">Reference: Earlier Exploration</div>
+    </div>
+
+    <!-- User Flows Section -->
+    <div class="sidebar-section">
+      <h2>User Flows</h2>
+      <div class="flow-item active" data-flow="has-recipes">
+        <span class="flow-title">Flow 1: Has Recipes After Rating</span>
+        <div class="reload-icon" title="Reload flow">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+          </svg>
+        </div>
+      </div>
+
+      <div class="flow-item" data-flow="no-recipes">
+        <span class="flow-title">Flow 2: No Recipes After Rating</span>
+        <div class="reload-icon" title="Reload flow">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+          </svg>
+        </div>
+      </div>
+
+      <div class="flow-item" data-flow="no-recipes-with-unrated">
+        <span class="flow-title">Flow 3: Unrated Available This Week</span>
+        <div class="reload-icon" title="Reload flow">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Content Area -->
+  <div class="content-area">
+    <!-- Prototype View -->
+    <div class="content-section active" data-content="prototype">
+      <div id="root"></div>
+    </div>
+
+    <!-- Logic View -->
+    <div class="content-section" data-content="logic">
+
+      <!-- Logic Tables Section -->
+      <div class="logic-tables-container">
+    <!-- Empty State Table -->
+    <h3 class="table-title">Empty State Logic</h3>
+    <div class="logic-table">
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 50%;">Users who have:</th>
+            <th style="width: 50%;">What to show</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <ul>
+                <li>Recent recipes to rate that are available this week</li>
+                <li>Recent recipes to rate that are available in the upcoming 2nd, 3rd, ... weeks</li>
+                <li>Recent recipes to rate but not available for any planned week</li>
+                <li>No recent recipes to rate</li>
+              </ul>
+            </td>
+            <td>
+              <ul>
+                <li>Prioritise those recipes that brings immediate value visibly</li>
+                <li>Next in the queue to show as it helps users to see in upcoming week menus</li>
+                <li>No show as it doesn't bring value</li>
+                <li>No show as it doesn't bring value</li>
+              </ul>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Users' Interaction Table -->
+    <h3 class="table-title">Users' Interaction Logic</h3>
+    <div class="logic-table">
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 35%;">Users' interaction:</th>
+            <th style="width: 40%;">What to show</th>
+            <th style="width: 25%;">Consideration</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <ul>
+                <li>Rate and there are top recipes to show in this week menu</li>
+              </ul>
+            </td>
+            <td>
+              <ul>
+                <li>Happy path: Show top recipes widget as the result state</li>
+              </ul>
+            </td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>
+              <ul>
+                <li>Rate and there are no top recipes to show, but there are unrated recipes that available this week</li>
+              </ul>
+            </td>
+            <td>
+              <ul>
+                <li>Nudge them to rate those recipes</li>
+              </ul>
+            </td>
+            <td>Slight nudge, not intrusive</td>
+          </tr>
+          <tr>
+            <td>
+              <ul>
+                <li>Rate and there are no top recipes to show</li>
+              </ul>
+            </td>
+            <td>
+              <ul>
+                <li>Inform them that when top rated recipes available in any week it will show</li>
+              </ul>
+            </td>
+            <td>Make it easy to dismiss in the current week</td>
+          </tr>
+          <tr>
+            <td>
+              <ul>
+                <li>Dismiss the section</li>
+              </ul>
+            </td>
+            <td></td>
+            <td>Not show the section again</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+      </div>
+    </div>
+
+    <!-- Flow View -->
+    <div class="content-section" data-content="flow">
+      <div class="logic-tables-container">
+        <h3 class="table-title">Flow Documentation</h3>
+        <p style="color: #666; line-height: 1.6;">Flow diagrams and user journey documentation will be displayed here.</p>
+      </div>
+    </div>
+  </div>
 
   <script type="text/babel">
     const { useState, useEffect, useRef } = React;
@@ -2000,13 +2445,407 @@
       );
     }
 
+    // ========== ORDER IT AGAIN WIDGET ==========
+    function OrderItAgainWidget({ onShowRating }) {
+      return (
+        <div style={{
+          background: '#efe9de',
+          marginLeft: -16,
+          marginRight: -16,
+          padding: '24px 16px 16px',
+          marginTop: 24,
+          marginBottom: 24,
+          position: 'relative',
+        }}>
+          {/* Header */}
+          <div style={{ marginBottom: 16 }}>
+            {/* Title */}
+            <h2 style={{
+              fontFamily: 'var(--font-headline)',
+              fontSize: 24,
+              fontWeight: 700,
+              lineHeight: 1.33,
+              color: 'black',
+              margin: '0 0 8px 0',
+              paddingRight: 72,
+            }}>Order it again</h2>
+
+            {/* Subtitle and Show more on same line */}
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+            }}>
+              <p style={{
+                fontFamily: 'var(--font-body)',
+                fontSize: 14,
+                fontWeight: 400,
+                lineHeight: '20px',
+                color: '#666666',
+                margin: 0,
+              }}>Based on your past orders:</p>
+
+              <button style={{
+                background: 'transparent',
+                border: 'none',
+                cursor: 'pointer',
+                padding: 0,
+                fontFamily: 'var(--font-body)',
+                fontSize: 16,
+                fontWeight: 700,
+                lineHeight: '24px',
+                color: 'black',
+                textDecoration: 'underline',
+                flexShrink: 0,
+              }}>
+                Show more
+              </button>
+            </div>
+          </div>
+
+          {/* Horizontal Scrolling Cards */}
+          <div
+            style={{
+              display: 'flex',
+              gap: 8,
+              overflowX: 'auto',
+              paddingBottom: 16,
+              paddingLeft: 16,
+              paddingRight: 16,
+              marginLeft: -16,
+              marginRight: -16,
+              scrollbarWidth: 'none',
+              msOverflowStyle: 'none',
+            }}
+            className="h-scroll"
+          >
+            {/* Recipe Card 1 */}
+            <div style={{
+              flexShrink: 0,
+              width: 160,
+              height: 264,
+              background: 'white',
+              borderRadius: 8,
+              overflow: 'hidden',
+              display: 'flex',
+              flexDirection: 'column',
+            }}>
+              <div style={{
+                width: '100%',
+                height: 112,
+                overflow: 'hidden',
+                cursor: 'pointer',
+                position: 'relative',
+                background: '#e8dcd0',
+              }}>
+                <img
+                  src="recipes/HelloFresh Main Image (10).jpg"
+                  alt="Meatloaves"
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'cover',
+                  }}
+                />
+              </div>
+              <div style={{
+                padding: '8px',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: 8,
+                flex: 1,
+                position: 'relative',
+              }}>
+                <h3 style={{
+                  fontFamily: 'var(--font-headline)',
+                  fontSize: 16,
+                  fontWeight: 700,
+                  lineHeight: '18px',
+                  color: 'black',
+                  margin: 0,
+                  height: 36,
+                  overflow: 'hidden',
+                  display: '-webkit-box',
+                  WebkitLineClamp: 2,
+                  WebkitBoxOrient: 'vertical',
+                  cursor: 'pointer',
+                  paddingRight: 40,
+                }}>
+                  Meatloaves with Sautéed Red...
+                </h3>
+
+                {/* Price info */}
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 4,
+                }}>
+                  <span style={{
+                    fontFamily: 'var(--font-body)',
+                    fontSize: 12,
+                    fontWeight: 400,
+                    lineHeight: '16px',
+                    color: '#656565',
+                    textDecoration: 'line-through',
+                  }}>+$4,99</span>
+                  <span style={{
+                    fontFamily: 'var(--font-body)',
+                    fontSize: 14,
+                    fontWeight: 700,
+                    lineHeight: '20px',
+                    color: '#b30000',
+                  }}>+$,99</span>
+                </div>
+                <div style={{
+                  fontFamily: 'var(--font-body)',
+                  fontSize: 12,
+                  fontWeight: 400,
+                  lineHeight: '16px',
+                  color: '#656565',
+                }}>
+                  per serving
+                </div>
+
+                {/* Add Button - bottom right corner */}
+                <button style={{
+                  position: 'absolute',
+                  bottom: 8,
+                  right: 8,
+                  width: 40,
+                  height: 40,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  background: '#F5F0E8',
+                  border: '1.5px solid #232323',
+                  borderRadius: 12,
+                  cursor: 'pointer',
+                  fontFamily: 'var(--font-body)',
+                  fontSize: 16,
+                  fontWeight: 700,
+                  color: 'black',
+                }}>
+                  +
+                </button>
+              </div>
+            </div>
+
+            {/* Recipe Card 2 */}
+            <div style={{
+              flexShrink: 0,
+              width: 160,
+              height: 264,
+              background: 'white',
+              borderRadius: 8,
+              overflow: 'hidden',
+              display: 'flex',
+              flexDirection: 'column',
+            }}>
+              <div style={{
+                width: '100%',
+                height: 112,
+                overflow: 'hidden',
+                cursor: 'pointer',
+                position: 'relative',
+                background: '#e8dcd0',
+              }}>
+                <img
+                  src="recipes/HelloFresh Main Image (11).jpg"
+                  alt="Rigatoni"
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'cover',
+                  }}
+                />
+              </div>
+              <div style={{
+                padding: '8px',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: 8,
+                flex: 1,
+                position: 'relative',
+              }}>
+                <h3 style={{
+                  fontFamily: 'var(--font-headline)',
+                  fontSize: 16,
+                  fontWeight: 700,
+                  lineHeight: '18px',
+                  color: 'black',
+                  margin: 0,
+                  height: 36,
+                  overflow: 'hidden',
+                  display: '-webkit-box',
+                  WebkitLineClamp: 2,
+                  WebkitBoxOrient: 'vertical',
+                  cursor: 'pointer',
+                  paddingRight: 40,
+                }}>
+                  Rigatoni with Beef & Zucchini Ragù
+                </h3>
+
+                {/* Price info */}
+                <div style={{
+                  fontFamily: 'var(--font-body)',
+                  fontSize: 12,
+                  fontWeight: 400,
+                  lineHeight: '16px',
+                  color: '#656565',
+                }}>
+                  +$9,99
+                </div>
+
+                {/* Add Button - bottom right corner */}
+                <button style={{
+                  position: 'absolute',
+                  bottom: 8,
+                  right: 8,
+                  width: 40,
+                  height: 40,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  background: '#F5F0E8',
+                  border: '1.5px solid #232323',
+                  borderRadius: 12,
+                  cursor: 'pointer',
+                  fontFamily: 'var(--font-body)',
+                  fontSize: 16,
+                  fontWeight: 700,
+                  color: 'black',
+                }}>
+                  +
+                </button>
+              </div>
+            </div>
+
+            {/* Rating Prompt Card */}
+            <div
+              onClick={onShowRating}
+              style={{
+                flexShrink: 0,
+                width: 160,
+                height: 264,
+                background: '#F5F0E8',
+                borderRadius: 8,
+                padding: '24px 16px',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: 16,
+                cursor: 'pointer',
+              }}
+            >
+              {/* Lightbulb Image */}
+              <img
+                src="light.png"
+                alt="Lightbulb"
+                style={{
+                  width: 80,
+                  height: 80,
+                  objectFit: 'contain',
+                }}
+              />
+
+              {/* Text */}
+              <div style={{
+                fontFamily: 'var(--font-body)',
+                fontSize: 16,
+                fontWeight: 400,
+                lineHeight: '24px',
+                color: 'black',
+                textAlign: 'center',
+              }}>
+                For better recommendation
+              </div>
+
+              {/* CTA */}
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onShowRating();
+                }}
+                style={{
+                  background: 'transparent',
+                  border: 'none',
+                  cursor: 'pointer',
+                  padding: 0,
+                  fontFamily: 'var(--font-body)',
+                  fontSize: 16,
+                  fontWeight: 700,
+                  lineHeight: '24px',
+                  color: 'black',
+                  textDecoration: 'underline',
+                }}
+              >
+                Rate past recipes
+              </button>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
     // ========== TRENDING NOW WIDGET ==========
-    function TrendingNowWidget({ cart, setCart, bookmarkedRecipes, toggleBookmark, onShowRating }) {
+    function TrendingNowWidget({ cart, setCart, bookmarkedRecipes, toggleBookmark, onShowRating, currentFlow, setShowFlowToast, showFavoritesSection, setShowFavoritesSection }) {
       const [recipeRatings, setRecipeRatings] = useState({});
       const scrollContainerRef = useRef(null);
       const recipeCardRefs = useRef({});
       const [animationPhase, setAnimationPhase] = useState('initial'); // 'initial', 'shrinking', 'cooking', 'transitioning', 'final'
       const [showFinalRecipes, setShowFinalRecipes] = useState([]);
+      const [isFadingOut, setIsFadingOut] = useState(false);
+      const [hideKeepExploring, setHideKeepExploring] = useState(false);
+
+      // Listen for flow reset event
+      useEffect(() => {
+        const handleResetFlow = (e) => {
+          console.log('Resetting flow:', e.detail.flow, 'Current flow:', currentFlow);
+          // Reset all states to initial
+          setAnimationPhase('initial');
+          setShowFinalRecipes([]);
+          setIsFadingOut(false);
+          setShowFavoritesSection(true);
+          setShowFlowToast(false);
+          setRecipeRatings({});
+          setHideKeepExploring(false);
+        };
+
+        window.addEventListener('resetFlow', handleResetFlow);
+        return () => window.removeEventListener('resetFlow', handleResetFlow);
+      }, [currentFlow]);
+
+      // Listen for show final phase event (from rating completion)
+      useEffect(() => {
+        const handleShowFinalPhase = (e) => {
+          console.log('Show final phase event received, hideKeepExploring:', e.detail?.hideKeepExploring);
+          setAnimationPhase('final');
+          setShowFinalRecipes([]);
+          setIsFadingOut(false);
+          setShowFavoritesSection(true);
+          setShowFlowToast(false);
+
+          // Set whether to hide "Keep exploring!" card
+          if (e.detail?.hideKeepExploring) {
+            setHideKeepExploring(true);
+          } else {
+            setHideKeepExploring(false);
+          }
+
+          // Show recipes one by one
+          setTimeout(() => {
+            trendingRecipes.slice(0, 2).forEach((recipe, index) => {
+              setTimeout(() => {
+                setShowFinalRecipes(prev => [...prev, recipe.id]);
+              }, index * 300);
+            });
+          }, 100);
+        };
+
+        window.addEventListener('showFinalPhase', handleShowFinalPhase);
+        return () => window.removeEventListener('showFinalPhase', handleShowFinalPhase);
+      }, []);
 
       const trendingRecipes = [
         {
@@ -2108,39 +2947,54 @@
         });
       };
 
-      // Handle show results animation
+      // Handle show results animation - same pattern as Rate & discover
       const handleShowResults = () => {
-        // Phase 1: Shrink images to center
-        setAnimationPhase('shrinking');
+        console.log('handleShowResults called, currentFlow:', currentFlow);
 
-        // Phase 2: Show cooking animation after shrinking
-        setTimeout(() => {
-          setAnimationPhase('cooking');
-        }, 800);
+        // Phase 1: Show cooking animation
+        setAnimationPhase('cooking');
 
-        // Phase 3: Transition to final state
+        // Phase 2: Show final state with sequential recipe reveals (slowed down)
         setTimeout(() => {
-          setAnimationPhase('transitioning');
-        }, 3000);
+          if (currentFlow === 'no-recipes' || currentFlow === 'no-recipes-with-unrated') {
+            console.log('No recipes flow detected - showing toast');
+            // Start fade-out animation first
+            setIsFadingOut(true);
+            setAnimationPhase('initial');
 
-        // Phase 4: Show final state with sequential recipe reveals
-        setTimeout(() => {
-          setAnimationPhase('final');
-          // Show recipes one by one
-          trendingRecipes.slice(0, 2).forEach((recipe, index) => {
+            // Show toast immediately
+            setShowFlowToast(true);
+
+            // Hide section after fade-out completes
             setTimeout(() => {
-              setShowFinalRecipes(prev => [...prev, recipe.id]);
-            }, index * 200);
-          });
+              setShowFavoritesSection(false);
+              setIsFadingOut(false);
+            }, 500); // Match the fade-out animation duration
+          } else {
+            // Normal flow - show results
+            setAnimationPhase('final');
+            setHideKeepExploring(false); // Show "Keep exploring!" card for normal flow
+            // Show recipes one by one
+            trendingRecipes.slice(0, 2).forEach((recipe, index) => {
+              setTimeout(() => {
+                setShowFinalRecipes(prev => [...prev, recipe.id]);
+              }, index * 300);
+            });
+          }
         }, 3500);
       };
 
       // Get rated recipes
       const ratedRecipes = trendingRecipes.filter(r => recipeRatings[r.id]);
 
+      if (!showFavoritesSection && !isFadingOut) {
+        return null;
+      }
+
       return (
         <div
           id="your-top-recipes"
+          className={isFadingOut ? 'favorites-section-fade-out' : ''}
           style={{
             background: '#efe9de',
             marginLeft: -16,
@@ -2151,16 +3005,34 @@
             position: 'relative',
           }}
         >
-          {/* Header Section */}
-          <div style={{
-            padding: '0 16px 16px',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: 8,
-          }}>
+          {/* Star icon - positioned absolutely above the section */}
+          {animationPhase === 'final' && (
+            <img
+              src="Star.png"
+              alt="Star"
+              style={{
+                width: 80,
+                height: 80,
+                objectFit: 'contain',
+                position: 'absolute',
+                right: 0,
+                top: -52,
+                zIndex: 10,
+              }}
+            />
+          )}
 
-            {/* Title and Close Button */}
+          {/* Header Section - changes based on animation phase */}
+          {animationPhase !== 'cooking' && (
             <div style={{
+              padding: '0 16px 16px',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 8,
+            }}>
+
+              {/* Title and Close Button */}
+              <div style={{
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'space-between',
@@ -2174,42 +3046,45 @@
                 color: 'var(--color-neutral-fg-default)',
                 margin: 0,
                 flex: 1,
-              }}>Find your favorites</h2>
+              }}>{animationPhase === 'final' ? 'Your favorite recipes' : 'Find your favorites'}</h2>
 
-              <div style={{
-                width: 80,
-                height: '100%',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'flex-end',
-              }}>
-                <button
-                  style={{
-                    width: 24,
-                    height: 24,
-                    background: 'transparent',
-                    border: 'none',
-                    cursor: 'pointer',
-                    padding: 0,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                  onClick={() => {
-                    // Close action - could hide the section or navigate
-                    console.log('Close favorites section');
-                  }}
-                >
-                  {Icons.close(24, '#242424')}
-                </button>
-              </div>
+              {animationPhase !== 'final' && (
+                <div style={{
+                  width: 80,
+                  height: '100%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'flex-end',
+                }}>
+                  <button
+                    style={{
+                      width: 24,
+                      height: 24,
+                      background: 'transparent',
+                      border: 'none',
+                      cursor: 'pointer',
+                      padding: 0,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}
+                    onClick={() => {
+                      // Close action - could hide the section or navigate
+                      console.log('Close favorites section');
+                    }}
+                  >
+                    {Icons.close(24, '#242424')}
+                  </button>
+                </div>
+              )}
             </div>
 
             {/* Subtitle */}
             <div style={{
               display: 'flex',
               alignItems: 'center',
-              justifyContent: 'flex-end',
+              justifyContent: 'space-between',
+              gap: 16,
             }}>
               <p style={{
                 fontFamily: 'var(--font-body)',
@@ -2218,28 +3093,256 @@
                 lineHeight: '20px',
                 color: 'var(--color-neutral-fg-default)',
                 margin: 0,
-                paddingBottom: 4,
-                paddingRight: 8,
                 flex: 1,
-              }}>Rate your recipes, we will show your top rated here</p>
+              }}>{animationPhase === 'final' ? 'Based on what you liked before:' : 'Rate your recipes, we will show your top rated here'}</p>
+              {animationPhase === 'final' && (
+                <button
+                  style={{
+                    background: 'transparent',
+                    border: 'none',
+                    fontFamily: 'var(--font-body)',
+                    fontSize: 16,
+                    fontWeight: 700,
+                    lineHeight: '24px',
+                    color: '#232323',
+                    textDecoration: 'underline',
+                    cursor: 'pointer',
+                    padding: 0,
+                  }}
+                >
+                  Show all
+                </button>
+              )}
             </div>
-          </div>
+            </div>
+          )}
 
-          {/* Horizontal Scrolling Cards */}
-          <div
-            ref={scrollContainerRef}
-            style={{
+          {/* Show cooking animation when triggered */}
+          {animationPhase === 'cooking' && (
+            <div style={{
               display: 'flex',
-              gap: 8,
-              overflowX: 'auto',
-              paddingLeft: 16,
-              paddingRight: 16,
-              scrollbarWidth: 'none',
-              msOverflowStyle: 'none',
-            }}
-            className="h-scroll"
-          >
-            {trendingRecipes.map((recipe, index) => {
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              minHeight: 300,
+              padding: '40px 16px',
+              animation: 'fadeIn 0.5s ease-out',
+            }}>
+              <img
+                src="pan mixing.png"
+                alt="Pan mixing"
+                style={{
+                  width: 180,
+                  height: 180,
+                  objectFit: 'contain',
+                  marginBottom: 24,
+                  animation: 'bounce 1s infinite',
+                }}
+              />
+              <h3 style={{
+                fontFamily: 'var(--font-headline)',
+                fontSize: 20,
+                fontWeight: 700,
+                color: '#232323',
+                margin: '0 0 8px',
+                textAlign: 'center',
+              }}>Picking your favorites...</h3>
+              <p style={{
+                fontFamily: 'var(--font-body)',
+                fontSize: 14,
+                fontWeight: 400,
+                color: '#666666',
+                margin: 0,
+                textAlign: 'center',
+                maxWidth: 300,
+              }}>Based on your ratings</p>
+            </div>
+          )}
+
+          {/* Show final recommendations */}
+          {animationPhase === 'final' && (
+            <div
+              style={{
+                display: 'flex',
+                gap: 12,
+                overflowX: 'auto',
+                paddingLeft: 16,
+                paddingRight: 16,
+                scrollbarWidth: 'none',
+                msOverflowStyle: 'none',
+                position: 'relative',
+              }}
+              className="h-scroll"
+            >
+              {trendingRecipes.slice(0, 2).map((recipe, index) => (
+                showFinalRecipes.includes(recipe.id) && (
+                  <div
+                    key={recipe.id}
+                    style={{
+                      flexShrink: 0,
+                      width: 180,
+                      display: 'flex',
+                      flexDirection: 'column',
+                      background: '#faf8f3',
+                      borderRadius: 8,
+                      overflow: 'hidden',
+                      animation: `popIn 0.5s ease-out ${index * 0.15}s backwards`,
+                    }}
+                  >
+                    {/* Image container */}
+                    <div style={{
+                      position: 'relative',
+                      width: 180,
+                      height: 180,
+                    }}>
+                      <img
+                        src={recipe.image}
+                        alt={recipe.name}
+                        style={{
+                          width: '100%',
+                          height: '100%',
+                          objectFit: 'cover',
+                          borderRadius: '8px 8px 0 0',
+                        }}
+                      />
+
+                      {/* Plus button */}
+                      <button
+                        onClick={() => {
+                          handleAdd(recipe.id);
+                        }}
+                        style={{
+                          position: 'absolute',
+                          top: 8,
+                          right: 8,
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          width: 32,
+                          height: 32,
+                          background: '#efe9de',
+                          border: '1px solid #232323',
+                          borderRadius: 8,
+                          cursor: 'pointer',
+                          padding: 0,
+                        }}
+                      >
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                          <path d="M8 3.5V12.5M3.5 8H12.5" stroke="black" strokeWidth="1.5" strokeLinecap="round"/>
+                        </svg>
+                      </button>
+                    </div>
+
+                    {/* Text container */}
+                    <div style={{
+                      padding: 8,
+                      display: 'flex',
+                      flexDirection: 'column',
+                      minHeight: 90,
+                    }}>
+                      <h3 style={{
+                        fontFamily: 'var(--font-headline)',
+                        fontSize: 16,
+                        fontWeight: 700,
+                        lineHeight: '20px',
+                        color: '#242424',
+                        margin: 0,
+                        height: 36,
+                        overflow: 'hidden',
+                        display: '-webkit-box',
+                        WebkitLineClamp: 2,
+                        WebkitBoxOrient: 'vertical',
+                      }}>{recipe.name}</h3>
+                    </div>
+                  </div>
+                )
+              ))}
+
+              {/* Navigational card at the end - only show for normal flow, not when coming from third flow */}
+              {!hideKeepExploring && (
+                <div style={{
+                  flexShrink: 0,
+                  width: 180,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  padding: '24px 16px',
+                  background: '#faf8f3',
+                  borderRadius: 8,
+                  animation: `popIn 0.5s ease-out ${0.3}s backwards`,
+                  minHeight: 270,
+                }}>
+                  <img
+                    src="heart.png"
+                    alt="Heart"
+                    style={{
+                      width: 56,
+                      height: 56,
+                      objectFit: 'contain',
+                      marginBottom: 16,
+                    }}
+                  />
+                  <h3 style={{
+                    fontFamily: 'var(--font-headline)',
+                    fontSize: 16,
+                    fontWeight: 700,
+                    color: '#232323',
+                    margin: '0 0 8px',
+                    textAlign: 'center',
+                    lineHeight: '20px',
+                  }}>Keep exploring!</h3>
+                  <p style={{
+                    fontFamily: 'var(--font-body)',
+                    fontSize: 12,
+                    fontWeight: 400,
+                    lineHeight: '16px',
+                    color: '#666666',
+                    margin: '0 0 16px',
+                    textAlign: 'center',
+                  }}>Rate more meals to get better recommendations</p>
+                  <button
+                    onClick={() => {
+                      if (onShowRating) {
+                        onShowRating();
+                      }
+                    }}
+                    style={{
+                      background: '#232323',
+                      color: 'white',
+                      border: 'none',
+                      borderRadius: 8,
+                      padding: '8px 16px',
+                      fontFamily: 'var(--font-body)',
+                      fontSize: 14,
+                      fontWeight: 700,
+                      cursor: 'pointer',
+                      width: '100%',
+                    }}
+                  >
+                    Rate more
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Horizontal Scrolling Cards - Initial state */}
+          {animationPhase === 'initial' && (
+            <div
+              ref={scrollContainerRef}
+              style={{
+                display: 'flex',
+                gap: 8,
+                overflowX: 'auto',
+                paddingLeft: 16,
+                paddingRight: 16,
+                scrollbarWidth: 'none',
+                msOverflowStyle: 'none',
+              }}
+              className="h-scroll"
+            >
+              {trendingRecipes.map((recipe, index) => {
               const rating = recipeRatings[recipe.id] || 0;
 
               return (
@@ -2577,6 +3680,7 @@
               </div>
             </div>
           </div>
+          )}
         </div>
       );
     }
@@ -6332,6 +7436,36 @@
               </div>
             </div>
           )}
+
+          {/* Footer link - only show in final state */}
+          {animationPhase === 'final' && (
+            <div style={{
+              padding: '0 16px',
+            }}>
+              <button
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 8,
+                  background: 'transparent',
+                  border: 'none',
+                  fontFamily: 'var(--font-body)',
+                  fontSize: 14,
+                  fontWeight: 400,
+                  lineHeight: '20px',
+                  color: '#232323',
+                  textDecoration: 'underline',
+                  cursor: 'pointer',
+                  padding: 0,
+                }}
+              >
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <path d="M8 2L9.5 6.5H14L10.5 9.5L12 14L8 11L4 14L5.5 9.5L2 6.5H6.5L8 2Z" fill="#232323"/>
+                </svg>
+                Link
+              </button>
+            </div>
+          )}
         </div>
       );
     }
@@ -7661,6 +8795,13 @@
       const [trophyCoins, setTrophyCoins] = useState([]);
       const [ratedRecipes, setRatedRecipes] = useState(new Set()); // Track recipes that completed rating animation
 
+      // Debug: Log when drawer receives openedFromRateMeals prop
+      React.useEffect(() => {
+        if (show) {
+          console.log('RatingDrawer opened with openedFromRateMeals:', openedFromRateMeals, 'hideRemindLater:', hideRemindLater);
+        }
+      }, [show, openedFromRateMeals, hideRemindLater]);
+
       // Reset state when drawer closes
       React.useEffect(() => {
         if (!show) {
@@ -8200,7 +9341,14 @@
                       {/* CTA button - different for menu vs other sources */}
                       {hideRemindLater ? (
                         <button
-                          onClick={onViewTopRecipes}
+                          onClick={() => {
+                            console.log('Button clicked in drawer (small screen), hideRemindLater:', hideRemindLater, 'openedFromRateMeals:', openedFromRateMeals);
+                            if (onViewTopRecipes) {
+                              onViewTopRecipes();
+                            } else {
+                              console.error('onViewTopRecipes is not defined');
+                            }
+                          }}
                           style={{
                             padding: '12px 24px',
                             background: '#232323',
@@ -8214,7 +9362,11 @@
                             cursor: 'pointer',
                           }}
                         >
-                          {openedFromRateMeals ? "See your new recommendations" : "View your top recipes"}
+                          {(() => {
+                            const buttonText = openedFromRateMeals ? "See your new recommendations" : "View your top recipes";
+                            console.log('Button rendering with text:', buttonText, 'openedFromRateMeals:', openedFromRateMeals);
+                            return buttonText;
+                          })()}
                         </button>
                       ) : (
                         <button
@@ -8297,7 +9449,14 @@
                       {/* CTA button - different for menu vs other sources */}
                       {hideRemindLater ? (
                         <button
-                          onClick={onViewTopRecipes}
+                          onClick={() => {
+                            console.log('Button clicked in drawer (large screen), hideRemindLater:', hideRemindLater, 'openedFromRateMeals:', openedFromRateMeals);
+                            if (onViewTopRecipes) {
+                              onViewTopRecipes();
+                            } else {
+                              console.error('onViewTopRecipes is not defined');
+                            }
+                          }}
                           style={{
                             padding: '12px 24px',
                             background: '#232323',
@@ -8311,7 +9470,11 @@
                             cursor: 'pointer',
                           }}
                         >
-                          {openedFromRateMeals ? "See your new recommendations" : "View your top recipes"}
+                          {(() => {
+                            const buttonText = openedFromRateMeals ? "See your new recommendations" : "View your top recipes";
+                            console.log('Button rendering with text:', buttonText, 'openedFromRateMeals:', openedFromRateMeals);
+                            return buttonText;
+                          })()}
                         </button>
                       ) : (
                         <button
@@ -16047,7 +17210,7 @@
     }
 
     // ========== MENU PAGE ==========
-    function MenuPage({ cart, setCart, onCartClick, onShowRating, bookmarkedRecipes, toggleBookmark, onViewSavedRecipes, onNavigateToPastOrders, openedFromRateMeals, setOpenedFromRateMeals, rateMealsUpdated, rateMealsToastFromApp, setRateMealsToastFromApp }) {
+    function MenuPage({ cart, setCart, onCartClick, onShowRating, bookmarkedRecipes, toggleBookmark, onViewSavedRecipes, onNavigateToPastOrders, openedFromRateMeals, setOpenedFromRateMeals, rateMealsUpdated, rateMealsToastFromApp, setRateMealsToastFromApp, currentFlow, showFlowToast, setShowFlowToast, showFavoritesSection, setShowFavoritesSection }) {
       const [showExitDialog, setShowExitDialog] = useState(false);
       const [customizeMeal, setCustomizeMeal] = useState(null);
       const [isScrolling, setIsScrolling] = useState(false);
@@ -16624,7 +17787,7 @@
 
               <BenefitsWidget />
 
-              <TrendingNowWidget cart={cart} setCart={setCart} bookmarkedRecipes={bookmarkedRecipes} toggleBookmark={handleToggleBookmark} onShowRating={onShowRating} />
+              <OrderItAgainWidget onShowRating={onShowRating} />
 
               <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
                 {mealsData.slice(4, 6).map(meal => (
@@ -16641,8 +17804,8 @@
                   />
                 ))}
                 {mealsData.slice(6, 13).map((meal, index) => {
-                  // Special handling for Roasted lamb chops (id: 8) - add "Order it again" section after
-                  if (meal.id === 8) {
+                  // Special handling for Crispy Chicken Schnitzel (id: 7) - add "Find your favorites" section after
+                  if (meal.id === 7) {
                     return (
                       <React.Fragment key={meal.id}>
                         <ProductCard
@@ -16656,358 +17819,18 @@
                           onClick={setSelectedRecipe}
                         />
 
-                        {/* Order it again section */}
-                        <div style={{
-                          background: '#efe9de',
-                          marginLeft: -16,
-                          marginRight: -16,
-                          padding: '24px 16px 16px',
-                          marginTop: 24,
-                          marginBottom: 24,
-                          position: 'relative',
-                        }}>
-                          {/* Decorative bag icon - top right, half overlapping */}
-                          <img
-                            src="https://www.figma.com/api/mcp/asset/5748d5de-7328-4cb6-8cc5-521d0f296465"
-                            alt=""
-                            style={{
-                              position: 'absolute',
-                              top: -32,
-                              right: 16,
-                              width: 64,
-                              height: 64,
-                              objectFit: 'contain',
-                            }}
-                          />
-
-                          {/* Header */}
-                          <div style={{ marginBottom: 16 }}>
-                            {/* Title */}
-                            <h2 style={{
-                              fontFamily: 'var(--font-headline)',
-                              fontSize: 24,
-                              fontWeight: 700,
-                              lineHeight: 1.33,
-                              color: 'black',
-                              margin: '0 0 8px 0',
-                              paddingRight: 72,
-                            }}>Order it again</h2>
-
-                            {/* Subtitle and Show more on same line */}
-                            <div style={{
-                              display: 'flex',
-                              alignItems: 'center',
-                              justifyContent: 'space-between',
-                            }}>
-                              <p style={{
-                                fontFamily: 'var(--font-body)',
-                                fontSize: 14,
-                                fontWeight: 400,
-                                lineHeight: '20px',
-                                color: '#666666',
-                                margin: 0,
-                              }}>Based on your past orders:</p>
-
-                              <button style={{
-                                background: 'transparent',
-                                border: 'none',
-                                cursor: 'pointer',
-                                padding: 0,
-                                fontFamily: 'var(--font-body)',
-                                fontSize: 16,
-                                fontWeight: 700,
-                                lineHeight: '24px',
-                                color: 'black',
-                                textDecoration: 'underline',
-                                flexShrink: 0,
-                              }}>
-                                Show more
-                              </button>
-                            </div>
-                          </div>
-
-                          {/* Horizontal Scrolling Cards */}
-                          <div
-                            style={{
-                              display: 'flex',
-                              gap: 8,
-                              overflowX: 'auto',
-                              paddingBottom: 16,
-                              paddingLeft: 16,
-                              paddingRight: 16,
-                              marginLeft: -16,
-                              marginRight: -16,
-                              scrollbarWidth: 'none',
-                              msOverflowStyle: 'none',
-                            }}
-                            className="h-scroll"
-                          >
-                            {/* Recipe Card 1 */}
-                            <div style={{
-                              flexShrink: 0,
-                              width: 160,
-                              height: 264,
-                              background: 'white',
-                              borderRadius: 8,
-                              overflow: 'hidden',
-                              display: 'flex',
-                              flexDirection: 'column',
-                            }}>
-                              <div style={{
-                                width: '100%',
-                                height: 112,
-                                overflow: 'hidden',
-                                cursor: 'pointer',
-                                position: 'relative',
-                                background: '#e8dcd0',
-                              }}>
-                                <img
-                                  src="https://www.figma.com/api/mcp/asset/5858b9e0-9b50-4fa1-ab49-f09ba96e2187"
-                                  alt="Meatloaves"
-                                  style={{
-                                    width: '100%',
-                                    height: '100%',
-                                    objectFit: 'cover',
-                                  }}
-                                />
-                              </div>
-                              <div style={{
-                                padding: '8px',
-                                display: 'flex',
-                                flexDirection: 'column',
-                                gap: 8,
-                                flex: 1,
-                                position: 'relative',
-                              }}>
-                                <h3 style={{
-                                  fontFamily: 'var(--font-headline)',
-                                  fontSize: 16,
-                                  fontWeight: 700,
-                                  lineHeight: '18px',
-                                  color: 'black',
-                                  margin: 0,
-                                  height: 36,
-                                  overflow: 'hidden',
-                                  display: '-webkit-box',
-                                  WebkitLineClamp: 2,
-                                  WebkitBoxOrient: 'vertical',
-                                  cursor: 'pointer',
-                                  paddingRight: 40,
-                                }}>
-                                  Meatloaves with Sautéed Red...
-                                </h3>
-
-                                {/* Price info */}
-                                <div style={{
-                                  display: 'flex',
-                                  alignItems: 'center',
-                                  gap: 4,
-                                }}>
-                                  <span style={{
-                                    fontFamily: 'var(--font-body)',
-                                    fontSize: 12,
-                                    fontWeight: 400,
-                                    lineHeight: '16px',
-                                    color: '#656565',
-                                    textDecoration: 'line-through',
-                                  }}>+$4,99</span>
-                                  <span style={{
-                                    fontFamily: 'var(--font-body)',
-                                    fontSize: 14,
-                                    fontWeight: 700,
-                                    lineHeight: '20px',
-                                    color: '#b30000',
-                                  }}>+$,99</span>
-                                </div>
-                                <div style={{
-                                  fontFamily: 'var(--font-body)',
-                                  fontSize: 12,
-                                  fontWeight: 400,
-                                  lineHeight: '16px',
-                                  color: '#656565',
-                                }}>
-                                  per serving
-                                </div>
-
-                                {/* Add Button - bottom right corner */}
-                                <button style={{
-                                  position: 'absolute',
-                                  bottom: 8,
-                                  right: 8,
-                                  width: 40,
-                                  height: 40,
-                                  display: 'flex',
-                                  alignItems: 'center',
-                                  justifyContent: 'center',
-                                  background: '#F5F0E8',
-                                  border: '1.5px solid #232323',
-                                  borderRadius: 12,
-                                  cursor: 'pointer',
-                                  fontFamily: 'var(--font-body)',
-                                  fontSize: 16,
-                                  fontWeight: 700,
-                                  color: 'black',
-                                }}>
-                                  +
-                                </button>
-                              </div>
-                            </div>
-
-                            {/* Recipe Card 2 */}
-                            <div style={{
-                              flexShrink: 0,
-                              width: 160,
-                              height: 264,
-                              background: 'white',
-                              borderRadius: 8,
-                              overflow: 'hidden',
-                              display: 'flex',
-                              flexDirection: 'column',
-                            }}>
-                              <div style={{
-                                width: '100%',
-                                height: 112,
-                                overflow: 'hidden',
-                                cursor: 'pointer',
-                                position: 'relative',
-                                background: '#e8dcd0',
-                              }}>
-                                <img
-                                  src="https://www.figma.com/api/mcp/asset/e0cca2d2-f135-497e-aef0-de8b69160019"
-                                  alt="Rigatoni"
-                                  style={{
-                                    width: '100%',
-                                    height: '100%',
-                                    objectFit: 'cover',
-                                  }}
-                                />
-                              </div>
-                              <div style={{
-                                padding: '8px',
-                                display: 'flex',
-                                flexDirection: 'column',
-                                gap: 8,
-                                flex: 1,
-                                position: 'relative',
-                              }}>
-                                <h3 style={{
-                                  fontFamily: 'var(--font-headline)',
-                                  fontSize: 16,
-                                  fontWeight: 700,
-                                  lineHeight: '18px',
-                                  color: 'black',
-                                  margin: 0,
-                                  height: 36,
-                                  overflow: 'hidden',
-                                  display: '-webkit-box',
-                                  WebkitLineClamp: 2,
-                                  WebkitBoxOrient: 'vertical',
-                                  cursor: 'pointer',
-                                  paddingRight: 40,
-                                }}>
-                                  Rigatoni with Beef & Zucchini Ragù
-                                </h3>
-
-                                {/* Price info */}
-                                <div style={{
-                                  fontFamily: 'var(--font-body)',
-                                  fontSize: 12,
-                                  fontWeight: 400,
-                                  lineHeight: '16px',
-                                  color: '#656565',
-                                }}>
-                                  +$9,99
-                                </div>
-
-                                {/* Add Button - bottom right corner */}
-                                <button style={{
-                                  position: 'absolute',
-                                  bottom: 8,
-                                  right: 8,
-                                  width: 40,
-                                  height: 40,
-                                  display: 'flex',
-                                  alignItems: 'center',
-                                  justifyContent: 'center',
-                                  background: '#F5F0E8',
-                                  border: '1.5px solid #232323',
-                                  borderRadius: 12,
-                                  cursor: 'pointer',
-                                  fontFamily: 'var(--font-body)',
-                                  fontSize: 16,
-                                  fontWeight: 700,
-                                  color: 'black',
-                                }}>
-                                  +
-                                </button>
-                              </div>
-                            </div>
-
-                            {/* Rating Prompt Card */}
-                            <div
-                              onClick={onShowRating}
-                              style={{
-                                flexShrink: 0,
-                                width: 160,
-                                height: 264,
-                                background: '#F5F0E8',
-                                borderRadius: 8,
-                                padding: '24px 16px',
-                                display: 'flex',
-                                flexDirection: 'column',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                gap: 16,
-                                cursor: 'pointer',
-                              }}
-                            >
-                              {/* Lightbulb Image */}
-                              <img
-                                src="light.png"
-                                alt="Lightbulb"
-                                style={{
-                                  width: 80,
-                                  height: 80,
-                                  objectFit: 'contain',
-                                }}
-                              />
-
-                              {/* Text */}
-                              <div style={{
-                                fontFamily: 'var(--font-body)',
-                                fontSize: 16,
-                                fontWeight: 400,
-                                lineHeight: '24px',
-                                color: 'black',
-                                textAlign: 'center',
-                              }}>
-                                For better recommendation
-                              </div>
-
-                              {/* CTA */}
-                              <button
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  onShowRating();
-                                }}
-                                style={{
-                                  background: 'transparent',
-                                  border: 'none',
-                                  cursor: 'pointer',
-                                  padding: 0,
-                                  fontFamily: 'var(--font-body)',
-                                  fontSize: 16,
-                                  fontWeight: 700,
-                                  lineHeight: '24px',
-                                  color: 'black',
-                                  textDecoration: 'underline',
-                                }}
-                              >
-                                Rate past recipes
-                              </button>
-                            </div>
-                          </div>
-                        </div>
+                        {/* Find your favorites section */}
+                        <TrendingNowWidget
+                          cart={cart}
+                          setCart={setCart}
+                          bookmarkedRecipes={bookmarkedRecipes}
+                          toggleBookmark={handleToggleBookmark}
+                          onShowRating={onShowRating}
+                          currentFlow={currentFlow}
+                          setShowFlowToast={setShowFlowToast}
+                          showFavoritesSection={showFavoritesSection}
+                          setShowFavoritesSection={setShowFavoritesSection}
+                        />
                       </React.Fragment>
                     );
                   }
@@ -18199,6 +19022,88 @@
           )}
 
           <MealSelectionGuidance totalItems={totalItems} mealsNeeded={MEALS_NEEDED} onCartClick={onCartClick} isHidden={isScrolling} onContinue={() => setShowCategoriesPage(true)} />
+
+          {/* Toast notification for no-recipes flow */}
+          {showFlowToast && console.log('Rendering toast, showFlowToast:', showFlowToast)}
+          {showFlowToast && (
+            <div style={{
+              position: 'absolute',
+              bottom: 170,
+              left: 8,
+              right: 8,
+              zIndex: 11,
+              animation: 'slideUp 0.3s ease-out',
+            }}>
+              <div style={{
+                background: '#cbf5e7',
+                borderRadius: 4,
+                padding: '12px 16px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                gap: 12,
+                boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
+              }}>
+                <div style={{ flex: 1 }}>
+                  <span style={{
+                    fontFamily: 'var(--font-body)',
+                    fontSize: 14,
+                    fontWeight: 400,
+                    lineHeight: '20px',
+                    color: '#232323',
+                  }}>
+                    {currentFlow === 'no-recipes-with-unrated'
+                      ? 'No top rated recipes available this week. Rate a few more for better results. '
+                      : "No top rated recipes available this week. We'll show them on the menu when they're back."}
+                  </span>
+                  {currentFlow === 'no-recipes-with-unrated' && (
+                    <button
+                      style={{
+                        background: 'transparent',
+                        border: 'none',
+                        cursor: 'pointer',
+                        padding: 0,
+                        fontFamily: 'var(--font-body)',
+                        fontSize: 14,
+                        fontWeight: 700,
+                        lineHeight: '20px',
+                        color: '#232323',
+                        textDecoration: 'underline',
+                      }}
+                      onClick={() => {
+                        console.log('Rate more clicked from no-recipes-with-unrated toast');
+                        setShowFlowToast(false);
+                        onShowRating(true);
+                      }}
+                    >
+                      Rate more
+                    </button>
+                  )}
+                </div>
+                <button
+                  style={{
+                    background: 'transparent',
+                    border: 'none',
+                    cursor: 'pointer',
+                    padding: 0,
+                    width: 20,
+                    height: 20,
+                    flexShrink: 0,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: '#232323',
+                  }}
+                  onClick={() => setShowFlowToast(false)}
+                >
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                  </svg>
+                </button>
+              </div>
+            </div>
+          )}
 
           <CustomizationDrawer
             meal={customizeMeal}
@@ -20789,6 +21694,16 @@
       const [rateMealsToast, setRateMealsToast] = useState(false);
       const rateMealsToastTimeoutRef = useRef(null);
 
+      // Flow management states
+      const [currentFlow, setCurrentFlow] = useState('has-recipes');
+      const [showFlowToast, setShowFlowToast] = useState(false);
+      const [showFavoritesSection, setShowFavoritesSection] = useState(true);
+
+      // Debug: Track openedFromRateMeals changes
+      React.useEffect(() => {
+        console.log('openedFromRateMeals changed to:', openedFromRateMeals, 'currentFlow:', currentFlow);
+      }, [openedFromRateMeals]);
+
       const toggleBookmark = (recipeId) => {
         setBookmarkedRecipes(prev => {
           const newSet = new Set(prev);
@@ -20852,6 +21767,43 @@
             }
           }, 500);
         }
+      }, []);
+
+      // Listen for flow changes from sidebar
+      React.useEffect(() => {
+        const handleFlowChange = (e) => {
+          console.log('App received flow change event:', e.detail.flow);
+          const newFlow = e.detail.flow;
+          setCurrentFlow(newFlow);
+
+          // Always reset to clean state when switching flows
+          setShowFavoritesSection(true);
+          setShowFlowToast(false);
+          setOpenedFromRateMeals(false);
+
+          // Note: The resetFlow event will handle resetting the widget's animationPhase
+        };
+
+        window.addEventListener('flowChange', handleFlowChange);
+        return () => window.removeEventListener('flowChange', handleFlowChange);
+      }, []);
+
+      // Listen for flow reset event
+      React.useEffect(() => {
+        const handleResetFlow = (e) => {
+          console.log('App received reset flow event:', e.detail.flow);
+          const flow = e.detail.flow;
+
+          // Reset based on current flow
+          setShowFlowToast(false);
+          setOpenedFromRateMeals(false);
+
+          // All flows start with favorites section visible
+          setShowFavoritesSection(true);
+        };
+
+        window.addEventListener('resetFlow', handleResetFlow);
+        return () => window.removeEventListener('resetFlow', handleResetFlow);
       }, []);
 
       // Initial recipes for rating drawer
@@ -20971,9 +21923,11 @@
               setCart={setCart}
               onCartClick={() => setShowCart(true)}
               onShowRating={(fromRateMeals = false) => {
+                console.log('Opening rating drawer, fromRateMeals:', fromRateMeals, 'currentFlow:', currentFlow);
                 setRatingDrawerSource('menu');
                 setShowRatingDrawer(true);
                 if (fromRateMeals) {
+                  console.log('Setting openedFromRateMeals to true');
                   setOpenedFromRateMeals(true);
                 }
               }}
@@ -20986,6 +21940,11 @@
               rateMealsUpdated={openedFromRateMeals}
               rateMealsToastFromApp={rateMealsToast}
               setRateMealsToastFromApp={setRateMealsToast}
+              currentFlow={currentFlow}
+              showFlowToast={showFlowToast}
+              setShowFlowToast={setShowFlowToast}
+              showFavoritesSection={showFavoritesSection}
+              setShowFavoritesSection={setShowFavoritesSection}
             />
           )}
 
@@ -21043,6 +22002,7 @@
           <RatingDrawer
             show={showRatingDrawer}
             onClose={() => {
+              console.log('Rating drawer closing, openedFromRateMeals:', openedFromRateMeals);
               const hasRatings = Object.keys(recipeRatings).length > 0;
 
               setShowRatingDrawer(false);
@@ -21053,6 +22013,7 @@
 
               // Keep openedFromRateMeals true if user rated recipes, so MenuPage can show toast
               if (!openedFromRateMeals || !hasRatings) {
+                console.log('Resetting openedFromRateMeals to false');
                 setOpenedFromRateMeals(false);
               }
             }}
@@ -21077,10 +22038,45 @@
             openedFromRateMeals={openedFromRateMeals}
             onViewTopRecipes={() => {
               const wasOpenedFromRateMeals = openedFromRateMeals;
+              const wasNoRecipesWithUnrated = currentFlow === 'no-recipes-with-unrated';
+
+              console.log('View Top Recipes clicked:', {
+                wasOpenedFromRateMeals,
+                wasNoRecipesWithUnrated,
+                currentFlow
+              });
+
               setShowRatingDrawer(false);
               setCurrentPage('menu');
 
-              if (wasOpenedFromRateMeals) {
+              // If in no-recipes-with-unrated flow, ALWAYS show favorites section after rating
+              // (regardless of openedFromRateMeals flag which may get lost)
+              if (wasNoRecipesWithUnrated) {
+                // Special handling for no-recipes-with-unrated flow
+                // After rating, show the top recipes widget with final results
+                console.log('Transitioning no-recipes-with-unrated flow to has-recipes with final phase');
+                setTimeout(() => {
+                  // Change flow to has-recipes and show favorites section
+                  setCurrentFlow('has-recipes');
+                  setShowFavoritesSection(true);
+                  setShowFlowToast(false);
+                  setOpenedFromRateMeals(false);
+
+                  // Dispatch event to show final phase (not initial rating phase)
+                  // Hide "Keep exploring!" card for third flow
+                  window.dispatchEvent(new CustomEvent('showFinalPhase', {
+                    detail: { hideKeepExploring: true }
+                  }));
+
+                  // Scroll to top recipes section
+                  setTimeout(() => {
+                    const topRecipesSection = document.getElementById('your-top-recipes');
+                    if (topRecipesSection) {
+                      topRecipesSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                  }, 100);
+                }, 300);
+              } else if (wasOpenedFromRateMeals) {
                 // Navigate to rate-meals section if opened from there
                 setTimeout(() => {
                   const rateMealsSection = document.getElementById('rate-meals');
@@ -21189,6 +22185,139 @@
 
     const root = ReactDOM.createRoot(document.getElementById('root'));
     root.render(<App />);
+  </script>
+  <script>
+    // Handle navigation and interactions
+    document.addEventListener('DOMContentLoaded', function() {
+      // Handle top navigation tabs
+      const navTabs = document.querySelectorAll('.nav-tab');
+      const contentSections = document.querySelectorAll('.content-section');
+
+      navTabs.forEach(tab => {
+        tab.addEventListener('click', function() {
+          const targetTab = this.getAttribute('data-tab');
+
+          // Update active tab
+          navTabs.forEach(t => t.classList.remove('active'));
+          this.classList.add('active');
+
+          // Update visible content
+          contentSections.forEach(section => {
+            if (section.getAttribute('data-content') === targetTab) {
+              section.classList.add('active');
+            } else {
+              section.classList.remove('active');
+            }
+          });
+        });
+      });
+
+      // Handle design option clicks
+      const designOptions = document.querySelectorAll('.design-option-item');
+
+      designOptions.forEach(option => {
+        option.addEventListener('click', function() {
+          // Update active state
+          designOptions.forEach(o => o.classList.remove('active'));
+          this.classList.add('active');
+
+          // Get the option type
+          const optionType = this.getAttribute('data-option');
+          console.log('Switched to option:', optionType);
+
+          // Dispatch event to React component
+          window.dispatchEvent(new CustomEvent('designOptionChange', {
+            detail: { option: optionType }
+          }));
+
+          // Scroll to the "find your favorites" section
+          setTimeout(() => {
+            const favoritesSection = document.getElementById('your-top-recipes');
+            if (favoritesSection) {
+              favoritesSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+          }, 100);
+        });
+      });
+
+      // Handle flow navigation
+      const flowItems = document.querySelectorAll('.flow-item');
+      const reloadIcons = document.querySelectorAll('.reload-icon');
+
+      // Handle flow item clicks
+      flowItems.forEach(item => {
+        item.addEventListener('click', function(e) {
+          // Don't trigger if clicking the reload icon
+          if (e.target.closest('.reload-icon')) return;
+
+          // Update active state
+          flowItems.forEach(i => i.classList.remove('active'));
+          this.classList.add('active');
+
+          // Get the flow type
+          const flowType = this.getAttribute('data-flow');
+          console.log('Switched to flow:', flowType);
+
+          // Dispatch event to React component
+          window.dispatchEvent(new CustomEvent('flowChange', {
+            detail: { flow: flowType }
+          }));
+
+          // Also dispatch reset event to ensure clean state
+          window.dispatchEvent(new CustomEvent('resetFlow', {
+            detail: { flow: flowType }
+          }));
+
+          // Scroll to the "find your favorites" section
+          setTimeout(() => {
+            const favoritesSection = document.getElementById('your-top-recipes');
+            if (favoritesSection) {
+              favoritesSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+          }, 100);
+        });
+      });
+
+      // Handle reload icon clicks
+      reloadIcons.forEach(icon => {
+        icon.addEventListener('click', function(e) {
+          e.stopPropagation(); // Prevent triggering the flow-item click
+
+          // Add rotation animation
+          this.style.transform = 'rotate(360deg)';
+          setTimeout(() => {
+            this.style.transform = '';
+          }, 300);
+
+          // Get the flow type from parent
+          const flowItem = this.closest('.flow-item');
+          const flowType = flowItem.getAttribute('data-flow');
+
+          // Make sure this flow is active
+          flowItems.forEach(i => i.classList.remove('active'));
+          flowItem.classList.add('active');
+
+          // Dispatch flow change event to set the flow
+          window.dispatchEvent(new CustomEvent('flowChange', {
+            detail: { flow: flowType }
+          }));
+
+          // Dispatch reset event for the current flow
+          window.dispatchEvent(new CustomEvent('resetFlow', {
+            detail: { flow: flowType }
+          }));
+
+          // Scroll to the "find your favorites" section
+          setTimeout(() => {
+            const favoritesSection = document.getElementById('your-top-recipes');
+            if (favoritesSection) {
+              favoritesSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+          }, 100);
+        });
+      });
+
+    });
   </script>
 </body>
 </html>

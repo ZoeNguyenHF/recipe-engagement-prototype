@@ -17977,7 +17977,13 @@
                               var banner = document.getElementById('rate-recipes-banner');
                               var favorites = document.getElementById('your-favorites-section');
                               if (banner) banner.style.display = 'none';
-                              if (favorites) favorites.style.display = 'block';
+                              if (favorites) {
+                                favorites.style.display = 'block';
+                                // Scroll favorites into view so users can see it perfectly
+                                setTimeout(function() {
+                                  favorites.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                                }, 100);
+                              }
                             }
 
                             // Listen for rating completion event

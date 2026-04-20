@@ -17819,18 +17819,82 @@
                           onClick={setSelectedRecipe}
                         />
 
-                        {/* Find your favorites section */}
-                        <TrendingNowWidget
-                          cart={cart}
-                          setCart={setCart}
-                          bookmarkedRecipes={bookmarkedRecipes}
-                          toggleBookmark={handleToggleBookmark}
-                          onShowRating={onShowRating}
-                          currentFlow={currentFlow}
-                          setShowFlowToast={setShowFlowToast}
-                          showFavoritesSection={showFavoritesSection}
-                          setShowFavoritesSection={setShowFavoritesSection}
-                        />
+                        {/* Option 1: Rate past recipes banner */}
+                        <div
+                          data-banner="rate-recipes"
+                          style={{
+                            background: '#efe9de',
+                            marginLeft: -16,
+                            marginRight: -16,
+                            marginTop: 24,
+                            marginBottom: 24,
+                          }}>
+                          <div style={{
+                            padding: 16,
+                            display: 'flex',
+                            alignItems: 'flex-start',
+                            gap: 4,
+                          }}>
+                            {/* Left lightbulb icon */}
+                            <div style={{
+                              width: 32,
+                              height: 32,
+                              flexShrink: 0,
+                              fontSize: 24,
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                            }}>
+                              💡
+                            </div>
+
+                            {/* Center text */}
+                            <div style={{
+                              flex: 1,
+                              fontFamily: 'var(--font-body)',
+                              fontSize: 14,
+                              lineHeight: '20px',
+                              color: '#454545',
+                            }}>
+                              <span
+                                onClick={() => {
+                                  onShowRating();
+                                }}
+                                style={{
+                                  fontWeight: 700,
+                                  textDecoration: 'underline',
+                                  cursor: 'pointer',
+                                }}>
+                                Rate past recipes
+                              </span>
+                              {' to get meal recommendation tailored to your taste!'}
+                            </div>
+
+                            {/* Right close button */}
+                            <button
+                              onClick={() => {
+                                // Hide banner
+                                const banner = document.querySelector('[data-banner="rate-recipes"]');
+                                if (banner) banner.style.display = 'none';
+                              }}
+                              style={{
+                                width: 24,
+                                height: 24,
+                                flexShrink: 0,
+                                background: 'transparent',
+                                border: 'none',
+                                cursor: 'pointer',
+                                padding: 0,
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                              }}>
+                              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="#454545" strokeWidth="2">
+                                <path d="M13 1L1 13M1 1l12 12"/>
+                              </svg>
+                            </button>
+                          </div>
+                        </div>
                       </React.Fragment>
                     );
                   }

@@ -3127,7 +3127,7 @@
     }
 
     // ========== TRENDING NOW WIDGET ==========
-    function TrendingNowWidget({ cart, setCart, bookmarkedRecipes, toggleBookmark, onShowRating, currentFlow, setShowFlowToast, showFavoritesSection, setShowFavoritesSection }) {
+    function TrendingNowWidget({ cart, setCart, bookmarkedRecipes, toggleBookmark, onShowRating, currentFlow, setShowFlowToast, showFavoritesSection, setShowFavoritesSection, designOption }) {
       const [recipeRatings, setRecipeRatings] = useState({});
       const scrollContainerRef = useRef(null);
       const recipeCardRefs = useRef({});
@@ -18168,6 +18168,7 @@
                           setShowFlowToast={setShowFlowToast}
                           showFavoritesSection={showFavoritesSection}
                           setShowFavoritesSection={setShowFavoritesSection}
+                          designOption={designOption}
                         />
                       </React.Fragment>
                     );
@@ -22040,6 +22041,18 @@
       // Design option state
       const [designOption, setDesignOption] = useState('reference');
       const [showMinimalBanner, setShowMinimalBanner] = useState(true);
+
+      // Listen for design option changes from sidebar
+      React.useEffect(() => {
+        const handleDesignOptionChange = (e) => {
+          setDesignOption(e.detail.option);
+          setShowFavoritesSection(true);
+          setShowMinimalBanner(true);
+        };
+
+        window.addEventListener('designOptionChange', handleDesignOptionChange);
+        return () => window.removeEventListener('designOptionChange', handleDesignOptionChange);
+      }, []);
 
       // Debug: Track openedFromRateMeals changes
       React.useEffect(() => {

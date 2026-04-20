@@ -17967,11 +17967,18 @@
                           (function() {
                             // Function to swap from banner to favorites section
                             function showFavoritesSection() {
+                              console.log('showFavoritesSection called!');
                               var banner = document.getElementById('rate-recipes-banner');
                               var favorites = document.getElementById('your-favorites-section');
-                              if (banner) banner.style.display = 'none';
+                              console.log('Elements:', {banner: !!banner, favorites: !!favorites});
+
+                              if (banner) {
+                                banner.style.display = 'none';
+                                console.log('Banner hidden');
+                              }
                               if (favorites) {
                                 favorites.style.display = 'block';
+                                console.log('Favorites shown');
                                 // Scroll favorites into view so users can see it perfectly
                                 setTimeout(function() {
                                   favorites.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -17980,29 +17987,12 @@
                             }
 
                             // Listen for rating completion event
-                            window.addEventListener('showFinalPhase', showFavoritesSection);
+                            window.addEventListener('showFinalPhase', function(e) {
+                              console.log('showFinalPhase event received!', e);
+                              showFavoritesSection();
+                            });
 
-                            // Also check when rating drawer closes - if user rated anything, show favorites
-                            var checkInterval = setInterval(function() {
-                              // Check if rating drawer exists and is closing
-                              var ratingDrawer = document.querySelector('[data-component="rating-drawer"]');
-
-                              // Simple approach: if user clicks anywhere and drawer closes after 2 seconds, show favorites
-                              // This is a fallback in case showFinalPhase doesn't fire
-                            }, 1000);
-
-                            // Manual trigger: show favorites 2 seconds after any rating is submitted
-                            var originalAddEventListener = window.addEventListener;
-                            window.addEventListener = function(type, listener, options) {
-                              if (type === 'showFinalPhase') {
-                                originalAddEventListener.call(this, type, function() {
-                                  listener.apply(this, arguments);
-                                  setTimeout(showFavoritesSection, 100);
-                                }, options);
-                              } else {
-                                originalAddEventListener.call(this, type, listener, options);
-                              }
-                            };
+                            console.log('Banner/Favorites script loaded successfully');
                           })();
                         `}} />
                       </React.Fragment>

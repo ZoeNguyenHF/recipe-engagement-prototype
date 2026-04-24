@@ -132,59 +132,6 @@
       font-weight: 500;
     }
 
-    /* User Flows in Sidebar */
-    .flow-item {
-      padding: 12px 16px;
-      background: #f5f5f5;
-      border: 2px solid transparent;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      margin-bottom: 8px;
-      font-size: 14px;
-      color: #424242;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-    }
-
-    .flow-item:hover {
-      background: #eeeeee;
-    }
-
-    .flow-item.active {
-      background: white;
-      border-color: #4f5fef;
-      color: #4f5fef;
-      font-weight: 500;
-    }
-
-    .flow-title {
-      flex: 1;
-      line-height: 1.4;
-    }
-
-    .reload-icon {
-      width: 18px;
-      height: 18px;
-      cursor: pointer;
-      color: currentColor;
-      transition: transform 0.3s ease;
-      flex-shrink: 0;
-      opacity: 0.6;
-    }
-
-    .reload-icon:hover {
-      transform: rotate(180deg);
-      opacity: 1;
-    }
-
-    .reload-icon svg {
-      width: 100%;
-      height: 100%;
-    }
-
     /* Content Area */
     .content-area {
       margin-left: 275px;
@@ -1032,8 +979,6 @@
   <div class="top-nav">
     <div class="nav-tabs">
       <div class="nav-tab active" data-tab="prototype">Design Prototype</div>
-      <div class="nav-tab" data-tab="flow">Flow & Logic</div>
-      <div class="nav-tab" data-tab="alternatives">Alternative Entries</div>
     </div>
   </div>
 
@@ -1048,28 +993,6 @@
       <div class="design-option-item" data-option="option3">Option 3: Horizontal Carousel</div>
       <div class="design-option-item" data-option="option4">Option 4: Card Stacking</div>
       <div class="design-option-item" data-option="option5">Option 5: Vertical List</div>
-    </div>
-
-    <!-- User Flows Section -->
-    <div class="sidebar-section">
-      <h2>User Flows</h2>
-      <div class="flow-item active" data-flow="has-recipes">
-        <span class="flow-title">Flow 1: Show fav recipes if there are after rating</span>
-        <div class="reload-icon" title="Reload flow">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-          </svg>
-        </div>
-      </div>
-
-      <div class="flow-item" data-flow="no-recipes">
-        <span class="flow-title">Flow 2: no show recipes after rating</span>
-        <div class="reload-icon" title="Reload flow">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-          </svg>
-        </div>
-      </div>
     </div>
   </div>
 

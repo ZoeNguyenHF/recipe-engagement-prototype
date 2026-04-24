@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Rate on Store ver 1.2</title>
+  <title>Rate on Store ver 1.3</title>
   <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -188,9 +188,119 @@
     /* Content Area */
     .content-area {
       margin-left: 275px;
+      margin-right: 320px;
       padding: 40px;
       display: flex;
       justify-content: center;
+    }
+
+    /* Right Sidebar - Design Reasoning */
+    .right-sidebar {
+      background: white;
+      width: 320px;
+      height: calc(100vh - 61px);
+      position: fixed;
+      top: 61px;
+      right: 0;
+      z-index: 1000;
+      overflow-y: auto;
+      border-left: 1px solid #e0e0e0;
+      padding: 24px;
+    }
+
+    .right-sidebar-header {
+      font-size: 11px;
+      font-weight: 600;
+      color: #9e9e9e;
+      margin-bottom: 16px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .right-sidebar-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 16px;
+      line-height: 1.4;
+    }
+
+    .right-sidebar-section {
+      margin-bottom: 24px;
+    }
+
+    .right-sidebar-section h4 {
+      font-size: 13px;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .right-sidebar-section p {
+      font-size: 13px;
+      color: #666;
+      line-height: 1.6;
+      margin-bottom: 8px;
+    }
+
+    .right-sidebar-section ul {
+      margin: 0;
+      padding-left: 18px;
+    }
+
+    .right-sidebar-section li {
+      font-size: 13px;
+      color: #666;
+      line-height: 1.6;
+      margin-bottom: 6px;
+    }
+
+    .pros-section h4 {
+      color: #2e7d32;
+    }
+
+    .cons-section h4 {
+      color: #c62828;
+    }
+
+    .reasoning-section h4 {
+      color: #1565c0;
+    }
+
+    .design-content {
+      display: none;
+    }
+
+    .design-content.active {
+      display: block;
+    }
+
+    .tag {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 500;
+      margin-right: 6px;
+      margin-bottom: 6px;
+    }
+
+    .tag-low {
+      background: #e3f2fd;
+      color: #1565c0;
+    }
+
+    .tag-medium {
+      background: #fff3e0;
+      color: #e65100;
+    }
+
+    .tag-high {
+      background: #fce4ec;
+      color: #c62828;
     }
 
     .content-section {
@@ -884,8 +994,9 @@
   <div class="top-nav">
     <div class="nav-tabs">
       <div class="nav-tab active" data-tab="prototype">Design Prototype</div>
-      <div class="nav-tab" data-tab="logic">Logic</div>
       <div class="nav-tab" data-tab="flow">Flow</div>
+      <div class="nav-tab" data-tab="logic">Logic</div>
+      <div class="nav-tab" data-tab="alternatives">Alternative Entries</div>
     </div>
   </div>
 
@@ -913,15 +1024,6 @@
 
       <div class="flow-item" data-flow="no-recipes">
         <span class="flow-title">Flow 2: No Recipes After Rating</span>
-        <div class="reload-icon" title="Reload flow">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-          </svg>
-        </div>
-      </div>
-
-      <div class="flow-item" data-flow="no-recipes-with-unrated">
-        <span class="flow-title">Flow 3: Unrated Available This Week</span>
         <div class="reload-icon" title="Reload flow">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
@@ -1044,9 +1146,292 @@
 
     <!-- Flow View -->
     <div class="content-section" data-content="flow">
-      <div class="logic-tables-container">
-        <h3 class="table-title">Flow Documentation</h3>
-        <p style="color: #666; line-height: 1.6;">Flow diagrams and user journey documentation will be displayed here.</p>
+      <div class="logic-tables-container" style="max-width: 800px;">
+        <h3 class="table-title">Rating Nudge Decision Tree</h3>
+
+        <!-- Decision Tree Visual -->
+        <div style="background: #f8f8f8; border-radius: 8px; padding: 24px; margin-bottom: 32px; border: 1px solid #e5e5e5;">
+          <div style="font-family: monospace; font-size: 14px; line-height: 2.2; color: #333;">
+            <div style="font-weight: 700; margin-bottom: 12px;">User opens Store page</div>
+
+            <div><strong>Has "My favorite recipes" swimlane?</strong></div>
+
+            <div style="margin-left: 20px;">
+              ├─ <strong>YES</strong> → How many top rated recipes?<br>
+              <span style="margin-left: 40px;">├─ <strong>2-6 recipes</strong> → Nudge at end of carousel</span><br>
+              <span style="margin-left: 40px;">└─ <strong>> 6 recipes</strong> → No nudge</span><br>
+              └─ <strong>NO</strong> → Nudge in lower position on Store (see extra logic below)
+            </div>
+          </div>
+        </div>
+
+        <!-- Extra Logic for No Swimlane -->
+        <div style="background: #fff8e6; border-radius: 8px; padding: 24px; margin-bottom: 32px; border: 1px solid #e5d9b3;">
+          <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+            <h4 style="margin: 0; font-size: 14px; font-weight: 700;">Extra Logic: No Swimlane Case</h4>
+            <span style="background: #f59e0b; color: white; font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 12px; text-transform: uppercase;">For Discussion</span>
+          </div>
+
+          <div style="font-family: monospace; font-size: 14px; line-height: 2.2; color: #333; margin-bottom: 16px;">
+            <div>When user has <strong>NO</strong> "My favorite recipes" swimlane:</div>
+            <div style="margin-left: 20px;">
+              • Show nudge only on the <strong>next upcoming week</strong> → Lower on the menu<br>
+              • Show nudge <strong>after user selects meals & revisits</strong> → Under the selected recipes
+            </div>
+          </div>
+
+          <div style="background: white; border-radius: 6px; padding: 16px; border: 1px solid #e5e5e5;">
+            <div style="font-size: 13px; font-weight: 600; margin-bottom: 8px;">Reasoning</div>
+            <p style="font-size: 13px; color: #666; line-height: 1.6; margin: 0;">
+              Keep full focus on meal selection for the upcoming week. For users without a swimlane (new/low-engagement), meal selection is the priority — rating can wait until after they've completed their primary task.
+            </p>
+          </div>
+        </div>
+
+        <!-- After Rating Flow -->
+        <div style="background: #f8f8f8; border-radius: 8px; padding: 24px; margin-bottom: 32px; border: 1px solid #e5e5e5;">
+          <div style="font-family: monospace; font-size: 14px; line-height: 2.2; color: #333;">
+            <div style="font-weight: 700; margin-bottom: 12px;">After User Completes Rating</div>
+
+            <div><strong>Has top rated recipes available this week?</strong></div>
+
+            <div style="margin-left: 20px;">
+              ├─ <strong>YES</strong> → Show "Your top rated are back!" → Enable category<br>
+              └─ <strong>NO</strong> → Show "Thanks!" → "We use this to tailor recommendations"
+            </div>
+          </div>
+        </div>
+
+        <!-- Mapping to Prototype Flows -->
+        <h3 class="table-title" style="margin-top: 32px;">Prototype Flow Mapping</h3>
+        <table style="width: 100%; border-collapse: collapse; font-size: 14px; margin-bottom: 32px;">
+          <tbody>
+            <tr>
+              <td style="padding: 12px; border: 1px solid #e5e5e5; font-weight: 600; width: 140px;">Flow 1</td>
+              <td style="padding: 12px; border: 1px solid #e5e5e5;">User rates → Top rated available this week → Shows category</td>
+            </tr>
+            <tr>
+              <td style="padding: 12px; border: 1px solid #e5e5e5; font-weight: 600;">Flow 2</td>
+              <td style="padding: 12px; border: 1px solid #e5e5e5;">User rates → No top rated this week → Shows "Thanks" message</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- Nudge Placement Summary -->
+        <h3 class="table-title">Nudge Placement Summary</h3>
+        <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
+          <thead>
+            <tr>
+              <th style="padding: 12px; text-align: left; border: 1px solid #e5e5e5; background: #f8f8f8;">Condition</th>
+              <th style="padding: 12px; text-align: left; border: 1px solid #e5e5e5; background: #f8f8f8;">Nudge Position</th>
+              <th style="padding: 12px; text-align: left; border: 1px solid #e5e5e5; background: #f8f8f8;">Rationale</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="padding: 12px; border: 1px solid #e5e5e5;">No swimlane</td>
+              <td style="padding: 12px; border: 1px solid #e5e5e5;">Lower on Store</td>
+              <td style="padding: 12px; border: 1px solid #e5e5e5; color: #666;">No context for carousel placement</td>
+            </tr>
+            <tr>
+              <td style="padding: 12px; border: 1px solid #e5e5e5;">2-6 top rated</td>
+              <td style="padding: 12px; border: 1px solid #e5e5e5;">End of carousel</td>
+              <td style="padding: 12px; border: 1px solid #e5e5e5; color: #666;">Contextual placement after viewing favorites</td>
+            </tr>
+            <tr>
+              <td style="padding: 12px; border: 1px solid #e5e5e5;">> 6 top rated</td>
+              <td style="padding: 12px; border: 1px solid #e5e5e5;">No nudge</td>
+              <td style="padding: 12px; border: 1px solid #e5e5e5; color: #666;">User already engaged</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Alternative Entries View -->
+    <div class="content-section" data-content="alternatives">
+      <div class="logic-tables-container" style="max-width: 900px;">
+        <h3 class="table-title">Alternative Entry Points</h3>
+        <p style="color: #666; line-height: 1.6; margin-bottom: 32px;">Other places where users can access the rating feature beyond the Store page.</p>
+
+        <!-- Entry 1: Orders Page -->
+        <div style="background: #f8f8f8; border-radius: 8px; padding: 24px; border: 1px solid #e5e5e5; margin-bottom: 32px;">
+          <h4 style="margin: 0 0 20px; font-size: 18px; font-weight: 700;">1. Your Orders Page</h4>
+
+          <div style="display: flex; gap: 32px; align-items: flex-start; margin-bottom: 24px;">
+            <!-- Concept image -->
+            <div style="flex-shrink: 0;">
+              <img src="your-orders-concept.png" alt="Your Orders concept" style="width: 280px; border-radius: 12px; border: 1px solid #e5e5e5; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+            </div>
+
+            <!-- Description and details -->
+            <div style="flex: 1;">
+              <p style="color: #333; font-size: 15px; line-height: 1.6; margin: 0 0 20px;">
+                Inline rating directly on delivered order cards. Users can rate each recipe without leaving the Orders context.
+              </p>
+
+              <!-- Design Reasoning -->
+              <div style="margin-bottom: 16px;">
+                <div style="font-size: 13px; font-weight: 600; color: #333; margin-bottom: 8px;">Design Reasoning</div>
+                <ul style="font-size: 13px; color: #555; line-height: 1.8; margin: 0; padding-left: 18px;">
+                  <li><strong>Mental model alignment</strong> — Rating is backward-looking (evaluating past meals); Orders shares this orientation while Store is forward-looking</li>
+                  <li><strong>Intent-context match</strong> — Users in Orders are already reviewing what they've cooked; rating becomes a natural extension</li>
+                  <li><strong>JTBD separation</strong> — Cleanly separates "select meals" (Store) from "reflect on meals" (Orders), reducing cognitive load</li>
+                </ul>
+              </div>
+
+              <!-- Dependency -->
+              <div style="background: #fff3cd; border-radius: 6px; padding: 12px 14px; border-left: 3px solid #f59e0b;">
+                <div style="font-size: 12px; font-weight: 600; color: #92400e; margin-bottom: 4px;">Dependency</div>
+                <p style="font-size: 13px; color: #78350f; margin: 0;">Requires Orders page to be introduced first</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Right Sidebar - Design Reasoning -->
+  <div class="right-sidebar">
+    <div class="right-sidebar-header">Design Reasoning</div>
+
+    <!-- Option 1 Content -->
+    <div class="design-content active" data-design="option1">
+      <div class="right-sidebar-title">Option 1: Minimal Nudge Banner</div>
+
+      <div class="right-sidebar-section">
+        <h4>🎯 Impact on Main JTBD</h4>
+        <p><strong>Primary JTBD:</strong> Selecting meals for the week</p>
+        <span class="tag tag-low">Low Distraction</span>
+      </div>
+
+      <div class="right-sidebar-section reasoning-section">
+        <h4>💡 Design Approach</h4>
+        <p>Minimal footprint approach — a small inline banner that doesn't compete with meal browsing. The rating action happens in a separate drawer, keeping the menu page focused on meal selection.</p>
+        <p>Does not lead with storytelling about how ratings help meal selection — relies on users understanding the value independently.</p>
+      </div>
+
+      <div class="right-sidebar-section pros-section">
+        <h4>✓ Pros</h4>
+        <ul>
+          <li>Minimal screen space — doesn't push meal cards down</li>
+          <li>Users can easily ignore and continue browsing</li>
+          <li>Rating happens in drawer — menu stays uncluttered</li>
+          <li>Low cognitive load during meal browsing</li>
+        </ul>
+      </div>
+
+      <div class="right-sidebar-section cons-section">
+        <h4>✗ Cons</h4>
+        <ul>
+          <li>Minimal but still adds visual noise to the page</li>
+          <li>No clear storytelling connecting ratings → better meal selection</li>
+          <li>Users may not understand the value proposition</li>
+        </ul>
+      </div>
+
+      <div class="right-sidebar-section">
+        <h4>📊 Metrics to Track</h4>
+        <ul>
+          <li>Time to first meal added (with/without banner)</li>
+          <li>Meals selected per session</li>
+          <li>Banner engagement vs ignore rate</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Option 2 Content -->
+    <div class="design-content" data-design="option2">
+      <div class="right-sidebar-title">Option 2: Rating in Carousel</div>
+
+      <div class="right-sidebar-section">
+        <h4>🎯 Impact on Main JTBD</h4>
+        <p><strong>Primary JTBD:</strong> Selecting meals for the week</p>
+        <span class="tag tag-medium">Medium Distraction</span>
+      </div>
+
+      <div class="right-sidebar-section reasoning-section">
+        <h4>💡 Design Approach</h4>
+        <p>Medium footprint — carousel takes more vertical space but keeps rating inline. Users rate without leaving the menu, but the interaction competes for attention with meal browsing.</p>
+        <p>Partial storytelling: Shows recipe images which reminds users of past meals, but doesn't explicitly connect "rate now → find favorites faster".</p>
+      </div>
+
+      <div class="right-sidebar-section pros-section">
+        <h4>✓ Pros</h4>
+        <ul>
+          <li>No page navigation — stays on menu</li>
+          <li>Quick inline interaction — less commitment</li>
+          <li>Completion state shows "top rated" link — connects to meal finding</li>
+          <li>Horizontal scroll doesn't block vertical meal browsing</li>
+        </ul>
+      </div>
+
+      <div class="right-sidebar-section cons-section">
+        <h4>✗ Cons</h4>
+        <ul>
+          <li>Carousel grabs attention with images and motion</li>
+          <li>Users may get "stuck" rating instead of selecting meals</li>
+          <li>Auto-scroll creates urgency that pulls focus</li>
+          <li>Takes vertical space that could show more meals</li>
+        </ul>
+      </div>
+
+      <div class="right-sidebar-section">
+        <h4>📊 Metrics to Track</h4>
+        <ul>
+          <li>Scroll depth on menu (with/without carousel)</li>
+          <li>Time spent on carousel vs meal cards</li>
+          <li>Session conversion to meal selection</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Option 3 Content -->
+    <div class="design-content" data-design="option3">
+      <div class="right-sidebar-title">Option 3: Rating with Cards</div>
+
+      <div class="right-sidebar-section">
+        <h4>🎯 Impact on Main JTBD</h4>
+        <p><strong>Primary JTBD:</strong> Selecting meals for the week</p>
+        <span class="tag tag-high">High Distraction</span>
+      </div>
+
+      <div class="right-sidebar-section reasoning-section">
+        <h4>💡 Design Approach</h4>
+        <p>Large footprint — stacked cards dominate the section and create a mini-experience within the menu page. The gamified pattern encourages completing all ratings before moving on.</p>
+        <p><strong>Opportunity:</strong> Could lead with storytelling — "Rate these to find your favorites faster this week" — to justify the larger presence by directly connecting to easier meal selection.</p>
+      </div>
+
+      <div class="right-sidebar-section pros-section">
+        <h4>✓ Pros</h4>
+        <ul>
+          <li>Completion drawer explicitly shows "Your top rated" — clear payoff</li>
+          <li>High engagement = more ratings = better recommendations</li>
+          <li>Star animation for 4-5 stars reinforces quality signal</li>
+          <li>Could justify distraction if copy connects rating → easier selection</li>
+        </ul>
+      </div>
+
+      <div class="right-sidebar-section cons-section">
+        <h4>✗ Cons</h4>
+        <ul>
+          <li>Takes significant visual space from meal browsing</li>
+          <li>Gamified pattern pulls users into "rating mode"</li>
+          <li>Animations compete with static meal cards</li>
+          <li>Users may leave before selecting meals</li>
+          <li>Without storytelling, feels like a detour from JTBD</li>
+        </ul>
+      </div>
+
+      <div class="right-sidebar-section">
+        <h4>📊 Metrics to Track</h4>
+        <ul>
+          <li>Session drop-off at rating section</li>
+          <li>Meals added after rating completion</li>
+          <li>"View top rated" click-through to meal selection</li>
+        </ul>
       </div>
     </div>
   </div>
@@ -8791,10 +9176,12 @@
     // ========== OPTION 3 COMPLETION DRAWER ==========
     function Option3CompletionDrawer({ show, onClose, onViewTopRated }) {
       const [confettiPieces, setConfettiPieces] = useState([]);
+      const [isClosing, setIsClosing] = useState(false);
 
       // Generate confetti when drawer opens
       useEffect(() => {
         if (show) {
+          setIsClosing(false);
           const pieces = [];
           const colors = ['#FFB800', '#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7', '#DDA0DD', '#98D8C8', '#F8B500', '#FF69B4'];
           for (let i = 0; i < 50; i++) {
@@ -8815,6 +9202,14 @@
         }
       }, [show]);
 
+      // Handle view top rated with slide-down animation
+      const handleViewTopRated = () => {
+        setIsClosing(true);
+        setTimeout(() => {
+          onViewTopRated();
+        }, 350); // Wait for animation to complete
+      };
+
       if (!show) return null;
 
       return (
@@ -8830,7 +9225,7 @@
               bottom: 0,
               background: 'rgba(0,0,0,0.5)',
               zIndex: 1000,
-              animation: 'fadeIn 0.3s ease-out forwards',
+              animation: isClosing ? 'fadeOut 0.35s ease-out forwards' : 'fadeIn 0.3s ease-out forwards',
             }}
           />
 
@@ -8845,7 +9240,7 @@
             borderTopRightRadius: 16,
             boxShadow: '0 -4px 20px rgba(0,0,0,0.15)',
             zIndex: 1001,
-            animation: 'slideUpDrawer 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+            animation: isClosing ? 'slideDownDrawer 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards' : 'slideUpDrawer 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards',
             overflow: 'hidden',
           }}>
             {/* CSS for drawer animations */}
@@ -8854,9 +9249,17 @@
                 from { transform: translateY(100%); }
                 to { transform: translateY(0); }
               }
+              @keyframes slideDownDrawer {
+                from { transform: translateY(0); }
+                to { transform: translateY(100%); }
+              }
               @keyframes fadeIn {
                 from { opacity: 0; }
                 to { opacity: 1; }
+              }
+              @keyframes fadeOut {
+                from { opacity: 1; }
+                to { opacity: 0; }
               }
               @keyframes confettiDrop {
                 0% {
@@ -8973,7 +9376,8 @@
 
               {/* CTA Button */}
               <button
-                onClick={onViewTopRated}
+                onClick={handleViewTopRated}
+                disabled={isClosing}
                 style={{
                   width: '100%',
                   padding: '12px 24px',
@@ -8985,7 +9389,8 @@
                   fontWeight: 700,
                   lineHeight: '24px',
                   color: 'white',
-                  cursor: 'pointer',
+                  cursor: isClosing ? 'default' : 'pointer',
+                  opacity: isClosing ? 0.7 : 1,
                 }}
               >
                 View top rated recipes
@@ -9013,7 +9418,7 @@
     }
 
     // ========== EXISTING RATING DRAWER ==========
-    function RatingDrawer({ show, onClose, recipes, ratings, onRate, onShowMoreRecipes, showMoreRecipes, onNavigateToPastOrders, hideRemindLater, customTitle, customDescription, showLoyaltyMission, onViewTopRecipes, openedFromRateMeals }) {
+    function RatingDrawer({ show, onClose, recipes, ratings, onRate, onShowMoreRecipes, showMoreRecipes, onNavigateToPastOrders, hideRemindLater, customTitle, customDescription, showLoyaltyMission, onViewTopRecipes, openedFromRateMeals, currentFlow }) {
       const scrollContainerRef = useRef(null);
       const [particles, setParticles] = useState([]);
       const [isFadingOut, setIsFadingOut] = useState(false);
@@ -9508,92 +9913,82 @@
 
                   {/* First thank you tile - shown after rating initial recipes */}
                   {allRated && !showMoreRecipes && (
-                    <div
-                      style={{
-                        flexShrink: 0,
-                        width: 264,
-                        scrollSnapAlign: 'start',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        padding: '16px',
-                        background: '#efe9de',
-                        borderRadius: 12,
-                        minHeight: 404,
-                        boxShadow: '0 1px 4px rgba(0,0,0,0.1)',
-                        animation: isFadingOut ? 'fadeOut 0.5s ease-out forwards' : 'none',
-                        position: 'relative',
-                        overflow: 'hidden',
-                      }}
-                    >
-                      {/* Confetti CSS */}
-                      <style dangerouslySetInnerHTML={{ __html: `
-                        @keyframes tileConfettiFall {
-                          0% { transform: translateY(-20px) rotate(0deg); opacity: 1; }
-                          100% { transform: translateY(450px) rotate(720deg); opacity: 0; }
-                        }
-                        @keyframes chefKissWiggle {
-                          0%, 100% { transform: rotate(0deg) scale(1); }
-                          25% { transform: rotate(-5deg) scale(1.02); }
-                          75% { transform: rotate(5deg) scale(1.02); }
-                        }
-                      `}} />
+                    currentFlow === 'no-recipes' ? (
+                      /* Flow 2: No recipes - special tile with heart */
+                      <div
+                        style={{
+                          flexShrink: 0,
+                          width: 264,
+                          scrollSnapAlign: 'start',
+                          display: 'flex',
+                          flexDirection: 'column',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          padding: '16px',
+                          background: '#efe9de',
+                          borderRadius: 12,
+                          minHeight: 404,
+                          boxShadow: '0 1px 4px rgba(0,0,0,0.1)',
+                          animation: isFadingOut ? 'fadeOut 0.5s ease-out forwards' : 'none',
+                          position: 'relative',
+                          overflow: 'hidden',
+                        }}
+                      >
+                        {/* Confetti CSS */}
+                        <style dangerouslySetInnerHTML={{ __html: `
+                          @keyframes tileConfettiFall {
+                            0% { transform: translateY(-20px) rotate(0deg); opacity: 1; }
+                            100% { transform: translateY(450px) rotate(720deg); opacity: 0; }
+                          }
+                        `}} />
 
-                      {/* Confetti falling inside tile */}
-                      <div style={{
-                        position: 'absolute',
-                        top: 0,
-                        left: 0,
-                        right: 0,
-                        height: '100%',
-                        overflow: 'hidden',
-                        pointerEvents: 'none',
-                        zIndex: 1,
-                      }}>
-                        {[...Array(40)].map((_, i) => {
-                          const colors = ['#FFB800', '#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7', '#DDA0DD', '#98D8C8', '#F8B500', '#FF69B4'];
-                          return (
-                            <div
-                              key={i}
-                              style={{
-                                position: 'absolute',
-                                left: `${Math.random() * 100}%`,
-                                top: -20,
-                                width: 6 + Math.random() * 6,
-                                height: (6 + Math.random() * 6) * 0.6,
-                                background: colors[Math.floor(Math.random() * colors.length)],
-                                borderRadius: 2,
-                                transform: `rotate(${Math.random() * 360}deg)`,
-                                animation: `tileConfettiFall ${2 + Math.random() * 1.5}s ease-out ${Math.random() * 1.5}s forwards`,
-                              }}
-                            />
-                          );
-                        })}
-                      </div>
+                        {/* Confetti falling inside tile */}
+                        <div style={{
+                          position: 'absolute',
+                          top: 0,
+                          left: 0,
+                          right: 0,
+                          height: '100%',
+                          overflow: 'hidden',
+                          pointerEvents: 'none',
+                          zIndex: 1,
+                        }}>
+                          {[...Array(40)].map((_, i) => {
+                            const colors = ['#FFB800', '#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7', '#DDA0DD', '#98D8C8', '#F8B500', '#FF69B4'];
+                            return (
+                              <div
+                                key={i}
+                                style={{
+                                  position: 'absolute',
+                                  left: `${Math.random() * 100}%`,
+                                  top: -20,
+                                  width: 6 + Math.random() * 6,
+                                  height: (6 + Math.random() * 6) * 0.6,
+                                  background: colors[Math.floor(Math.random() * colors.length)],
+                                  borderRadius: 2,
+                                  transform: `rotate(${Math.random() * 360}deg)`,
+                                  animation: `tileConfettiFall ${2 + Math.random() * 1.5}s ease-out ${Math.random() * 1.5}s forwards`,
+                                }}
+                              />
+                            );
+                          })}
+                        </div>
 
-                      {/* Chef Kiss Animation */}
-                      <div style={{
-                        width: 120,
-                        height: 120,
-                        marginBottom: 16,
-                        animation: 'chefKissWiggle 2s ease-in-out infinite',
-                        position: 'relative',
-                        zIndex: 2,
-                      }}>
+                        {/* Heart illustration */}
                         <img
-                          src="chef-kiss.gif"
-                          alt="Chef Kiss"
+                          src="heart.png"
+                          alt="Heart"
                           style={{
-                            width: '100%',
-                            height: '100%',
+                            width: 140,
+                            height: 140,
                             objectFit: 'contain',
+                            marginBottom: 16,
+                            position: 'relative',
+                            zIndex: 2,
                           }}
                         />
-                      </div>
 
-                      {/* Text content */}
-                      <div style={{ textAlign: 'center', position: 'relative', zIndex: 2 }}>
+                        {/* Title */}
                         <h3 style={{
                           fontFamily: 'var(--font-headline)',
                           fontSize: 20,
@@ -9602,8 +9997,254 @@
                           color: '#232323',
                           margin: '0 0 8px',
                           textAlign: 'center',
-                        }}>Your top rated are back this week!</h3>
+                          position: 'relative',
+                          zIndex: 2,
+                        }}>Thanks for the rating!</h3>
 
+                        {/* Description */}
+                        <p style={{
+                          fontFamily: 'var(--font-body)',
+                          fontSize: 16,
+                          fontWeight: 400,
+                          lineHeight: '24px',
+                          color: '#242424',
+                          margin: '0 0 16px',
+                          textAlign: 'center',
+                          position: 'relative',
+                          zIndex: 2,
+                        }}>
+                          We use this to recommend meals tailored to your taste!
+                        </p>
+
+                        {/* Got it button */}
+                        <button
+                          onClick={onClose}
+                          style={{
+                            width: '100%',
+                            padding: '8px 24px',
+                            background: '#232323',
+                            border: 'none',
+                            borderRadius: 8,
+                            fontFamily: 'var(--font-body)',
+                            fontSize: 16,
+                            fontWeight: 700,
+                            lineHeight: '24px',
+                            color: 'white',
+                            cursor: 'pointer',
+                            marginBottom: 8,
+                            position: 'relative',
+                            zIndex: 2,
+                          }}
+                        >
+                          Got it
+                        </button>
+
+                        {/* Rate more button */}
+                        <button
+                          onClick={onNavigateToPastOrders}
+                          style={{
+                            width: '100%',
+                            padding: '8px 24px',
+                            background: 'transparent',
+                            border: 'none',
+                            borderRadius: 8,
+                            fontFamily: 'var(--font-body)',
+                            fontSize: 16,
+                            fontWeight: 700,
+                            lineHeight: '24px',
+                            color: '#232323',
+                            cursor: 'pointer',
+                            position: 'relative',
+                            zIndex: 2,
+                          }}
+                        >
+                          Rate more
+                        </button>
+                      </div>
+                    ) : (
+                      /* Other flows - original tile with chef kiss */
+                      <div
+                        style={{
+                          flexShrink: 0,
+                          width: 264,
+                          scrollSnapAlign: 'start',
+                          display: 'flex',
+                          flexDirection: 'column',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          padding: '16px',
+                          background: '#efe9de',
+                          borderRadius: 12,
+                          minHeight: 404,
+                          boxShadow: '0 1px 4px rgba(0,0,0,0.1)',
+                          animation: isFadingOut ? 'fadeOut 0.5s ease-out forwards' : 'none',
+                          position: 'relative',
+                          overflow: 'hidden',
+                        }}
+                      >
+                        {/* Confetti CSS */}
+                        <style dangerouslySetInnerHTML={{ __html: `
+                          @keyframes tileConfettiFall {
+                            0% { transform: translateY(-20px) rotate(0deg); opacity: 1; }
+                            100% { transform: translateY(450px) rotate(720deg); opacity: 0; }
+                          }
+                          @keyframes chefKissWiggle {
+                            0%, 100% { transform: rotate(0deg) scale(1); }
+                            25% { transform: rotate(-5deg) scale(1.02); }
+                            75% { transform: rotate(5deg) scale(1.02); }
+                          }
+                        `}} />
+
+                        {/* Confetti falling inside tile */}
+                        <div style={{
+                          position: 'absolute',
+                          top: 0,
+                          left: 0,
+                          right: 0,
+                          height: '100%',
+                          overflow: 'hidden',
+                          pointerEvents: 'none',
+                          zIndex: 1,
+                        }}>
+                          {[...Array(40)].map((_, i) => {
+                            const colors = ['#FFB800', '#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7', '#DDA0DD', '#98D8C8', '#F8B500', '#FF69B4'];
+                            return (
+                              <div
+                                key={i}
+                                style={{
+                                  position: 'absolute',
+                                  left: `${Math.random() * 100}%`,
+                                  top: -20,
+                                  width: 6 + Math.random() * 6,
+                                  height: (6 + Math.random() * 6) * 0.6,
+                                  background: colors[Math.floor(Math.random() * colors.length)],
+                                  borderRadius: 2,
+                                  transform: `rotate(${Math.random() * 360}deg)`,
+                                  animation: `tileConfettiFall ${2 + Math.random() * 1.5}s ease-out ${Math.random() * 1.5}s forwards`,
+                                }}
+                              />
+                            );
+                          })}
+                        </div>
+
+                        {/* Chef Kiss Animation */}
+                        <div style={{
+                          width: 120,
+                          height: 120,
+                          marginBottom: 16,
+                          animation: 'chefKissWiggle 2s ease-in-out infinite',
+                          position: 'relative',
+                          zIndex: 2,
+                        }}>
+                          <img
+                            src="chef-kiss.gif"
+                            alt="Chef Kiss"
+                            style={{
+                              width: '100%',
+                              height: '100%',
+                              objectFit: 'contain',
+                            }}
+                          />
+                        </div>
+
+                        {/* Text content */}
+                        <div style={{ textAlign: 'center', position: 'relative', zIndex: 2 }}>
+                          <h3 style={{
+                            fontFamily: 'var(--font-headline)',
+                            fontSize: 20,
+                            fontWeight: 700,
+                            lineHeight: '24px',
+                            color: '#232323',
+                            margin: '0 0 8px',
+                            textAlign: 'center',
+                          }}>Your top rated are back this week!</h3>
+
+                          <p style={{
+                            fontFamily: 'var(--font-body)',
+                            fontSize: 16,
+                            fontWeight: 400,
+                            lineHeight: '24px',
+                            color: '#242424',
+                            margin: '0 0 16px',
+                            textAlign: 'center',
+                          }}>
+                            Awesome! Your top rated are highlighted in this week Menu
+                          </p>
+                        </div>
+
+                        {/* CTA button */}
+                        <button
+                          onClick={() => {
+                            if (onViewTopRecipes) {
+                              onViewTopRecipes();
+                            }
+                          }}
+                          style={{
+                            width: '100%',
+                            padding: '8px 24px',
+                            background: '#232323',
+                            border: 'none',
+                            borderRadius: 8,
+                            fontFamily: 'var(--font-body)',
+                            fontSize: 16,
+                            fontWeight: 700,
+                            lineHeight: '24px',
+                            color: 'white',
+                            cursor: 'pointer',
+                            position: 'relative',
+                            zIndex: 2,
+                          }}
+                        >
+                          View top rated recipes
+                        </button>
+                      </div>
+                    )
+                  )}
+
+                  {/* Second thank you tile - shown after rating all recipes */}
+                  {allRated && showMoreRecipes && (
+                    currentFlow === 'no-recipes' ? (
+                      /* Flow 2: No recipes - special tile with heart */
+                      <div
+                        style={{
+                          flexShrink: 0,
+                          width: 260,
+                          scrollSnapAlign: 'start',
+                          display: 'flex',
+                          flexDirection: 'column',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          padding: '16px',
+                          background: '#efe9de',
+                          borderRadius: 12,
+                          minHeight: 380,
+                          boxShadow: '0 1px 4px rgba(0,0,0,0.1)',
+                        }}
+                      >
+                        {/* Heart illustration */}
+                        <img
+                          src="heart.png"
+                          alt="Heart"
+                          style={{
+                            width: 140,
+                            height: 140,
+                            objectFit: 'contain',
+                            marginBottom: 16,
+                          }}
+                        />
+
+                        {/* Title */}
+                        <h3 style={{
+                          fontFamily: 'var(--font-headline)',
+                          fontSize: 20,
+                          fontWeight: 700,
+                          lineHeight: '24px',
+                          color: '#232323',
+                          margin: '0 0 8px',
+                          textAlign: 'center',
+                        }}>Thanks for the rating!</h3>
+
+                        {/* Description */}
                         <p style={{
                           fontFamily: 'var(--font-body)',
                           fontSize: 16,
@@ -9613,107 +10254,15 @@
                           margin: '0 0 16px',
                           textAlign: 'center',
                         }}>
-                          Awesome! Your top rated are highlighted in this week Menu
+                          We use this to recommend meals tailored to your taste!
                         </p>
-                      </div>
 
-                      {/* CTA button */}
-                      <button
-                        onClick={() => {
-                          if (onViewTopRecipes) {
-                            onViewTopRecipes();
-                          }
-                        }}
-                        style={{
-                          width: '100%',
-                          padding: '8px 24px',
-                          background: '#232323',
-                          border: 'none',
-                          borderRadius: 8,
-                          fontFamily: 'var(--font-body)',
-                          fontSize: 16,
-                          fontWeight: 700,
-                          lineHeight: '24px',
-                          color: 'white',
-                          cursor: 'pointer',
-                          position: 'relative',
-                          zIndex: 2,
-                        }}
-                      >
-                        View top rated recipes
-                      </button>
-                    </div>
-                  )}
-
-                  {/* Second thank you tile - shown after rating all recipes */}
-                  {allRated && showMoreRecipes && (
-                    <div
-                      style={{
-                        flexShrink: 0,
-                        width: 260,
-                        scrollSnapAlign: 'start',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        padding: '32px 20px',
-                        background: '#f0f0f0',
-                        borderRadius: 12,
-                        minHeight: 380,
-                      }}
-                    >
-                      {/* Heart illustration */}
-                      <img
-                        src="heart.png"
-                        alt="Heart"
-                        style={{
-                          width: 80,
-                          height: 80,
-                          objectFit: 'contain',
-                          marginBottom: 20,
-                        }}
-                      />
-
-                      {/* Thank you text */}
-                      <h3 style={{
-                        fontFamily: 'var(--font-headline)',
-                        fontSize: 20,
-                        fontWeight: 700,
-                        lineHeight: '24px',
-                        color: '#232323',
-                        margin: '0 0 12px',
-                        textAlign: 'center',
-                      }}>Thanks for rating!</h3>
-
-                      <p style={{
-                        fontFamily: 'var(--font-body)',
-                        fontSize: 14,
-                        fontWeight: 400,
-                        lineHeight: '20px',
-                        color: '#232323',
-                        margin: '0 0 24px',
-                        textAlign: 'center',
-                      }}>
-                        {hideRemindLater
-                          ? (openedFromRateMeals
-                              ? "We've added new recommendations based on your ratings."
-                              : "Your high-rated recipes will be highlighted in menu if available.")
-                          : "Want to rate more? Find all your delivered meals in Past orders."}
-                      </p>
-
-                      {/* CTA button - different for menu vs other sources */}
-                      {hideRemindLater ? (
+                        {/* Got it button */}
                         <button
-                          onClick={() => {
-                            console.log('Button clicked in drawer (large screen), hideRemindLater:', hideRemindLater, 'openedFromRateMeals:', openedFromRateMeals);
-                            if (onViewTopRecipes) {
-                              onViewTopRecipes();
-                            } else {
-                              console.error('onViewTopRecipes is not defined');
-                            }
-                          }}
+                          onClick={onClose}
                           style={{
-                            padding: '12px 24px',
+                            width: '100%',
+                            padding: '8px 24px',
                             background: '#232323',
                             border: 'none',
                             borderRadius: 8,
@@ -9723,34 +10272,139 @@
                             lineHeight: '24px',
                             color: 'white',
                             cursor: 'pointer',
+                            marginBottom: 8,
                           }}
                         >
-                          {(() => {
-                            const buttonText = openedFromRateMeals ? "See your new recommendations" : "View your top recipes";
-                            console.log('Button rendering with text:', buttonText, 'openedFromRateMeals:', openedFromRateMeals);
-                            return buttonText;
-                          })()}
+                          Got it
                         </button>
-                      ) : (
+
+                        {/* Rate more button */}
                         <button
                           onClick={onNavigateToPastOrders}
                           style={{
-                            padding: '12px 24px',
-                            background: '#232323',
+                            width: '100%',
+                            padding: '8px 24px',
+                            background: 'transparent',
                             border: 'none',
                             borderRadius: 8,
                             fontFamily: 'var(--font-body)',
                             fontSize: 16,
                             fontWeight: 700,
                             lineHeight: '24px',
-                            color: 'white',
+                            color: '#232323',
                             cursor: 'pointer',
                           }}
                         >
-                          Go to past orders
+                          Rate more
                         </button>
-                      )}
-                    </div>
+                      </div>
+                    ) : (
+                      /* Other flows - original tile */
+                      <div
+                        style={{
+                          flexShrink: 0,
+                          width: 260,
+                          scrollSnapAlign: 'start',
+                          display: 'flex',
+                          flexDirection: 'column',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          padding: '32px 20px',
+                          background: '#f0f0f0',
+                          borderRadius: 12,
+                          minHeight: 380,
+                        }}
+                      >
+                        {/* Heart illustration */}
+                        <img
+                          src="heart.png"
+                          alt="Heart"
+                          style={{
+                            width: 80,
+                            height: 80,
+                            objectFit: 'contain',
+                            marginBottom: 20,
+                          }}
+                        />
+
+                        {/* Thank you text */}
+                        <h3 style={{
+                          fontFamily: 'var(--font-headline)',
+                          fontSize: 20,
+                          fontWeight: 700,
+                          lineHeight: '24px',
+                          color: '#232323',
+                          margin: '0 0 12px',
+                          textAlign: 'center',
+                        }}>Thanks for rating!</h3>
+
+                        <p style={{
+                          fontFamily: 'var(--font-body)',
+                          fontSize: 14,
+                          fontWeight: 400,
+                          lineHeight: '20px',
+                          color: '#232323',
+                          margin: '0 0 24px',
+                          textAlign: 'center',
+                        }}>
+                          {hideRemindLater
+                            ? (openedFromRateMeals
+                                ? "We've added new recommendations based on your ratings."
+                                : "Your high-rated recipes will be highlighted in menu if available.")
+                            : "Want to rate more? Find all your delivered meals in Past orders."}
+                        </p>
+
+                        {/* CTA button - different for menu vs other sources */}
+                        {hideRemindLater ? (
+                          <button
+                            onClick={() => {
+                              console.log('Button clicked in drawer (large screen), hideRemindLater:', hideRemindLater, 'openedFromRateMeals:', openedFromRateMeals);
+                              if (onViewTopRecipes) {
+                                onViewTopRecipes();
+                              } else {
+                                console.error('onViewTopRecipes is not defined');
+                              }
+                            }}
+                            style={{
+                              padding: '12px 24px',
+                              background: '#232323',
+                              border: 'none',
+                              borderRadius: 8,
+                              fontFamily: 'var(--font-body)',
+                              fontSize: 16,
+                              fontWeight: 700,
+                              lineHeight: '24px',
+                              color: 'white',
+                              cursor: 'pointer',
+                            }}
+                          >
+                            {(() => {
+                              const buttonText = openedFromRateMeals ? "See your new recommendations" : "View your top recipes";
+                              console.log('Button rendering with text:', buttonText, 'openedFromRateMeals:', openedFromRateMeals);
+                              return buttonText;
+                            })()}
+                          </button>
+                        ) : (
+                          <button
+                            onClick={onNavigateToPastOrders}
+                            style={{
+                              padding: '12px 24px',
+                              background: '#232323',
+                              border: 'none',
+                              borderRadius: 8,
+                              fontFamily: 'var(--font-body)',
+                              fontSize: 16,
+                              fontWeight: 700,
+                              lineHeight: '24px',
+                              color: 'white',
+                              cursor: 'pointer',
+                            }}
+                          >
+                            Go to past orders
+                          </button>
+                        )}
+                      </div>
+                    )
                   )}
 
                   {/* Spacer for last card - ensures right margin when scrolled to end */}
@@ -10182,6 +10836,417 @@
               padding: '8px 24px',
               alignSelf: 'center',
             }}>Logout</button>
+          </div>
+        </div>
+      );
+    }
+
+    // ========== TOP RATED CATEGORY PAGE ==========
+    function TopRatedCategoryPage({ onBack, onAddToCart, cart }) {
+      const topRatedMeals = [
+        {
+          id: 101,
+          name: "Firecracker Meatballs",
+          subtitle: "with Zucchini & Toasted Buttery Panko",
+          time: "40 mins",
+          prepTime: "8 mins",
+          kcal: "830 Cal",
+          rating: 5,
+          img: "recipes/HelloFresh Main Image (4).jpg",
+          tags: ["Veggie", "Protein Smart"],
+        },
+        {
+          id: 102,
+          name: "Avocado Chicken Salad",
+          subtitle: "with Green Goddess Dressing",
+          time: "30 mins",
+          prepTime: "10 mins",
+          kcal: "750 Cal",
+          rating: 5,
+          img: "recipes/HelloFresh Main Image (3).jpg",
+          tags: ["Quick", "Low Calorie"],
+        },
+        {
+          id: 103,
+          name: "Honey Garlic Salmon",
+          subtitle: "with Roasted Vegetables",
+          time: "35 mins",
+          prepTime: "12 mins",
+          kcal: "680 Cal",
+          rating: 4,
+          img: "recipes/HelloFresh Main Image (5).jpg",
+          tags: ["Protein Smart"],
+        },
+      ];
+
+      return (
+        <div style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: 'var(--color-page-bg)',
+          zIndex: 100,
+          display: 'flex',
+          flexDirection: 'column',
+        }}>
+          {/* Status Bar */}
+          <StatusBar dark={true} />
+
+          {/* Green Header with Week Navigation */}
+          <div style={{
+            background: '#067a46',
+            padding: '0 16px 16px',
+          }}>
+            <div style={{
+              display: 'flex',
+              gap: 8,
+              overflowX: 'auto',
+              paddingTop: 8,
+            }}>
+              <div style={{
+                background: '#056d3f',
+                borderRadius: 8,
+                padding: '4px 16px',
+                textAlign: 'center',
+                flexShrink: 0,
+              }}>
+                <div style={{ fontSize: 12, color: 'white', textDecoration: 'underline' }}>Past</div>
+                <div style={{ fontSize: 12, color: 'white', textDecoration: 'underline' }}>Deliveries</div>
+              </div>
+              <div style={{
+                background: '#bbf06a',
+                borderRadius: 8,
+                padding: '4px 32px',
+                textAlign: 'center',
+                flexShrink: 0,
+              }}>
+                <div style={{ fontSize: 12, color: '#242424' }}>Thu</div>
+                <div style={{ fontSize: 16, fontWeight: 700, color: '#242424', fontFamily: 'var(--font-headline)' }}>April 9th</div>
+              </div>
+              <div style={{
+                background: '#056d3f',
+                borderRadius: 8,
+                padding: '4px 32px',
+                textAlign: 'center',
+                flexShrink: 0,
+              }}>
+                <div style={{ fontSize: 12, color: 'white' }}>Thu</div>
+                <div style={{ fontSize: 16, fontWeight: 700, color: 'white', fontFamily: 'var(--font-headline)' }}>April 16th</div>
+              </div>
+            </div>
+          </div>
+
+          {/* Category Tabs */}
+          <div style={{
+            background: 'var(--color-page-bg)',
+            borderBottom: '4px solid #e0e0e0',
+            overflowX: 'auto',
+          }}>
+            <div style={{
+              display: 'flex',
+              whiteSpace: 'nowrap',
+            }}>
+              <div style={{
+                padding: '12px 16px',
+                fontSize: 14,
+                color: '#232323',
+                borderBottom: '4px solid transparent',
+                marginBottom: -4,
+              }}>This Week's Menu</div>
+              <div style={{
+                padding: '12px 16px',
+                fontSize: 14,
+                color: '#232323',
+                borderBottom: '4px solid transparent',
+                marginBottom: -4,
+              }}>Health Conscious</div>
+              <div style={{
+                padding: '12px 16px',
+                fontSize: 16,
+                fontWeight: 700,
+                color: '#232323',
+                borderBottom: '4px solid #232323',
+                marginBottom: -4,
+              }}>Your favorite recipes</div>
+              <div style={{
+                padding: '12px 16px',
+                fontSize: 14,
+                color: '#232323',
+                borderBottom: '4px solid transparent',
+                marginBottom: -4,
+              }}>HelloFresh Market</div>
+            </div>
+          </div>
+
+          {/* Filter row */}
+          <div style={{
+            padding: '8px 16px',
+            display: 'flex',
+            alignItems: 'center',
+            gap: 8,
+          }}>
+            <div style={{
+              background: '#efe9de',
+              border: '1px solid #d3cab7',
+              borderRadius: 999,
+              padding: '8px 12px',
+              display: 'flex',
+              alignItems: 'center',
+            }}>
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M2 4h12M4 8h8M6 12h4" stroke="#7d7561" strokeWidth="1.5" strokeLinecap="round"/>
+              </svg>
+            </div>
+            <div style={{ width: 1, height: 24, background: '#c1c1c1' }}></div>
+            <span style={{ fontSize: 14, color: '#232323' }}>No further filters available for this category</span>
+          </div>
+
+          {/* Scrollable Content */}
+          <div style={{
+            flex: 1,
+            overflowY: 'auto',
+            padding: '16px 16px 16px',
+          }}>
+            {/* Recipe Cards */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+              {topRatedMeals.map(meal => (
+                <div key={meal.id} style={{
+                  background: 'white',
+                  borderRadius: 8,
+                  overflow: 'hidden',
+                  boxShadow: '0 0 0 0 rgba(0,0,0,0.15)',
+                }}>
+                  {/* Image */}
+                  <div style={{ position: 'relative', aspectRatio: '16/9' }}>
+                    <img
+                      src={meal.img}
+                      alt={meal.name}
+                      style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                    />
+                    {/* Your top rated tag */}
+                    <div style={{
+                      position: 'absolute',
+                      bottom: 0,
+                      left: 8,
+                      background: 'white',
+                      padding: '8px 8px 0',
+                      borderRadius: '5px 5px 0 0',
+                    }}>
+                      <div style={{
+                        background: '#8c6e00',
+                        borderRadius: 4,
+                        padding: '4px 8px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 4,
+                      }}>
+                        <span style={{ fontSize: 12, fontWeight: 700, color: 'white' }}>{meal.rating}</span>
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="white">
+                          <path d="M8 1l2.5 5 5.5.8-4 3.9.9 5.3L8 13.3l-4.9 2.7.9-5.3-4-3.9 5.5-.8L8 1z"/>
+                        </svg>
+                        <span style={{ fontSize: 12, fontWeight: 700, color: 'white' }}>Your top rated</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Info */}
+                  <div style={{ padding: 16 }}>
+                    <div style={{
+                      fontFamily: 'var(--font-headline)',
+                      fontSize: 20,
+                      fontWeight: 700,
+                      color: '#232323',
+                      marginBottom: 4,
+                    }}>{meal.name}</div>
+                    <div style={{
+                      fontSize: 14,
+                      color: '#232323',
+                      marginBottom: 8,
+                    }}>{meal.subtitle}</div>
+
+                    {/* Quick info */}
+                    <div style={{ display: 'flex', gap: 16, marginBottom: 8 }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 14, color: '#333332' }}>
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#333332" strokeWidth="1.5">
+                          <circle cx="8" cy="8" r="6"/>
+                          <path d="M8 4v4l2.5 2.5"/>
+                        </svg>
+                        {meal.time}
+                      </div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 14, color: '#333332' }}>
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="#333332">
+                          <path d="M4 2v12M8 6c0-2 4-2 4 0v8c0 2-4 2-4 0"/>
+                        </svg>
+                        {meal.prepTime}
+                      </div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 14, color: '#333332' }}>
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#333332" strokeWidth="1.5">
+                          <path d="M8 2c-2 3-4 5-4 8a4 4 0 108 0c0-3-2-5-4-8z"/>
+                        </svg>
+                        {meal.kcal}
+                      </div>
+                    </div>
+
+                    {/* Tags */}
+                    <div style={{ display: 'flex', gap: 8, marginBottom: 16 }}>
+                      {meal.tags.map(tag => (
+                        <span key={tag} style={{
+                          background: tag === 'Veggie' ? '#96dc14' : '#efe9de',
+                          borderRadius: 4,
+                          padding: '4px 8px',
+                          fontSize: 14,
+                          color: '#232323',
+                        }}>{tag}</span>
+                      ))}
+                    </div>
+
+                    {/* Price and Add */}
+                    <div style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                    }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                          <svg width="16" height="16" viewBox="0 0 16 16" fill="#232323">
+                            <circle cx="8" cy="5" r="3"/>
+                            <path d="M2 14c0-3 3-5 6-5s6 2 6 5"/>
+                          </svg>
+                          <span style={{ fontSize: 14, fontWeight: 700 }}>2</span>
+                        </div>
+                        <span style={{ fontSize: 14, color: '#656565' }}>Included in plan</span>
+                      </div>
+                      <button style={{
+                        background: 'transparent',
+                        border: '1px solid #232323',
+                        borderRadius: 8,
+                        padding: '8px 24px',
+                        fontSize: 16,
+                        fontWeight: 700,
+                        color: '#232323',
+                        cursor: 'pointer',
+                      }}>Add</button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Sticky Footer */}
+          <div style={{
+            padding: '8px',
+            background: 'transparent',
+          }}>
+            <div style={{
+              background: '#e0d9cb',
+              borderRadius: 12,
+              padding: 16,
+              display: 'flex',
+              gap: 16,
+            }}>
+              <button style={{
+                background: 'transparent',
+                border: '1px solid #232323',
+                borderRadius: 8,
+                padding: '8px 32px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                position: 'relative',
+              }}>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#232323" strokeWidth="2">
+                  <path d="M6 6h15l-1.5 9h-12z"/>
+                  <circle cx="9" cy="20" r="1"/>
+                  <circle cx="18" cy="20" r="1"/>
+                </svg>
+                <span style={{
+                  position: 'absolute',
+                  top: 4,
+                  right: 20,
+                  background: '#067a46',
+                  color: 'white',
+                  fontSize: 12,
+                  borderRadius: 999,
+                  padding: '0 4px',
+                  minWidth: 16,
+                  textAlign: 'center',
+                }}>3</span>
+              </button>
+              <button style={{
+                flex: 1,
+                background: '#232323',
+                border: 'none',
+                borderRadius: 8,
+                padding: '8px 24px',
+                fontSize: 16,
+                fontWeight: 700,
+                color: 'white',
+                cursor: 'pointer',
+              }}>Next</button>
+            </div>
+          </div>
+
+          {/* Bottom Navigation */}
+          <div style={{
+            background: 'var(--color-bottom-nav-bg)',
+          }}>
+            {/* Divider */}
+            <div style={{ height: 1, background: 'var(--color-divider)' }} />
+
+            <div style={{
+              display: 'flex',
+              justifyContent: 'space-around',
+              padding: '4px 0',
+            }}>
+              {[
+                { icon: 'home', label: 'Home', active: false },
+                { icon: 'fork_knife', label: 'Menu', active: true },
+                { icon: 'gift', label: 'HelloFriends', active: false },
+                { icon: 'trophy', label: 'Rewards', active: false },
+                { icon: 'profile', label: 'Profile', active: false },
+              ].map((item) => (
+                <div
+                  key={item.label}
+                  onClick={() => item.label === 'Home' && onBack()}
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    padding: '4px 4px 4px',
+                    cursor: item.label === 'Home' ? 'pointer' : 'default',
+                    flex: 1,
+                  }}
+                >
+                  <div style={{
+                    width: 48,
+                    height: 24,
+                    borderRadius: 'var(--radius-tag-pill)',
+                    background: item.active ? 'var(--color-selected-bg-primary)' : 'transparent',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}>
+                    {Icons[item.icon](20, item.active ? 'var(--color-bottom-nav-fg-selected)' : 'var(--color-bottom-nav-fg-unselected)')}
+                  </div>
+                  <span style={{
+                    fontFamily: 'var(--font-body)',
+                    fontSize: 'var(--fs-xs)',
+                    fontWeight: 700,
+                    lineHeight: 'var(--lh-xs)',
+                    color: item.active ? 'var(--color-bottom-nav-fg-selected)' : 'var(--color-bottom-nav-fg-unselected)',
+                    textAlign: 'center',
+                  }}>{item.label}</span>
+                </div>
+              ))}
+            </div>
+
+            {/* Home indicator */}
+            <div style={{ display: 'flex', justifyContent: 'center', paddingBottom: 8, paddingTop: 4 }}>
+              <div style={{ width: 134, height: 5, background: 'black', borderRadius: 100 }} />
+            </div>
           </div>
         </div>
       );
@@ -17465,7 +18530,7 @@
     }
 
     // ========== MENU PAGE ==========
-    function MenuPage({ cart, setCart, onCartClick, onShowRating, bookmarkedRecipes, toggleBookmark, onViewSavedRecipes, onNavigateToPastOrders, openedFromRateMeals, setOpenedFromRateMeals, rateMealsUpdated, rateMealsToastFromApp, setRateMealsToastFromApp, currentFlow, showFlowToast, setShowFlowToast, showFavoritesSection, setShowFavoritesSection, showOption1Favorites, setShowOption1Favorites, selectedDesignOption, option2CurrentIndex, setOption2CurrentIndex, option2Ratings, setOption2Ratings, option2Completed, setOption2Completed, option2ShowConfetti, option2ShowFavorites, setOption2ShowFavorites, option3CurrentIndex, setOption3CurrentIndex, option3Ratings, setOption3Ratings, option3Completed, setOption3Completed, option3ShowConfetti, option3ShowFavorites, setOption3ShowFavorites, option3SwipingIndex, setOption3SwipingIndex, option3SwipeDirection, setOption3SwipeDirection }) {
+    function MenuPage({ cart, setCart, onCartClick, onShowRating, bookmarkedRecipes, toggleBookmark, onViewSavedRecipes, onNavigateToPastOrders, openedFromRateMeals, setOpenedFromRateMeals, rateMealsUpdated, rateMealsToastFromApp, setRateMealsToastFromApp, currentFlow, showFlowToast, setShowFlowToast, showFavoritesSection, setShowFavoritesSection, showOption1Favorites, setShowOption1Favorites, selectedDesignOption, option2CurrentIndex, setOption2CurrentIndex, option2Ratings, setOption2Ratings, option2Completed, setOption2Completed, option2ShowConfetti, option2ShowFavorites, setOption2ShowFavorites, option3CurrentIndex, setOption3CurrentIndex, option3Ratings, setOption3Ratings, option3Completed, setOption3Completed, option3ShowConfetti, option3ShowFavorites, setOption3ShowFavorites, option3SwipingIndex, setOption3SwipingIndex, option3SwipeDirection, setOption3SwipeDirection, onShowTopRatedCategory }) {
       const [showExitDialog, setShowExitDialog] = useState(false);
       const [customizeMeal, setCustomizeMeal] = useState(null);
       const [isScrolling, setIsScrolling] = useState(false);
@@ -18537,8 +19602,8 @@
                               {/* CTA Button */}
                               <button
                                 onClick={() => {
-                                  // Show favorites section
-                                  setOption2ShowFavorites(true);
+                                  // Open Top Rated Category page
+                                  if (onShowTopRatedCategory) onShowTopRatedCategory();
                                 }}
                                 style={{
                                   width: '100%',
@@ -18555,7 +19620,7 @@
                                 }}>
                                 View your top rated
                               </button>
-                            </div>
+                          </div>
                         )}
 
                         {/* Option 2: Your favorite recipes - shown after clicking View your top rated */}
@@ -22851,6 +23916,9 @@
       const [option3SwipingIndex, setOption3SwipingIndex] = useState(null); // Track which card is animating out
       const [option3SwipeDirection, setOption3SwipeDirection] = useState(null); // 'left' for 1-3 stars, 'right' for 4-5 stars
 
+      // Top Rated Category Page state
+      const [showTopRatedCategory, setShowTopRatedCategory] = useState(false);
+
       // Debug: Track openedFromRateMeals changes
       React.useEffect(() => {
         console.log('openedFromRateMeals changed to:', openedFromRateMeals, 'currentFlow:', currentFlow);
@@ -22967,6 +24035,7 @@
 
           // All flows start with favorites section visible
           setShowFavoritesSection(true);
+          setShowTopRatedCategory(false); // Close category page if open
           setShowOption1Favorites(false); // Reset Option 1 to show banner
           // Reset Option 2 state
           setOption2CurrentIndex(0);
@@ -23012,6 +24081,8 @@
           console.log('App received design option change:', e.detail.option);
           // Update selected design option
           setSelectedDesignOption(e.detail.option);
+          // Close Top Rated Category page if open
+          setShowTopRatedCategory(false);
           // Reset Option 1 to show banner when any design option is clicked
           setShowOption1Favorites(false);
           // Reset Option 2 state
@@ -23103,7 +24174,12 @@
 
       return (
         <div className="phone-frame">
-          {showCookbook ? (
+          {showTopRatedCategory ? (
+            <TopRatedCategoryPage
+              onBack={() => setShowTopRatedCategory(false)}
+              cart={cart}
+            />
+          ) : showCookbook ? (
             <CookbookPage
               onBack={() => {
                 setShowCookbook(false);
@@ -23198,6 +24274,7 @@
               setOption3SwipingIndex={setOption3SwipingIndex}
               option3SwipeDirection={option3SwipeDirection}
               setOption3SwipeDirection={setOption3SwipeDirection}
+              onShowTopRatedCategory={() => setShowTopRatedCategory(true)}
             />
           )}
 
@@ -23290,63 +24367,12 @@
             showLoyaltyMission={showLoyaltyMission}
             openedFromRateMeals={openedFromRateMeals}
             onViewTopRecipes={() => {
-              const wasOpenedFromRateMeals = openedFromRateMeals;
-              const wasNoRecipesWithUnrated = currentFlow === 'no-recipes-with-unrated';
-
-              console.log('View Top Recipes clicked:', {
-                wasOpenedFromRateMeals,
-                wasNoRecipesWithUnrated,
-                currentFlow
-              });
-
+              // Close drawer and open Top Rated Category page
               setShowRatingDrawer(false);
-              setCurrentPage('menu');
-
-              // Show favorites section and hide banner (Option 1)
-              setShowOption1Favorites(true);
-
-              // Scroll to favorites section after render
-              setTimeout(() => {
-                const favorites = document.getElementById('your-favorites-section');
-                if (favorites) {
-                  favorites.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }
-              }, 300);
-
-              // Original logic for other flows
-              if (wasNoRecipesWithUnrated) {
-                // Special handling for no-recipes-with-unrated flow
-                setTimeout(() => {
-                  setCurrentFlow('has-recipes');
-                  setShowFavoritesSection(true);
-                  setShowFlowToast(false);
-                  setOpenedFromRateMeals(false);
-                }, 300);
-              } else if (wasOpenedFromRateMeals) {
-                // Navigate to rate-meals section if opened from there
-                setTimeout(() => {
-                  const rateMealsSection = document.getElementById('rate-meals');
-                  if (rateMealsSection) {
-                    rateMealsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    // Show toast that section is updated
-                    setRateMealsToast(true);
-                    if (rateMealsToastTimeoutRef.current) clearTimeout(rateMealsToastTimeoutRef.current);
-                    rateMealsToastTimeoutRef.current = setTimeout(() => {
-                      setRateMealsToast(false);
-                    }, 3000);
-                  }
-                  setOpenedFromRateMeals(false);
-                }, 300);
-              } else {
-                // Original behavior - scroll to top recipes section
-                setTimeout(() => {
-                  const topRecipesSection = document.getElementById('your-top-recipes');
-                  if (topRecipesSection) {
-                    topRecipesSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                  }
-                }, 300);
-              }
+              setShowTopRatedCategory(true);
+              setOpenedFromRateMeals(false);
             }}
+            currentFlow={currentFlow}
           />
 
           {/* Highlight Toast */}
@@ -23437,15 +24463,8 @@
               setOption3SwipeDirection(null);
             }}
             onViewTopRated={() => {
-              setOption3ShowFavorites(true);
-
-              // Scroll to favorites section after render
-              setTimeout(() => {
-                const favorites = document.getElementById('option3-favorites-section');
-                if (favorites) {
-                  favorites.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }
-              }, 300);
+              // Open Top Rated Category page
+              setShowTopRatedCategory(true);
             }}
           />
         </div>
@@ -23461,6 +24480,10 @@
       // Handle top navigation tabs
       const navTabs = document.querySelectorAll('.nav-tab');
       const contentSections = document.querySelectorAll('.content-section');
+
+      const leftSidebar = document.querySelector('.left-sidebar');
+      const rightSidebar = document.querySelector('.right-sidebar');
+      const contentArea = document.querySelector('.content-area');
 
       navTabs.forEach(tab => {
         tab.addEventListener('click', function() {
@@ -23478,6 +24501,19 @@
               section.classList.remove('active');
             }
           });
+
+          // Show/hide sidebars based on tab (only show for Design Prototype)
+          if (targetTab === 'prototype') {
+            leftSidebar.style.display = 'block';
+            rightSidebar.style.display = 'block';
+            contentArea.style.marginLeft = '275px';
+            contentArea.style.marginRight = '320px';
+          } else {
+            leftSidebar.style.display = 'none';
+            rightSidebar.style.display = 'none';
+            contentArea.style.marginLeft = '40px';
+            contentArea.style.marginRight = '40px';
+          }
         });
       });
 
@@ -23498,6 +24534,15 @@
           window.dispatchEvent(new CustomEvent('designOptionChange', {
             detail: { option: optionType }
           }));
+
+          // Update right sidebar content
+          const designContents = document.querySelectorAll('.design-content');
+          designContents.forEach(content => {
+            content.classList.remove('active');
+            if (content.getAttribute('data-design') === optionType) {
+              content.classList.add('active');
+            }
+          });
 
           // Only manipulate DOM for Option 1 - Option 2 and 3 use React state
           if (optionType === 'option1') {

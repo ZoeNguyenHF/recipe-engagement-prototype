@@ -1046,7 +1046,7 @@
       <div class="design-option-item" data-option="option1">Option 1: Minimal Nudge</div>
       <div class="design-option-item" data-option="option2">Option 2: Rating in Carousel</div>
       <div class="design-option-item" data-option="option3">Option 3: Horizontal Carousel</div>
-      <div class="design-option-item" data-option="option4">Option 4: Rating with Cards</div>
+      <div class="design-option-item" data-option="option4">Option 4: Card Stacking</div>
       <div class="design-option-item" data-option="option5">Option 5: Vertical List</div>
     </div>
 
@@ -1538,7 +1538,7 @@
 
     <!-- Option 4 Content -->
     <div class="design-content" data-design="option4">
-      <div class="right-sidebar-title">Option 4: Rating with Cards</div>
+      <div class="right-sidebar-title">Option 4: Card Stacking</div>
 
       <div class="right-sidebar-section">
         <h4>🎯 Impact on Main JTBD</h4>
@@ -16442,7 +16442,7 @@
                                               <svg width="27" height="27" viewBox="0 0 27 27" fill="none">
                                                 <path
                                                   d="M13.5 3.5L16.5 10.5L24 11.5L18.5 16.5L20 24L13.5 20L7 24L8.5 16.5L3 11.5L10.5 10.5L13.5 3.5Z"
-                                                  fill={recipeRating >= star ? '#F7B500' : 'none'}
+                                                  fill={recipeRating >= star ? '#232323' : 'none'}
                                                   stroke="#242424"
                                                   strokeWidth="1.5"
                                                   strokeLinecap="round"
@@ -16774,7 +16774,7 @@
                   ))}
                 </>
               ) : selectedDesignOption === 'option4' ? (
-                // OPTION 4: Rating with Stacked Cards
+                // OPTION 4: Card Stacking
                 <>
                   {deliveries.filter(d => d.type === 'delivered').map((delivery, idx) => {
                     const handleStarClick = (rating) => {
@@ -16983,7 +16983,7 @@
                                                     <svg width="27" height="27" viewBox="0 0 27 27" fill="none">
                                                       <path
                                                         d="M13.5 3.5L16.5 10.5L24 11.5L18.5 16.5L20 24L13.5 20L7 24L8.5 16.5L3 11.5L10.5 10.5L13.5 3.5Z"
-                                                        fill={recipeRating >= star ? '#F7B500' : 'none'}
+                                                        fill={recipeRating >= star ? '#232323' : 'none'}
                                                         stroke="#242424"
                                                         strokeWidth="1.5"
                                                         strokeLinecap="round"
@@ -17152,7 +17152,7 @@
                                                 <svg width="27" height="27" viewBox="0 0 27 27" fill="none">
                                                   <path
                                                     d="M13.5 3.5L16.5 10.5L24 11.5L18.5 16.5L20 24L13.5 20L7 24L8.5 16.5L3 11.5L10.5 10.5L13.5 3.5Z"
-                                                    fill={recipeRating >= star ? '#F7B500' : 'none'}
+                                                    fill={recipeRating >= star ? '#232323' : 'none'}
                                                     stroke="#242424"
                                                     strokeWidth="1.5"
                                                     strokeLinecap="round"
@@ -17654,7 +17654,7 @@
                                                 <svg width="27" height="27" viewBox="0 0 27 27" fill="none">
                                                   <path
                                                     d="M13.5 3.5L16.5 10.5L24 11.5L18.5 16.5L20 24L13.5 20L7 24L8.5 16.5L3 11.5L10.5 10.5L13.5 3.5Z"
-                                                    fill={recipeRating >= star ? '#F7B500' : 'none'}
+                                                    fill={recipeRating >= star ? '#232323' : 'none'}
                                                     stroke="#242424"
                                                     strokeWidth="1.5"
                                                     strokeLinecap="round"
@@ -18092,7 +18092,7 @@
                                           <svg width="27" height="27" viewBox="0 0 27 27" fill="none">
                                             <path
                                               d="M13.5 3.5L16.5 10.5L24 11.5L18.5 16.5L20 24L13.5 20L7 24L8.5 16.5L3 11.5L10.5 10.5L13.5 3.5Z"
-                                              fill={recipeRating >= star ? '#F7B500' : 'none'}
+                                              fill={recipeRating >= star ? '#232323' : 'none'}
                                               stroke="#242424"
                                               strokeWidth="1.5"
                                               strokeLinecap="round"

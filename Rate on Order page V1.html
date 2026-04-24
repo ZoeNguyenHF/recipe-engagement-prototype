@@ -1366,31 +1366,32 @@
 
       <div class="right-sidebar-section">
         <h4>🎯 Impact on Main JTBD</h4>
-        <p><strong>Primary JTBD:</strong> Selecting meals for the week</p>
-        <span class="tag tag-low">No Distraction</span>
+        <p><strong>Primary JTBD:</strong> Reviewing delivered orders (cooking or rating recipes)</p>
+        <p><strong>Prioritized Action:</strong> Rating recipes to improve personalization</p>
+        <span class="tag tag-low">No Rating Nudge</span>
       </div>
 
       <div class="right-sidebar-section reasoning-section">
         <h4>💡 Design Approach</h4>
-        <p>Baseline experience — no rating prompts or nudges. Users focus entirely on meal selection without any interruption or additional context about rating past meals.</p>
+        <p>Baseline experience — no rating prompts or nudges. Users can access delivered orders but must proactively find the rating feature. Prioritizes cooking mode access with no additional friction.</p>
       </div>
 
       <div class="right-sidebar-section pros-section">
         <h4>✓ Pros</h4>
         <ul>
-          <li>Zero distraction from primary task</li>
+          <li>Zero friction to cooking mode and other order actions</li>
           <li>Simplest, cleanest user experience</li>
           <li>No additional cognitive load</li>
-          <li>Fastest path to meal selection</li>
+          <li>Fastest path to cooking or managing orders</li>
         </ul>
       </div>
 
       <div class="right-sidebar-section cons-section">
         <h4>✗ Cons</h4>
         <ul>
-          <li>No mechanism to collect meal ratings</li>
-          <li>Missed opportunity to gather user feedback</li>
-          <li>Can't improve personalization without ratings data</li>
+          <li>No mechanism to encourage meal ratings</li>
+          <li>Missed opportunity to gather user feedback for personalization</li>
+          <li>Lower rating completion rates expected</li>
           <li>Users must proactively seek rating features</li>
         </ul>
       </div>
@@ -1398,10 +1399,10 @@
       <div class="right-sidebar-section">
         <h4>📊 Metrics to Track</h4>
         <ul>
-          <li>Time to first meal added</li>
-          <li>Meals selected per session</li>
-          <li>Session conversion rate (% who complete meal selection)</li>
-          <li>Organic rating rate (without prompts)</li>
+          <li><strong>Rating Engagement:</strong> % of users who rate recipes, # of recipes rated per session, rating completion rate</li>
+          <li><strong>Other Actions:</strong> Cooking mode access rate, order tracking usage, help requests</li>
+          <li><strong>Friction Indicators:</strong> Time spent on delivered orders section, navigation patterns, cooking mode traffic vs. baseline</li>
+          <li><strong>Overall Success:</strong> Session completion rate, user satisfaction</li>
         </ul>
       </div>
     </div>
@@ -1412,40 +1413,42 @@
 
       <div class="right-sidebar-section">
         <h4>🎯 Impact on Main JTBD</h4>
-        <p><strong>Primary JTBD:</strong> Selecting meals for the week</p>
-        <span class="tag tag-low">Low Distraction</span>
+        <p><strong>Primary JTBD:</strong> Reviewing delivered orders (cooking or rating recipes)</p>
+        <p><strong>Prioritized Action:</strong> Rating recipes to improve personalization</p>
+        <span class="tag tag-low">Low Friction</span>
       </div>
 
       <div class="right-sidebar-section reasoning-section">
         <h4>💡 Design Approach</h4>
-        <p>Minimal footprint approach — a small inline banner that doesn't compete with meal browsing. The rating action happens in a separate drawer, keeping the menu page focused on meal selection.</p>
+        <p>Minimal nudge — small info banner with "Rate recipes now" CTA that opens a separate rating experience. Provides awareness of rating benefit without blocking access to cooking mode or other order actions.</p>
       </div>
 
       <div class="right-sidebar-section pros-section">
         <h4>✓ Pros</h4>
         <ul>
-          <li>Minimal screen space — doesn't push meal cards down</li>
-          <li>Users can easily ignore and continue browsing</li>
-          <li>Rating happens in drawer — menu stays uncluttered</li>
-          <li>Low cognitive load during meal browsing</li>
+          <li>Minimal visual footprint — doesn't dominate the order card</li>
+          <li>Clear value proposition for rating (personalization benefit)</li>
+          <li>Maintains easy access to cooking mode and other actions</li>
+          <li>Low cognitive load — users can easily ignore if not interested</li>
         </ul>
       </div>
 
       <div class="right-sidebar-section cons-section">
         <h4>✗ Cons</h4>
         <ul>
-          <li>Minimal but still adds visual noise to the page</li>
-          <li>Extra step to rating, may easily ignore</li>
+          <li>Extra step to rating (opens drawer) may reduce completion</li>
+          <li>Subtle nudge may be overlooked by users</li>
+          <li>Takes some screen space on delivered orders</li>
         </ul>
       </div>
 
       <div class="right-sidebar-section">
         <h4>📊 Metrics to Track</h4>
         <ul>
-          <li>Rating completion rate</li>
-          <li>Time to first meal added</li>
-          <li>Meals selected per session</li>
-          <li>Session conversion rate (% who complete meal selection)</li>
+          <li><strong>Rating Engagement:</strong> CTA click-through rate, rating completion rate, # of recipes rated per session</li>
+          <li><strong>Other Actions:</strong> Cooking mode access rate, "View order" clicks, track/help usage</li>
+          <li><strong>Friction Indicators:</strong> Time on delivered orders vs. control, cooking mode traffic change, user complaints about blocked access</li>
+          <li><strong>Overall Success:</strong> Session completion rate, return to orders rate</li>
         </ul>
       </div>
     </div>
@@ -1456,37 +1459,43 @@
 
       <div class="right-sidebar-section">
         <h4>🎯 Impact on Main JTBD</h4>
-        <p><strong>Primary JTBD:</strong> Selecting meals for the week</p>
-        <span class="tag tag-medium">Medium Distraction</span>
+        <p><strong>Primary JTBD:</strong> Reviewing delivered orders (cooking or rating recipes)</p>
+        <p><strong>Prioritized Action:</strong> Rating recipes to improve personalization</p>
+        <span class="tag tag-medium">Medium Friction</span>
       </div>
 
       <div class="right-sidebar-section reasoning-section">
         <h4>💡 Design Approach</h4>
-        <p>Medium footprint — carousel takes more vertical space but keeps rating inline. Users rate without leaving the menu, but the interaction competes for attention with meal browsing.</p>
+        <p>Inline carousel with progressive rating — shows one recipe at a time with star rating directly in the card. Auto-advances to next recipe after rating. Guides users through rating flow while maintaining access to other order actions.</p>
       </div>
 
       <div class="right-sidebar-section pros-section">
         <h4>✓ Pros</h4>
         <ul>
-          <li>Easy to rate as the action can be done immediately on the page</li>
+          <li>Focused rating experience — one recipe at a time reduces overwhelm</li>
+          <li>Auto-advance creates natural progression through all recipes</li>
+          <li>Inline rating — no need to open separate drawer</li>
+          <li>Clear value prop with info banner</li>
         </ul>
       </div>
 
       <div class="right-sidebar-section cons-section">
         <h4>✗ Cons</h4>
         <ul>
-          <li>May confuse recipes being selected (future orders) with recipes being rated (past orders)</li>
-          <li>Takes vertical space despite not being the primary job-to-be-done</li>
+          <li>Takes vertical space on delivered order card</li>
+          <li>May create friction if user wants to cook immediately</li>
+          <li>Forced progression may feel restrictive</li>
+          <li>Carousel interaction less familiar than list view</li>
         </ul>
       </div>
 
       <div class="right-sidebar-section">
         <h4>📊 Metrics to Track</h4>
         <ul>
-          <li>Rating completion rate</li>
-          <li>Time to first meal added</li>
-          <li>Meals selected per session</li>
-          <li>Session conversion rate (% who complete meal selection)</li>
+          <li><strong>Rating Engagement:</strong> % who rate at least one recipe, average # of recipes rated, full rating completion rate, time to first rating</li>
+          <li><strong>Other Actions:</strong> Cooking mode access rate, "View order" click-through, action button usage (Track/Help)</li>
+          <li><strong>Friction Indicators:</strong> Carousel abandonment rate, cooking mode traffic vs. control, scroll-past behavior, time blocked by rating UI</li>
+          <li><strong>Overall Success:</strong> Return to orders rate, user complaints about access</li>
         </ul>
       </div>
     </div>
@@ -1497,41 +1506,44 @@
 
       <div class="right-sidebar-section">
         <h4>🎯 Impact on Main JTBD</h4>
-        <p><strong>Primary JTBD:</strong> Selecting meals for the week</p>
-        <span class="tag tag-medium">Medium Distraction</span>
+        <p><strong>Primary JTBD:</strong> Reviewing delivered orders (cooking or rating recipes)</p>
+        <p><strong>Prioritized Action:</strong> Rating recipes to improve personalization</p>
+        <span class="tag tag-medium">Medium Friction</span>
       </div>
 
       <div class="right-sidebar-section reasoning-section">
         <h4>💡 Design Approach</h4>
-        <p>Medium footprint — horizontal scrollable carousel displays all recipes at once. Users can browse and rate at their own pace without forced interaction patterns.</p>
+        <p>Horizontal scrollable carousel — displays all recipes at once with inline star ratings. Users can browse and rate at their own pace, in any order. Auto-scrolls to next recipe after rating for guided progression.</p>
       </div>
 
       <div class="right-sidebar-section pros-section">
         <h4>✓ Pros</h4>
         <ul>
-          <li>Shows all recipes at once - users see what they're rating upfront</li>
-          <li>No forced interaction pattern - rate any recipe in any order</li>
-          <li>Familiar scrolling interaction - feels natural on mobile</li>
-          <li>Already rated recipes show label for quick feedback</li>
+          <li>Shows all recipes upfront - users see full scope before rating</li>
+          <li>Flexible rating order - rate any recipe first</li>
+          <li>Familiar horizontal scroll - native mobile pattern</li>
+          <li>"Your top rated" label provides immediate feedback</li>
+          <li>Maintains access to all order actions below</li>
         </ul>
       </div>
 
       <div class="right-sidebar-section cons-section">
         <h4>✗ Cons</h4>
         <ul>
-          <li>Takes significant vertical space</li>
-          <li>May feel overwhelming with many recipes visible</li>
-          <li>Less engaging than gamified interactions</li>
+          <li>Takes significant vertical space on order card</li>
+          <li>May create friction for users wanting to cook immediately</li>
+          <li>Scrollable area may be missed by some users</li>
+          <li>Could feel overwhelming with 8+ recipes</li>
         </ul>
       </div>
 
       <div class="right-sidebar-section">
         <h4>📊 Metrics to Track</h4>
         <ul>
-          <li>Rating completion rate</li>
-          <li>Number of recipes rated per session</li>
-          <li>Time to first meal added</li>
-          <li>Session conversion rate (% who complete meal selection)</li>
+          <li><strong>Rating Engagement:</strong> % who rate at least one recipe, average # of recipes rated, full completion rate, rating distribution (which recipes rated first)</li>
+          <li><strong>Other Actions:</strong> Cooking mode access rate, "View order" usage, scroll interaction with carousel</li>
+          <li><strong>Friction Indicators:</strong> Time spent on carousel vs. moving to actions, cooking mode traffic change, carousel abandonment rate</li>
+          <li><strong>Overall Success:</strong> Return to orders rate, subsequent rating behavior</li>
         </ul>
       </div>
     </div>
@@ -1542,41 +1554,45 @@
 
       <div class="right-sidebar-section">
         <h4>🎯 Impact on Main JTBD</h4>
-        <p><strong>Primary JTBD:</strong> Selecting meals for the week</p>
-        <span class="tag tag-high">High Distraction</span>
+        <p><strong>Primary JTBD:</strong> Reviewing delivered orders (cooking or rating recipes)</p>
+        <p><strong>Prioritized Action:</strong> Rating recipes to improve personalization</p>
+        <span class="tag tag-high">High Friction</span>
       </div>
 
       <div class="right-sidebar-section reasoning-section">
         <h4>💡 Design Approach</h4>
-        <p>Large footprint — stacked cards dominate the section and create a mini-experience within the menu page. The gamified pattern encourages completing all ratings before moving on.</p>
+        <p>Stacked card experience — presents recipes one at a time in an engaging, gamified flow. Cards swipe away after rating with visual feedback (left for 1-3 stars, right for 4-5 stars). Encourages full rating completion before accessing other actions.</p>
       </div>
 
       <div class="right-sidebar-section pros-section">
         <h4>✓ Pros</h4>
         <ul>
-          <li>Allows users to rate directly on Store with a highlighted, prominent action</li>
-          <li>Makes rating engaging through a gamified swiping interaction mimicking familiar patterns</li>
+          <li>Highly engaging gamified interaction - feels like play</li>
+          <li>Focused attention on one recipe at a time</li>
+          <li>Clear visual progress as cards are rated and removed</li>
+          <li>Swipe direction provides emotional feedback mechanism</li>
+          <li>After completion, shows all ratings in carousel view for review</li>
         </ul>
       </div>
 
       <div class="right-sidebar-section cons-section">
         <h4>✗ Cons</h4>
         <ul>
-          <li>Takes significant visual space from meal browsing</li>
-          <li>Gamified pattern pulls users into "rating mode"</li>
-          <li>Animations compete with static meal cards</li>
-          <li>Users may leave before selecting meals</li>
-          <li>Without storytelling, feels like a detour from JTBD</li>
+          <li>High friction - may block access to cooking mode and other actions</li>
+          <li>Dominant visual presence takes over order card</li>
+          <li>Users may feel forced into rating flow</li>
+          <li>Could create frustration if user wants to cook immediately</li>
+          <li>Risk of users abandoning orders section entirely</li>
         </ul>
       </div>
 
       <div class="right-sidebar-section">
         <h4>📊 Metrics to Track</h4>
         <ul>
-          <li>Rating completion rate</li>
-          <li>Time to first meal added</li>
-          <li>Meals selected per session</li>
-          <li>Session conversion rate (% who complete meal selection)</li>
+          <li><strong>Rating Engagement:</strong> Full completion rate (all recipes rated), average # of recipes rated before abandonment, swipe direction patterns</li>
+          <li><strong>Other Actions:</strong> Cooking mode access rate, time to access cooking mode vs. control, action button usage during rating flow</li>
+          <li><strong>Friction Indicators:</strong> Abandonment rate (leaving orders without completing), cooking mode traffic change, user complaints, attempts to skip rating</li>
+          <li><strong>Overall Success:</strong> Return to orders rate, subsequent session behavior, rating quality</li>
         </ul>
       </div>
     </div>
@@ -1587,44 +1603,44 @@
 
       <div class="right-sidebar-section">
         <h4>🎯 Impact on Main JTBD</h4>
-        <p><strong>Primary JTBD:</strong> Selecting meals for the week</p>
-        <span class="tag tag-low">Low Distraction</span>
+        <p><strong>Primary JTBD:</strong> Reviewing delivered orders (cooking or rating recipes)</p>
+        <p><strong>Prioritized Action:</strong> Rating recipes to improve personalization</p>
+        <span class="tag tag-low">Low Friction</span>
       </div>
 
       <div class="right-sidebar-section reasoning-section">
         <h4>💡 Design Approach</h4>
-        <p>Compact list view — shows first 3 recipes with inline ratings, separated by dividers. Expandable to view all recipes at once. Balances space efficiency with easy access to all recipes.</p>
+        <p>Compact list view — shows first 3 recipes with inline star ratings, separated by dividers. "View all" expands to show remaining recipes. Balances rating visibility with minimal footprint, maintaining easy access to cooking mode and other actions.</p>
       </div>
 
       <div class="right-sidebar-section pros-section">
         <h4>✓ Pros</h4>
         <ul>
-          <li>Compact initial view - minimal space with first 3 recipes visible</li>
-          <li>Simple inline interaction - rate any recipe without forced progression</li>
-          <li>Clear visual separation with dividers between recipes</li>
-          <li>"View all" gives full overview when needed</li>
-          <li>Familiar list pattern - easy to scan and understand</li>
+          <li>Compact initial footprint - first 3 recipes visible without overwhelming</li>
+          <li>Flexible interaction - rate any recipe in any order</li>
+          <li>Optional expansion - users control when to see more</li>
+          <li>Familiar list pattern - scannable and understandable</li>
+          <li>Low friction - maintains clear access to all order actions</li>
         </ul>
       </div>
 
       <div class="right-sidebar-section cons-section">
         <h4>✗ Cons</h4>
         <ul>
-          <li>Less engaging than gamified interactions</li>
-          <li>Takes more space than fully collapsed designs when expanded</li>
-          <li>May require scrolling to see all recipes when expanded</li>
+          <li>Less engaging than gamified interactions - may be overlooked</li>
+          <li>Requires expansion for full recipe list</li>
+          <li>When expanded, takes more vertical space</li>
+          <li>Users may not discover "View all" button</li>
         </ul>
       </div>
 
       <div class="right-sidebar-section">
         <h4>📊 Metrics to Track</h4>
         <ul>
-          <li>Rating completion rate</li>
-          <li>Number of recipes rated per session</li>
-          <li>% of users who expand "View all"</li>
-          <li>Average ratings per recipe</li>
-          <li>Time to first meal added</li>
-          <li>Session conversion rate (% who complete meal selection)</li>
+          <li><strong>Rating Engagement:</strong> % who rate at least one recipe, average # of recipes rated, "View all" expansion rate, rating completion by position (first 3 vs. expanded)</li>
+          <li><strong>Other Actions:</strong> Cooking mode access rate, "View order" clicks, time to cooking mode access</li>
+          <li><strong>Friction Indicators:</strong> Expansion behavior, cooking mode traffic vs. control, scroll patterns, time spent on rating vs. actions</li>
+          <li><strong>Overall Success:</strong> Return to orders rate, partial vs. full rating completion</li>
         </ul>
       </div>
     </div>

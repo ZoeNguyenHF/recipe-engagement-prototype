@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cooking Flow Prototype</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background: transparent;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    .phone-container {
+      width: 280px;
+      height: 606px;
+      position: relative;
+      overflow: hidden;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    }
+
+    .screen {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      transition: opacity 0.4s ease-in-out;
+    }
+
+    .screen.active {
+      opacity: 1;
+    }
+
+    .screen img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* Drawer slide-up animation */
+    .screen.slide-up {
+      transform: translateY(100%);
+      opacity: 1;
+      transition: transform 0.5s cubic-bezier(0.32, 0.72, 0, 1), opacity 0.3s ease;
+    }
+
+    .screen.slide-up.active {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    /* Progress indicator */
+    .progress-bar {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      height: 3px;
+      background: rgba(0,0,0,0.3);
+      width: 0%;
+      transition: width linear;
+    }
+  </style>
+</head>
+<body>
+  <div class="phone-container">
+    <!-- Screen 1: Mark as cooked -->
+    <div class="screen" id="screen1">
+      <img src="cooking-flow-1-mark-as-cooked.png" alt="Mark as cooked">
+    </div>
+
+    <!-- Screen 2: Loading -->
+    <div class="screen" id="screen2">
+      <img src="cooking-flow-2-loading.png" alt="Loading">
+    </div>
+
+    <!-- Screen 3: Cooked confirmed -->
+    <div class="screen" id="screen3">
+      <img src="cooking-flow-3-cooked.png" alt="Cooked">
+    </div>
+
+    <!-- Screen 4: Rating drawer -->
+    <div class="screen" id="screen4">
+      <img src="cooking-flow-4-rating-drawer.png" alt="Rating drawer">
+    </div>
+
+    <!-- Screen 5: Detailed feedback -->
+    <div class="screen" id="screen5">
+      <img src="cooking-flow-5-detailed-feedback.png" alt="Detailed feedback">
+    </div>
+
+    <!-- Screen 6: Feedback filled -->
+    <div class="screen" id="screen6">
+      <img src="cooking-flow-6-feedback-filled.png" alt="Feedback filled">
+    </div>
+
+    <!-- Screen 7: Thank you -->
+    <div class="screen" id="screen7">
+      <img src="cooking-flow-7-thank-you.png" alt="Thank you">
+    </div>
+
+    <div class="progress-bar" id="progress"></div>
+  </div>
+
+  <script>
+    const screens = [
+      { id: 'screen1', duration: 1800, transition: 'fade' },      // Mark as cooked
+      { id: 'screen2', duration: 700, transition: 'fade' },       // Loading
+      { id: 'screen3', duration: 1000, transition: 'fade' },      // Cooked confirmed
+      { id: 'screen4', duration: 2200, transition: 'fade' },      // Rating drawer slides up
+      { id: 'screen5', duration: 2000, transition: 'fade' },      // Detailed feedback
+      { id: 'screen6', duration: 2200, transition: 'fade' },      // Feedback filled
+      { id: 'screen7', duration: 2500, transition: 'fade' }       // Thank you
+    ];
+
+    let currentIndex = 0;
+    const progressBar = document.getElementById('progress');
+
+    function showScreen(index) {
+      // Hide all screens
+      screens.forEach((s, i) => {
+        const el = document.getElementById(s.id);
+        el.classList.remove('active');
+      });
+
+      // Show current screen
+      const current = screens[index];
+      const currentEl = document.getElementById(current.id);
+      currentEl.classList.add('active');
+
+      // Animate progress bar
+      const totalDuration = screens.reduce((sum, s) => sum + s.duration, 0);
+      const elapsed = screens.slice(0, index).reduce((sum, s) => sum + s.duration, 0);
+      const startPercent = (elapsed / totalDuration) * 100;
+      const endPercent = ((elapsed + current.duration) / totalDuration) * 100;
+
+      progressBar.style.transition = 'none';
+      progressBar.style.width = startPercent + '%';
+
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          progressBar.style.transition = `width ${current.duration}ms linear`;
+          progressBar.style.width = endPercent + '%';
+        });
+      });
+
+      // Schedule next screen
+      setTimeout(() => {
+        currentIndex = (currentIndex + 1) % screens.length;
+
+        // Reset progress bar at loop
+        if (currentIndex === 0) {
+          progressBar.style.transition = 'none';
+          progressBar.style.width = '0%';
+        }
+
+        showScreen(currentIndex);
+      }, current.duration);
+    }
+
+    // Start the animation
+    window.onload = () => {
+      // Small delay before starting
+      setTimeout(() => {
+        showScreen(0);
+      }, 500);
+    };
+  </script>
+</body>
+</html>

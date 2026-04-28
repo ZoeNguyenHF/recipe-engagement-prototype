@@ -23111,11 +23111,17 @@
       const [openedFromRateMeals, setOpenedFromRateMeals] = useState(false);
       const [rateMealsToast, setRateMealsToast] = useState(false);
       const rateMealsToastTimeoutRef = useRef(null);
-      const [selectedDesignOption, setSelectedDesignOption] = useState('control');
+      // Initialize from sessionStorage or default to 'control'
+      const [selectedDesignOption, setSelectedDesignOption] = useState(() => {
+        return sessionStorage.getItem('selectedDesignOption') || 'control';
+      });
 
       // Expose setSelectedDesignOption to global scope for vanilla JS to access
       useEffect(() => {
-        window.setSelectedDesignOption = setSelectedDesignOption;
+        window.setSelectedDesignOption = (option) => {
+          setSelectedDesignOption(option);
+          sessionStorage.setItem('selectedDesignOption', option);
+        };
         return () => {
           delete window.setSelectedDesignOption;
         };
@@ -23611,13 +23617,13 @@
           // Get selected option
           const selectedOption = option.getAttribute('data-option');
 
-          // Update React state via global function
+          // Update React state via global function (also saves to sessionStorage)
           if (window.setSelectedDesignOption) {
             window.setSelectedDesignOption(selectedOption);
+          } else {
+            // Fallback if React not ready yet
+            sessionStorage.setItem('selectedDesignOption', selectedOption);
           }
-
-          // Store in sessionStorage
-          sessionStorage.setItem('selectedDesignOption', selectedOption);
         });
       });
 

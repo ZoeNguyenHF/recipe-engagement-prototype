@@ -9328,6 +9328,17 @@
           setShowTopLabel(true);
           setLabelShrinking(false);
         }
+
+        // Auto-transition to next recipe after rating
+        setTimeout(() => {
+          setShowTopLabel(false);
+          setLabelShrinking(false);
+
+          if (currentRecipeIndex < recipes.length - 1) {
+            setCurrentRecipeIndex(currentRecipeIndex + 1);
+            lastRatedIndexRef.current = currentRecipeIndex;
+          }
+        }, 1200);
       };
 
       if (!show) return null;

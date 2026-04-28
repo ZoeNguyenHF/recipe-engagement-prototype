@@ -9267,168 +9267,278 @@
 
       if (showThankYou) {
         return (
-          <div style={{
-            position: 'absolute',
-            bottom: 0,
-            left: 0,
-            right: 0,
-            background: '#FAF8F3',
-            borderTopLeftRadius: 16,
-            borderTopRightRadius: 16,
-            boxShadow: '0 -2px 10px rgba(0,0,0,0.1)',
-            zIndex: 1000,
-            maxHeight: '85vh',
-            overflow: 'hidden',
-          }}>
-            <div style={{
-              padding: '16px 0 24px',
-              position: 'relative',
-              overflow: 'hidden',
-            }}>
-              <div style={{
-                width: 40,
-                height: 6,
-                background: '#E0E0E0',
-                borderRadius: 3,
-                margin: '0 auto 16px',
-                cursor: 'pointer',
-              }} onClick={onClose} />
-
-              <div style={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                gap: 20,
-                padding: '8px 24px',
-                position: 'relative',
-                zIndex: 2,
-              }}>
-                <div style={{
-                  width: 80,
-                  height: 80,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}>
-                  <img
-                    src="https://em-content.zobj.net/source/apple/391/green-heart_1f49a.png"
-                    alt="Heart"
-                    style={{
-                      width: '100%',
-                      height: '100%',
-                      objectFit: 'contain',
-                    }}
-                  />
-                </div>
-
-                <div style={{
-                  textAlign: 'center',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: 12,
-                }}>
-                  <h2 style={{
-                    fontFamily: 'var(--font-headline)',
-                    fontSize: 24,
-                    fontWeight: 700,
-                    lineHeight: '28px',
-                    color: '#232323',
-                    margin: 0,
-                  }}>
-                    Thank you!
-                  </h2>
-                  <p style={{
-                    fontFamily: 'var(--font-body)',
-                    fontSize: 16,
-                    fontWeight: 400,
-                    lineHeight: '24px',
-                    color: '#717171',
-                    margin: 0,
-                  }}>
-                    Your ratings help us recommend meals you'll love
-                  </p>
-                </div>
-
-                <button
-                  onClick={onClose}
-                  style={{
-                    width: '100%',
-                    padding: '12px 24px',
-                    background: '#232323',
-                    border: 'none',
-                    borderRadius: 8,
-                    fontFamily: 'var(--font-body)',
-                    fontSize: 16,
-                    fontWeight: 700,
-                    lineHeight: '24px',
-                    color: 'white',
-                    cursor: 'pointer',
-                    marginTop: 4,
-                  }}
-                >
-                  Done
-                </button>
-              </div>
-
-              <div style={{
+          <>
+            <div
+              style={{
                 position: 'absolute',
                 top: 0,
                 left: 0,
                 right: 0,
-                height: '100%',
-                overflow: 'hidden',
-                pointerEvents: 'none',
-                zIndex: 1,
+                bottom: 0,
+                background: 'rgba(0, 0, 0, 0.5)',
+                zIndex: 999,
+              }}
+              onClick={onClose}
+            />
+            <div style={{
+              position: 'absolute',
+              bottom: 0,
+              left: 0,
+              right: 0,
+              background: '#FAF8F3',
+              borderTopLeftRadius: 16,
+              borderTopRightRadius: 16,
+              boxShadow: '0 -2px 10px rgba(0,0,0,0.1)',
+              zIndex: 1000,
+              maxHeight: '85vh',
+              overflow: 'auto',
+            }}>
+              <div style={{
+                padding: '24px 24px 40px',
+                position: 'relative',
               }}>
-                {confettiPieces.map(piece => {
-                  let width, height, borderRadius;
-                  if (piece.shape === 'square') {
-                    width = piece.size;
-                    height = piece.size;
-                    borderRadius = '2px';
-                  } else if (piece.shape === 'rect') {
-                    width = piece.size * 1.5;
-                    height = piece.size * 0.6;
-                    borderRadius = '2px';
-                  } else if (piece.shape === 'circle') {
-                    width = piece.size;
-                    height = piece.size;
-                    borderRadius = '50%';
-                  } else if (piece.shape === 'line') {
-                    width = piece.size * 0.3;
-                    height = piece.size * 1.8;
-                    borderRadius = '1px';
-                  }
+                {/* Drag handle */}
+                <div style={{
+                  width: 40,
+                  height: 6,
+                  background: '#E0E0E0',
+                  borderRadius: 3,
+                  margin: '0 auto 16px',
+                  cursor: 'pointer',
+                }} onClick={onClose} />
 
-                  return (
-                    <div
-                      key={piece.id}
+                {/* Chat Interface */}
+                <div style={{
+                  display: 'flex',
+                  gap: 8,
+                  alignItems: 'flex-start',
+                  marginBottom: 20,
+                }}>
+                  {/* Avatar */}
+                  <div style={{
+                    width: 32,
+                    height: 32,
+                    borderRadius: '50%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    flexShrink: 0,
+                    overflow: 'hidden',
+                  }}>
+                    <img
+                      src="chat bot.png"
+                      alt="Chat Bot"
                       style={{
-                        position: 'absolute',
-                        left: `${piece.left}%`,
-                        top: -20,
-                        width: width,
-                        height: height,
-                        borderRadius: borderRadius,
-                        background: piece.color,
-                        transform: `rotate(${piece.rotation}deg)`,
-                        animation: `fall ${piece.duration}s linear ${piece.delay}s forwards`,
+                        width: '100%',
+                        height: '100%',
+                        objectFit: 'cover',
                       }}
                     />
-                  );
-                })}
-              </div>
+                  </div>
 
-              <style dangerouslySetInnerHTML={{__html: `
-                @keyframes fall {
-                  to {
-                    transform: translateY(100vh) rotate(${Math.random() * 360}deg);
-                    opacity: 0;
+                  {/* Chat balloon */}
+                  <div style={{
+                    background: '#EFE9DE',
+                    borderRadius: 4,
+                    padding: 8,
+                    flex: 1,
+                    animation: 'slideIn 0.3s ease-out',
+                  }}>
+                    <p style={{
+                      fontFamily: 'var(--font-body)',
+                      fontSize: 16,
+                      fontWeight: 400,
+                      lineHeight: '24px',
+                      color: '#242424',
+                      margin: 0,
+                    }}>
+                      Thank you for rating! We will recommend meals you love on Menu
+                    </p>
+                  </div>
+                </div>
+
+                {/* Action Buttons */}
+                <div style={{
+                  display: 'flex',
+                  gap: 12,
+                  marginBottom: 20,
+                }}>
+                  <button
+                    onClick={onClose}
+                    style={{
+                      flex: 1,
+                      padding: '12px 24px',
+                      background: '#232323',
+                      border: 'none',
+                      borderRadius: 8,
+                      fontFamily: 'var(--font-body)',
+                      fontSize: 16,
+                      fontWeight: 700,
+                      lineHeight: '24px',
+                      color: 'white',
+                      cursor: 'pointer',
+                    }}
+                  >
+                    Got it
+                  </button>
+                  <button
+                    onClick={() => {
+                      setShowThankYou(false);
+                      setCurrentRecipeIndex(0);
+                    }}
+                    style={{
+                      flex: 1,
+                      padding: '12px 24px',
+                      background: 'white',
+                      border: '2px solid #232323',
+                      borderRadius: 8,
+                      fontFamily: 'var(--font-body)',
+                      fontSize: 16,
+                      fontWeight: 700,
+                      lineHeight: '24px',
+                      color: '#232323',
+                      cursor: 'pointer',
+                    }}
+                  >
+                    Rate more
+                  </button>
+                </div>
+
+                {/* Recipe Thumbnails */}
+                <div style={{
+                  display: 'flex',
+                  gap: 12,
+                  flexWrap: 'wrap',
+                }}>
+                  {recipes.map((recipe, idx) => (
+                    <div
+                      key={`thumb-${idx}`}
+                      onClick={() => {
+                        setShowThankYou(false);
+                        setCurrentRecipeIndex(idx);
+                      }}
+                      style={{
+                        width: 80,
+                        height: 80,
+                        borderRadius: 12,
+                        overflow: 'hidden',
+                        cursor: 'pointer',
+                        position: 'relative',
+                        border: '2px solid transparent',
+                        transition: 'all 0.2s ease',
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.border = '2px solid #232323';
+                        e.currentTarget.style.transform = 'scale(1.05)';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.border = '2px solid transparent';
+                        e.currentTarget.style.transform = 'scale(1)';
+                      }}
+                    >
+                      <img
+                        src={recipe.image}
+                        alt={recipe.name}
+                        style={{
+                          width: '100%',
+                          height: '100%',
+                          objectFit: 'cover',
+                        }}
+                      />
+                      {ratings[idx] && (
+                        <div style={{
+                          position: 'absolute',
+                          bottom: 4,
+                          right: 4,
+                          background: 'rgba(0, 0, 0, 0.7)',
+                          borderRadius: 4,
+                          padding: '2px 4px',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: 2,
+                        }}>
+                          <svg width="12" height="12" viewBox="0 0 24 24">
+                            <path
+                              d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"
+                              fill="#FFD700"
+                              stroke="none"
+                            />
+                          </svg>
+                          <span style={{
+                            color: 'white',
+                            fontSize: 12,
+                            fontWeight: 700,
+                            fontFamily: 'var(--font-body)',
+                          }}>
+                            {ratings[idx]}
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+
+                {/* Confetti */}
+                <div style={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  height: '100%',
+                  overflow: 'hidden',
+                  pointerEvents: 'none',
+                  zIndex: 1,
+                }}>
+                  {confettiPieces.map(piece => {
+                    let width, height, borderRadius;
+                    if (piece.shape === 'square') {
+                      width = piece.size;
+                      height = piece.size;
+                      borderRadius = '2px';
+                    } else if (piece.shape === 'rect') {
+                      width = piece.size * 1.5;
+                      height = piece.size * 0.6;
+                      borderRadius = '2px';
+                    } else if (piece.shape === 'circle') {
+                      width = piece.size;
+                      height = piece.size;
+                      borderRadius = '50%';
+                    } else if (piece.shape === 'line') {
+                      width = piece.size * 0.3;
+                      height = piece.size * 1.8;
+                      borderRadius = '1px';
+                    }
+
+                    return (
+                      <div
+                        key={piece.id}
+                        style={{
+                          position: 'absolute',
+                          left: `${piece.left}%`,
+                          top: -20,
+                          width: width,
+                          height: height,
+                          borderRadius: borderRadius,
+                          background: piece.color,
+                          transform: `rotate(${piece.rotation}deg)`,
+                          animation: `fall ${piece.duration}s linear ${piece.delay}s forwards`,
+                        }}
+                      />
+                    );
+                  })}
+                </div>
+
+                <style dangerouslySetInnerHTML={{__html: `
+                  @keyframes fall {
+                    to {
+                      transform: translateY(100vh) rotate(${Math.random() * 360}deg);
+                      opacity: 0;
+                    }
                   }
-                }
-              `}} />
+                `}} />
+              </div>
             </div>
-          </div>
+          </>
         );
       }
 

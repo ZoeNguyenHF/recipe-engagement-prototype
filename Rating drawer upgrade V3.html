@@ -8878,6 +8878,7 @@
       const [showMessage1, setShowMessage1] = useState(false);
       const [showMessage2, setShowMessage2] = useState(false);
       const [showTypingIndicator, setShowTypingIndicator] = useState(false);
+      const [showRecipeCard, setShowRecipeCard] = useState(false);
       const [message1Text, setMessage1Text] = useState('');
       const [message2Text, setMessage2Text] = useState('');
       const starRefs = useRef({});
@@ -8940,6 +8941,7 @@
           setShowMessage1(false);
           setShowMessage2(false);
           setShowTypingIndicator(false);
+          setShowRecipeCard(false);
           setMessage1Text('');
           setMessage2Text('');
         }
@@ -8991,6 +8993,12 @@
             setMessage2Text(fullMessage2.slice(0, message2Text.length + 1));
           }, 30);
           return () => clearTimeout(timer);
+        } else if (showMessage2 && message2Text.length === fullMessage2.length) {
+          // Show recipe card after second message completes
+          const cardTimer = setTimeout(() => {
+            setShowRecipeCard(true);
+          }, 500);
+          return () => clearTimeout(cardTimer);
         }
       }, [showMessage2, message2Text, fullMessage2]);
 
@@ -9578,11 +9586,13 @@
               </div>
 
               {/* Recipe Rating Carousel */}
+              {showRecipeCard && (
               <div style={{
                 position: 'relative',
                 height: 262,
                 width: '100%',
                 overflow: 'hidden',
+                animation: 'slideIn 0.5s ease-out',
               }}>
                 <div
                   ref={burstContainerRef}
@@ -9756,6 +9766,7 @@
                   );
                 })}
               </div>
+              )}
             </div>
           </div>
         </>

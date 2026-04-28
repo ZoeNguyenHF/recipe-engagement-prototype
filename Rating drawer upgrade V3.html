@@ -8187,7 +8187,7 @@
                       onClick={(isPrevious || isNext) ? handleCircleClick : undefined}
                     >
                       {/* Top recipe label - only show on active recipe */}
-                      {showTopLabel && isActive && (
+                      {ratings[idx] >= 4 && isActive && (
                         <div style={{
                           position: 'absolute',
                           top: -10,
@@ -8832,7 +8832,7 @@
                           }}
                         />
 
-                        {showTopLabel && isActive && (
+                        {ratings[idx] >= 4 && isActive && (
                           <div style={{
                             position: 'absolute',
                             bottom: 8,
@@ -9884,7 +9884,7 @@
                             objectFit: 'cover',
                           }}
                         />
-                        {showTopLabel && isActive && (
+                        {ratings[idx] >= 4 && isActive && (
                           <div style={{
                             position: 'absolute',
                             bottom: 8,

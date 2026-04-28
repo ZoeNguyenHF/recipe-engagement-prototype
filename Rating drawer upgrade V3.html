@@ -62,6 +62,9 @@
       margin-bottom: 8px;
       font-size: 14px;
       color: #424242;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
     }
 
     .design-option-item:hover {
@@ -73,6 +76,28 @@
       border-color: #4f5fef;
       color: #4f5fef;
       font-weight: 500;
+    }
+
+    .refresh-icon {
+      width: 18px;
+      height: 18px;
+      opacity: 0;
+      transition: all 0.2s ease;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    .design-option-item:hover .refresh-icon {
+      opacity: 0.6;
+    }
+
+    .refresh-icon:hover {
+      opacity: 1 !important;
+      transform: rotate(90deg);
+    }
+
+    .design-option-item.active .refresh-icon {
+      opacity: 0.8;
     }
 
     /* Content Area */
@@ -611,10 +636,30 @@
   <div class="left-sidebar">
     <div class="sidebar-section">
       <h2>Design Options</h2>
-      <div class="design-option-item active" data-option="control">Control</div>
-      <div class="design-option-item" data-option="option1">Option 1</div>
-      <div class="design-option-item" data-option="option2">Option 2</div>
-      <div class="design-option-item" data-option="option3">Option 3</div>
+      <div class="design-option-item active" data-option="control">
+        <span>Control</span>
+        <svg class="refresh-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" data-refresh="control">
+          <path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+        </svg>
+      </div>
+      <div class="design-option-item" data-option="option1">
+        <span>Option 1</span>
+        <svg class="refresh-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" data-refresh="option1">
+          <path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+        </svg>
+      </div>
+      <div class="design-option-item" data-option="option2">
+        <span>Option 2</span>
+        <svg class="refresh-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" data-refresh="option2">
+          <path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+        </svg>
+      </div>
+      <div class="design-option-item" data-option="option3">
+        <span>Option 3</span>
+        <svg class="refresh-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" data-refresh="option3">
+          <path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+        </svg>
+      </div>
     </div>
   </div>
 
@@ -23066,6 +23111,27 @@
         };
       }, []);
 
+      // Reset function for each design option
+      const resetDesignOption = () => {
+        setShowRatingDrawer(false);
+        setRecipeRatings({});
+        setShowMoreRecipes(false);
+        setShowLoyaltyMission(false);
+        setRatingDrawerCustomContent(null);
+        setShowHighlightToast(false);
+        setShowHighlightToastWithCTA(false);
+        setOpenedFromRateMeals(false);
+        setRateMealsToast(false);
+      };
+
+      // Expose reset function to global scope
+      useEffect(() => {
+        window.resetDesignOption = resetDesignOption;
+        return () => {
+          delete window.resetDesignOption;
+        };
+      }, []);
+
       const toggleBookmark = (recipeId) => {
         setBookmarkedRecipes(prev => {
           const newSet = new Set(prev);
@@ -23557,6 +23623,25 @@
           }
         }
       }
+
+      // Handle refresh icon clicks
+      const refreshIcons = document.querySelectorAll('.refresh-icon');
+      refreshIcons.forEach(icon => {
+        icon.addEventListener('click', (e) => {
+          e.stopPropagation(); // Prevent triggering the option click
+
+          // Reset the design option state
+          if (window.resetDesignOption) {
+            window.resetDesignOption();
+          }
+
+          // Add a visual feedback animation
+          icon.style.transform = 'rotate(360deg)';
+          setTimeout(() => {
+            icon.style.transform = '';
+          }, 300);
+        });
+      });
     });
   </script>
 </body>

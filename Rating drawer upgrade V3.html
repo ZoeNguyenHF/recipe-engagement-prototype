@@ -9058,29 +9058,28 @@
         // 2. This is a new rating (not already processed)
         // 3. Not already transitioning
         // 4. There are more recipes to rate
-        // 5. Not all recipes are rated yet
+        const currentRating = ratings[currentRecipeIndex];
+
         if (
-          ratings[currentRecipeIndex] !== undefined &&
+          currentRating !== undefined &&
           lastRatedIndexRef.current !== currentRecipeIndex &&
           !isTransitioning &&
-          currentRecipeIndex < recipes.length - 1 &&
-          !allRated
+          currentRecipeIndex < recipes.length - 1
         ) {
           lastRatedIndexRef.current = currentRecipeIndex;
           setIsTransitioning(true);
 
           const timer = setTimeout(() => {
-            setCurrentRecipeIndex(currentRecipeIndex + 1);
+            setCurrentRecipeIndex(prev => prev + 1);
             setShowTopLabel(false);
             setIsTransitioning(false);
           }, 1200);
 
           return () => {
             clearTimeout(timer);
-            setIsTransitioning(false);
           };
         }
-      }, [ratings, currentRecipeIndex, recipes.length, isTransitioning, allRated]);
+      }, [ratings, currentRecipeIndex, recipes.length, isTransitioning]);
 
       const smallBurstJSON = {
         v: "5.7.4",

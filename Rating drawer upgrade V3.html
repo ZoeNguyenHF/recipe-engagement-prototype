@@ -9369,39 +9369,30 @@
               boxShadow: '0 -2px 10px rgba(0,0,0,0.1)',
               zIndex: 1000,
               maxHeight: '85vh',
-              display: 'flex',
-              flexDirection: 'column',
+              overflow: 'auto',
             }}>
-              {/* Drag handle - fixed at top */}
               <div style={{
-                padding: '12px 24px 0',
-                flexShrink: 0,
+                padding: '24px 24px 40px',
+                position: 'relative',
               }}>
+                {/* Drag handle */}
                 <div style={{
                   width: 40,
                   height: 6,
                   background: '#E0E0E0',
                   borderRadius: 3,
-                  margin: '0 auto',
+                  margin: '0 auto 16px',
                   cursor: 'pointer',
                 }} onClick={onClose} />
-              </div>
 
-              {/* Scrollable content area */}
-              <div style={{
-                flex: 1,
-                overflowY: 'auto',
-                padding: '16px 24px',
-                display: 'flex',
-                flexDirection: 'column',
-                gap: 16,
-              }}>
-                {/* Previous conversation - Message 1 */}
+                {/* Chat Interface */}
                 <div style={{
                   display: 'flex',
                   gap: 8,
                   alignItems: 'flex-start',
+                  marginBottom: 20,
                 }}>
+                  {/* Avatar */}
                   <div style={{
                     width: 32,
                     height: 32,
@@ -9422,11 +9413,14 @@
                       }}
                     />
                   </div>
+
+                  {/* Chat balloon */}
                   <div style={{
                     background: '#EFE9DE',
                     borderRadius: 4,
                     padding: 8,
                     flex: 1,
+                    animation: 'slideIn 0.3s ease-out',
                   }}>
                     <p style={{
                       fontFamily: 'var(--font-body)',
@@ -9436,54 +9430,56 @@
                       color: '#242424',
                       margin: 0,
                     }}>
-                      {fullMessage1}
+                      Thank you for rating! We will recommend meals you love on Menu
                     </p>
                   </div>
                 </div>
 
-                {/* Previous conversation - Message 2 */}
+                {/* Action Buttons */}
                 <div style={{
                   display: 'flex',
-                  gap: 8,
-                  alignItems: 'flex-start',
+                  gap: 12,
+                  marginBottom: 20,
                 }}>
-                  <div style={{
-                    width: 32,
-                    height: 32,
-                    borderRadius: '50%',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    flexShrink: 0,
-                    overflow: 'hidden',
-                  }}>
-                    <img
-                      src="chat bot.png"
-                      alt="Chat Bot"
-                      style={{
-                        width: '100%',
-                        height: '100%',
-                        objectFit: 'cover',
-                      }}
-                    />
-                  </div>
-                  <div style={{
-                    background: '#EFE9DE',
-                    borderRadius: 4,
-                    padding: 8,
-                    flex: 1,
-                  }}>
-                    <p style={{
+                  <button
+                    onClick={onClose}
+                    style={{
+                      flex: 1,
+                      padding: '12px 24px',
+                      background: '#232323',
+                      border: 'none',
+                      borderRadius: 8,
                       fontFamily: 'var(--font-body)',
                       fontSize: 16,
-                      fontWeight: 400,
+                      fontWeight: 700,
                       lineHeight: '24px',
-                      color: '#242424',
-                      margin: 0,
-                    }}>
-                      {fullMessage2}
-                    </p>
-                  </div>
+                      color: 'white',
+                      cursor: 'pointer',
+                    }}
+                  >
+                    Got it
+                  </button>
+                  <button
+                    onClick={() => {
+                      setShowThankYou(false);
+                      setCurrentRecipeIndex(0);
+                    }}
+                    style={{
+                      flex: 1,
+                      padding: '12px 24px',
+                      background: 'white',
+                      border: '2px solid #232323',
+                      borderRadius: 8,
+                      fontFamily: 'var(--font-body)',
+                      fontSize: 16,
+                      fontWeight: 700,
+                      lineHeight: '24px',
+                      color: '#232323',
+                      cursor: 'pointer',
+                    }}
+                  >
+                    Rate more
+                  </button>
                 </div>
 
                 {/* Recipe Thumbnails */}
@@ -9491,7 +9487,6 @@
                   display: 'flex',
                   gap: 12,
                   flexWrap: 'wrap',
-                  marginTop: 8,
                 }}>
                   {recipes.map((recipe, idx) => (
                     <div
@@ -9561,117 +9556,17 @@
                   ))}
                 </div>
 
-                {/* Thank you message */}
+                {/* Confetti */}
                 <div style={{
-                  display: 'flex',
-                  gap: 8,
-                  alignItems: 'flex-start',
-                  marginTop: 8,
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  height: '100%',
+                  overflow: 'hidden',
+                  pointerEvents: 'none',
+                  zIndex: 1,
                 }}>
-                  <div style={{
-                    width: 32,
-                    height: 32,
-                    borderRadius: '50%',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    flexShrink: 0,
-                    overflow: 'hidden',
-                  }}>
-                    <img
-                      src="chat bot.png"
-                      alt="Chat Bot"
-                      style={{
-                        width: '100%',
-                        height: '100%',
-                        objectFit: 'cover',
-                      }}
-                    />
-                  </div>
-                  <div style={{
-                    background: '#EFE9DE',
-                    borderRadius: 4,
-                    padding: 8,
-                    flex: 1,
-                  }}>
-                    <p style={{
-                      fontFamily: 'var(--font-body)',
-                      fontSize: 16,
-                      fontWeight: 400,
-                      lineHeight: '24px',
-                      color: '#242424',
-                      margin: 0,
-                    }}>
-                      Thank you for rating! We will recommend meals you love on Menu
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Action Buttons - fixed at bottom */}
-              <div style={{
-                padding: '16px 24px 40px',
-                borderTop: '1px solid #E0E0E0',
-                flexShrink: 0,
-                background: '#FAF8F3',
-              }}>
-                <div style={{
-                  display: 'flex',
-                  gap: 12,
-                }}>
-                  <button
-                    onClick={onClose}
-                    style={{
-                      flex: 1,
-                      padding: '12px 24px',
-                      background: '#232323',
-                      border: 'none',
-                      borderRadius: 8,
-                      fontFamily: 'var(--font-body)',
-                      fontSize: 16,
-                      fontWeight: 700,
-                      lineHeight: '24px',
-                      color: 'white',
-                      cursor: 'pointer',
-                    }}
-                  >
-                    Got it
-                  </button>
-                  <button
-                    onClick={() => {
-                      setShowThankYou(false);
-                      setCurrentRecipeIndex(0);
-                    }}
-                    style={{
-                      flex: 1,
-                      padding: '12px 24px',
-                      background: 'white',
-                      border: '2px solid #232323',
-                      borderRadius: 8,
-                      fontFamily: 'var(--font-body)',
-                      fontSize: 16,
-                      fontWeight: 700,
-                      lineHeight: '24px',
-                      color: '#232323',
-                      cursor: 'pointer',
-                    }}
-                  >
-                    Rate more
-                  </button>
-                </div>
-              </div>
-
-              {/* Confetti */}
-              <div style={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                right: 0,
-                height: '100%',
-                overflow: 'hidden',
-                pointerEvents: 'none',
-                zIndex: 1,
-              }}>
                   {confettiPieces.map(piece => {
                     let width, height, borderRadius;
                     if (piece.shape === 'square') {

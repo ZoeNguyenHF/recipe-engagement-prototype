@@ -2023,8 +2023,8 @@
           id: 101,
           name: 'Garlic Butter Shrimp',
           subtitle: 'with Jasmine Rice & Vegetables',
-          img: 'https://c.stocksy.com/a/HQzR00/z9/6670969.jpg',
-          image: 'https://c.stocksy.com/a/HQzR00/z9/6670969.jpg',
+          img: 'recipes/HelloFresh Main High (1).jpg',
+          image: 'recipes/HelloFresh Main High (1).jpg',
           time: '20 min',
           kcal: '680 kcal',
           protein: '32g protein',
@@ -2037,8 +2037,8 @@
           id: 102,
           name: 'Tuscan Chicken Pasta',
           subtitle: 'with Sun-Dried Tomatoes & Basil',
-          img: 'https://c.stocksy.com/a/nlpB00/z9/2820615.jpg',
-          image: 'https://c.stocksy.com/a/nlpB00/z9/2820615.jpg',
+          img: 'recipes/HelloFresh Main Image (8).jpg',
+          image: 'recipes/HelloFresh Main Image (8).jpg',
           time: '25 min',
           kcal: '680 kcal',
           protein: '35g protein',
@@ -2051,8 +2051,8 @@
           id: 103,
           name: 'Lemon Herb Salmon',
           subtitle: 'with Roasted Asparagus & Potatoes',
-          img: 'https://c.stocksy.com/a/Xc3H00/z9/4065497.jpg',
-          image: 'https://c.stocksy.com/a/Xc3H00/z9/4065497.jpg',
+          img: 'recipes/HelloFresh Main Image (9).jpg',
+          image: 'recipes/HelloFresh Main Image (9).jpg',
           time: '30 min',
           kcal: '620 kcal',
           protein: '38g protein',
@@ -2065,8 +2065,8 @@
           id: 104,
           name: 'Beef Stir-Fry',
           subtitle: 'with Broccoli & Sesame Seeds',
-          img: 'https://c.stocksy.com/a/nlpB00/z9/2820615.jpg',
-          image: 'https://c.stocksy.com/a/nlpB00/z9/2820615.jpg',
+          img: 'recipes/HelloFresh Main Image (10).jpg',
+          image: 'recipes/HelloFresh Main Image (10).jpg',
           time: '25 min',
           kcal: '720 kcal',
           protein: '42g protein',
@@ -9589,9 +9589,9 @@
               {showRecipeCard && (
               <div style={{
                 position: 'relative',
-                height: 262,
+                height: 280,
                 width: '100%',
-                overflow: 'hidden',
+                overflow: 'visible',
                 animation: 'slideIn 0.5s ease-out',
               }}>
                 <div
@@ -22985,17 +22985,17 @@
 
       // Initial recipes for rating drawer
       const initialRecipes = [
-        { name: 'Cheddar-Crusted Chicken with Roasted Vegetables', img: 'https://c.stocksy.com/a/nlpB00/z9/2820615.jpg', image: 'https://c.stocksy.com/a/nlpB00/z9/2820615.jpg', orderDate: 'ordered this week' },
-        { name: 'Creamy Tuscan Shrimp Pasta', img: 'https://c.stocksy.com/a/HQzR00/z9/6670969.jpg', image: 'https://c.stocksy.com/a/HQzR00/z9/6670969.jpg', orderDate: 'ordered this week' },
-        { name: 'Honey Garlic Glazed Salmon', img: 'https://c.stocksy.com/a/Xc3H00/z9/4065497.jpg', image: 'https://c.stocksy.com/a/Xc3H00/z9/4065497.jpg', orderDate: 'ordered this week' },
-        { name: 'Mediterranean Chicken Bowl', img: 'https://c.stocksy.com/a/nlpB00/z9/2820615.jpg', image: 'https://c.stocksy.com/a/nlpB00/z9/2820615.jpg', orderDate: 'ordered this week' },
+        { name: 'Cheddar-Crusted Chicken with Roasted Vegetables', img: 'recipes/HelloFresh Main Image.jpg', image: 'recipes/HelloFresh Main Image.jpg', orderDate: 'ordered this week' },
+        { name: 'Creamy Tuscan Shrimp Pasta', img: 'recipes/HelloFresh Main High.jpg', image: 'recipes/HelloFresh Main High.jpg', orderDate: 'ordered this week' },
+        { name: 'Honey Garlic Glazed Salmon', img: 'recipes/HelloFresh Main High (1).jpg', image: 'recipes/HelloFresh Main High (1).jpg', orderDate: 'ordered this week' },
+        { name: 'Mediterranean Chicken Bowl', img: 'recipes/HelloFresh Main High (2).jpg', image: 'recipes/HelloFresh Main High (2).jpg', orderDate: 'ordered this week' },
       ];
 
       // Additional recipes to show after "Show more"
       const moreRecipes = [
-        { name: 'Firecracker Meatballs with Jasmine Rice', img: 'https://c.stocksy.com/a/HQzR00/z9/6670969.jpg', image: 'https://c.stocksy.com/a/HQzR00/z9/6670969.jpg', orderDate: 'ordered last week' },
-        { name: 'Cheesy Black Bean & Bacon Burritos', img: 'https://c.stocksy.com/a/Xc3H00/z9/4065497.jpg', image: 'https://c.stocksy.com/a/Xc3H00/z9/4065497.jpg', orderDate: 'ordered last week' },
-        { name: 'Crispy Parmesan Chicken Milanese', img: 'https://c.stocksy.com/a/nlpB00/z9/2820615.jpg', image: 'https://c.stocksy.com/a/nlpB00/z9/2820615.jpg', orderDate: 'ordered 2 weeks ago' },
+        { name: 'Firecracker Meatballs with Jasmine Rice', img: 'recipes/HelloFresh Main Image (1).jpg', image: 'recipes/HelloFresh Main Image (1).jpg', orderDate: 'ordered last week' },
+        { name: 'Cheesy Black Bean & Bacon Burritos', img: 'recipes/HelloFresh Main Image (2).jpg', image: 'recipes/HelloFresh Main Image (2).jpg', orderDate: 'ordered last week' },
+        { name: 'Crispy Parmesan Chicken Milanese', img: 'recipes/HelloFresh Main Image (3).jpg', image: 'recipes/HelloFresh Main Image (3).jpg', orderDate: 'ordered 2 weeks ago' },
       ];
 
       const recipesToRate = showMoreRecipes ? [...initialRecipes, ...moreRecipes] : initialRecipes;

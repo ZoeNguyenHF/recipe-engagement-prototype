@@ -8881,8 +8881,10 @@
       const [showRecipeCard, setShowRecipeCard] = useState(false);
       const [message1Text, setMessage1Text] = useState('');
       const [message2Text, setMessage2Text] = useState('');
+      const [isTransitioning, setIsTransitioning] = useState(false);
       const starRefs = useRef({});
       const burstContainerRef = useRef(null);
+      const lastRatedIndexRef = useRef(-1);
 
       const currentRecipe = recipes[currentRecipeIndex];
       const currentRating = ratings[currentRecipeIndex];
@@ -8944,6 +8946,8 @@
           setShowRecipeCard(false);
           setMessage1Text('');
           setMessage2Text('');
+          setIsTransitioning(false);
+          lastRatedIndexRef.current = -1;
         }
       }, [show]);
 
@@ -9004,15 +9008,34 @@
 
       // Smooth transition to next recipe after rating
       useEffect(() => {
-        const ratedCount = Object.keys(ratings).length;
-        if (ratedCount > 0 && currentRecipeIndex < recipes.length - 1 && ratings[currentRecipeIndex] !== undefined) {
+        // Only transition if:
+        // 1. Current recipe is rated
+        // 2. This is a new rating (not already processed)
+        // 3. Not already transitioning
+        // 4. There are more recipes to rate
+        // 5. Not all recipes are rated yet
+        if (
+          ratings[currentRecipeIndex] !== undefined &&
+          lastRatedIndexRef.current !== currentRecipeIndex &&
+          !isTransitioning &&
+          currentRecipeIndex < recipes.length - 1 &&
+          !allRated
+        ) {
+          lastRatedIndexRef.current = currentRecipeIndex;
+          setIsTransitioning(true);
+
           const timer = setTimeout(() => {
             setCurrentRecipeIndex(currentRecipeIndex + 1);
             setShowTopLabel(false);
+            setIsTransitioning(false);
           }, 1200);
-          return () => clearTimeout(timer);
+
+          return () => {
+            clearTimeout(timer);
+            setIsTransitioning(false);
+          };
         }
-      }, [ratings, currentRecipeIndex, recipes.length]);
+      }, [ratings, currentRecipeIndex, recipes.length, isTransitioning, allRated]);
 
       const smallBurstJSON = {
         v: "5.7.4",
@@ -9725,42 +9748,53 @@
 
                 {recipes.map((recipe, idx) => {
                   const isActive = idx === currentRecipeIndex;
-                  const isPrevious = idx < currentRecipeIndex;
-                  const isNext = idx > currentRecipeIndex;
+                  const isPrevious = idx === currentRecipeIndex - 1;
+                  const isNext = idx === currentRecipeIndex + 1;
                   const isRated = ratings[idx] !== undefined;
+
+                  // Only render current, immediately previous, and immediately next
+                  const shouldRender = isActive || isPrevious || isNext;
 
                   let positionX = 0;
                   let positionY = 0;
                   let scale = 1;
-                  let opacity = 1;
+                  let opacity = 0;
                   let zIndex = 0;
+                  let display = 'none';
 
-                  if (!isActive && !isPrevious && !isNext) {
-                    opacity = 0;
-                    zIndex = 0;
-                  } else if (isPrevious) {
+                  if (isPrevious) {
                     positionX = -147;
                     positionY = 0;
                     scale = 0.45;
                     opacity = 1;
                     zIndex = 1;
+                    display = 'flex';
                   } else if (isActive) {
                     positionX = 0;
                     positionY = 0;
                     scale = 1;
                     opacity = 1;
                     zIndex = 2;
+                    display = 'flex';
                   } else if (isNext) {
                     positionX = 147;
                     positionY = 0;
                     scale = 0.45;
                     opacity = 1;
                     zIndex = 1;
+                    display = 'flex';
+                  }
+
+                  // Don't render at all if not one of the three visible cards
+                  if (!shouldRender) {
+                    return null;
                   }
 
                   const handleSquareClick = () => {
-                    if (isPrevious || isNext) {
+                    if ((isPrevious || isNext) && !isTransitioning) {
                       setCurrentRecipeIndex(idx);
+                      setShowTopLabel(false);
+                      lastRatedIndexRef.current = -1; // Reset to allow re-rating
                     }
                   };
 

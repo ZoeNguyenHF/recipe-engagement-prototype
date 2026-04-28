@@ -319,6 +319,26 @@
         opacity: 1;
       }
     }
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    @keyframes typing {
+      0%, 60%, 100% {
+        transform: translateY(0);
+        opacity: 0.6;
+      }
+      30% {
+        transform: translateY(-8px);
+        opacity: 1;
+      }
+    }
     @keyframes particleBurst {
       0% {
         transform: translate(0, 0) scale(1);
@@ -8855,12 +8875,20 @@
       const [labelShrinking, setLabelShrinking] = useState(false);
       const [showThankYou, setShowThankYou] = useState(false);
       const [confettiPieces, setConfettiPieces] = useState([]);
+      const [showMessage1, setShowMessage1] = useState(false);
+      const [showMessage2, setShowMessage2] = useState(false);
+      const [showTypingIndicator, setShowTypingIndicator] = useState(false);
+      const [message1Text, setMessage1Text] = useState('');
+      const [message2Text, setMessage2Text] = useState('');
       const starRefs = useRef({});
       const burstContainerRef = useRef(null);
 
       const currentRecipe = recipes[currentRecipeIndex];
       const currentRating = ratings[currentRecipeIndex];
       const allRated = recipes.every((_, idx) => ratings[idx] !== undefined);
+
+      const fullMessage1 = "Your rating helps us to recommend meals you love!";
+      const fullMessage2 = "How was it?";
 
       useEffect(() => {
         if (allRated && recipes.length > 0) {
@@ -8909,8 +8937,62 @@
           setLabelShrinking(false);
           setShowThankYou(false);
           setConfettiPieces([]);
+          setShowMessage1(false);
+          setShowMessage2(false);
+          setShowTypingIndicator(false);
+          setMessage1Text('');
+          setMessage2Text('');
         }
       }, [show]);
+
+      // Typing animation sequence
+      useEffect(() => {
+        if (show && !allRated) {
+          // Start typing first message after a short delay
+          const startTimer = setTimeout(() => {
+            setShowMessage1(true);
+          }, 300);
+
+          return () => clearTimeout(startTimer);
+        }
+      }, [show, allRated]);
+
+      // Type out first message character by character
+      useEffect(() => {
+        if (showMessage1 && message1Text.length < fullMessage1.length) {
+          const timer = setTimeout(() => {
+            setMessage1Text(fullMessage1.slice(0, message1Text.length + 1));
+          }, 30);
+          return () => clearTimeout(timer);
+        } else if (showMessage1 && message1Text.length === fullMessage1.length) {
+          // Show typing indicator after first message completes
+          const indicatorTimer = setTimeout(() => {
+            setShowTypingIndicator(true);
+          }, 400);
+          return () => clearTimeout(indicatorTimer);
+        }
+      }, [showMessage1, message1Text, fullMessage1]);
+
+      // Show second message after typing indicator
+      useEffect(() => {
+        if (showTypingIndicator) {
+          const timer = setTimeout(() => {
+            setShowTypingIndicator(false);
+            setShowMessage2(true);
+          }, 800);
+          return () => clearTimeout(timer);
+        }
+      }, [showTypingIndicator]);
+
+      // Type out second message character by character
+      useEffect(() => {
+        if (showMessage2 && message2Text.length < fullMessage2.length) {
+          const timer = setTimeout(() => {
+            setMessage2Text(fullMessage2.slice(0, message2Text.length + 1));
+          }, 30);
+          return () => clearTimeout(timer);
+        }
+      }, [showMessage2, message2Text, fullMessage2]);
 
       const smallBurstJSON = {
         v: "5.7.4",
@@ -9422,39 +9504,81 @@
                   flex: 1,
                   minWidth: 0,
                 }}>
-                  <div style={{
-                    background: '#EFE9DE',
-                    borderRadius: 4,
-                    padding: 8,
-                  }}>
-                    <p style={{
-                      fontFamily: 'var(--font-body)',
-                      fontSize: 16,
-                      fontWeight: 400,
-                      lineHeight: '24px',
-                      color: '#242424',
-                      margin: 0,
+                  {showMessage1 && (
+                    <div style={{
+                      background: '#EFE9DE',
+                      borderRadius: 4,
+                      padding: 8,
+                      animation: 'slideIn 0.3s ease-out',
                     }}>
-                      Your rating helps us to recommend meals you love!
-                    </p>
-                  </div>
-                  <div style={{
-                    background: '#EFE9DE',
-                    borderRadius: 4,
-                    padding: 8,
-                    alignSelf: 'flex-start',
-                  }}>
-                    <p style={{
-                      fontFamily: 'var(--font-body)',
-                      fontSize: 16,
-                      fontWeight: 400,
-                      lineHeight: '24px',
-                      color: '#242424',
-                      margin: 0,
+                      <p style={{
+                        fontFamily: 'var(--font-body)',
+                        fontSize: 16,
+                        fontWeight: 400,
+                        lineHeight: '24px',
+                        color: '#242424',
+                        margin: 0,
+                      }}>
+                        {message1Text}
+                      </p>
+                    </div>
+                  )}
+                  {showTypingIndicator && (
+                    <div style={{
+                      background: '#EFE9DE',
+                      borderRadius: 4,
+                      padding: '12px 16px',
+                      alignSelf: 'flex-start',
+                      display: 'flex',
+                      gap: 4,
+                      animation: 'slideIn 0.3s ease-out',
                     }}>
-                      How was it?
-                    </p>
-                  </div>
+                      <div style={{
+                        width: 8,
+                        height: 8,
+                        borderRadius: '50%',
+                        background: '#717171',
+                        animation: 'typing 1.4s infinite',
+                        animationDelay: '0s',
+                      }} />
+                      <div style={{
+                        width: 8,
+                        height: 8,
+                        borderRadius: '50%',
+                        background: '#717171',
+                        animation: 'typing 1.4s infinite',
+                        animationDelay: '0.2s',
+                      }} />
+                      <div style={{
+                        width: 8,
+                        height: 8,
+                        borderRadius: '50%',
+                        background: '#717171',
+                        animation: 'typing 1.4s infinite',
+                        animationDelay: '0.4s',
+                      }} />
+                    </div>
+                  )}
+                  {showMessage2 && (
+                    <div style={{
+                      background: '#EFE9DE',
+                      borderRadius: 4,
+                      padding: 8,
+                      alignSelf: 'flex-start',
+                      animation: 'slideIn 0.3s ease-out',
+                    }}>
+                      <p style={{
+                        fontFamily: 'var(--font-body)',
+                        fontSize: 16,
+                        fontWeight: 400,
+                        lineHeight: '24px',
+                        color: '#242424',
+                        margin: 0,
+                      }}>
+                        {message2Text}
+                      </p>
+                    </div>
+                  )}
                 </div>
               </div>
 
@@ -22855,17 +22979,17 @@
 
       // Initial recipes for rating drawer
       const initialRecipes = [
-        { name: 'Cheddar-Crusted Chicken with Roasted Vegetables', img: 'recipes/HelloFresh Main Image.jpg', orderDate: 'ordered this week' },
-        { name: 'Creamy Tuscan Shrimp Pasta', img: 'recipes/HelloFresh Main High.jpg', orderDate: 'ordered this week' },
-        { name: 'Honey Garlic Glazed Salmon', img: 'recipes/HelloFresh Main High (1).jpg', orderDate: 'ordered this week' },
-        { name: 'Mediterranean Chicken Bowl', img: 'recipes/HelloFresh Main High (2).jpg', orderDate: 'ordered this week' },
+        { name: 'Cheddar-Crusted Chicken with Roasted Vegetables', img: 'https://c.stocksy.com/a/nlpB00/z9/2820615.jpg', image: 'https://c.stocksy.com/a/nlpB00/z9/2820615.jpg', orderDate: 'ordered this week' },
+        { name: 'Creamy Tuscan Shrimp Pasta', img: 'https://c.stocksy.com/a/HQzR00/z9/6670969.jpg', image: 'https://c.stocksy.com/a/HQzR00/z9/6670969.jpg', orderDate: 'ordered this week' },
+        { name: 'Honey Garlic Glazed Salmon', img: 'https://c.stocksy.com/a/Xc3H00/z9/4065497.jpg', image: 'https://c.stocksy.com/a/Xc3H00/z9/4065497.jpg', orderDate: 'ordered this week' },
+        { name: 'Mediterranean Chicken Bowl', img: 'https://c.stocksy.com/a/nlpB00/z9/2820615.jpg', image: 'https://c.stocksy.com/a/nlpB00/z9/2820615.jpg', orderDate: 'ordered this week' },
       ];
 
       // Additional recipes to show after "Show more"
       const moreRecipes = [
-        { name: 'Firecracker Meatballs with Jasmine Rice', img: 'recipes/HelloFresh Main Image (1).jpg', orderDate: 'ordered last week' },
-        { name: 'Cheesy Black Bean & Bacon Burritos', img: 'recipes/HelloFresh Main Image (2).jpg', orderDate: 'ordered last week' },
-        { name: 'Crispy Parmesan Chicken Milanese', img: 'recipes/HelloFresh Main Image (3).jpg', orderDate: 'ordered 2 weeks ago' },
+        { name: 'Firecracker Meatballs with Jasmine Rice', img: 'https://c.stocksy.com/a/HQzR00/z9/6670969.jpg', image: 'https://c.stocksy.com/a/HQzR00/z9/6670969.jpg', orderDate: 'ordered last week' },
+        { name: 'Cheesy Black Bean & Bacon Burritos', img: 'https://c.stocksy.com/a/Xc3H00/z9/4065497.jpg', image: 'https://c.stocksy.com/a/Xc3H00/z9/4065497.jpg', orderDate: 'ordered last week' },
+        { name: 'Crispy Parmesan Chicken Milanese', img: 'https://c.stocksy.com/a/nlpB00/z9/2820615.jpg', image: 'https://c.stocksy.com/a/nlpB00/z9/2820615.jpg', orderDate: 'ordered 2 weeks ago' },
       ];
 
       const recipesToRate = showMoreRecipes ? [...initialRecipes, ...moreRecipes] : initialRecipes;

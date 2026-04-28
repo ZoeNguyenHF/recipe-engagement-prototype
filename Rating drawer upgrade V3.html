@@ -9002,6 +9002,18 @@
         }
       }, [showMessage2, message2Text, fullMessage2]);
 
+      // Smooth transition to next recipe after rating
+      useEffect(() => {
+        const ratedCount = Object.keys(ratings).length;
+        if (ratedCount > 0 && currentRecipeIndex < recipes.length - 1 && ratings[currentRecipeIndex] !== undefined) {
+          const timer = setTimeout(() => {
+            setCurrentRecipeIndex(currentRecipeIndex + 1);
+            setShowTopLabel(false);
+          }, 1200);
+          return () => clearTimeout(timer);
+        }
+      }, [ratings, currentRecipeIndex, recipes.length]);
+
       const smallBurstJSON = {
         v: "5.7.4",
         fr: 60,
@@ -9249,13 +9261,6 @@
           setShowTopLabel(true);
           setLabelShrinking(false);
         }
-
-        if (currentRecipeIndex < recipes.length - 1) {
-          setTimeout(() => {
-            setCurrentRecipeIndex(currentRecipeIndex + 1);
-            setShowTopLabel(false);
-          }, 2000);
-        }
       };
 
       if (!show) return null;
@@ -9456,7 +9461,7 @@
             flexDirection: 'column',
           }}>
             <div style={{
-              padding: '24px 24px 16px',
+              padding: '24px 24px 40px',
               display: 'flex',
               flexDirection: 'column',
               gap: 16,

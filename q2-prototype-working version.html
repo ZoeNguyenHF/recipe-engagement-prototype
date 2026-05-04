@@ -965,6 +965,7 @@
       margin-top: 8px;
     }
   </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js"></script>
 </head>
 <body>
   <div id="root"></div>
@@ -6848,6 +6849,7 @@
                         borderRadius: 12,
                         overflow: 'hidden',
                         marginBottom: 16,
+                        position: 'relative',
                       }}>
                         <img
                           src={recipe.img}
@@ -6858,6 +6860,39 @@
                             objectFit: 'cover',
                           }}
                         />
+
+                        {/* Your Top Rated Badge */}
+                        {ratings[recipeIndex] >= 4 && (
+                          <div style={{
+                            position: 'absolute',
+                            bottom: 0,
+                            left: 0,
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: 4,
+                            backgroundColor: '#8c6e00',
+                            borderRadius: '0 12px 0 0',
+                            padding: '4px 8px',
+                          }}>
+                            <span style={{
+                              fontFamily: 'var(--font-body)',
+                              fontSize: 12,
+                              fontWeight: 700,
+                              color: '#ffffff',
+                              lineHeight: '16px',
+                            }}>{ratings[recipeIndex]}</span>
+                            <svg width="16" height="16" viewBox="0 0 28 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <path d="M14 0L18.1532 8.79122L28 9.93112L20.72 16.5043L22.6525 26L14 21.2712L5.34752 26L7.28 16.5043L0 9.93112L9.84681 8.79122L14 0Z" fill="#ffffff"/>
+                            </svg>
+                            <span style={{
+                              fontFamily: 'var(--font-body)',
+                              fontSize: 12,
+                              fontWeight: 700,
+                              color: '#ffffff',
+                              lineHeight: '16px',
+                            }}>Your top rated</span>
+                          </div>
+                        )}
                       </div>
 
                       {/* Recipe name */}
@@ -8228,6 +8263,7 @@
                         borderRadius: 12,
                         overflow: 'hidden',
                         marginBottom: 16,
+                        position: 'relative',
                       }}>
                         <img
                           src={recipe.img}
@@ -8238,6 +8274,39 @@
                             objectFit: 'cover',
                           }}
                         />
+
+                        {/* Your Top Rated Badge */}
+                        {ratings[recipeIndex] >= 4 && (
+                          <div style={{
+                            position: 'absolute',
+                            bottom: 0,
+                            left: 0,
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: 4,
+                            backgroundColor: '#8c6e00',
+                            borderRadius: '0 12px 0 0',
+                            padding: '4px 8px',
+                          }}>
+                            <span style={{
+                              fontFamily: 'var(--font-body)',
+                              fontSize: 12,
+                              fontWeight: 700,
+                              color: '#ffffff',
+                              lineHeight: '16px',
+                            }}>{ratings[recipeIndex]}</span>
+                            <svg width="16" height="16" viewBox="0 0 28 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <path d="M14 0L18.1532 8.79122L28 9.93112L20.72 16.5043L22.6525 26L14 21.2712L5.34752 26L7.28 16.5043L0 9.93112L9.84681 8.79122L14 0Z" fill="#ffffff"/>
+                            </svg>
+                            <span style={{
+                              fontFamily: 'var(--font-body)',
+                              fontSize: 12,
+                              fontWeight: 700,
+                              color: '#ffffff',
+                              lineHeight: '16px',
+                            }}>Your top rated</span>
+                          </div>
+                        )}
                       </div>
 
                       {/* Recipe name */}
@@ -10075,6 +10144,40 @@
                               objectFit: 'cover',
                             }}
                           />
+
+                          {/* Your Top Rated Badge */}
+                          {currentRating >= 4 && (
+                            <div style={{
+                              position: 'absolute',
+                              bottom: 0,
+                              left: 0,
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              gap: 4,
+                              backgroundColor: '#8c6e00',
+                              borderRadius: '0 12px 0 0',
+                              padding: '4px 8px',
+                            }}>
+                              <span style={{
+                                fontFamily: 'var(--font-body)',
+                                fontSize: 12,
+                                fontWeight: 700,
+                                color: '#ffffff',
+                                lineHeight: '16px',
+                              }}>{currentRating}</span>
+                              <svg width="16" height="16" viewBox="0 0 28 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M14 0L18.1532 8.79122L28 9.93112L20.72 16.5043L22.6525 26L14 21.2712L5.34752 26L7.28 16.5043L0 9.93112L9.84681 8.79122L14 0Z" fill="#ffffff"/>
+                              </svg>
+                              <span style={{
+                                fontFamily: 'var(--font-body)',
+                                fontSize: 12,
+                                fontWeight: 700,
+                                color: '#ffffff',
+                                lineHeight: '16px',
+                              }}>Your top rated</span>
+                            </div>
+                          )}
+
                           {/* Bookmark */}
                           <button
                             onClick={(e) => {
@@ -11235,14 +11338,12 @@
                               paddingBottom: 8,
                             }}>
                               {[
-                                { id: 1, label: 'Healthy' },
-                                { id: 2, label: 'Clear instructions' },
-                                { id: 3, label: 'Tasty / liked flavors' },
-                                { id: 4, label: 'Easy to cook' },
-                                { id: 5, label: 'Liked certain ingredient(s)' },
-                                { id: 6, label: 'Fast to cook' },
-                                { id: 7, label: 'Family / kid-friendly' },
-                                { id: 8, label: 'Other' },
+                                { id: 1, label: 'Ingredient quality' },
+                                { id: 2, label: 'Ease of cooking' },
+                                { id: 3, label: 'Portion size' },
+                                { id: 4, label: 'Value for money' },
+                                { id: 5, label: 'Delivery' },
+                                { id: 6, label: 'Taste' },
                               ].map((option) => {
                                 const isSelected = selectedPositiveChips.has(option.id);
                                 return (
@@ -11567,14 +11668,12 @@
                               paddingBottom: 8,
                             }}>
                               {[
-                                { id: 1, label: 'Healthy' },
-                                { id: 2, label: 'Clear instructions' },
-                                { id: 3, label: 'Tasty / liked flavors' },
-                                { id: 4, label: 'Easy to cook' },
-                                { id: 5, label: 'Liked certain ingredient(s)' },
-                                { id: 6, label: 'Fast to cook' },
-                                { id: 7, label: 'Family / kid-friendly' },
-                                { id: 8, label: 'Other' },
+                                { id: 1, label: 'Ingredient quality' },
+                                { id: 2, label: 'Ease of cooking' },
+                                { id: 3, label: 'Portion size' },
+                                { id: 4, label: 'Value for money' },
+                                { id: 5, label: 'Delivery' },
+                                { id: 6, label: 'Taste' },
                               ].map((option) => {
                                 const isSelected = selectedPositiveChips.has(option.id);
                                 return (
@@ -12040,7 +12139,7 @@
                 fontWeight: 700,
                 color: '#232323',
               }}>
-                {showSuccessReviewScreen ? 'Your review' : showCompletedScreen ? 'Complete' : showRatingScreen ? 'Rate your meal' : `Step ${currentStep + 1} of ${cookingSteps.length}`}
+                {showSuccessReviewScreen ? 'Your last review' : showCompletedScreen ? 'Complete' : showRatingScreen ? 'Rate your meal' : `Step ${currentStep + 1} of ${cookingSteps.length}`}
               </span>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
                 <path d="M6 9l6 6 6-6" stroke="#232323" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
@@ -13610,10 +13709,31 @@
       const [isPositiveFeedbackExpanded, setIsPositiveFeedbackExpanded] = useState(true);
       const [isNegativeFeedbackExpanded, setIsNegativeFeedbackExpanded] = useState(false);
       const [showRatingFilter, setShowRatingFilter] = useState(false);
-      const [selectedRatingFilters, setSelectedRatingFilters] = useState(new Set());
+      const [selectedRatingFilters, setSelectedRatingFilters] = useState(null);
+      const [selectedThemeFilter, setSelectedThemeFilter] = useState(null); // For filtering by theme: { theme: 'taste', section: 'positive' }
+      const [markedHelpful, setMarkedHelpful] = useState(new Set()); // Track which reviews user marked as helpful (by index)
+      const [expandedReviews, setExpandedReviews] = useState(new Set()); // Track which reviews are expanded
       const [userSubmittedRating, setUserSubmittedRating] = useState(null);
       const [userSubmittedFeedback, setUserSubmittedFeedback] = useState({ positive: new Set(), negative: new Set(), comment: '' });
       const customerRatingRef = React.useRef(null);
+      const drawerContentRef = React.useRef(null);
+      const ratingStarsRef = React.useRef(null);
+
+      // New state for theme-based ratings
+      const [themeRatings, setThemeRatings] = useState({
+        ingredientQuality: null, // null, 'like', or 'dislike'
+        easeOfCooking: null,
+        portionSize: null,
+        valueForMoney: null,
+        delivery: null,
+        taste: null,
+      });
+      const [drawerScrolled, setDrawerScrolled] = useState(false);
+      const [capturedPhoto, setCapturedPhoto] = useState(null);
+      const burstAnimRef = useRef(null);
+      const burstAnimInstanceRef = useRef(null);
+      const stickyBurstAnimRef = useRef(null);
+      const stickyBurstAnimInstanceRef = useRef(null);
 
       // Check if user has a rating (either from recipe data or newly submitted)
       const hasUserRating = userSubmittedRating !== null || (recipe.rating && recipe.isPersonalRating);
@@ -13623,6 +13743,54 @@
       React.useEffect(() => {
         setQuantity(cart[recipe.id] || 0);
       }, [cart, recipe.id]);
+
+      // Initialize Lottie burst animations
+      React.useEffect(() => {
+        if (showFeedbackDrawer) {
+          const lottieJSON = {"nm": "Main Scene", "h": 512, "w": 512, "meta": {"g": "@lottiefiles/creator 1.79.0"}, "layers": [{"ty": 4, "nm": "Star 1", "sr": 1, "st": 0, "op": 150, "ip": 0, "hasMask": false, "ao": 0, "ks": {"a": {"a": 0, "k": [0, 0]}, "s": {"a": 1, "k": [{"o": {"x": 0, "y": 0}, "i": {"x": 0.36, "y": 1}, "s": [84.44568, 84.44568], "t": 0}, {"o": {"x": 0.22, "y": 0.61}, "i": {"x": 1, "y": 1}, "s": [161.38672, 161.38672], "t": 6}, {"s": [54.36904, 54.36904], "t": 30}]}, "sk": {"a": 0, "k": 0}, "p": {"a": 1, "k": [{"o": {"x": 0, "y": 0}, "i": {"x": 0.36, "y": 1}, "s": [256, 256], "t": 0}, {"s": [417.5, 256.0], "t": 30}]}, "r": {"a": 0, "k": 0}, "sa": {"a": 0, "k": 0}, "o": {"a": 1, "k": [{"o": {"x": 0, "y": 0}, "i": {"x": 0.36, "y": 1}, "s": [100], "t": 0}, {"s": [0], "t": 30}]}}, "shapes": [{"ty": "sr", "nm": "Star Shape 1", "d": 1, "ir": {"a": 0, "k": 10.25}, "is": {"a": 0, "k": 0}, "pt": {"a": 0, "k": 5}, "p": {"a": 0, "k": [0, 0]}, "or": {"a": 0, "k": 20.5}, "os": {"a": 0, "k": 0}, "r": {"a": 0, "k": 0}, "sy": 1}, {"ty": "fl", "nm": "Fill", "c": {"a": 0, "k": [1, 0.914, 0]}, "r": 1, "o": {"a": 0, "k": 100}}], "ind": 1}, {"ty": 4, "nm": "Star 2", "sr": 1, "st": 0, "op": 150, "ip": 0, "hasMask": false, "ao": 0, "ks": {"a": {"a": 0, "k": [0, 0]}, "s": {"a": 1, "k": [{"o": {"x": 0, "y": 0}, "i": {"x": 0.36, "y": 1}, "s": [46.0, 46.0], "t": 0}, {"o": {"x": 0.22, "y": 0.61}, "i": {"x": 1, "y": 1}, "s": [88.0, 88.0], "t": 6}, {"s": [29.0, 29.0], "t": 30}]}, "sk": {"a": 0, "k": 0}, "p": {"a": 1, "k": [{"o": {"x": 0, "y": 0}, "i": {"x": 0.36, "y": 1}, "s": [256, 256], "t": 0}, {"s": [336.75, 395.8631027111868], "t": 30}]}, "r": {"a": 0, "k": 0}, "sa": {"a": 0, "k": 0}, "o": {"a": 1, "k": [{"o": {"x": 0, "y": 0}, "i": {"x": 0.36, "y": 1}, "s": [100], "t": 0}, {"s": [0], "t": 30}]}}, "shapes": [{"ty": "sr", "nm": "Star Shape 1", "d": 1, "ir": {"a": 0, "k": 10.25}, "is": {"a": 0, "k": 0}, "pt": {"a": 0, "k": 5}, "p": {"a": 0, "k": [0, 0]}, "or": {"a": 0, "k": 20.5}, "os": {"a": 0, "k": 0}, "r": {"a": 0, "k": 0}, "sy": 1}, {"ty": "fl", "nm": "Fill", "c": {"a": 0, "k": [1, 0.914, 0]}, "r": 1, "o": {"a": 0, "k": 100}}], "ind": 2}, {"ty": 4, "nm": "Star 3", "sr": 1, "st": 0, "op": 150, "ip": 0, "hasMask": false, "ao": 0, "ks": {"a": {"a": 0, "k": [0, 0]}, "s": {"a": 1, "k": [{"o": {"x": 0, "y": 0}, "i": {"x": 0.36, "y": 1}, "s": [84.44568, 84.44568], "t": 0}, {"o": {"x": 0.22, "y": 0.61}, "i": {"x": 1, "y": 1}, "s": [161.38672, 161.38672], "t": 6}, {"s": [54.36904, 54.36904], "t": 30}]}, "sk": {"a": 0, "k": 0}, "p": {"a": 1, "k": [{"o": {"x": 0, "y": 0}, "i": {"x": 0.36, "y": 1}, "s": [256, 256], "t": 0}, {"s": [175.25000000000006, 395.8631027111869], "t": 30}]}, "r": {"a": 0, "k": 0}, "sa": {"a": 0, "k": 0}, "o": {"a": 1, "k": [{"o": {"x": 0, "y": 0}, "i": {"x": 0.36, "y": 1}, "s": [100], "t": 0}, {"s": [0], "t": 30}]}}, "shapes": [{"ty": "sr", "nm": "Star Shape 1", "d": 1, "ir": {"a": 0, "k": 10.25}, "is": {"a": 0, "k": 0}, "pt": {"a": 0, "k": 5}, "p": {"a": 0, "k": [0, 0]}, "or": {"a": 0, "k": 20.5}, "os": {"a": 0, "k": 0}, "r": {"a": 0, "k": 0}, "sy": 1}, {"ty": "fl", "nm": "Fill", "c": {"a": 0, "k": [1, 0.914, 0]}, "r": 1, "o": {"a": 0, "k": 100}}], "ind": 3}, {"ty": 4, "nm": "Star 4", "sr": 1, "st": 0, "op": 150, "ip": 0, "hasMask": false, "ao": 0, "ks": {"a": {"a": 0, "k": [0, 0]}, "s": {"a": 1, "k": [{"o": {"x": 0, "y": 0}, "i": {"x": 0.36, "y": 1}, "s": [46.0, 46.0], "t": 0}, {"o": {"x": 0.22, "y": 0.61}, "i": {"x": 1, "y": 1}, "s": [88.0, 88.0], "t": 6}, {"s": [29.0, 29.0], "t": 30}]}, "sk": {"a": 0, "k": 0}, "p": {"a": 1, "k": [{"o": {"x": 0, "y": 0}, "i": {"x": 0.36, "y": 1}, "s": [256, 256], "t": 0}, {"s": [94.5, 256.0], "t": 30}]}, "r": {"a": 0, "k": 0}, "sa": {"a": 0, "k": 0}, "o": {"a": 1, "k": [{"o": {"x": 0, "y": 0}, "i": {"x": 0.36, "y": 1}, "s": [100], "t": 0}, {"s": [0], "t": 30}]}}, "shapes": [{"ty": "sr", "nm": "Star Shape 1", "d": 1, "ir": {"a": 0, "k": 10.25}, "is": {"a": 0, "k": 0}, "pt": {"a": 0, "k": 5}, "p": {"a": 0, "k": [0, 0]}, "or": {"a": 0, "k": 20.5}, "os": {"a": 0, "k": 0}, "r": {"a": 0, "k": 0}, "sy": 1}, {"ty": "fl", "nm": "Fill", "c": {"a": 0, "k": [1, 0.914, 0]}, "r": 1, "o": {"a": 0, "k": 100}}], "ind": 4}, {"ty": 4, "nm": "Star 5", "sr": 1, "st": 0, "op": 150, "ip": 0, "hasMask": false, "ao": 0, "ks": {"a": {"a": 0, "k": [0, 0]}, "s": {"a": 1, "k": [{"o": {"x": 0, "y": 0}, "i": {"x": 0.36, "y": 1}, "s": [84.44568, 84.44568], "t": 0}, {"o": {"x": 0.22, "y": 0.61}, "i": {"x": 1, "y": 1}, "s": [161.38672, 161.38672], "t": 6}, {"s": [54.36904, 54.36904], "t": 30}]}, "sk": {"a": 0, "k": 0}, "p": {"a": 1, "k": [{"o": {"x": 0, "y": 0}, "i": {"x": 0.36, "y": 1}, "s": [256, 256], "t": 0}, {"s": [175.24999999999994, 116.1368972888132], "t": 30}]}, "r": {"a": 0, "k": 0}, "sa": {"a": 0, "k": 0}, "o": {"a": 1, "k": [{"o": {"x": 0, "y": 0}, "i": {"x": 0.36, "y": 1}, "s": [100], "t": 0}, {"s": [0], "t": 30}]}}, "shapes": [{"ty": "sr", "nm": "Star Shape 1", "d": 1, "ir": {"a": 0, "k": 10.25}, "is": {"a": 0, "k": 0}, "pt": {"a": 0, "k": 5}, "p": {"a": 0, "k": [0, 0]}, "or": {"a": 0, "k": 20.5}, "os": {"a": 0, "k": 0}, "r": {"a": 0, "k": 0}, "sy": 1}, {"ty": "fl", "nm": "Fill", "c": {"a": 0, "k": [1, 0.914, 0]}, "r": 1, "o": {"a": 0, "k": 100}}], "ind": 5}, {"ty": 4, "nm": "Star 6", "sr": 1, "st": 0, "op": 150, "ip": 0, "hasMask": false, "ao": 0, "ks": {"a": {"a": 0, "k": [0, 0]}, "s": {"a": 1, "k": [{"o": {"x": 0, "y": 0}, "i": {"x": 0.36, "y": 1}, "s": [46.0, 46.0], "t": 0}, {"o": {"x": 0.22, "y": 0.61}, "i": {"x": 1, "y": 1}, "s": [88.0, 88.0], "t": 6}, {"s": [29.0, 29.0], "t": 30}]}, "sk": {"a": 0, "k": 0}, "p": {"a": 1, "k": [{"o": {"x": 0, "y": 0}, "i": {"x": 0.36, "y": 1}, "s": [256, 256], "t": 0}, {"s": [336.75, 116.13689728881317], "t": 30}]}, "r": {"a": 0, "k": 0}, "sa": {"a": 0, "k": 0}, "o": {"a": 1, "k": [{"o": {"x": 0, "y": 0}, "i": {"x": 0.36, "y": 1}, "s": [100], "t": 0}, {"s": [0], "t": 30}]}}, "shapes": [{"ty": "sr", "nm": "Star Shape 1", "d": 1, "ir": {"a": 0, "k": 10.25}, "is": {"a": 0, "k": 0}, "pt": {"a": 0, "k": 5}, "p": {"a": 0, "k": [0, 0]}, "or": {"a": 0, "k": 20.5}, "os": {"a": 0, "k": 0}, "r": {"a": 0, "k": 0}, "sy": 1}, {"ty": "fl", "nm": "Fill", "c": {"a": 0, "k": [1, 0.914, 0]}, "r": 1, "o": {"a": 0, "k": 100}}], "ind": 6}], "v": "5.7.0", "fr": 30, "op": 60, "ip": 0, "assets": []};
+
+          if (burstAnimRef.current && !burstAnimInstanceRef.current) {
+            burstAnimInstanceRef.current = lottie.loadAnimation({
+              container: burstAnimRef.current,
+              renderer: 'svg',
+              loop: false,
+              autoplay: false,
+              animationData: lottieJSON
+            });
+            burstAnimInstanceRef.current.addEventListener('complete', () => {
+              if (burstAnimRef.current) {
+                burstAnimRef.current.style.display = 'none';
+              }
+            });
+          }
+
+          if (stickyBurstAnimRef.current && !stickyBurstAnimInstanceRef.current) {
+            stickyBurstAnimInstanceRef.current = lottie.loadAnimation({
+              container: stickyBurstAnimRef.current,
+              renderer: 'svg',
+              loop: false,
+              autoplay: false,
+              animationData: lottieJSON
+            });
+            stickyBurstAnimInstanceRef.current.addEventListener('complete', () => {
+              if (stickyBurstAnimRef.current) {
+                stickyBurstAnimRef.current.style.display = 'none';
+              }
+            });
+          }
+        }
+
+        return () => {
+          if (burstAnimInstanceRef.current) {
+            burstAnimInstanceRef.current.destroy();
+            burstAnimInstanceRef.current = null;
+          }
+          if (stickyBurstAnimInstanceRef.current) {
+            stickyBurstAnimInstanceRef.current.destroy();
+            stickyBurstAnimInstanceRef.current = null;
+          }
+        };
+      }, [showFeedbackDrawer]);
 
       const scrollToCustomerRating = () => {
         if (!isCommunityRatingExpanded) {
@@ -13649,11 +13817,12 @@
 
       // Helper to map chip IDs to labels
       const chipLabels = {
-        1: 'Healthy',
-        2: 'Clear instructions',
-        3: 'Tasty / liked flavors',
-        4: 'Easy to cook',
-        5: 'Liked certain ingredient(s)',
+        1: 'Ingredient quality',
+        2: 'Ease of cooking',
+        3: 'Portion size',
+        4: 'Value for money',
+        5: 'Delivery',
+        6: 'Taste',
         6: 'Fast to cook',
         7: 'Family / kid-friendly',
         8: 'Other',
@@ -13740,6 +13909,39 @@
                   objectFit: 'cover',
                 }}
               />
+
+              {/* Your Top Rated Badge */}
+              {currentUserRating >= 4 && (
+                <div style={{
+                  position: 'absolute',
+                  bottom: 0,
+                  left: 0,
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: 4,
+                  backgroundColor: '#8c6e00',
+                  borderRadius: '0 8px 0 0',
+                  padding: '4px 8px',
+                }}>
+                  <span style={{
+                    fontFamily: 'var(--font-body)',
+                    fontSize: 12,
+                    fontWeight: 700,
+                    color: '#ffffff',
+                    lineHeight: '16px',
+                  }}>{currentUserRating}</span>
+                  <svg width="16" height="16" viewBox="0 0 28 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M14 0L18.1532 8.79122L28 9.93112L20.72 16.5043L22.6525 26L14 21.2712L5.34752 26L7.28 16.5043L0 9.93112L9.84681 8.79122L14 0Z" fill="#ffffff"/>
+                  </svg>
+                  <span style={{
+                    fontFamily: 'var(--font-body)',
+                    fontSize: 12,
+                    fontWeight: 700,
+                    color: '#ffffff',
+                    lineHeight: '16px',
+                  }}>Your top rated</span>
+                </div>
+              )}
 
               {/* Close Button */}
               <button
@@ -14110,42 +14312,82 @@
                     <div style={{
                       marginBottom: 24,
                       padding: 16,
-                      background: '#faf8f3',
-                      border: '1px solid #e0d9cb',
+                      background: '#efe9de',
+                      border: '2px solid #efe9de',
                       borderRadius: 8,
+                      display: 'flex',
+                      gap: 16,
+                      alignItems: 'center',
                     }}>
-                      <p style={{
-                        fontFamily: 'var(--font-body)',
-                        fontSize: 14,
-                        fontWeight: 400,
-                        color: '#656565',
-                        margin: '0 0 12px 0',
-                        textAlign: 'center',
-                      }}>You ordered this meal 2 weeks ago. Add your rating:</p>
-                      <div style={{ display: 'flex', gap: 4, justifyContent: 'center' }}>
-                        {[1, 2, 3, 4, 5].map((star) => (
-                          <span
-                            key={star}
-                            onClick={() => {
-                              setEditingRating(star);
-                              setFeedbackComment('');
-                              setSelectedPositiveChips(new Set());
-                              setSelectedNegativeChips(new Set());
-                              // Set expanded state based on rating
-                              if (star >= 4) {
-                                setIsPositiveFeedbackExpanded(true);
-                                setIsNegativeFeedbackExpanded(false);
-                              } else {
-                                setIsPositiveFeedbackExpanded(false);
-                                setIsNegativeFeedbackExpanded(true);
-                              }
-                              setShowFeedbackDrawer(true);
-                            }}
-                            style={{ cursor: 'pointer' }}
-                          >
-                            {renderStar(star - 1, 0, 28)}
-                          </span>
-                        ))}
+                      {/* Left side: Text and stars */}
+                      <div style={{
+                        flex: 1,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: 8,
+                      }}>
+                        <div style={{
+                          display: 'flex',
+                          flexDirection: 'column',
+                          gap: 8,
+                        }}>
+                          <h3 style={{
+                            fontFamily: 'var(--font-headline)',
+                            fontSize: 16,
+                            fontWeight: 700,
+                            color: '#232323',
+                            margin: 0,
+                            lineHeight: '20px',
+                          }}>Don't forget to rate this</h3>
+                          <p style={{
+                            fontFamily: 'var(--font-body)',
+                            fontSize: 12,
+                            fontWeight: 400,
+                            color: '#242424',
+                            margin: 0,
+                            lineHeight: '16px',
+                          }}>You ordered this meal 2 weeks ago. Rate it to get better meal recommendations.</p>
+                        </div>
+                        <div style={{ display: 'flex', gap: 0 }}>
+                          {[1, 2, 3, 4, 5].map((star) => (
+                            <span
+                              key={star}
+                              onClick={() => {
+                                setEditingRating(star);
+                                setFeedbackComment('');
+                                setSelectedPositiveChips(new Set());
+                                setSelectedNegativeChips(new Set());
+                                // Set expanded state based on rating
+                                if (star >= 4) {
+                                  setIsPositiveFeedbackExpanded(true);
+                                  setIsNegativeFeedbackExpanded(false);
+                                } else {
+                                  setIsPositiveFeedbackExpanded(false);
+                                  setIsNegativeFeedbackExpanded(true);
+                                }
+                                setShowFeedbackDrawer(true);
+                              }}
+                              style={{ cursor: 'pointer' }}
+                            >
+                              {renderStar(star - 1, 0, 32)}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Right side: Illustration */}
+                      <div style={{
+                        flexShrink: 0,
+                      }}>
+                        <img
+                          src="review visual.png"
+                          alt="Rate this meal"
+                          style={{
+                            width: 112,
+                            height: 112,
+                            objectFit: 'contain',
+                          }}
+                        />
                       </div>
                     </div>
                   )}
@@ -14162,24 +14404,42 @@
                     <div style={{
                       display: 'flex',
                       alignItems: 'center',
-                      gap: 8,
+                      gap: 12,
                     }}>
+                      {/* Big Star Icon */}
+                      <svg width="32" height="32" viewBox="0 0 28 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M14 0L18.1532 8.79122L28 9.93112L20.72 16.5043L22.6525 26L14 21.2712L5.34752 26L7.28 16.5043L0 9.93112L9.84681 8.79122L14 0Z" fill="#232323"/>
+                      </svg>
+
+                      {/* Rating Number */}
                       <span style={{
                         fontFamily: 'var(--font-headline)',
-                        fontSize: 32,
+                        fontSize: 40,
                         fontWeight: 700,
                         color: '#232323',
+                        lineHeight: '40px',
                       }}>{recipe.customerRating || '4.5'}</span>
-                      <div>
-                        <div style={{ display: 'flex', gap: 2, marginBottom: 4 }}>
-                          {[0, 1, 2, 3, 4].map((i) => renderStar(i, parseFloat(recipe.customerRating || 4.5), 20))}
-                        </div>
+
+                      {/* Rating and Review Count */}
+                      <div style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: 0,
+                      }}>
                         <span style={{
                           fontFamily: 'var(--font-body)',
                           fontSize: 14,
                           fontWeight: 400,
                           color: '#656565',
-                        }}>23k customer ratings</span>
+                          lineHeight: '20px',
+                        }}>23k ratings</span>
+                        <span style={{
+                          fontFamily: 'var(--font-body)',
+                          fontSize: 14,
+                          fontWeight: 400,
+                          color: '#656565',
+                          lineHeight: '20px',
+                        }}>402 reviews</span>
                       </div>
                     </div>
 
@@ -14201,9 +14461,9 @@
                         padding: 8,
                       }}>
                       <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                        <path d="M8 1L8.5 5.5L13 6L8.5 6.5L8 11L7.5 6.5L3 6L7.5 5.5L8 1Z" fill="#232323"/>
-                        <path d="M12 2L12.3 3.7L14 4L12.3 4.3L12 6L11.7 4.3L10 4L11.7 3.7L12 2Z" fill="#232323"/>
-                        <path d="M4 10L4.3 11.7L6 12L4.3 12.3L4 14L3.7 12.3L2 12L3.7 11.7L4 10Z" fill="#232323"/>
+                        <path d="M3.5 8C3.5 8 5 7 6 3C7 7 8.5 8 8.5 8C8.5 8 7 9 6 13C5 9 3.5 8 3.5 8Z" fill="#232323"/>
+                        <path d="M9.5 4C9.5 4 10.2 3.5 10.5 2C10.8 3.5 11.5 4 11.5 4C11.5 4 10.8 4.5 10.5 6C10.2 4.5 9.5 4 9.5 4Z" fill="#232323"/>
+                        <path d="M11 10C11 10 11.5 9.7 11.7 9C11.9 9.7 12.4 10 12.4 10C12.4 10 11.9 10.3 11.7 11C11.5 10.3 11 10 11 10Z" fill="#232323"/>
                       </svg>
                       AI summary
                     </button>
@@ -14215,34 +14475,33 @@
                     flexDirection: 'column',
                     gap: 0,
                     marginBottom: 24,
-                    padding: '12px',
-                    backgroundColor: '#faf8f3',
+                    padding: '16px',
+                    backgroundColor: '#ffffff',
                     borderRadius: '8px',
-                    border: '1px solid #e0d9cb',
                   }}>
-                    {/* Filter hint and clear button */}
+                    {/* Filter header */}
                     <div style={{
                       display: 'flex',
                       justifyContent: 'space-between',
                       alignItems: 'center',
-                      marginBottom: 4,
+                      marginBottom: 12,
                     }}>
                       <div style={{
                         fontFamily: 'var(--font-body)',
-                        fontSize: 12,
+                        fontSize: 14,
                         fontWeight: 400,
                         color: '#656565',
                       }}>
-                        {selectedRatingFilters.size === 0 ? 'Tap to filter reviews' : `Filtered by ${selectedRatingFilters.size} rating${selectedRatingFilters.size > 1 ? 's' : ''}`}
+                        {selectedRatingFilters === null ? 'Tap to filter reviews' : `Filtered by ${selectedRatingFilters} star rating`}
                       </div>
-                      {selectedRatingFilters.size > 0 && (
+                      {selectedRatingFilters !== null && (
                         <button
-                          onClick={() => setSelectedRatingFilters(new Set())}
+                          onClick={() => setSelectedRatingFilters(null)}
                           style={{
                             background: 'transparent',
                             border: 'none',
                             fontFamily: 'var(--font-body)',
-                            fontSize: 12,
+                            fontSize: 14,
                             fontWeight: 700,
                             color: '#232323',
                             textDecoration: 'underline',
@@ -14253,16 +14512,18 @@
                         </button>
                       )}
                     </div>
+
                     {[
-                      { rating: 5, count: 15234 },
-                      { rating: 4, count: 5821 },
+                      { rating: 5, count: 15200 },
+                      { rating: 4, count: 5800 },
                       { rating: 3, count: 1456 },
                       { rating: 2, count: 623 },
                       { rating: 1, count: 322 },
                     ].map(({ rating, count }) => {
                       const totalRatings = 23456;
                       const percentage = (count / totalRatings) * 100;
-                      const isSelected = selectedRatingFilters.has(rating);
+                      const isSelected = selectedRatingFilters === rating;
+                      const hasFilter = selectedRatingFilters !== null;
                       const formatCount = (num) => {
                         if (num >= 1000) {
                           return (num / 1000).toFixed(1).replace(/\.0$/, '') + 'k';
@@ -14274,40 +14535,36 @@
                         <div
                           key={rating}
                           onClick={() => {
-                            const newFilters = new Set(selectedRatingFilters);
-                            if (newFilters.has(rating)) {
-                              newFilters.delete(rating);
+                            // Toggle: if clicking the same rating, clear it; otherwise set the new rating
+                            if (selectedRatingFilters === rating) {
+                              setSelectedRatingFilters(null);
                             } else {
-                              newFilters.add(rating);
+                              setSelectedRatingFilters(rating);
                             }
-                            setSelectedRatingFilters(newFilters);
                           }}
                           style={{
                             display: 'flex',
                             alignItems: 'center',
                             gap: 8,
                             cursor: 'pointer',
-                            padding: '4px 4px',
-                            borderRadius: '4px',
-                            backgroundColor: isSelected ? '#efe9de' : 'transparent',
-                            opacity: selectedRatingFilters.size === 0 || isSelected ? 1 : 0.4,
-                            transition: 'all 0.2s ease',
+                            padding: '8px 0',
+                            opacity: hasFilter && !isSelected ? 0.4 : 1,
+                            transition: 'opacity 0.2s ease',
                           }}
                         >
-                          {/* Star rating label */}
+                          {/* Rating number and star */}
                           <div style={{
                             display: 'flex',
                             alignItems: 'center',
                             gap: 4,
-                            minWidth: 50,
+                            fontFamily: 'var(--font-body)',
+                            fontSize: 14,
+                            fontWeight: isSelected ? 700 : 400,
+                            color: '#232323',
+                            lineHeight: '16px',
+                            minWidth: 35,
                           }}>
-                            <span style={{
-                              fontFamily: 'var(--font-body)',
-                              fontSize: 14,
-                              fontWeight: isSelected ? 700 : 400,
-                              color: isSelected ? '#067a46' : '#232323',
-                            }}>{rating}</span>
-                            {renderStar(0, 1, 14)}
+                            {rating} {renderStar(0, 1, 14)}
                           </div>
 
                           {/* Progress bar */}
@@ -14318,27 +14575,30 @@
                             borderRadius: 5,
                             overflow: 'hidden',
                             position: 'relative',
+                            minWidth: 1,
                           }}>
                             <div style={{
                               height: '100%',
                               width: `${percentage}%`,
-                              backgroundColor: '#067a46',
-                              transition: 'width 0.3s ease, transform 0.2s ease',
+                              backgroundColor: hasFilter && !isSelected ? '#cccccc' : '#232323',
+                              borderRadius: 5,
+                              transition: 'background-color 0.2s ease, transform 0.2s ease',
                               transform: isSelected ? 'scaleY(1.1)' : 'scaleY(1)',
                             }} />
                           </div>
 
                           {/* Count */}
-                          <span style={{
+                          <div style={{
                             fontFamily: 'var(--font-body)',
                             fontSize: 14,
                             fontWeight: isSelected ? 700 : 400,
                             color: '#232323',
-                            minWidth: 40,
                             textAlign: 'right',
+                            lineHeight: '16px',
+                            minWidth: 40,
                           }}>
                             {formatCount(count)}
-                          </span>
+                          </div>
                         </div>
                       );
                     })}
@@ -14346,59 +14606,116 @@
 
                 {/* Community Reviews */}
                 {(() => {
-                  // All reviews data with feedback tags and photos (randomized for realism)
-                  const allReviews = [
-                    { rating: 5, name: 'Sarah M.', time: '2 days ago', comment: 'This recipe was absolutely delicious! The flavors were perfectly balanced and my family loved it. Will definitely make this again.', positive: ['Tasty', 'Family-friendly'], negative: [], photos: ['recipes/HelloFresh Main Image.jpg', 'recipes/HelloFresh Main High.jpg'] },
-                    { rating: 5, name: 'Jessica L.', time: '2 weeks ago', comment: 'Perfect weeknight dinner! Quick, healthy, and tasty. Kids ate everything on their plates which is a win in my book!', positive: ['Easy to make', 'Healthy', 'Family-friendly'], negative: [], photos: [] },
-                    { rating: 5, name: 'David R.', time: '3 weeks ago', comment: 'Outstanding meal! The ingredients were fresh and the instructions were easy to follow. Highly recommend!', positive: ['Easy to make', 'Fresh ingredients'], negative: [], photos: ['recipes/HelloFresh Main High.jpg'] },
-                    { rating: 4, name: 'Mike T.', time: '1 week ago', comment: 'Great recipe! Easy to follow instructions. Only gave 4 stars because I would have preferred a bit more spice, but that\'s just personal preference.', positive: ['Easy to make'], negative: ['Needs more spice'], photos: ['recipes/HelloFresh Main Image.jpg'] },
-                    { rating: 4, name: 'Emily S.', time: '5 days ago', comment: 'Really good overall. Cooking time was accurate and the meal was filling. Would like to see more variety in the spices used.', positive: ['Good portions'], negative: ['Needs more spice'], photos: [] },
-                    { rating: 4, name: 'Robert K.', time: '1 month ago', comment: 'Solid recipe. The portion sizes were generous and it tasted great. I took off a star because prep took longer than expected.', positive: ['Tasty', 'Good portions'], negative: ['Takes time'], photos: ['recipes/HelloFresh Main Image.jpg', 'recipes/HelloFresh Main High.jpg'] },
-                    { rating: 3, name: 'Amanda P.', time: '2 weeks ago', comment: 'It was okay. Nothing special but not bad either. I think I expected more flavor based on the description.', positive: [], negative: ['Too bland'], photos: [] },
-                    { rating: 3, name: 'Chris B.', time: '3 weeks ago', comment: 'Average meal. The ingredients were fine but the overall taste was a bit bland for my liking. Needed more seasoning.', positive: [], negative: ['Too bland'], photos: [] },
-                    { rating: 2, name: 'Lisa W.', time: '4 days ago', comment: 'Disappointed with this one. The vegetables were overcooked by the time the protein was done. Instructions could be clearer.', positive: [], negative: ['Confusing instructions', 'Quality issues'], photos: ['recipes/HelloFresh Main High.jpg'] },
-                    { rating: 2, name: 'Tom H.', time: '1 week ago', comment: 'Not great. The portions were smaller than expected and some ingredients didn\'t seem very fresh.', positive: [], negative: ['Small portions', 'Quality issues'], photos: [] },
-                    { rating: 1, name: 'Karen J.', time: '6 days ago', comment: 'Really didn\'t enjoy this meal. The flavors didn\'t work together and it took much longer to prepare than stated.', positive: [], negative: ['Takes time', 'Too bland'], photos: [] },
-                    { rating: 1, name: 'Mark D.', time: '2 weeks ago', comment: 'Very disappointing. The recipe was confusing and the end result was not appetizing. Would not recommend.', positive: [], negative: ['Confusing instructions', 'Too bland'], photos: [] },
+                  // Theme definitions matching rating drawer
+                  const themes = {
+                    ingredientQuality: 'Ingredient quality',
+                    easeOfCooking: 'Ease of cooking',
+                    portionSize: 'Portion size',
+                    valueForMoney: 'Value for money',
+                    delivery: 'Delivery',
+                    taste: 'Taste',
+                  };
+
+                  // All reviews data with theme-based feedback (randomized for realism)
+                  let allReviews = [
+                    { rating: 5, name: 'Sarah M.', time: '2 days ago', comment: 'This recipe was absolutely delicious! The flavors were perfectly balanced and my family loved it. The instructions were clear and easy to follow, even for someone like me who is not an experienced cook. I particularly enjoyed how the spices complemented each other without being overwhelming. My family couldn\'t stop raving about it at dinner, and my picky eater actually asked for seconds! The portion sizes were generous, and we even had leftovers for lunch the next day. I\'ve already added this to my regular rotation and will definitely make this again. Highly recommend to anyone looking for a flavorful, satisfying meal!', positive: ['taste', 'ingredientQuality', 'easeOfCooking', 'portionSize'], negative: [], photos: ['recipes/HelloFresh Main Image.jpg', 'recipes/HelloFresh Main High.jpg'], helpfulCount: 24 },
+                    { rating: 5, name: 'Jessica L.', time: '2 weeks ago', comment: 'Perfect weeknight dinner! Quick, healthy, and tasty. Kids ate everything on their plates which is a win in my book!', positive: ['easeOfCooking', 'taste', 'portionSize'], negative: [], photos: [], helpfulCount: 18 },
+                    { rating: 5, name: 'David R.', time: '3 weeks ago', comment: 'Outstanding meal! The ingredients were fresh and the instructions were easy to follow. Highly recommend!', positive: ['ingredientQuality', 'easeOfCooking'], negative: [], photos: ['recipes/HelloFresh Main High.jpg'], helpfulCount: 12 },
+                    { rating: 4, name: 'Mike T.', time: '1 week ago', comment: 'Great recipe! Easy to follow instructions. Only gave 4 stars because portions could be bigger, but that\'s just personal preference.', positive: ['easeOfCooking', 'taste'], negative: ['portionSize'], photos: ['recipes/HelloFresh Main Image.jpg'], helpfulCount: 7 },
+                    { rating: 4, name: 'Emily S.', time: '5 days ago', comment: 'Really good overall. Cooking time was accurate and the meal was filling. Great value for the price.', positive: ['portionSize', 'valueForMoney'], negative: [], photos: [], helpfulCount: 3 },
+                    { rating: 4, name: 'Robert K.', time: '1 month ago', comment: 'Solid recipe. The portion sizes were generous and it tasted great. I took off a star because prep took longer than expected.', positive: ['taste', 'portionSize'], negative: ['easeOfCooking'], photos: ['recipes/HelloFresh Main Image.jpg', 'recipes/HelloFresh Main High.jpg'], helpfulCount: 15 },
+                    { rating: 3, name: 'Amanda P.', time: '2 weeks ago', comment: 'It was okay. Nothing special but not bad either. I think I expected more flavor based on the description.', positive: ['delivery'], negative: ['taste'], photos: [], helpfulCount: 2 },
+                    { rating: 3, name: 'Chris B.', time: '3 weeks ago', comment: 'Average meal. The ingredients were fine but the overall taste was a bit bland for my liking. Needed more seasoning.', positive: ['ingredientQuality'], negative: ['taste'], photos: [], helpfulCount: 0 },
+                    { rating: 2, name: 'Lisa W.', time: '4 days ago', comment: 'Disappointed with this one. The vegetables were overcooked by the time the protein was done. Instructions could be clearer.', positive: [], negative: ['easeOfCooking', 'ingredientQuality'], photos: ['recipes/HelloFresh Main High.jpg'], helpfulCount: 1 },
+                    { rating: 2, name: 'Tom H.', time: '1 week ago', comment: 'Not great. The portions were smaller than expected and some ingredients didn\'t seem very fresh.', positive: [], negative: ['portionSize', 'ingredientQuality'], photos: [], helpfulCount: 0 },
+                    { rating: 1, name: 'Karen J.', time: '6 days ago', comment: 'Really didn\'t enjoy this meal. The flavors didn\'t work together and it took much longer to prepare than stated.', positive: [], negative: ['easeOfCooking', 'taste'], photos: [], helpfulCount: 0 },
+                    { rating: 1, name: 'Mark D.', time: '2 weeks ago', comment: 'Very disappointing. The recipe was confusing and the end result was not appetizing. Would not recommend.', positive: [], negative: ['easeOfCooking', 'taste'], photos: [], helpfulCount: 5 },
                   ];
 
-                  // Filter reviews based on selected ratings
-                  const filteredReviews = selectedRatingFilters.size === 0
-                    ? allReviews
-                    : allReviews.filter(review => selectedRatingFilters.has(review.rating));
+                  // Add user's review to the beginning if it exists
+                  if (hasUserRating) {
+                    const chipLabelToThemeKey = {
+                      'Ingredient quality': 'ingredientQuality',
+                      'Ease of cooking': 'easeOfCooking',
+                      'Portion size': 'portionSize',
+                      'Value for money': 'valueForMoney',
+                      'Delivery': 'delivery',
+                      'Taste': 'taste',
+                    };
+
+                    const userPositiveThemes = userSubmittedFeedback.positive.size > 0
+                      ? Array.from(userSubmittedFeedback.positive).map(id => chipLabelToThemeKey[chipLabels[id]] || 'taste')
+                      : ['easeOfCooking', 'taste', 'portionSize'];
+
+                    const userNegativeThemes = userSubmittedFeedback.negative.size > 0
+                      ? Array.from(userSubmittedFeedback.negative).map(id => chipLabelToThemeKey[chipLabels[id]] || 'ingredientQuality')
+                      : ['ingredientQuality'];
+
+                    const userReview = {
+                      rating: currentUserRating,
+                      name: 'Zoe Ng.',
+                      time: userSubmittedRating !== null ? 'Just now' : '2 weeks ago',
+                      comment: userSubmittedFeedback.comment || 'This was amazing! The Green Goddess dressing really made the dish. My whole family enjoyed it and it was so fresh and healthy. Definitely adding this to our regular rotation!',
+                      positive: userPositiveThemes,
+                      negative: userNegativeThemes,
+                      photos: recipe.isPersonalRating ? [recipe.img] : [],
+                      isUserReview: true,
+                      helpfulCount: 12,
+                    };
+
+                    allReviews = [userReview, ...allReviews];
+                  }
+
+                  // Filter reviews based on selected rating and theme
+                  let ratingFilteredReviews = allReviews;
+
+                  // First apply rating filter
+                  if (selectedRatingFilters !== null) {
+                    ratingFilteredReviews = ratingFilteredReviews.filter(review => review.rating === selectedRatingFilters);
+                  }
+
+                  // Then apply theme filter (for displaying reviews only)
+                  let filteredReviews = ratingFilteredReviews;
+                  if (selectedThemeFilter !== null) {
+                    filteredReviews = filteredReviews.filter(review =>
+                      review.positive.includes(selectedThemeFilter.theme) || review.negative.includes(selectedThemeFilter.theme)
+                    );
+                  }
 
                   // Show only 4 most recent by default
                   const displayedReviews = filteredReviews.slice(0, 4);
 
-                  // Aggregate feedback from filtered reviews
+                  // Aggregate feedback from rating-filtered reviews only (not theme-filtered)
+                  // This keeps the pills stable when clicking theme filters
                   const aggregateFeedback = (reviews) => {
                     const positiveCounts = {};
                     const negativeCounts = {};
 
                     reviews.forEach(review => {
-                      review.positive.forEach(item => {
-                        positiveCounts[item] = (positiveCounts[item] || 0) + 1;
+                      review.positive.forEach(themeKey => {
+                        positiveCounts[themeKey] = (positiveCounts[themeKey] || 0) + 1;
                       });
-                      review.negative.forEach(item => {
-                        negativeCounts[item] = (negativeCounts[item] || 0) + 1;
+                      review.negative.forEach(themeKey => {
+                        negativeCounts[themeKey] = (negativeCounts[themeKey] || 0) + 1;
                       });
                     });
 
-                    // Sort by count and get top items
+                    // Sort by count and get top items with counts
                     const topPositive = Object.entries(positiveCounts)
                       .sort((a, b) => b[1] - a[1])
-                      .slice(0, 4)
-                      .map(([item]) => item);
+                      .slice(0, 6)
+                      .map(([themeKey, count]) => ({ themeKey, label: themes[themeKey], count }));
 
                     const topNegative = Object.entries(negativeCounts)
                       .sort((a, b) => b[1] - a[1])
-                      .slice(0, 4)
-                      .map(([item]) => item);
+                      .slice(0, 6)
+                      .map(([themeKey, count]) => ({ themeKey, label: themes[themeKey], count }));
 
                     return { topPositive, topNegative };
                   };
 
-                  const { topPositive, topNegative } = aggregateFeedback(filteredReviews);
+                  // Use rating-filtered reviews for pill aggregation to prevent jumping
+                  const { topPositive, topNegative } = aggregateFeedback(ratingFilteredReviews);
 
                   return (
                     <>
@@ -14416,18 +14733,17 @@
                             alignItems: 'flex-start',
                             gap: 8,
                           }}>
-                            {/* Smile icon */}
+                            {/* Smile emoji */}
                             <div style={{
                               minWidth: 20,
                               height: 20,
                               marginTop: 2,
                             }}>
-                              <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                                <circle cx="10" cy="10" r="9" stroke="#067a46" strokeWidth="1.5" fill="none"/>
-                                <circle cx="7" cy="8" r="1.5" fill="#067a46"/>
-                                <circle cx="13" cy="8" r="1.5" fill="#067a46"/>
-                                <path d="M6 12C6 12 7.5 14 10 14C12.5 14 14 12 14 12" stroke="#067a46" strokeWidth="1.5" strokeLinecap="round"/>
-                              </svg>
+                              <img
+                                src="Emoji rating/4.png"
+                                alt="Like"
+                                style={{ width: 20, height: 20, display: 'block' }}
+                              />
                             </div>
                             <div style={{ flex: 1 }}>
                               <span style={{
@@ -14442,20 +14758,35 @@
                                 gap: 6,
                                 marginTop: 6,
                               }}>
-                                {topPositive.map((item) => (
-                                  <span key={item} style={{
-                                    display: 'inline-block',
-                                    padding: '4px 10px',
-                                    backgroundColor: '#efe9de',
-                                    borderRadius: '4px',
-                                    fontFamily: 'var(--font-body)',
-                                    fontSize: 12,
-                                    fontWeight: 400,
-                                    color: '#232323',
-                                  }}>
-                                    {item}
-                                  </span>
-                                ))}
+                                {topPositive.map((item) => {
+                                  const isSelected = selectedThemeFilter?.theme === item.themeKey && selectedThemeFilter?.section === 'positive';
+                                  return (
+                                    <button
+                                      key={item.themeKey}
+                                      onClick={() => {
+                                        if (isSelected) {
+                                          setSelectedThemeFilter(null);
+                                        } else {
+                                          setSelectedThemeFilter({ theme: item.themeKey, section: 'positive' });
+                                        }
+                                      }}
+                                      style={{
+                                        display: 'inline-block',
+                                        padding: '4px 10px',
+                                        backgroundColor: isSelected ? '#232323' : '#efe9de',
+                                        color: isSelected ? '#ffffff' : '#232323',
+                                        border: 'none',
+                                        borderRadius: '4px',
+                                        fontFamily: 'var(--font-body)',
+                                        fontSize: 12,
+                                        fontWeight: 400,
+                                        cursor: 'pointer',
+                                      }}
+                                    >
+                                      {item.label} ({item.count})
+                                    </button>
+                                  );
+                                })}
                               </div>
                             </div>
                           </div>
@@ -14468,18 +14799,17 @@
                             alignItems: 'flex-start',
                             gap: 8,
                           }}>
-                            {/* Sad icon */}
+                            {/* Disappointed emoji */}
                             <div style={{
                               minWidth: 20,
                               height: 20,
                               marginTop: 2,
                             }}>
-                              <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                                <circle cx="10" cy="10" r="9" stroke="#656565" strokeWidth="1.5" fill="none"/>
-                                <circle cx="7" cy="8" r="1.5" fill="#656565"/>
-                                <circle cx="13" cy="8" r="1.5" fill="#656565"/>
-                                <path d="M6 14C6 14 7.5 12 10 12C12.5 12 14 14 14 14" stroke="#656565" strokeWidth="1.5" strokeLinecap="round"/>
-                              </svg>
+                              <img
+                                src="Emoji rating/1.png"
+                                alt="Dislike"
+                                style={{ width: 20, height: 20, display: 'block' }}
+                              />
                             </div>
                             <div style={{ flex: 1 }}>
                               <span style={{
@@ -14494,179 +14824,373 @@
                                 gap: 6,
                                 marginTop: 6,
                               }}>
-                                {topNegative.map((item) => (
-                                  <span key={item} style={{
-                                    display: 'inline-block',
-                                    padding: '4px 10px',
-                                    backgroundColor: '#efe9de',
-                                    borderRadius: '4px',
-                                    fontFamily: 'var(--font-body)',
-                                    fontSize: 12,
-                                    fontWeight: 400,
-                                    color: '#232323',
-                                  }}>
-                                    {item}
-                                  </span>
-                                ))}
+                                {topNegative.map((item) => {
+                                  const isSelected = selectedThemeFilter?.theme === item.themeKey && selectedThemeFilter?.section === 'negative';
+                                  return (
+                                    <button
+                                      key={item.themeKey}
+                                      onClick={() => {
+                                        if (isSelected) {
+                                          setSelectedThemeFilter(null);
+                                        } else {
+                                          setSelectedThemeFilter({ theme: item.themeKey, section: 'negative' });
+                                        }
+                                      }}
+                                      style={{
+                                        display: 'inline-block',
+                                        padding: '4px 10px',
+                                        backgroundColor: isSelected ? '#232323' : '#efe9de',
+                                        color: isSelected ? '#ffffff' : '#232323',
+                                        border: 'none',
+                                        borderRadius: '4px',
+                                        fontFamily: 'var(--font-body)',
+                                        fontSize: 12,
+                                        fontWeight: 400,
+                                        cursor: 'pointer',
+                                      }}
+                                    >
+                                      {item.label} ({item.count})
+                                    </button>
+                                  );
+                                })}
                               </div>
                             </div>
                           </div>
                         )}
                       </div>
 
+                      {/* Filtered Reviews */}
                       <div style={{
                         display: 'flex',
                         flexDirection: 'column',
-                        gap: 24,
+                        gap: 16,
                       }}>
-                        {/* User's Rating - First Review */}
-                        {hasUserRating && (
-                        <div>
+                      {displayedReviews.map((review, index) => (
+                        <div key={index} style={{
+                          display: 'flex',
+                          flexDirection: 'column',
+                          gap: review.isUserReview ? 8 : 12,
+                          backgroundColor: '#ffffff',
+                          padding: '16px',
+                          borderRadius: '8px',
+                        }}>
+                          {/* Title for user review */}
+                          {review.isUserReview && (
+                            <div style={{
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'space-between',
+                              marginBottom: 4,
+                            }}>
+                              <h3 style={{
+                                fontFamily: 'var(--font-headline)',
+                                fontSize: 16,
+                                fontWeight: 700,
+                                lineHeight: '20px',
+                                color: '#232323',
+                                margin: 0,
+                              }}>Your last review</h3>
+                              <span
+                                onClick={() => {
+                                  setEditingRating(currentUserRating);
+                                  setFeedbackComment(userSubmittedFeedback.comment || '');
+                                  setSelectedPositiveChips(new Set(userSubmittedFeedback.positive));
+                                  setSelectedNegativeChips(new Set(userSubmittedFeedback.negative));
+                                  if (currentUserRating >= 4) {
+                                    setIsPositiveFeedbackExpanded(true);
+                                    setIsNegativeFeedbackExpanded(false);
+                                  } else {
+                                    setIsPositiveFeedbackExpanded(false);
+                                    setIsNegativeFeedbackExpanded(true);
+                                  }
+                                  setShowFeedbackDrawer(true);
+                                }}
+                                style={{
+                                  fontFamily: 'var(--font-body)',
+                                  fontSize: 12,
+                                  fontWeight: 700,
+                                  color: '#232323',
+                                  textDecoration: 'underline',
+                                  cursor: 'pointer',
+                                }}>Edit</span>
+                            </div>
+                          )}
+
+                          {/* Content container */}
                           <div style={{
                             display: 'flex',
-                            alignItems: 'center',
-                            gap: 8,
-                            marginBottom: 8,
+                            flexDirection: 'column',
+                            gap: 12,
                           }}>
-                            <div style={{ display: 'flex', gap: 2 }}>
-                              {[0, 1, 2, 3, 4].map((i) => renderStar(i, currentUserRating, 16))}
-                            </div>
-                            <span style={{
-                              fontFamily: 'var(--font-body)',
-                              fontSize: 14,
-                              fontWeight: 700,
-                              color: '#232323',
-                            }}>Your rating</span>
-                            <span style={{
-                              fontFamily: 'var(--font-body)',
-                              fontSize: 14,
-                              fontWeight: 400,
-                              color: '#656565',
-                            }}>· {userSubmittedRating !== null ? 'Just now' : '3 days ago'}</span>
-                            <span
-                              onClick={() => {
-                                setEditingRating(currentUserRating);
-                                setFeedbackComment(userSubmittedFeedback.comment || '');
-                                setSelectedPositiveChips(new Set(userSubmittedFeedback.positive));
-                                setSelectedNegativeChips(new Set(userSubmittedFeedback.negative));
-                                // Set expanded state based on rating
-                                if (currentUserRating >= 4) {
-                                  setIsPositiveFeedbackExpanded(true);
-                                  setIsNegativeFeedbackExpanded(false);
-                                } else {
-                                  setIsPositiveFeedbackExpanded(false);
-                                  setIsNegativeFeedbackExpanded(true);
-                                }
-                                setShowFeedbackDrawer(true);
-                              }}
-                              style={{
+                            {/* Avatar and Name/Time */}
+                            <div style={{
+                              display: 'flex',
+                              alignItems: 'center',
+                              gap: 12,
+                            }}>
+                              {/* Avatar Circle with Initial */}
+                              <div style={{
+                                width: 32,
+                                height: 32,
+                                borderRadius: '50%',
+                                backgroundColor: '#067a46',
+                                flexShrink: 0,
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
                                 fontFamily: 'var(--font-body)',
                                 fontSize: 14,
                                 fontWeight: 700,
-                                color: '#232323',
-                                textDecoration: 'underline',
-                                cursor: 'pointer',
-                                marginLeft: 'auto',
-                              }}>Edit</span>
-                          </div>
-                          {/* Like/Dislike text */}
-                          {(userSubmittedFeedback.positive.size > 0 || userSubmittedFeedback.negative.size > 0 || (recipe.isPersonalRating && userSubmittedRating === null)) && (
-                          <div style={{ marginBottom: 8 }}>
-                            {(userSubmittedFeedback.positive.size > 0 || (recipe.isPersonalRating && userSubmittedRating === null)) && (
-                            <p style={{
-                              fontFamily: 'var(--font-body)',
-                              fontSize: 14,
-                              fontWeight: 400,
-                              lineHeight: '20px',
-                              color: '#232323',
-                              margin: '0 0 4px 0',
-                            }}>
-                              <span style={{ fontWeight: 700 }}>Like:</span> {userSubmittedFeedback.positive.size > 0 ? Array.from(userSubmittedFeedback.positive).map(id => chipLabels[id]).join(', ') : 'Healthy, Tasty / liked flavors, Family / kid-friendly'}
-                            </p>
-                            )}
-                            {(userSubmittedFeedback.negative.size > 0 || (recipe.isPersonalRating && userSubmittedRating === null)) && (
-                            <p style={{
-                              fontFamily: 'var(--font-body)',
-                              fontSize: 14,
-                              fontWeight: 400,
-                              lineHeight: '20px',
-                              color: '#232323',
-                              margin: 0,
-                            }}>
-                              <span style={{ fontWeight: 700 }}>Dislike:</span> {userSubmittedFeedback.negative.size > 0 ? Array.from(userSubmittedFeedback.negative).map(id => chipLabels[id]).join(', ') : "Didn't like ingredient(s)"}
-                            </p>
-                            )}
-                          </div>
-                          )}
-                          {(userSubmittedFeedback.comment || (recipe.isPersonalRating && userSubmittedRating === null)) && (
-                          <p style={{
-                            fontFamily: 'var(--font-body)',
-                            fontSize: 14,
-                            fontWeight: 400,
-                            lineHeight: '20px',
-                            color: '#232323',
-                            margin: 0,
-                          }}>{userSubmittedFeedback.comment || 'This was amazing! The Green Goddess dressing really made the dish. My whole family enjoyed it and it was so fresh and healthy. Definitely adding this to our regular rotation!'}</p>
-                          )}
-                          {/* User's Review Photo - Show for personal ratings */}
-                          {recipe.isPersonalRating && (
-                            <div className="review-photos-container">
-                              <img
-                                src={recipe.img}
-                                alt="Your meal photo"
-                                className="review-photo"
-                              />
+                                color: '#ffffff',
+                              }}>
+                                {review.name.charAt(0).toUpperCase()}
+                              </div>
+                              {/* Name and Time */}
+                              <div style={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                gap: 2,
+                              }}>
+                                <span style={{
+                                  fontFamily: 'var(--font-body)',
+                                  fontSize: 12,
+                                  fontWeight: 700,
+                                  color: '#232323',
+                                  lineHeight: '16px',
+                                }}>{review.name}</span>
+                                <span style={{
+                                  fontFamily: 'var(--font-body)',
+                                  fontSize: 12,
+                                  fontWeight: 400,
+                                  color: '#656565',
+                                  lineHeight: '16px',
+                                }}>{review.time}</span>
+                              </div>
                             </div>
-                          )}
-                        </div>
-                      )}
 
-                      {/* Filtered Reviews */}
-                      {displayedReviews.map((review, index) => (
-                        <div key={index}>
-                          <div style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: 8,
-                            marginBottom: 8,
-                          }}>
-                            <div style={{ display: 'flex', gap: 2 }}>
-                              {[0, 1, 2, 3, 4].map((i) => renderStar(i, review.rating, 16))}
+                            {/* Star Rating */}
+                            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                              <div style={{ display: 'flex', gap: 2 }}>
+                                {[0, 1, 2, 3, 4].map((i) => renderStar(i, review.rating, 16))}
+                              </div>
                             </div>
-                            <span style={{
-                              fontFamily: 'var(--font-body)',
-                              fontSize: 14,
-                              fontWeight: 700,
-                              color: '#232323',
-                            }}>{review.name}</span>
-                            <span style={{
-                              fontFamily: 'var(--font-body)',
-                              fontSize: 14,
-                              fontWeight: 400,
-                              color: '#656565',
-                            }}>· {review.time}</span>
-                          </div>
-                          <p style={{
-                            fontFamily: 'var(--font-body)',
-                            fontSize: 14,
-                            fontWeight: 400,
-                            lineHeight: '20px',
-                            color: '#232323',
-                            margin: 0,
-                          }}>{review.comment}</p>
-                          {/* Review Photos */}
-                          {review.photos && review.photos.length > 0 && (
-                            <div className="review-photos-container">
-                              {review.photos.map((photo, photoIndex) => (
-                                <img
-                                  key={photoIndex}
-                                  src={photo}
-                                  alt={`Review photo ${photoIndex + 1}`}
-                                  className="review-photo"
-                                />
-                              ))}
-                            </div>
+
+                            {/* Comment */}
+                            {(() => {
+                              const reviewKey = `${review.name}-${review.time}`;
+                              const isExpanded = expandedReviews.has(reviewKey);
+                              const isLong = review.comment.length > 267;
+                              const displayComment = isLong && !isExpanded
+                                ? review.comment.substring(0, 267).trim() + '...'
+                                : review.comment;
+
+                              return (
+                                <div>
+                                  <p style={{
+                                    fontFamily: 'var(--font-body)',
+                                    fontSize: 12,
+                                    fontWeight: 400,
+                                    lineHeight: '16px',
+                                    color: '#242424',
+                                    margin: 0,
+                                  }}>
+                                    {displayComment}
+                                  </p>
+                                  {isLong && (
+                                    <button
+                                      onClick={() => {
+                                        const newSet = new Set(expandedReviews);
+                                        if (isExpanded) {
+                                          newSet.delete(reviewKey);
+                                        } else {
+                                          newSet.add(reviewKey);
+                                        }
+                                        setExpandedReviews(newSet);
+                                      }}
+                                      style={{
+                                        background: 'transparent',
+                                        border: 'none',
+                                        padding: 0,
+                                        cursor: 'pointer',
+                                        fontFamily: 'var(--font-body)',
+                                        fontSize: 12,
+                                        fontWeight: 700,
+                                        color: '#232323',
+                                        textDecoration: 'underline',
+                                        marginTop: 4,
+                                        display: 'block',
+                                      }}>
+                                      {isExpanded ? 'Read less' : 'Read more'}
+                                    </button>
+                                  )}
+                                </div>
+                              );
+                            })()}
+
+                          {/* Like/Dislike themes for this review in pill format */}
+                          {review.positive.length > 0 && (
+                            <>
+                              <p style={{
+                                fontFamily: 'var(--font-body)',
+                                fontSize: 12,
+                                fontWeight: 700,
+                                color: '#232323',
+                                margin: '0 0 4px 0',
+                              }}>Like</p>
+                              <div style={{
+                                display: 'flex',
+                                flexWrap: 'wrap',
+                                gap: 8,
+                                marginTop: -8,
+                                marginBottom: review.negative.length > 0 ? 0 : 0,
+                              }}>
+                                {review.positive.map((key, idx) => (
+                                  <span key={idx} style={{
+                                    padding: '0 4px',
+                                    backgroundColor: '#efe9de',
+                                    fontFamily: 'var(--font-body)',
+                                    fontSize: 12,
+                                    fontWeight: 700,
+                                    color: '#232323',
+                                  }}>{themes[key]}</span>
+                                ))}
+                              </div>
+                            </>
                           )}
+
+                          {review.negative.length > 0 && (
+                            <>
+                              <p style={{
+                                fontFamily: 'var(--font-body)',
+                                fontSize: 12,
+                                fontWeight: 700,
+                                color: '#232323',
+                                margin: '0 0 4px 0',
+                              }}>Dislike</p>
+                              <div style={{
+                                display: 'flex',
+                                flexWrap: 'wrap',
+                                gap: 8,
+                                marginTop: -8,
+                              }}>
+                                {review.negative.map((key, idx) => (
+                                  <span key={idx} style={{
+                                    padding: '0 4px',
+                                    backgroundColor: '#efe9de',
+                                    fontFamily: 'var(--font-body)',
+                                    fontSize: 12,
+                                    fontWeight: 700,
+                                    color: '#232323',
+                                  }}>{themes[key]}</span>
+                                ))}
+                              </div>
+                            </>
+                          )}
+
+                            {/* Review Photos */}
+                            {review.photos && review.photos.length > 0 && (
+                              <div className="review-photos-container">
+                                {review.photos.map((photo, photoIndex) => (
+                                  <img
+                                    key={photoIndex}
+                                    src={photo}
+                                    alt={`Review photo ${photoIndex + 1}`}
+                                    className="review-photo"
+                                  />
+                                ))}
+                              </div>
+                            )}
+
+                            {/* Helpful and Report Section */}
+                            {(() => {
+                              const reviewKey = `${review.name}-${review.time}`;
+                              const isMarkedHelpful = markedHelpful.has(reviewKey);
+                              const displayCount = review.helpfulCount + (isMarkedHelpful ? 1 : 0);
+                              const showCount = displayCount > 0;
+
+                              return (
+                                <div style={{
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  justifyContent: 'space-between',
+                                  marginTop: 4,
+                                }}>
+                                  <div style={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: 8,
+                                  }}>
+                                    {/* Helpful Button */}
+                                    <button
+                                      onClick={() => {
+                                        const newSet = new Set(markedHelpful);
+                                        if (isMarkedHelpful) {
+                                          newSet.delete(reviewKey);
+                                        } else {
+                                          newSet.add(reviewKey);
+                                        }
+                                        setMarkedHelpful(newSet);
+                                      }}
+                                      style={{
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        gap: 4,
+                                        background: 'transparent',
+                                        border: 'none',
+                                        padding: 0,
+                                        cursor: 'pointer',
+                                      }}>
+                                      {isMarkedHelpful ? (
+                                        // Filled thumbs up
+                                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                          <path d="M4.5 14V7.5M4.5 7.5L2 7.5V14H4.5V7.5ZM4.5 7.5C4.5 6 5 4 7 2.5C7.5 2.5 8 2.5 8 3.5V5.5C8 6 8.5 6.5 9 6.5H13C13.5 6.5 14 7 14 7.5C14 7.7 14 7.9 13.9 8.1L12.4 12.6C12.2 13.4 11.5 14 10.7 14H5.5C5 14 4.5 13.5 4.5 13V7.5Z" fill="#232323" stroke="#232323" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
+                                        </svg>
+                                      ) : (
+                                        // Outline thumbs up
+                                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                          <path d="M4.5 14V7.5M4.5 7.5L2 7.5V14H4.5V7.5ZM4.5 7.5C4.5 6 5 4 7 2.5C7.5 2.5 8 2.5 8 3.5V5.5C8 6 8.5 6.5 9 6.5H13C13.5 6.5 14 7 14 7.5C14 7.7 14 7.9 13.9 8.1L12.4 12.6C12.2 13.4 11.5 14 10.7 14H5.5C5 14 4.5 13.5 4.5 13V7.5Z" stroke="#232323" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
+                                        </svg>
+                                      )}
+                                      <span style={{
+                                        fontFamily: 'var(--font-body)',
+                                        fontSize: 14,
+                                        fontWeight: 700,
+                                        color: '#232323',
+                                        textDecoration: 'underline',
+                                        lineHeight: '20px',
+                                      }}>Helpful</span>
+                                    </button>
+                                    {/* Count - only show if > 0 */}
+                                    {showCount && (
+                                      <span style={{
+                                        fontFamily: 'var(--font-body)',
+                                        fontSize: 12,
+                                        fontWeight: 400,
+                                        color: '#656565',
+                                        lineHeight: '16px',
+                                      }}>{displayCount} {displayCount === 1 ? 'person' : 'people'} found this helpful</span>
+                                    )}
+                                  </div>
+                                  {/* Report Flag Icon - Only for non-user reviews */}
+                                  {!review.isUserReview && (
+                                    <button style={{
+                                      background: 'transparent',
+                                      border: 'none',
+                                      padding: 4,
+                                      cursor: 'pointer',
+                                      display: 'flex',
+                                      alignItems: 'center',
+                                      justifyContent: 'center',
+                                    }}>
+                                      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                        <path d="M3 2V14M3 2H11L10 5L11 8H3" stroke="#656565" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                                      </svg>
+                                    </button>
+                                  )}
+                                </div>
+                              );
+                            })()}
+                          </div>
                         </div>
                       ))}
 
@@ -14679,7 +15203,7 @@
                           fontFamily: 'var(--font-body)',
                           fontSize: 14,
                         }}>
-                          No reviews found for selected rating(s)
+                          No reviews found for selected filter(s)
                         </div>
                       )}
 
@@ -15012,12 +15536,16 @@
             </>
           )}
 
-          {/* Feedback Drawer - Edit Rating */}
+          {/* Feedback Drawer - New Theme-Based Design */}
           {showFeedbackDrawer && (
             <>
               {/* Backdrop */}
               <div
-                onClick={() => setShowFeedbackDrawer(false)}
+                onClick={() => {
+                  setShowFeedbackDrawer(false);
+                  setCapturedPhoto(null);
+                  setDrawerScrolled(false);
+                }}
                 style={{
                   position: 'absolute',
                   top: 0,
@@ -15040,607 +15568,515 @@
                 animation: 'slideUpDrawer 0.3s ease-out',
                 display: 'flex',
                 flexDirection: 'column',
+                maxHeight: '75vh',
               }}>
-                {/* Main Drawer Content */}
-                <div style={{
-                  background: 'white',
-                  borderRadius: '8px 8px 0 0',
-                  boxShadow: '0 4px 16px rgba(0, 0, 0, 0.2)',
-                  padding: 16,
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: 16,
-                  maxHeight: '75vh',
-                  overflowY: 'auto',
-                }}>
+                {/* Scrollable Content Area */}
+                <div
+                  ref={drawerContentRef}
+                  onScroll={(e) => {
+                    // Check if rating stars are scrolled out of view
+                    if (ratingStarsRef.current) {
+                      const rect = ratingStarsRef.current.getBoundingClientRect();
+                      const drawerRect = e.target.getBoundingClientRect();
+                      // Show sticky header when stars are above the drawer viewport
+                      setDrawerScrolled(rect.bottom < drawerRect.top + 100);
+                    }
+                  }}
+                  style={{
+                    background: '#faf8f3',
+                    borderRadius: '8px 8px 0 0',
+                    boxShadow: '0 4px 16px rgba(0, 0, 0, 0.2)',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    overflowY: 'auto',
+                    overflowX: 'hidden',
+                    flex: 1,
+                    position: 'relative',
+                  }}>
                   {/* Handle bar */}
                   <div style={{
                     width: 40,
                     height: 6,
                     background: '#e0e0e0',
                     borderRadius: 4,
-                    margin: '0 auto',
+                    margin: '16px auto 0',
+                    flexShrink: 0,
                   }} />
 
-                  {/* Card with Recipe Info and Rating */}
+                  {/* Minimized Header (shown when scrolled) */}
+                  {drawerScrolled && (
+                    <div style={{
+                      position: 'sticky',
+                      top: 0,
+                      background: '#faf8f3',
+                      zIndex: 10,
+                      padding: '8px 16px',
+                      boxShadow: '0 3px 8px rgba(0, 0, 0, 0.15)',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      gap: 8,
+                    }}>
+                      <h3 style={{
+                        fontFamily: 'var(--font-headline)',
+                        fontSize: 16,
+                        fontWeight: 700,
+                        lineHeight: '20px',
+                        color: '#232323',
+                        margin: 0,
+                        textAlign: 'center',
+                        width: '100%',
+                      }}>{recipe.name}</h3>
+                      <div style={{ display: 'flex', gap: 5, position: 'relative' }}>
+                        {[1, 2, 3, 4, 5].map((star) => (
+                          <span
+                            key={star}
+                            onClick={(e) => {
+                              const prevRating = editingRating;
+                              setEditingRating(star);
+
+                              // Trigger burst animation only for 4 and 5 stars
+                              if (star === 4 || star === 5) {
+                                const starEl = e.currentTarget;
+                                const rect = starEl.getBoundingClientRect();
+                                const parent = starEl.parentElement.getBoundingClientRect();
+
+                                if (stickyBurstAnimRef.current && stickyBurstAnimInstanceRef.current) {
+                                  const centerX = rect.left + rect.width / 2 - parent.left;
+                                  const centerY = rect.top + rect.height / 2 - parent.top;
+
+                                  // Set size based on rating: 4 stars = small (150px), 5 stars = big (200px)
+                                  const burstSize = star === 4 ? 150 : 200;
+                                  stickyBurstAnimRef.current.style.width = burstSize + 'px';
+                                  stickyBurstAnimRef.current.style.height = burstSize + 'px';
+
+                                  stickyBurstAnimRef.current.style.left = centerX + 'px';
+                                  stickyBurstAnimRef.current.style.top = centerY + 'px';
+                                  stickyBurstAnimRef.current.style.display = 'block';
+
+                                  stickyBurstAnimInstanceRef.current.stop();
+                                  stickyBurstAnimInstanceRef.current.play();
+                                }
+                              }
+                            }}
+                            style={{
+                              width: 28,
+                              height: 26,
+                              cursor: 'pointer',
+                              flexShrink: 0,
+                              display: 'inline-block'
+                            }}
+                          >
+                            {star <= editingRating ? (
+                              <svg width="28" height="26" viewBox="0 0 28 26" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ pointerEvents: 'none', width: 28, height: 26 }}>
+                                <path d="M14 0L18.1532 8.79122L28 9.93112L20.72 16.5043L22.6525 26L14 21.2712L5.34752 26L7.28 16.5043L0 9.93112L9.84681 8.79122L14 0Z" fill="#242424"/>
+                              </svg>
+                            ) : (
+                              <svg width="28" height="26" viewBox="0 0 28 26" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ pointerEvents: 'none', width: 28, height: 26 }}>
+                                <path fillRule="evenodd" clipRule="evenodd" d="M18.1532 8.79122L14 0L9.84681 8.79122L0 9.93112L7.28 16.5043L5.34752 26L14 21.2712L22.6525 26L20.72 16.5043L28 9.93112L18.1532 8.79122ZM23.3783 11.4095L16.8195 10.6502L14 4.68213L11.1805 10.6502L4.62169 11.4095L9.46744 15.7847L8.16582 22.1805L14 18.992L19.8342 22.1805L18.5326 15.7847L23.3783 11.4095Z" fill="black"/>
+                              </svg>
+                            )}
+                          </span>
+                        ))}
+                        <div
+                          ref={stickyBurstAnimRef}
+                          style={{
+                            position: 'absolute',
+                            width: 200,
+                            height: 200,
+                            pointerEvents: 'none',
+                            zIndex: 999,
+                            display: 'none',
+                            transform: 'translate(-50%, -50%)',
+                          }}
+                        />
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Main Content */}
                   <div style={{
-                    background: 'transparent',
-                    padding: 0,
+                    padding: 16,
                     display: 'flex',
                     flexDirection: 'column',
-                    alignItems: 'center',
                     gap: 16,
                   }}>
-                    {/* Recipe name header */}
-                    <h2 style={{
-                      fontFamily: 'var(--font-headline)',
-                      fontSize: 20,
-                      fontWeight: 500,
-                      lineHeight: '24px',
-                      color: '#232323',
-                      margin: 0,
-                      textAlign: 'center',
-                    }}>{recipe.name}</h2>
-
-                    {/* Emoji + Text + Stars */}
+                    {/* Recipe name and Rating Section */}
                     <div style={{
                       display: 'flex',
                       flexDirection: 'column',
                       alignItems: 'center',
-                      gap: 0,
+                      gap: 16,
                     }}>
-                      {/* Emoji rating illustration - only show when rating is selected */}
-                      {editingRating > 0 && (
-                        <>
-                          <div style={{
-                            width: 64,
-                            height: 64,
-                            borderRadius: 6.4,
-                            overflow: 'hidden',
-                            boxShadow: '0 0 0 0 rgba(0, 0, 0, 0.1)',
-                            marginBottom: 0,
-                          }}>
-                            <img
-                              src={`Emoji rating/gif/rate ${Math.round(editingRating)}.gif`}
-                              alt="Rating emoji"
-                              style={{
-                                width: '100%',
-                                height: '100%',
-                                objectFit: 'cover',
-                              }}
-                            />
-                          </div>
+                      <h2 style={{
+                        fontFamily: 'var(--font-headline)',
+                        fontSize: 20,
+                        fontWeight: 500,
+                        lineHeight: '24px',
+                        color: '#232323',
+                        margin: 0,
+                        textAlign: 'center',
+                      }}>{recipe.name}</h2>
 
-                          {/* Rating text */}
-                          <p style={{
-                            fontFamily: 'var(--font-body)',
-                            fontSize: 16,
-                            fontWeight: 400,
-                            lineHeight: '24px',
-                            color: '#232323',
-                            margin: 0,
-                          }}>
-                            {editingRating === 5 ? 'Loved it!' :
-                             editingRating === 4 ? 'Really liked it!' :
-                             editingRating === 3 ? 'It was okay' :
-                             editingRating === 2 ? 'Not great' :
-                             editingRating === 1 ? 'Didn\'t like it' : ''}
-                          </p>
-                        </>
-                      )}
-
-                      {/* Star rating - clickable */}
+                      {/* Emoji + Rating Text + Stars */}
                       <div style={{
                         display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
                         gap: 0,
-                        marginTop: 0,
                       }}>
-                        {[1, 2, 3, 4, 5].map((star) => (
-                          <svg
-                            key={star}
-                            onClick={() => {
-                              setEditingRating(star);
-                              // Set expanded state based on rating
-                              if (star >= 4) {
-                                setIsPositiveFeedbackExpanded(true);
-                                setIsNegativeFeedbackExpanded(false);
-                              } else {
-                                setIsPositiveFeedbackExpanded(false);
-                                setIsNegativeFeedbackExpanded(true);
-                              }
+                        {editingRating > 0 && (
+                          <>
+                            <div style={{
+                              width: 64,
+                              height: 64,
+                              borderRadius: 6.4,
+                              overflow: 'hidden',
+                              marginBottom: 0,
+                            }}>
+                              <img
+                                src={`Emoji rating/gif/rate ${Math.round(editingRating)}.gif`}
+                                alt="Rating emoji"
+                                style={{
+                                  width: '100%',
+                                  height: '100%',
+                                  objectFit: 'cover',
+                                }}
+                              />
+                            </div>
+                            <p style={{
+                              fontFamily: 'var(--font-body)',
+                              fontSize: 16,
+                              fontWeight: 400,
+                              lineHeight: '24px',
+                              color: '#232323',
+                              margin: 0,
+                            }}>
+                              {editingRating === 5 ? 'Loved it!' :
+                               editingRating === 4 ? 'Really liked it!' :
+                               editingRating === 3 ? 'It was okay' :
+                               editingRating === 2 ? 'Not great' :
+                               'Didn\'t like it'}
+                            </p>
+                          </>
+                        )}
+
+                        <div ref={ratingStarsRef} style={{ display: 'flex', gap: 5, marginTop: editingRating > 0 ? 0 : 0, position: 'relative' }}>
+                          {[1, 2, 3, 4, 5].map((star) => (
+                            <span
+                              key={star}
+                              onClick={(e) => {
+                                const prevRating = editingRating;
+                                setEditingRating(star);
+
+                                // Trigger burst animation only for 4 and 5 stars
+                                if (star === 4 || star === 5) {
+                                  const starEl = e.currentTarget;
+                                  const rect = starEl.getBoundingClientRect();
+                                  const parent = starEl.parentElement.getBoundingClientRect();
+
+                                  if (burstAnimRef.current && burstAnimInstanceRef.current) {
+                                    const centerX = rect.left + rect.width / 2 - parent.left;
+                                    const centerY = rect.top + rect.height / 2 - parent.top;
+
+                                    // Set size based on rating: 4 stars = small (150px), 5 stars = big (200px)
+                                    const burstSize = star === 4 ? 150 : 200;
+                                    burstAnimRef.current.style.width = burstSize + 'px';
+                                    burstAnimRef.current.style.height = burstSize + 'px';
+
+                                    burstAnimRef.current.style.left = centerX + 'px';
+                                    burstAnimRef.current.style.top = centerY + 'px';
+                                    burstAnimRef.current.style.display = 'block';
+
+                                    burstAnimInstanceRef.current.stop();
+                                    burstAnimInstanceRef.current.play();
+                                  }
+                                }
+                              }}
+                              style={{
+                                width: 28,
+                                height: 26,
+                                cursor: 'pointer',
+                                flexShrink: 0,
+                                display: 'inline-block'
+                              }}
+                            >
+                              {star <= editingRating ? (
+                                <svg width="28" height="26" viewBox="0 0 28 26" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ pointerEvents: 'none', width: 28, height: 26 }}>
+                                  <path d="M14 0L18.1532 8.79122L28 9.93112L20.72 16.5043L22.6525 26L14 21.2712L5.34752 26L7.28 16.5043L0 9.93112L9.84681 8.79122L14 0Z" fill="#242424"/>
+                                </svg>
+                              ) : (
+                                <svg width="28" height="26" viewBox="0 0 28 26" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ pointerEvents: 'none', width: 28, height: 26 }}>
+                                  <path fillRule="evenodd" clipRule="evenodd" d="M18.1532 8.79122L14 0L9.84681 8.79122L0 9.93112L7.28 16.5043L5.34752 26L14 21.2712L22.6525 26L20.72 16.5043L28 9.93112L18.1532 8.79122ZM23.3783 11.4095L16.8195 10.6502L14 4.68213L11.1805 10.6502L4.62169 11.4095L9.46744 15.7847L8.16582 22.1805L14 18.992L19.8342 22.1805L18.5326 15.7847L23.3783 11.4095Z" fill="black"/>
+                                </svg>
+                              )}
+                            </span>
+                          ))}
+                          <div
+                            ref={burstAnimRef}
+                            style={{
+                              position: 'absolute',
+                              width: 200,
+                              height: 200,
+                              pointerEvents: 'none',
+                              zIndex: 999,
+                              display: 'none',
+                              transform: 'translate(-50%, -50%)',
                             }}
-                            width={32}
-                            height={32}
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            style={{ cursor: 'pointer' }}
-                          >
-                            <path
-                              d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"
-                              fill={star <= editingRating ? '#232323' : 'white'}
-                              stroke="#232323"
-                              strokeWidth="1.5"
-                              strokeLinejoin="round"
-                            />
-                          </svg>
-                        ))}
+                          />
+                        </div>
                       </div>
+
+                      {/* Divider */}
+                      <div style={{
+                        height: 1,
+                        background: '#c1c1c1',
+                        width: '100%',
+                      }} />
                     </div>
 
-                    {/* Divider */}
+                    {/* Theme Ratings Section */}
                     <div style={{
-                      height: 1,
-                      background: '#c1c1c1',
-                      width: '100%',
-                    }} />
-                  </div>
-
-                  {/* Feedback Section */}
-                  <div style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: 16,
-                  }}>
-                    {editingRating >= 4 ? (
-                      <>
-                        {/* Positive feedback section */}
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                          <button
-                            onClick={() => setIsPositiveFeedbackExpanded(!isPositiveFeedbackExpanded)}
+                      display: 'flex',
+                      flexDirection: 'column',
+                      gap: 16,
+                    }}>
+                      {[
+                        { key: 'ingredientQuality', label: 'Ingredient quality', icon: 'rate theme illustration/Image.png' },
+                        { key: 'easeOfCooking', label: 'Ease of cooking', icon: 'rate theme illustration/Image-1.png' },
+                        { key: 'portionSize', label: 'Portion size', icon: 'rate theme illustration/Image-2.png' },
+                        { key: 'valueForMoney', label: 'Value for money', icon: 'rate theme illustration/Image-3.png' },
+                        { key: 'delivery', label: 'Delivery', icon: 'rate theme illustration/Image-4.png' },
+                        { key: 'taste', label: 'Taste', icon: 'rate theme illustration/Image-5.png' },
+                      ].map((theme) => (
+                        <div
+                          key={theme.key}
+                          style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: 8,
+                          }}
+                        >
+                          <img
+                            src={theme.icon}
+                            alt={theme.label}
                             style={{
-                              width: '100%',
-                              display: 'flex',
-                              alignItems: 'center',
-                              justifyContent: 'space-between',
-                              background: 'transparent',
-                              border: 'none',
-                              padding: 0,
-                              cursor: 'pointer',
-                            }}
-                          >
-                            <span style={{
-                              fontFamily: 'var(--font-body)',
-                              fontSize: 16,
-                              fontWeight: 700,
-                              lineHeight: '24px',
-                              color: '#232323',
-                            }}>What worked for you?</span>
-                            <svg
-                              width={16}
-                              height={16}
-                              viewBox="0 0 16 16"
-                              fill="none"
-                              style={{
-                                transform: isPositiveFeedbackExpanded ? 'rotate(180deg)' : 'rotate(0deg)',
-                                transition: 'transform 0.2s',
-                              }}
-                            >
-                              <path
-                                d="M4 6l4 4 4-4"
-                                stroke="#232323"
-                                strokeWidth="1.5"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                              />
-                            </svg>
-                          </button>
-
-                          {isPositiveFeedbackExpanded && (
-                            <div style={{
-                              display: 'flex',
-                              flexWrap: 'wrap',
-                              gap: 10,
-                              paddingTop: 8,
-                              paddingBottom: 8,
-                            }}>
-                              {[
-                                { id: 1, label: 'Healthy' },
-                                { id: 2, label: 'Clear instructions' },
-                                { id: 3, label: 'Tasty / liked flavors' },
-                                { id: 4, label: 'Easy to cook' },
-                                { id: 5, label: 'Liked certain ingredient(s)' },
-                                { id: 6, label: 'Fast to cook' },
-                                { id: 7, label: 'Family / kid-friendly' },
-                                { id: 8, label: 'Other' },
-                              ].map((option) => {
-                                const isSelected = selectedPositiveChips.has(option.id);
-                                return (
-                                  <button
-                                    key={option.id}
-                                    onClick={() => {
-                                      const newSet = new Set(selectedPositiveChips);
-                                      if (isSelected) {
-                                        newSet.delete(option.id);
-                                      } else {
-                                        newSet.add(option.id);
-                                      }
-                                      setSelectedPositiveChips(newSet);
-                                    }}
-                                    style={{
-                                      height: 'auto',
-                                      padding: '8px 16px',
-                                      background: isSelected ? '#E8F5E9' : 'white',
-                                      border: isSelected ? '1.5px solid #4CAF50' : '1.5px solid #E0E0E0',
-                                      borderRadius: 20,
-                                      fontFamily: 'var(--font-body)',
-                                      fontSize: 14,
-                                      fontWeight: 500,
-                                      lineHeight: '20px',
-                                      color: isSelected ? '#2E7D32' : '#232323',
-                                      cursor: 'pointer',
-                                      transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
-                                    }}
-                                  >
-                                    {option.label}
-                                  </button>
-                                );
-                              })}
-                            </div>
-                          )}
-                        </div>
-
-                        {/* Negative feedback section */}
-                        <div>
-                          <button
-                            onClick={() => setIsNegativeFeedbackExpanded(!isNegativeFeedbackExpanded)}
-                            style={{
-                              width: '100%',
-                              display: 'flex',
-                              alignItems: 'center',
-                              justifyContent: 'space-between',
-                              background: 'transparent',
-                              border: 'none',
-                              padding: 0,
-                              cursor: 'pointer',
-                            }}
-                          >
-                            <span style={{
-                              fontFamily: 'var(--font-body)',
-                              fontSize: 16,
-                              fontWeight: 700,
-                              lineHeight: '24px',
-                              color: '#232323',
-                            }}>What didn't work for you?</span>
-                            <svg
-                              width={16}
-                              height={16}
-                              viewBox="0 0 16 16"
-                              fill="none"
-                              style={{
-                                transform: isNegativeFeedbackExpanded ? 'rotate(180deg)' : 'rotate(0deg)',
-                                transition: 'transform 0.2s',
-                              }}
-                            >
-                              <path
-                                d="M4 6l4 4 4-4"
-                                stroke="#232323"
-                                strokeWidth="1.5"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                              />
-                            </svg>
-                          </button>
-
-                          {isNegativeFeedbackExpanded && (
-                            <div style={{
-                              display: 'flex',
-                              flexWrap: 'wrap',
-                              gap: 10,
-                              paddingTop: 8,
-                              paddingBottom: 8,
-                            }}>
-                              {[
-                                { id: 9, label: 'Not healthy enough' },
-                                { id: 10, label: 'Confusing instructions' },
-                                { id: 11, label: 'Bland / didn\'t like flavors' },
-                                { id: 12, label: 'Hard to cook' },
-                                { id: 13, label: 'Didn\'t like ingredient(s)' },
-                                { id: 14, label: 'Took too long' },
-                                { id: 15, label: 'Not family / kid-friendly' },
-                                { id: 16, label: 'Other' },
-                              ].map((option) => {
-                                const isSelected = selectedNegativeChips.has(option.id);
-                                return (
-                                  <button
-                                    key={option.id}
-                                    onClick={() => {
-                                      const newSet = new Set(selectedNegativeChips);
-                                      if (isSelected) {
-                                        newSet.delete(option.id);
-                                      } else {
-                                        newSet.add(option.id);
-                                      }
-                                      setSelectedNegativeChips(newSet);
-                                    }}
-                                    style={{
-                                      height: 'auto',
-                                      padding: '8px 16px',
-                                      background: isSelected ? '#FFEBEE' : 'white',
-                                      border: isSelected ? '1.5px solid #F44336' : '1.5px solid #E0E0E0',
-                                      borderRadius: 20,
-                                      fontFamily: 'var(--font-body)',
-                                      fontSize: 14,
-                                      fontWeight: 500,
-                                      lineHeight: '20px',
-                                      color: isSelected ? '#C62828' : '#232323',
-                                      cursor: 'pointer',
-                                      transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
-                                    }}
-                                  >
-                                    {option.label}
-                                  </button>
-                                );
-                              })}
-                            </div>
-                          )}
-                        </div>
-
-                        {/* Comment text area */}
-                        <div style={{
-                          display: 'flex',
-                          flexDirection: 'column',
-                          gap: 4,
-                        }}>
-                          <textarea
-                            value={feedbackComment}
-                            onChange={(e) => setFeedbackComment(e.target.value)}
-                            placeholder="How can we make it better?"
-                            style={{
-                              width: '100%',
-                              minHeight: 80,
-                              border: '1.5px solid #c1c1c1',
+                              width: 48,
+                              height: 48,
+                              objectFit: 'cover',
                               borderRadius: 8,
-                              padding: 12,
-                              fontFamily: 'var(--font-body)',
-                              fontSize: 14,
-                              fontWeight: 400,
-                              lineHeight: '20px',
-                              color: '#232323',
-                              resize: 'vertical',
-                              boxSizing: 'border-box',
-                              transition: 'border-color 0.2s',
                             }}
-                            onFocus={(e) => e.target.style.borderColor = '#232323'}
-                            onBlur={(e) => e.target.style.borderColor = '#c1c1c1'}
                           />
+                          <div style={{
+                            flex: 1,
+                            fontFamily: 'var(--font-body)',
+                            fontSize: 16,
+                            fontWeight: 700,
+                            lineHeight: '24px',
+                            color: '#242424',
+                          }}>
+                            {theme.label}
+                          </div>
+                          <div style={{
+                            display: 'flex',
+                            gap: 16,
+                          }}>
+                            <button
+                              onClick={() => {
+                                setThemeRatings(prev => ({
+                                  ...prev,
+                                  [theme.key]: prev[theme.key] === 'like' ? null : 'like',
+                                }));
+                              }}
+                              style={{
+                                width: 40,
+                                height: 40,
+                                borderRadius: 300,
+                                border: 'none',
+                                background: themeRatings[theme.key] === 'like' ? '#bbf06a' : '#efe9de',
+                                cursor: 'pointer',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                transition: 'all 0.2s',
+                                padding: 8,
+                              }}
+                            >
+                              <svg width={24} height={24} viewBox="0 0 24 24" fill="none">
+                                <path d="M7 22V11M2 13V20C2 21.1046 2.89543 22 4 22H16.4262C17.907 22 19.1662 20.9197 19.3914 19.4562L20.4683 12.4562C20.7479 10.6389 19.3418 9 17.5032 9H14V4C14 2.89543 13.1046 2 12 2C11.4477 2 11 2.44772 11 3V3.56075C11 3.84156 10.9208 4.11652 10.7711 4.35389L7.83205 9.03114C7.49449 9.552 6.93529 9.87555 6.32889 9.91605L2.48727 10.2088C2.21246 10.2269 2 10.4573 2 10.7328V13Z" stroke="#232323" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                              </svg>
+                            </button>
+                            <button
+                              onClick={() => {
+                                setThemeRatings(prev => ({
+                                  ...prev,
+                                  [theme.key]: prev[theme.key] === 'dislike' ? null : 'dislike',
+                                }));
+                              }}
+                              style={{
+                                width: 40,
+                                height: 40,
+                                borderRadius: 300,
+                                border: 'none',
+                                background: themeRatings[theme.key] === 'dislike' ? '#b30000' : '#efe9de',
+                                cursor: 'pointer',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                transition: 'all 0.2s',
+                                padding: 8,
+                              }}
+                            >
+                              <svg width={24} height={24} viewBox="0 0 24 24" fill="none">
+                                <path d="M17 2V13M22 11V4C22 2.89543 21.1046 2 20 2H7.57377C6.09301 2 4.83385 3.08033 4.60864 4.54378L3.53168 11.5438C3.25208 13.3611 4.65821 15 6.49678 15H10V20C10 21.1046 10.8954 22 12 22C12.5523 22 13 21.5523 13 21V20.4392C13 20.1584 13.0792 19.8835 13.2289 19.6461L16.1679 14.9689C16.5055 14.448 17.0647 14.1244 17.6711 14.084L21.5127 13.7912C21.7875 13.7731 22 13.5427 22 13.2672V11Z" stroke={themeRatings[theme.key] === 'dislike' ? 'white' : '#232323'} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                              </svg>
+                            </button>
+                          </div>
                         </div>
-                      </>
+                      ))}
+                    </div>
+
+                    {/* Comment Text Area */}
+                    <div style={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      gap: 4,
+                    }}>
+                      <textarea
+                        value={feedbackComment}
+                        onChange={(e) => setFeedbackComment(e.target.value)}
+                        placeholder="How can we make it better?"
+                        style={{
+                          width: '100%',
+                          minHeight: 96,
+                          border: '1px solid #c1c1c1',
+                          borderRadius: 4,
+                          padding: 12,
+                          fontFamily: 'var(--font-body)',
+                          fontSize: 16,
+                          fontWeight: 400,
+                          lineHeight: '24px',
+                          color: feedbackComment ? '#000' : '#656565',
+                          resize: 'none',
+                          boxSizing: 'border-box',
+                        }}
+                      />
+                    </div>
+
+                    {/* Photo Capture/Preview Section */}
+                    {!capturedPhoto ? (
+                      <button
+                        onClick={() => setCapturedPhoto('captured-food-photo.png')}
+                        style={{
+                          width: '100%',
+                          background: '#faf8f3',
+                          border: 'none',
+                          borderRadius: 12,
+                          padding: 0,
+                          cursor: 'pointer',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: 8,
+                          paddingRight: 12,
+                        }}
+                      >
+                        <div style={{
+                          width: 56,
+                          height: 56,
+                          background: '#efe9de',
+                          borderRadius: 8,
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          position: 'relative',
+                        }}>
+                          <div style={{
+                            width: 24,
+                            height: 24,
+                            position: 'absolute',
+                            top: '50%',
+                            left: '50%',
+                            transform: 'translate(-50%, -50%)',
+                          }}>
+                            <svg width={24} height={24} viewBox="0 0 24 24" fill="none">
+                              <path d="M23 19C23 20.1046 22.1046 21 21 21H3C1.89543 21 1 20.1046 1 19V8C1 6.89543 1.89543 6 3 6H7L9 3H15L17 6H21C22.1046 6 23 6.89543 23 8V19Z" stroke="#232323" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                              <circle cx="12" cy="13" r="4" stroke="#232323" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                            </svg>
+                          </div>
+                        </div>
+                        <div style={{
+                          flex: 1,
+                          textAlign: 'left',
+                        }}>
+                          <div style={{
+                            fontFamily: 'var(--font-headline)',
+                            fontSize: 16,
+                            fontWeight: 700,
+                            lineHeight: '20px',
+                            color: '#141414',
+                          }}>
+                            Save a photo of what you made.
+                          </div>
+                        </div>
+                      </button>
                     ) : (
-                      <>
-                        {/* Negative feedback section */}
-                        <div>
-                          <button
-                            onClick={() => setIsNegativeFeedbackExpanded(!isNegativeFeedbackExpanded)}
+                      <div style={{
+                        width: '100%',
+                        position: 'relative',
+                        borderRadius: 16,
+                        overflow: 'hidden',
+                      }}>
+                        <img
+                          src={capturedPhoto}
+                          alt="Captured meal"
+                          style={{
+                            width: '100%',
+                            height: 'auto',
+                            display: 'block',
+                            borderRadius: 16,
+                          }}
+                        />
+                        <button
+                          onClick={() => setCapturedPhoto('captured-food-photo.png')}
+                          style={{
+                            position: 'absolute',
+                            bottom: 7,
+                            left: 7,
+                            width: 44,
+                            height: 44,
+                            background: '#232323',
+                            border: 'none',
+                            borderRadius: 16,
+                            cursor: 'pointer',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            padding: 4,
+                          }}
+                        >
+                          <img
+                            src="repeat_outline_24.png"
+                            alt="Retake photo"
                             style={{
-                              width: '100%',
-                              display: 'flex',
-                              alignItems: 'center',
-                              justifyContent: 'space-between',
-                              background: 'transparent',
-                              border: 'none',
-                              padding: 0,
-                              cursor: 'pointer',
+                              width: 24,
+                              height: 24,
+                              filter: 'brightness(0) invert(1)',
                             }}
-                          >
-                            <span style={{
-                              fontFamily: 'var(--font-body)',
-                              fontSize: 16,
-                              fontWeight: 700,
-                              lineHeight: '24px',
-                              color: '#232323',
-                            }}>What didn't work for you?</span>
-                            <svg
-                              width={16}
-                              height={16}
-                              viewBox="0 0 16 16"
-                              fill="none"
-                              style={{
-                                transform: isNegativeFeedbackExpanded ? 'rotate(180deg)' : 'rotate(0deg)',
-                                transition: 'transform 0.2s',
-                              }}
-                            >
-                              <path
-                                d="M4 6l4 4 4-4"
-                                stroke="#232323"
-                                strokeWidth="1.5"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                              />
-                            </svg>
-                          </button>
-
-                          {isNegativeFeedbackExpanded && (
-                            <div style={{
-                              display: 'flex',
-                              flexWrap: 'wrap',
-                              gap: 10,
-                              paddingTop: 8,
-                              paddingBottom: 8,
-                            }}>
-                              {[
-                                { id: 9, label: 'Not healthy enough' },
-                                { id: 10, label: 'Confusing instructions' },
-                                { id: 11, label: 'Bland / didn\'t like flavors' },
-                                { id: 12, label: 'Hard to cook' },
-                                { id: 13, label: 'Didn\'t like ingredient(s)' },
-                                { id: 14, label: 'Took too long' },
-                                { id: 15, label: 'Not family / kid-friendly' },
-                                { id: 16, label: 'Other' },
-                              ].map((option) => {
-                                const isSelected = selectedNegativeChips.has(option.id);
-                                return (
-                                  <button
-                                    key={option.id}
-                                    onClick={() => {
-                                      const newSet = new Set(selectedNegativeChips);
-                                      if (isSelected) {
-                                        newSet.delete(option.id);
-                                      } else {
-                                        newSet.add(option.id);
-                                      }
-                                      setSelectedNegativeChips(newSet);
-                                    }}
-                                    style={{
-                                      height: 'auto',
-                                      padding: '8px 16px',
-                                      background: isSelected ? '#FFEBEE' : 'white',
-                                      border: isSelected ? '1.5px solid #F44336' : '1.5px solid #E0E0E0',
-                                      borderRadius: 20,
-                                      fontFamily: 'var(--font-body)',
-                                      fontSize: 14,
-                                      fontWeight: 500,
-                                      lineHeight: '20px',
-                                      color: isSelected ? '#C62828' : '#232323',
-                                      cursor: 'pointer',
-                                      transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
-                                    }}
-                                  >
-                                    {option.label}
-                                  </button>
-                                );
-                              })}
-                            </div>
-                          )}
-                        </div>
-
-                        {/* Comment text area */}
-                        <div style={{
-                          display: 'flex',
-                          flexDirection: 'column',
-                          gap: 4,
-                        }}>
-                          <textarea
-                            value={feedbackComment}
-                            onChange={(e) => setFeedbackComment(e.target.value)}
-                            placeholder="How can we make it better?"
-                            style={{
-                              width: '100%',
-                              minHeight: 80,
-                              border: '1.5px solid #c1c1c1',
-                              borderRadius: 8,
-                              padding: 12,
-                              fontFamily: 'var(--font-body)',
-                              fontSize: 14,
-                              fontWeight: 400,
-                              lineHeight: '20px',
-                              color: '#232323',
-                              resize: 'vertical',
-                              boxSizing: 'border-box',
-                              transition: 'border-color 0.2s',
-                            }}
-                            onFocus={(e) => e.target.style.borderColor = '#232323'}
-                            onBlur={(e) => e.target.style.borderColor = '#c1c1c1'}
                           />
-                        </div>
-
-                        {/* Positive feedback section */}
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                          <button
-                            onClick={() => setIsPositiveFeedbackExpanded(!isPositiveFeedbackExpanded)}
-                            style={{
-                              width: '100%',
-                              display: 'flex',
-                              alignItems: 'center',
-                              justifyContent: 'space-between',
-                              background: 'transparent',
-                              border: 'none',
-                              padding: 0,
-                              cursor: 'pointer',
-                            }}
-                          >
-                            <span style={{
-                              fontFamily: 'var(--font-body)',
-                              fontSize: 16,
-                              fontWeight: 700,
-                              lineHeight: '24px',
-                              color: '#232323',
-                            }}>What worked for you?</span>
-                            <svg
-                              width={16}
-                              height={16}
-                              viewBox="0 0 16 16"
-                              fill="none"
-                              style={{
-                                transform: isPositiveFeedbackExpanded ? 'rotate(180deg)' : 'rotate(0deg)',
-                                transition: 'transform 0.2s',
-                              }}
-                            >
-                              <path
-                                d="M4 6l4 4 4-4"
-                                stroke="#232323"
-                                strokeWidth="1.5"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                              />
-                            </svg>
-                          </button>
-
-                          {isPositiveFeedbackExpanded && (
-                            <div style={{
-                              display: 'flex',
-                              flexWrap: 'wrap',
-                              gap: 10,
-                              paddingTop: 8,
-                              paddingBottom: 8,
-                            }}>
-                              {[
-                                { id: 1, label: 'Healthy' },
-                                { id: 2, label: 'Clear instructions' },
-                                { id: 3, label: 'Tasty / liked flavors' },
-                                { id: 4, label: 'Easy to cook' },
-                                { id: 5, label: 'Liked certain ingredient(s)' },
-                                { id: 6, label: 'Fast to cook' },
-                                { id: 7, label: 'Family / kid-friendly' },
-                                { id: 8, label: 'Other' },
-                              ].map((option) => {
-                                const isSelected = selectedPositiveChips.has(option.id);
-                                return (
-                                  <button
-                                    key={option.id}
-                                    onClick={() => {
-                                      const newSet = new Set(selectedPositiveChips);
-                                      if (isSelected) {
-                                        newSet.delete(option.id);
-                                      } else {
-                                        newSet.add(option.id);
-                                      }
-                                      setSelectedPositiveChips(newSet);
-                                    }}
-                                    style={{
-                                      height: 'auto',
-                                      padding: '8px 16px',
-                                      background: isSelected ? '#E8F5E9' : 'white',
-                                      border: isSelected ? '1.5px solid #4CAF50' : '1.5px solid #E0E0E0',
-                                      borderRadius: 20,
-                                      fontFamily: 'var(--font-body)',
-                                      fontSize: 14,
-                                      fontWeight: 500,
-                                      lineHeight: '20px',
-                                      color: isSelected ? '#2E7D32' : '#232323',
-                                      cursor: 'pointer',
-                                      transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
-                                    }}
-                                  >
-                                    {option.label}
-                                  </button>
-                                );
-                              })}
-                            </div>
-                          )}
-                        </div>
-                      </>
+                        </button>
+                      </div>
                     )}
                   </div>
                 </div>
 
-                {/* CTA Section */}
+                {/* Fixed CTA at Bottom */}
                 <div style={{
                   background: '#efe9de',
                   padding: '16px 16px 32px',
+                  flexShrink: 0,
                 }}>
                   <button
                     onClick={() => {
-                      // Save the user's rating and feedback
                       if (editingRating > 0) {
                         setUserSubmittedRating(editingRating);
                         setUserSubmittedFeedback({
@@ -15650,6 +16086,8 @@
                         });
                       }
                       setShowFeedbackDrawer(false);
+                      setCapturedPhoto(null);
+                      setDrawerScrolled(false);
                     }}
                     style={{
                       width: '100%',
@@ -15663,11 +16101,6 @@
                       lineHeight: '24px',
                       color: 'white',
                       cursor: 'pointer',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      gap: 8,
-                      minWidth: 88,
                     }}
                   >
                     Send feedback

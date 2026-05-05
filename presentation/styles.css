@@ -472,3 +472,125 @@ html, body {
         padding: 32px 48px;
     }
 }
+
+/* Context Section */
+.context-section {
+}
+
+.context-content {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.context-block {
+    padding-bottom: 20px;
+    border-bottom: 1px solid #e8e7e4;
+}
+
+.context-block:last-child {
+    padding-bottom: 0;
+    border-bottom: none;
+}
+
+.context-block h4 {
+    font-size: 13px;
+    font-weight: 600;
+    color: #37352f;
+    margin-bottom: 10px;
+}
+
+.context-block p {
+    font-size: 13px;
+    line-height: 1.6;
+    color: #37352f;
+    margin-bottom: 8px;
+}
+
+.context-block p:last-child {
+    margin-bottom: 0;
+}
+
+.context-block ul {
+    margin: 8px 0 0 0;
+    padding-left: 18px;
+}
+
+.context-block li {
+    font-size: 13px;
+    line-height: 1.6;
+    color: #37352f;
+    margin-bottom: 6px;
+}
+
+.context-block li:last-child {
+    margin-bottom: 0;
+}
+
+.context-block strong {
+    font-weight: 600;
+    color: #37352f;
+}
+
+/* Questions Dropdown */
+.questions-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    user-select: none;
+    padding: 6px 0;
+    border-radius: 4px;
+    transition: background 0.2s ease;
+}
+
+.questions-header:hover {
+    background: rgba(0, 0, 0, 0.02);
+}
+
+.questions-header h4 {
+    margin-bottom: 0;
+}
+
+.toggle-icon {
+    font-size: 12px;
+    color: #91918e;
+    transition: transform 0.3s ease;
+    margin-left: 8px;
+}
+
+.toggle-icon.open {
+    transform: rotate(180deg);
+}
+
+.questions-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease;
+}
+
+.questions-content.open {
+    max-height: 1500px;
+}
+
+.question-item {
+    margin-top: 12px;
+    padding: 12px;
+    background: #fafaf9;
+    border-radius: 6px;
+}
+
+.question-item strong {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: #37352f;
+    margin-bottom: 6px;
+}
+
+.question-item p {
+    font-size: 13px;
+    line-height: 1.6;
+    color: #656565;
+    margin: 0;
+}

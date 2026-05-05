@@ -6863,7 +6863,7 @@
 
                         {/* Your Top Rated Badge */}
                         {ratings[recipeIndex] >= 4 && (
-                          <div style={{
+                          <div data-top-rated-badge="" style={{
                             position: 'absolute',
                             bottom: 0,
                             left: 0,
@@ -8277,7 +8277,7 @@
 
                         {/* Your Top Rated Badge */}
                         {ratings[recipeIndex] >= 4 && (
-                          <div style={{
+                          <div data-top-rated-badge="" style={{
                             position: 'absolute',
                             bottom: 0,
                             left: 0,
@@ -14309,7 +14309,7 @@
 
                   {/* Add your rating - moved to top of reviews section (only for delivered recipes) */}
                   {!hasUserRating && (recipe.isDelivered || recipe.canRate === true) && (
-                    <div style={{
+                    <div data-add-your-rating="" style={{
                       marginBottom: 24,
                       padding: 16,
                       background: '#efe9de',
@@ -14338,7 +14338,7 @@
                             color: '#232323',
                             margin: 0,
                             lineHeight: '20px',
-                          }}>Don't forget to rate this</h3>
+                          }}>Add your rating</h3>
                           <p style={{
                             fontFamily: 'var(--font-body)',
                             fontSize: 12,
@@ -14383,8 +14383,8 @@
                           src="review visual.png"
                           alt="Rate this meal"
                           style={{
-                            width: 112,
-                            height: 112,
+                            width: 72,
+                            height: 72,
                             objectFit: 'contain',
                           }}
                         />
@@ -14392,8 +14392,61 @@
                     </div>
                   )}
 
+                  {/* Alternative Overall Rating - appears after Add your rating banner */}
+                  <div data-alternative-overall-rating="" style={{
+                    display: 'none',
+                    marginBottom: 24,
+                    padding: 16,
+                    background: '#ffffff',
+                    borderRadius: 8,
+                  }}>
+                    <div style={{
+                      fontFamily: 'var(--font-headline)',
+                      fontSize: 16,
+                      fontWeight: 700,
+                      color: '#232323',
+                      marginBottom: 16,
+                      lineHeight: '20px',
+                    }}>Community ratings</div>
+                    <div style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 4,
+                    }}>
+                      {/* Star icon */}
+                      <img src="cta-star-3d.png" alt="Star" style={{
+                        width: 48,
+                        height: 48,
+                      }} />
+                      {/* Rating number */}
+                      <div style={{
+                        fontFamily: 'var(--font-headline)',
+                        fontSize: 32,
+                        fontWeight: 700,
+                        color: '#232323',
+                        lineHeight: '40px',
+                        marginRight: 8,
+                      }}>4.7</div>
+                      {/* Description */}
+                      <div style={{
+                        flex: 1,
+                        fontFamily: 'var(--font-body)',
+                        fontSize: 12,
+                        fontWeight: 400,
+                        color: '#656565',
+                        lineHeight: '16px',
+                      }}>1,352 people shared their feedback for this recipe</div>
+                      {/* Info icon */}
+                      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="8" cy="8" r="7" stroke="#656565" strokeWidth="1"/>
+                        <path d="M8 7V11M8 5V5.5" stroke="#656565" strokeWidth="1.5" strokeLinecap="round"/>
+                      </svg>
+                    </div>
+                  </div>
+
                   {/* Community Rating Overall */}
                   <div
+                    data-rating-display=""
                     style={{
                       display: 'flex',
                       alignItems: 'center',
@@ -14426,14 +14479,14 @@
                         flexDirection: 'column',
                         gap: 0,
                       }}>
-                        <span style={{
+                        <span data-rating-count="" style={{
                           fontFamily: 'var(--font-body)',
                           fontSize: 14,
                           fontWeight: 400,
                           color: '#656565',
                           lineHeight: '20px',
                         }}>23k ratings</span>
-                        <span style={{
+                        <span data-review-count="" style={{
                           fontFamily: 'var(--font-body)',
                           fontSize: 14,
                           fontWeight: 400,
@@ -14445,6 +14498,7 @@
 
                     {/* AI Summary Button - Moved to top right */}
                     <button
+                      data-ai-summary=""
                       onClick={() => setShowAISummaryDrawer(true)}
                       style={{
                         display: 'flex',
@@ -14469,8 +14523,145 @@
                     </button>
                   </div>
 
+                  {/* AI Summary Section Alternative - full section instead of button */}
+                  <div data-ai-summary-section="" style={{
+                    display: 'none',
+                    marginBottom: 24,
+                    padding: 16,
+                    background: '#ffffff',
+                    borderRadius: 8,
+                  }}>
+                    {/* Title */}
+                    <h3 style={{
+                      fontFamily: 'var(--font-headline)',
+                      fontSize: 16,
+                      fontWeight: 700,
+                      color: '#232323',
+                      margin: '0 0 8px 0',
+                      lineHeight: '20px',
+                    }}>Review summary</h3>
+
+                    {/* Updated date */}
+                    <p style={{
+                      fontFamily: 'var(--font-body)',
+                      fontSize: 12,
+                      fontWeight: 400,
+                      lineHeight: '16px',
+                      color: '#666666',
+                      margin: '0 0 16px 0',
+                    }}>
+                      Updated on Sep 2025
+                    </p>
+
+                    {/* Summary sections */}
+                    <div style={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      gap: 12,
+                    }}>
+                      {/* Flavor */}
+                      <div>
+                        <p style={{
+                          fontFamily: 'var(--font-body)',
+                          fontSize: 14,
+                          fontWeight: 700,
+                          lineHeight: '20px',
+                          color: '#232323',
+                          margin: 0,
+                        }}>
+                          Flavor:{' '}
+                          <span style={{ fontWeight: 400 }}>
+                            Customers rave about the delicious, flavorful chicken. The crispy Parmesan crust is a particular highlight.
+                          </span>
+                        </p>
+                      </div>
+
+                      {/* Ease */}
+                      <div>
+                        <p style={{
+                          fontFamily: 'var(--font-body)',
+                          fontSize: 14,
+                          fontWeight: 700,
+                          lineHeight: '20px',
+                          color: '#232323',
+                          margin: 0,
+                        }}>
+                          Ease:{' '}
+                          <span style={{ fontWeight: 400 }}>
+                            Many find this recipe simple and easy to prepare. It's become a go-to dish for several customers.
+                          </span>
+                        </p>
+                      </div>
+
+                      {/* Tweaks */}
+                      <div>
+                        <p style={{
+                          fontFamily: 'var(--font-body)',
+                          fontSize: 14,
+                          fontWeight: 700,
+                          lineHeight: '20px',
+                          color: '#232323',
+                          margin: 0,
+                        }}>
+                          Tweaks:{' '}
+                          <span style={{ fontWeight: 400 }}>
+                            Some prefer sautéing the green beans in the chicken pan after roasting for better taste and energy efficiency.
+                          </span>
+                        </p>
+                      </div>
+
+                      {/* Leftovers */}
+                      <div>
+                        <p style={{
+                          fontFamily: 'var(--font-body)',
+                          fontSize: 14,
+                          fontWeight: 700,
+                          lineHeight: '20px',
+                          color: '#232323',
+                          margin: 0,
+                        }}>
+                          Leftovers:{' '}
+                          <span style={{ fontWeight: 400 }}>
+                            The dish reheats well, with customers enjoying it as both chicken and fish variations.
+                          </span>
+                        </p>
+                      </div>
+
+                      {/* Texture */}
+                      <div>
+                        <p style={{
+                          fontFamily: 'var(--font-body)',
+                          fontSize: 14,
+                          fontWeight: 700,
+                          lineHeight: '20px',
+                          color: '#232323',
+                          margin: 0,
+                        }}>
+                          Texture:{' '}
+                          <span style={{ fontWeight: 400 }}>
+                            Diners praise the juicy chicken, defying expectations of dryness often associated with breast meat.
+                          </span>
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* AI-generated footer */}
+                    <p style={{
+                      fontFamily: 'var(--font-body)',
+                      fontSize: 12,
+                      fontWeight: 400,
+                      lineHeight: '16px',
+                      color: '#999999',
+                      margin: '16px 0 0 0',
+                      borderTop: '1px solid #E0E0E0',
+                      paddingTop: 12,
+                    }}>
+                      AI-generated from customer reviews
+                    </p>
+                  </div>
+
                   {/* Rating Distribution Bars */}
-                  <div style={{
+                  <div data-rating-distribution="" style={{
                     display: 'flex',
                     flexDirection: 'column',
                     gap: 0,
@@ -14480,13 +14671,13 @@
                     borderRadius: '8px',
                   }}>
                     {/* Filter header */}
-                    <div style={{
+                    <div data-filter-feature="" style={{
                       display: 'flex',
                       justifyContent: 'space-between',
                       alignItems: 'center',
                       marginBottom: 12,
                     }}>
-                      <div style={{
+                      <div data-filter-text="" style={{
                         fontFamily: 'var(--font-body)',
                         fontSize: 14,
                         fontWeight: 400,
@@ -14534,6 +14725,7 @@
                       return (
                         <div
                           key={rating}
+                          data-filter-feature=""
                           onClick={() => {
                             // Toggle: if clicking the same rating, clear it; otherwise set the new rating
                             if (selectedRatingFilters === rating) {
@@ -14720,7 +14912,7 @@
                   return (
                     <>
                       {/* Most Like/Dislike Summary */}
-                      <div style={{
+                      <div data-theme-breakdown="" style={{
                         display: 'flex',
                         flexDirection: 'column',
                         gap: 12,
@@ -14763,6 +14955,7 @@
                                   return (
                                     <button
                                       key={item.themeKey}
+                                      data-filter-feature=""
                                       onClick={() => {
                                         if (isSelected) {
                                           setSelectedThemeFilter(null);
@@ -14829,6 +15022,7 @@
                                   return (
                                     <button
                                       key={item.themeKey}
+                                      data-filter-feature=""
                                       onClick={() => {
                                         if (isSelected) {
                                           setSelectedThemeFilter(null);
@@ -14866,7 +15060,7 @@
                         gap: 16,
                       }}>
                       {displayedReviews.map((review, index) => (
-                        <div key={index} style={{
+                        <div key={index} {...(review.isUserReview ? { 'data-user-review': '' } : { 'data-community-reviews': '' })} style={{
                           display: 'flex',
                           flexDirection: 'column',
                           gap: review.isUserReview ? 8 : 12,
@@ -15089,7 +15283,7 @@
 
                             {/* Review Photos */}
                             {review.photos && review.photos.length > 0 && (
-                              <div className="review-photos-container">
+                              <div data-photo-reviews="" className="review-photos-container">
                                 {review.photos.map((photo, photoIndex) => (
                                   <img
                                     key={photoIndex}
@@ -15109,7 +15303,7 @@
                               const showCount = displayCount > 0;
 
                               return (
-                                <div style={{
+                                <div data-helpful-buttons="" style={{
                                   display: 'flex',
                                   alignItems: 'center',
                                   justifyContent: 'space-between',
@@ -15209,7 +15403,7 @@
 
                       {/* View More Reviews Button - Only show if there are more reviews */}
                       {filteredReviews.length > 4 && (
-                        <button style={{
+                        <button data-community-reviews="" style={{
                           background: 'transparent',
                           border: 'none',
                           fontFamily: 'var(--font-body)',
@@ -15377,6 +15571,21 @@
                 }}
               />
 
+              {/* Robot thinking illustration - positioned with quarter outside drawer */}
+              <img
+                src="Home/robot thinking.png"
+                alt="AI assistant"
+                style={{
+                  position: 'absolute',
+                  bottom: 'calc(85% - 160px)',
+                  right: 16,
+                  width: 128,
+                  height: 128,
+                  zIndex: 1001,
+                  animation: 'slideUpDrawer 0.3s ease-out',
+                }}
+              />
+
               {/* Drawer */}
               <div style={{
                 position: 'absolute',
@@ -15391,6 +15600,7 @@
                 maxHeight: '85%',
                 overflowY: 'auto',
               }}>
+
                 {/* Drag handle */}
                 <div style={{
                   width: 40,
@@ -15568,7 +15778,7 @@
                 animation: 'slideUpDrawer 0.3s ease-out',
                 display: 'flex',
                 flexDirection: 'column',
-                maxHeight: '75vh',
+                maxHeight: '60vh',
               }}>
                 {/* Scrollable Content Area */}
                 <div
@@ -15711,7 +15921,7 @@
                       <h2 style={{
                         fontFamily: 'var(--font-headline)',
                         fontSize: 20,
-                        fontWeight: 500,
+                        fontWeight: 700,
                         lineHeight: '24px',
                         color: '#232323',
                         margin: 0,
@@ -15842,12 +16052,12 @@
                       gap: 16,
                     }}>
                       {[
+                        { key: 'taste', label: 'Taste', icon: 'rate theme illustration/Image-5.png' },
                         { key: 'ingredientQuality', label: 'Ingredient quality', icon: 'rate theme illustration/Image.png' },
                         { key: 'easeOfCooking', label: 'Ease of cooking', icon: 'rate theme illustration/Image-1.png' },
                         { key: 'portionSize', label: 'Portion size', icon: 'rate theme illustration/Image-2.png' },
                         { key: 'valueForMoney', label: 'Value for money', icon: 'rate theme illustration/Image-3.png' },
                         { key: 'delivery', label: 'Delivery', icon: 'rate theme illustration/Image-4.png' },
-                        { key: 'taste', label: 'Taste', icon: 'rate theme illustration/Image-5.png' },
                       ].map((theme) => (
                         <div
                           key={theme.key}
@@ -22603,6 +22813,94 @@
 
     const root = ReactDOM.createRoot(document.getElementById('root'));
     root.render(<App />);
+  </script>
+
+  <script>
+    // Feature control system - listens for messages from control panel
+    (function() {
+      const styleId = 'feature-control-styles';
+      let styleElement = document.getElementById(styleId);
+
+      if (!styleElement) {
+        styleElement = document.createElement('style');
+        styleElement.id = styleId;
+        document.head.appendChild(styleElement);
+      }
+
+      const featureSelectors = {
+        starRatings: '[data-star-rating]',
+        reviewCounts: '[data-review-count]',
+        topRatedBadge: '[data-top-rated-badge]',
+        overallRating: '[data-rating-display]',
+        ratingCount: '[data-rating-count]',
+        reviewCount: '[data-review-count]',
+        ratingDistribution: '[data-rating-distribution]',
+        filterFeature: '[data-filter-feature]',
+        aiSummary: '[data-ai-summary]',
+        aiSummarySection: '[data-ai-summary-section]',
+        alternativeOverallRating: '[data-alternative-overall-rating]',
+        addYourRating: '[data-add-your-rating]',
+        themeBreakdown: '[data-theme-breakdown]',
+        userReview: '[data-user-review]',
+        communityReviews: '[data-community-reviews]',
+        helpfulButtons: '[data-helpful-buttons]',
+        photoReviews: '[data-photo-reviews]',
+        cookingFlowRating: '[data-cooking-flow-rating]',
+        filterText: '[data-filter-text]'
+      };
+
+      function updateFeatureStyles(features) {
+        let css = '';
+        Object.keys(features).forEach(feature => {
+          if (!features[feature] && featureSelectors[feature]) {
+            // Special handling for filter feature - disable clicks but keep visual style
+            if (feature === 'filterFeature') {
+              css += `${featureSelectors[feature]} { pointer-events: none !important; cursor: default !important; }\n`;
+              // Also hide the filter text
+              css += `${featureSelectors['filterText']} { display: none !important; }\n`;
+            } else {
+              css += `${featureSelectors[feature]} { display: none !important; }\n`;
+            }
+          }
+          // Show AI Summary Section when enabled
+          if (features[feature] && feature === 'aiSummarySection' && featureSelectors[feature]) {
+            css += `${featureSelectors[feature]} { display: block !important; }\n`;
+          }
+          // Show Alternative Overall Rating when enabled
+          if (features[feature] && feature === 'alternativeOverallRating' && featureSelectors[feature]) {
+            css += `${featureSelectors[feature]} { display: block !important; }\n`;
+          }
+        });
+        styleElement.textContent = css;
+        console.log('Updated feature styles:', features);
+      }
+
+      // Listen for messages from parent window (control panel)
+      window.addEventListener('message', (event) => {
+        if (event.data.type === 'featureToggle') {
+          // Use allFeatures if provided (for related toggles), otherwise update individual feature
+          let features;
+          if (event.data.allFeatures) {
+            features = event.data.allFeatures;
+          } else {
+            const { feature, isActive } = event.data;
+            features = JSON.parse(sessionStorage.getItem('featureState') || '{}');
+            features[feature] = isActive;
+          }
+          sessionStorage.setItem('featureState', JSON.stringify(features));
+          updateFeatureStyles(features);
+        } else if (event.data.type === 'initFeatures') {
+          sessionStorage.setItem('featureState', JSON.stringify(event.data.features));
+          updateFeatureStyles(event.data.features);
+        }
+      });
+
+      // Apply saved feature state on load
+      const savedState = JSON.parse(sessionStorage.getItem('featureState') || '{}');
+      if (Object.keys(savedState).length > 0) {
+        updateFeatureStyles(savedState);
+      }
+    })();
   </script>
 </body>
 </html>

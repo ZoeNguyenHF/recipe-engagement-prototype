@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Community rating initiative</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="workspace">
+                    <span class="workspace-name">Community rating initiative</span>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <div class="nav-section-title">design</div>
+                    <a href="#" class="nav-item active" data-page="full-scope-experience">
+                        <span class="nav-sub-item-text">Full scope experience</span>
+                        <span class="nav-refresh-icon" data-page="full-scope-experience" title="Refresh and restart">↻</span>
+                    </a>
+                    <div class="nav-item-parent">
+                        <a href="#" class="nav-item has-dropdown open" data-page="milestone-breakdown">
+                            <span>milestone breakdown</span>
+                            <span class="dropdown-icon">▼</span>
+                        </a>
+                        <div class="nav-dropdown open">
+                            <a href="#" class="nav-sub-item" data-page="milestone-1">
+                                <span class="nav-sub-item-text">milestone 1</span>
+                                <span class="nav-refresh-icon" data-page="milestone-1" title="Refresh and restart">↻</span>
+                            </a>
+                            <a href="#" class="nav-sub-item" data-page="milestone-2">
+                                <span class="nav-sub-item-text">milestone 2</span>
+                                <span class="nav-refresh-icon" data-page="milestone-2" title="Refresh and restart">↻</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+
+        </aside>
+
+        <!-- Main Content -->
+        <main class="content">
+            <!-- Full Scope Experience Page -->
+            <div class="page prototype-page active" id="full-scope-experience">
+                <div class="solution-layout">
+                    <div class="prototype-frame">
+                        <iframe src="../q2-prototype-working version.html#menu" title="Full Scope Experience Prototype"></iframe>
+                    </div>
+                    <aside class="solution-sidebar">
+                        <div class="sidebar-item">
+                            <div class="sidebar-label">Context</div>
+                            <div class="sidebar-value context-content">
+                                <div class="context-block">
+                                    <h4>User Problem</h4>
+                                    <p>As HelloFresh has expanded menu offerings (20+ recipes weekly in some markets), users face increasing decision fatigue during meal selection. Without trusted signals or recommendations, users may:</p>
+                                    <ul>
+                                        <li>Spend excessive time evaluating options</li>
+                                        <li>Experience choice paralysis</li>
+                                        <li>Feel uncertain about their selections</li>
+                                        <li>Default to familiar choices, limiting variety</li>
+                                    </ul>
+                                </div>
+
+                                <div class="context-block">
+                                    <h4>Proposed Solution</h4>
+                                    <p>Display community ratings prominently throughout the meal selection journey as social proof, providing users with reliable signals to make confident decisions faster.</p>
+                                    <p><strong>Key touchpoints:</strong> Recipe cards (browse view), recipe detail pages, post-cooking experience</p>
+                                </div>
+
+                                <div class="context-block">
+                                    <h4>Success Metrics</h4>
+                                    <p><strong>Selection Confidence (Primary)</strong></p>
+                                    <ul>
+                                        <li>Time to complete meal selection</li>
+                                        <li>Menu completion rate (% users who finalize box)</li>
+                                        <li>Meal variety score (diversity of selections)</li>
+                                        <li>Recipe trial rate (% users trying new vs repeat recipes)</li>
+                                    </ul>
+                                    <p><strong>Business Impact (Secondary)</strong></p>
+                                    <ul>
+                                        <li>AOV (Average Order Value)</li>
+                                        <li>AOR (Add-On Rate)</li>
+                                        <li>Retention rate (4-week, 8-week)</li>
+                                        <li>Premium recipe selection rate</li>
+                                    </ul>
+                                </div>
+
+                                <div class="context-block">
+                                    <h4>Rating Engagement Bet</h4>
+                                    <p>By explicitly showcasing how ratings help the community make better choices, users will be motivated to contribute. Displaying users' own past ratings creates personal value and reinforces rating behavior.</p>
+                                    <p><strong>Engagement Metrics:</strong></p>
+                                    <ul>
+                                        <li>Rating submission rate (% delivered meals rated)</li>
+                                        <li>Review addition rate (ratings with text)</li>
+                                        <li>Average rating speed (days post-delivery)</li>
+                                        <li>Repeat rater rate (% users rating multiple weeks)</li>
+                                    </ul>
+                                </div>
+
+                                <div class="context-block">
+                                    <div class="questions-header" onclick="toggleQuestions()">
+                                        <h4>Open Questions for Leadership</h4>
+                                        <span class="toggle-icon" id="questionsToggle">▼</span>
+                                    </div>
+                                    <div class="questions-content" id="questionsContent">
+                                        <div class="question-item">
+                                            <strong>Strategic Priority</strong>
+                                            <p>Should we prioritize volume (many ratings, few reviews) or depth (detailed reviews)? Quality reviews are more helpful for decision-making but harder to obtain.</p>
+                                        </div>
+                                        <div class="question-item">
+                                            <strong>Popularity Bias</strong>
+                                            <p>Will prominent ratings create a rich-get-richer effect where high-rated meals dominate selections? Is this acceptable, or do we need mechanisms to promote variety?</p>
+                                        </div>
+                                        <div class="question-item">
+                                            <strong>Moderation Strategy</strong>
+                                            <p>What's our approach to negative reviews, fake reviews, and content moderation? Resource implications?</p>
+                                        </div>
+                                        <div class="question-item">
+                                            <strong>Timing Strategy</strong>
+                                            <p>When do we prompt for ratings? Immediately post-cooking vs. next-day vs. pre-next-selection? What drives highest quality and quantity?</p>
+                                        </div>
+                                        <div class="question-item">
+                                            <strong>Integration with Personalization</strong>
+                                            <p>How do community ratings interact with our ML recommendation engine? Do they complement or compete?</p>
+                                        </div>
+                                        <div class="question-item">
+                                            <strong>Customer Support</strong>
+                                            <p>Expected volume increase in rating-related inquiries? Support team training needed?</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </aside>
+                </div>
+            </div>
+
+            <!-- Milestone Breakdown Page -->
+            <div class="page prototype-page" id="milestone-breakdown">
+                <div class="solution-layout">
+                    <div class="prototype-frame">
+                        <iframe src="../q2-prototype-working version.html" title="Milestone Breakdown Prototype"></iframe>
+                    </div>
+                    <aside class="solution-sidebar">
+                        <div class="sidebar-item">
+                            <div class="sidebar-label">Feature name</div>
+                            <div class="sidebar-value">milestone breakdown</div>
+                        </div>
+                        <div class="sidebar-item">
+                            <div class="sidebar-label">Hypothesis</div>
+                            <div class="sidebar-value">If we provide rating entry points at contextually relevant moments, then we will increase rating submission volume because users can share feedback when they're naturally engaged and their experience is fresh.</div>
+                        </div>
+                        <div class="sidebar-item">
+                            <div class="sidebar-label">View in prototype</div>
+                            <div class="sidebar-value">
+                                Explore rating entry points across multiple touchpoints:
+                                <ul>
+                                    <li><strong>milestone 1:</strong> Rate during or after cooking experience</li>
+                                    <li><strong>milestone 2:</strong> Rate completed meals from order history</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </aside>
+                </div>
+            </div>
+
+            <!-- Milestone 1 Page -->
+            <div class="page prototype-page" id="milestone-1">
+                <iframe src="milestone-1-controlled.html" title="Milestone 1 Prototype" style="width: 100%; height: 100vh; border: none;"></iframe>
+            </div>
+
+            <!-- Milestone 2 Page -->
+            <div class="page prototype-page" id="milestone-2">
+                <div class="solution-layout">
+                    <div class="prototype-frame">
+                        <iframe src="../q2-prototype-working version.html#menu" title="Milestone 2 Prototype"></iframe>
+                    </div>
+                    <aside class="solution-sidebar">
+                        <div class="sidebar-item">
+                            <div class="sidebar-label">Feature name</div>
+                            <div class="sidebar-value">milestone 2</div>
+                        </div>
+                        <div class="sidebar-item">
+                            <div class="sidebar-label">Description</div>
+                            <div class="sidebar-value">The past orders section provides prominent rating entry points for completed meals, making it easy for users to rate multiple recipes in one session. This centralized approach increases rating volume by reducing the effort required to provide feedback.</div>
+                        </div>
+                        <div class="sidebar-item">
+                            <div class="sidebar-label">View in prototype</div>
+                            <div class="sidebar-value">Navigate to the <strong>past orders</strong> section to see rate buttons next to each completed order, with quick access to rating forms.</div>
+                        </div>
+                    </aside>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        // Toggle questions dropdown
+        function toggleQuestions() {
+            const content = document.getElementById('questionsContent');
+            const icon = document.getElementById('questionsToggle');
+
+            content.classList.toggle('open');
+            icon.classList.toggle('open');
+        }
+    </script>
+</body>
+</html>

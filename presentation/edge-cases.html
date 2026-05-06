@@ -180,6 +180,10 @@
             margin: 0 auto;
         }
 
+        .recipe-card-mockup.selected {
+            border: 2px solid #000000;
+        }
+
         .recipe-card-image {
             width: 100%;
             height: 202px;
@@ -317,18 +321,41 @@
         }
 
         .insights-block h3 {
-            font-size: 1rem;
-            font-weight: 600;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9375rem;
+            font-weight: 700;
             color: var(--text);
-            margin-bottom: 16px;
+            margin: 0 0 12px 0;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .insights-block h3.pros-title {
+            color: #16A34A;
+            margin-top: 16px;
+        }
+
+        .insights-block h3.cons-title {
+            color: #DC2626;
+            margin-top: 20px;
+        }
+
+        .insights-block > p {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9375rem;
+            line-height: 1.6;
+            color: var(--text);
+            margin: 0;
         }
 
         .insights-block ul {
             list-style: none;
             padding: 0;
+            margin: 0;
         }
 
         .insights-block li {
+            font-family: 'Inter', sans-serif;
             font-size: 0.875rem;
             line-height: 1.6;
             color: var(--text);
@@ -385,6 +412,56 @@
             margin-bottom: 0;
         }
 
+        /* Archive Section */
+        .archive-section {
+            margin-top: 60px;
+            padding-top: 40px;
+            border-top: 2px solid #e8e7e4;
+        }
+
+        .archive-toggle {
+            background: #fafaf9;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 20px 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: all 0.3s;
+        }
+
+        .archive-toggle:hover {
+            background: #f5f5f4;
+        }
+
+        .archive-toggle h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text);
+            margin: 0;
+        }
+
+        .archive-arrow {
+            transition: transform 0.3s;
+            color: var(--text);
+        }
+
+        .archive-arrow.expanded {
+            transform: rotate(180deg);
+        }
+
+        .archive-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-out;
+        }
+
+        .archive-content.expanded {
+            max-height: 10000px;
+            transition: max-height 0.8s ease-in;
+        }
+
         /* Responsive */
         @media (max-width: 1024px) {
             .nav-container {
@@ -429,27 +506,78 @@
             <p>Handling scenarios where community ratings data is limited, absent, or requires special treatment</p>
         </div>
 
-        <!-- Edge Case 0: Low Ratings in Recommendation Contexts -->
+        <!-- Edge Case 1: Low Ratings in Recommendation Contexts -->
         <section class="edge-case-section">
-            <h2 class="section-title">Low-Rated Recipes in Recommendation Contexts</h2>
+            <h2 class="section-title">1. Low-Rated Recipes in Recommendation Contexts</h2>
             <div class="proposal-box">
-                <p><strong>The Edge Case:</strong> When we display community ratings, low-rated recipes (e.g., 2.5★) may appear in high-visibility recommendation contexts like "Top 20 This Week" or "For You" swimlanes. This creates cognitive dissonance: users expect "recommended" recipes to be high quality, but the rating suggests otherwise.</p>
+                <p><strong>The Edge Case:</strong> When we display community ratings, low-rated recipes (e.g., 2.5★) may appear in high-visibility recommendation contexts like "Top 20 This Week", "For You" swimlanes, or preselected meals. This creates cognitive dissonance: users expect "recommended" recipes to be high quality, but the rating suggests otherwise.</p>
             </div>
 
             <div class="insights-block">
                 <h3>The Problem</h3>
                 <ul>
-                    <li>User sees "Top 20" with 2.5★ recipe → Erodes trust in HelloFresh curation</li>
+                    <li>User sees "Top 20" or preselected meal with 2.5★ recipe → Erodes trust in HelloFresh curation</li>
                     <li>Creates disconnect: "Why is HelloFresh recommending poorly-rated recipes?"</li>
                     <li>Recommendations are based on order volume, freshness, business goals — not just quality</li>
                     <li>A highly-ordered recipe (popular) can still be poorly-rated (disappointing experience)</li>
                 </ul>
             </div>
 
-            <div class="comparison-grid" style="grid-template-columns: repeat(2, 1fr); margin-bottom: 40px;">
-                <!-- Problem Example 1: Top 20 with Low Rating -->
+            <div class="comparison-grid" style="grid-template-columns: repeat(3, 1fr); margin-bottom: 40px;">
+                <!-- Problem Example 1: Preselected Meal -->
                 <div class="comparison-card">
-                    <div class="comparison-card-header">❌ Problem: Top 20 with 2.5★</div>
+                    <div class="comparison-card-header">❌ Problem: Preselected with low rate</div>
+                    <div class="comparison-card-image">
+                        <div class="recipe-card-mockup selected">
+                            <div class="recipe-card-image">
+                                <img src="../recipes/HelloFresh Main Image (5).jpg" alt="Salmon Bowl">
+                            </div>
+                            <div class="recipe-card-content">
+                                <div class="recipe-info">
+                                    <h3 class="recipe-card-title">Teriyaki Salmon Bowl</h3>
+                                    <span class="recipe-card-subtitle">with Edamame & Brown Rice</span>
+                                    <div class="recipe-card-rating">
+                                        <span class="rating-number">2.4</span>
+                                        <svg width="14" height="14" viewBox="0 0 16 16" fill="black">
+                                            <path d="M8 0L9.79 5.53L16 5.53L11.1 8.94L12.89 14.47L8 11.06L3.11 14.47L4.9 8.94L0 5.53L6.21 5.53L8 0Z"/>
+                                        </svg>
+                                        <span class="rating-count">(38)</span>
+                                    </div>
+                                </div>
+                                <div class="recipe-quick-info">
+                                    <div class="quick-info-row">
+                                        <div class="info-item">
+                                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                                <path d="M8 1C4.13 1 1 4.13 1 8C1 11.87 4.13 15 8 15C11.87 15 15 11.87 15 8C15 4.13 11.87 1 8 1ZM10.5 10.5L7.5 8.5V4.5H8.5V8L11 10L10.5 10.5Z" fill="#242424"/>
+                                            </svg>
+                                            <span>25 min</span>
+                                        </div>
+                                        <div class="info-item">
+                                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                                <path d="M8 1C8 1 4 5 4 9C4 12 6 14 8 14C10 14 12 12 12 9C12 5 8 1 8 1ZM8 12C7 12 6 11 6 10C6 9 7 8 8 8C9 8 10 9 10 10C10 11 9 12 8 12Z" fill="#242424"/>
+                                            </svg>
+                                            <span>680 kcal</span>
+                                        </div>
+                                        <div class="info-item">
+                                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                                <path d="M13.5 4C12.5 4 12 4.5 12 5.5V7H11V5C11 4 10.5 3 9 3C8 3 7.5 3.5 7.5 4V7H6.5V5C6.5 4 6 3.5 5.5 3.5C4.5 3.5 4 4 4 5V8C4 10 5 12 8 12C11 12 12 10 12 8V6H13V8C13 8.5 13.5 9 14 9C14.5 9 15 8.5 15 8V5.5C15 4.5 14.5 4 13.5 4Z" fill="#242424"/>
+                                            </svg>
+                                            <span>42g protein</span>
+                                        </div>
+                                    </div>
+                                    <div class="recipe-card-tags">
+                                        <span class="tag">Quick</span>
+                                        <span class="tag">High Protein</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Problem Example 2: Top 20 with Low Rating -->
+                <div class="comparison-card">
+                    <div class="comparison-card-header">❌ Problem: Top 20 with low rate</div>
                     <div class="comparison-card-image">
                         <div class="recipe-card-mockup">
                             <div class="recipe-card-image">
@@ -458,9 +586,9 @@
                             <div class="recipe-card-content">
                                 <div class="recipe-info">
                                     <h3 class="recipe-card-title">Spicy Chicken Stir-Fry</h3>
-                                    <span class="recipe-card-subtitle">with Bell Peppers & Jasmine Rice</span>
+                                    <span class="recipe-card-subtitle">with Bell Peppers & Rice</span>
                                     <div class="recipe-card-rating">
-                                        <span class="rating-number">2.5</span>
+                                        <span class="rating-number">2.4</span>
                                         <svg width="14" height="14" viewBox="0 0 16 16" fill="black">
                                             <path d="M8 0L9.79 5.53L16 5.53L11.1 8.94L12.89 14.47L8 11.06L3.11 14.47L4.9 8.94L0 5.53L6.21 5.53L8 0Z"/>
                                         </svg>
@@ -473,10 +601,23 @@
                                             <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                                                 <path d="M8 1C4.13 1 1 4.13 1 8C1 11.87 4.13 15 8 15C11.87 15 15 11.87 15 8C15 4.13 11.87 1 8 1ZM10.5 10.5L7.5 8.5V4.5H8.5V8L11 10L10.5 10.5Z" fill="#242424"/>
                                             </svg>
-                                            <span>25 min</span>
+                                            <span>30 min</span>
+                                        </div>
+                                        <div class="info-item">
+                                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                                <path d="M8 1C8 1 4 5 4 9C4 12 6 14 8 14C10 14 12 12 12 9C12 5 8 1 8 1ZM8 12C7 12 6 11 6 10C6 9 7 8 8 8C9 8 10 9 10 10C10 11 9 12 8 12Z" fill="#242424"/>
+                                            </svg>
+                                            <span>650 kcal</span>
+                                        </div>
+                                        <div class="info-item">
+                                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                                <path d="M13.5 4C12.5 4 12 4.5 12 5.5V7H11V5C11 4 10.5 3 9 3C8 3 7.5 3.5 7.5 4V7H6.5V5C6.5 4 6 3.5 5.5 3.5C4.5 3.5 4 4 4 5V8C4 10 5 12 8 12C11 12 12 10 12 8V6H13V8C13 8.5 13.5 9 14 9C14.5 9 15 8.5 15 8V5.5C15 4.5 14.5 4 13.5 4Z" fill="#242424"/>
+                                            </svg>
+                                            <span>38g protein</span>
                                         </div>
                                     </div>
                                     <div class="recipe-card-tags">
+                                        <span class="tag">Spicy</span>
                                         <span class="tag">Quick</span>
                                     </div>
                                 </div>
@@ -485,9 +626,9 @@
                     </div>
                 </div>
 
-                <!-- Problem Example 2: For You with Low Rating -->
+                <!-- Problem Example 3: For You with Low Rating -->
                 <div class="comparison-card">
-                    <div class="comparison-card-header">❌ Problem: "For You" with 2.8★</div>
+                    <div class="comparison-card-header">❌ Problem: "For You" with low rate</div>
                     <div class="comparison-card-image">
                         <div class="recipe-card-mockup">
                             <div class="recipe-card-image">
@@ -496,9 +637,9 @@
                             <div class="recipe-card-content">
                                 <div class="recipe-info">
                                     <h3 class="recipe-card-title">Veggie Pasta Primavera</h3>
-                                    <span class="recipe-card-subtitle">with Fresh Seasonal Vegetables</span>
+                                    <span class="recipe-card-subtitle">with Seasonal Vegetables</span>
                                     <div class="recipe-card-rating">
-                                        <span class="rating-number">2.8</span>
+                                        <span class="rating-number">2.4</span>
                                         <svg width="14" height="14" viewBox="0 0 16 16" fill="black">
                                             <path d="M8 0L9.79 5.53L16 5.53L11.1 8.94L12.89 14.47L8 11.06L3.11 14.47L4.9 8.94L0 5.53L6.21 5.53L8 0Z"/>
                                         </svg>
@@ -513,9 +654,22 @@
                                             </svg>
                                             <span>20 min</span>
                                         </div>
+                                        <div class="info-item">
+                                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                                <path d="M8 1C8 1 4 5 4 9C4 12 6 14 8 14C10 14 12 12 12 9C12 5 8 1 8 1ZM8 12C7 12 6 11 6 10C6 9 7 8 8 8C9 8 10 9 10 10C10 11 9 12 8 12Z" fill="#242424"/>
+                                            </svg>
+                                            <span>520 kcal</span>
+                                        </div>
+                                        <div class="info-item">
+                                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                                <path d="M13.5 4C12.5 4 12 4.5 12 5.5V7H11V5C11 4 10.5 3 9 3C8 3 7.5 3.5 7.5 4V7H6.5V5C6.5 4 6 3.5 5.5 3.5C4.5 3.5 4 4 4 5V8C4 10 5 12 8 12C11 12 12 10 12 8V6H13V8C13 8.5 13.5 9 14 9C14.5 9 15 8.5 15 8V5.5C15 4.5 14.5 4 13.5 4Z" fill="#242424"/>
+                                            </svg>
+                                            <span>18g protein</span>
+                                        </div>
                                     </div>
                                     <div class="recipe-card-tags">
-                                        <span class="tag">Veggie</span>
+                                        <span class="tag">Vegetarian</span>
+                                        <span class="tag">Quick</span>
                                     </div>
                                 </div>
                             </div>
@@ -526,113 +680,374 @@
 
             <div class="insights-block" style="margin-bottom: 32px;">
                 <h3>Solution Option 1: Hide Ratings in Recommendation Contexts</h3>
+                <p style="margin-bottom: 16px;"><strong>Approach:</strong> Don't show ratings in "Top 20", "For You", or preselected meals. Only show in menu browse and detail pages.</p>
+
+                <div class="comparison-grid" style="grid-template-columns: repeat(2, 1fr); margin-bottom: 16px;">
+                    <div class="comparison-card">
+                        <div class="comparison-card-header">Top 20: Rating hidden</div>
+                        <div class="comparison-card-image">
+                            <div class="recipe-card-mockup">
+                                <div class="recipe-card-image">
+                                    <img src="../recipes/HelloFresh Main Image (3).jpg" alt="Stir-Fry">
+                                </div>
+                                <div class="recipe-card-content">
+                                    <div class="recipe-info">
+                                        <h3 class="recipe-card-title">Spicy Chicken Stir-Fry</h3>
+                                        <span class="recipe-card-subtitle">with Bell Peppers</span>
+                                        <div style="height: 18px; opacity: 0.3; font-size: 0.75rem; color: #656565;">(no rating shown)</div>
+                                    </div>
+                                    <div class="recipe-quick-info">
+                                        <div class="quick-info-row">
+                                            <div class="info-item">
+                                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                                    <path d="M8 1C4.13 1 1 4.13 1 8C1 11.87 4.13 15 8 15C11.87 15 15 11.87 15 8C15 4.13 11.87 1 8 1ZM10.5 10.5L7.5 8.5V4.5H8.5V8L11 10L10.5 10.5Z" fill="#242424"/>
+                                                </svg>
+                                                <span>30 min</span>
+                                            </div>
+                                            <div class="info-item">
+                                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                                    <path d="M8 1C8 1 4 5 4 9C4 12 6 14 8 14C10 14 12 12 12 9C12 5 8 1 8 1ZM8 12C7 12 6 11 6 10C6 9 7 8 8 8C9 8 10 9 10 10C10 11 9 12 8 12Z" fill="#242424"/>
+                                                </svg>
+                                                <span>650 kcal</span>
+                                            </div>
+                                            <div class="info-item">
+                                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                                    <path d="M13.5 4C12.5 4 12 4.5 12 5.5V7H11V5C11 4 10.5 3 9 3C8 3 7.5 3.5 7.5 4V7H6.5V5C6.5 4 6 3.5 5.5 3.5C4.5 3.5 4 4 4 5V8C4 10 5 12 8 12C11 12 12 10 12 8V6H13V8C13 8.5 13.5 9 14 9C14.5 9 15 8.5 15 8V5.5C15 4.5 14.5 4 13.5 4Z" fill="#242424"/>
+                                                </svg>
+                                                <span>38g protein</span>
+                                            </div>
+                                        </div>
+                                        <div class="recipe-card-tags">
+                                            <span class="tag">Spicy</span>
+                                            <span class="tag">Quick</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="comparison-card">
+                        <div class="comparison-card-header">Product Detail: Full page with rating</div>
+                        <div class="comparison-card-image">
+                            <div style="width: 100%; max-width: 320px; margin: 0 auto; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.08); font-family: 'Roboto', sans-serif;">
+                                <!-- Hero Image (larger for PDP) -->
+                                <img src="../recipes/HelloFresh Main Image (3).jpg" alt="Spicy Chicken Stir-Fry" style="width: 100%; height: 200px; object-fit: cover; display: block;">
+                                <!-- Content -->
+                                <div style="padding: 16px;">
+                                    <h2 style="font-size: 20px; font-weight: 700; color: #232323; margin: 0 0 4px; line-height: 1.2;">Spicy Chicken Stir-Fry</h2>
+                                    <p style="font-size: 14px; font-weight: 400; color: #232323; margin: 0 0 12px; line-height: 1.3;">with Bell Peppers & Jasmine Rice</p>
+                                    <!-- Rating row -->
+                                    <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 16px;">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#232323" stroke="#232323" stroke-width="1.5"/></svg>
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#232323" stroke="#232323" stroke-width="1.5"/></svg>
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="none" stroke="#232323" stroke-width="1.5"/></svg>
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="none" stroke="#232323" stroke-width="1.5"/></svg>
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="none" stroke="#232323" stroke-width="1.5"/></svg>
+                                        <span style="font-size: 14px; font-weight: 700; color: #232323;">2.4</span>
+                                        <span style="font-size: 14px; font-weight: 400; color: #656565; text-decoration: underline;">(47)</span>
+                                    </div>
+                                    <!-- Quick facts row -->
+                                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; padding-top: 12px; border-top: 1px solid #E5E7EB; font-size: 11px; color: #656565;">
+                                        <div><strong style="display: block; color: #232323;">Total</strong>25 min</div>
+                                        <div><strong style="display: block; color: #232323;">Calories</strong>650 kcal</div>
+                                        <div><strong style="display: block; color: #232323;">Difficulty</strong>Easy</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <h3 class="pros-title">Pros</h3>
                 <ul>
-                    <li><strong>Approach:</strong> Don't show ratings in "Top 20" or "For You" swimlanes. Only show in menu browse and detail pages.</li>
-                    <li><strong>Pro:</strong> Eliminates cognitive dissonance, simple to implement (CSS only)</li>
-                    <li><strong>Con:</strong> Users may feel deceived when they click and see low rating on detail page</li>
-                    <li><strong>Con:</strong> Reduces rating visibility, doesn't solve root cause</li>
+                    <li>Eliminates cognitive dissonance immediately</li>
+                    <li>Simple to implement (CSS only)</li>
+                    <li>Protects brand trust in recommendations</li>
+                </ul>
+                <h3 class="cons-title">Cons</h3>
+                <ul>
+                    <li>Users may feel deceived when they click and see low rating on detail page</li>
+                    <li>Reduces rating visibility, doesn't solve root cause</li>
                 </ul>
             </div>
 
             <div class="insights-block" style="margin-bottom: 32px;">
                 <h3>Solution Option 2: Rating-Weighted Algorithm</h3>
+                <p style="margin-bottom: 16px;"><strong>Approach:</strong> Update recommendation algorithms to factor in ratings. Low-rated recipes (&lt;3.5★) are automatically deprioritized.</p>
+
+                <div class="comparison-grid" style="grid-template-columns: repeat(2, 1fr); margin-bottom: 16px;">
+                    <div class="comparison-card">
+                        <div class="comparison-card-header">High-rated: Prioritized</div>
+                        <div class="comparison-card-image">
+                            <div class="recipe-card-mockup">
+                                <div class="recipe-card-image">
+                                    <img src="../recipes/HelloFresh Main Image (2).jpg" alt="Chicken">
+                                </div>
+                                <div class="recipe-card-content">
+                                    <div class="recipe-info">
+                                        <h3 class="recipe-card-title">Crispy Parmesan Chicken</h3>
+                                        <span class="recipe-card-subtitle">with Roasted Potatoes</span>
+                                        <div class="recipe-card-rating">
+                                            <span class="rating-number">4.5</span>
+                                            <svg width="14" height="14" viewBox="0 0 16 16" fill="black">
+                                                <path d="M8 0L9.79 5.53L16 5.53L11.1 8.94L12.89 14.47L8 11.06L3.11 14.47L4.9 8.94L0 5.53L6.21 5.53L8 0Z"/>
+                                            </svg>
+                                            <span class="rating-count">(89)</span>
+                                        </div>
+                                    </div>
+                                    <div class="recipe-quick-info">
+                                        <div class="quick-info-row">
+                                            <div class="info-item">
+                                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                                    <path d="M8 1C4.13 1 1 4.13 1 8C1 11.87 4.13 15 8 15C11.87 15 15 11.87 15 8C15 4.13 11.87 1 8 1ZM10.5 10.5L7.5 8.5V4.5H8.5V8L11 10L10.5 10.5Z" fill="#242424"/>
+                                                </svg>
+                                                <span>30 min</span>
+                                            </div>
+                                            <div class="info-item">
+                                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                                    <path d="M8 1C8 1 4 5 4 9C4 12 6 14 8 14C10 14 12 12 12 9C12 5 8 1 8 1ZM8 12C7 12 6 11 6 10C6 9 7 8 8 8C9 8 10 9 10 10C10 11 9 12 8 12Z" fill="#242424"/>
+                                                </svg>
+                                                <span>750 kcal</span>
+                                            </div>
+                                            <div class="info-item">
+                                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                                    <path d="M13.5 4C12.5 4 12 4.5 12 5.5V7H11V5C11 4 10.5 3 9 3C8 3 7.5 3.5 7.5 4V7H6.5V5C6.5 4 6 3.5 5.5 3.5C4.5 3.5 4 4 4 5V8C4 10 5 12 8 12C11 12 12 10 12 8V6H13V8C13 8.5 13.5 9 14 9C14.5 9 15 8.5 15 8V5.5C15 4.5 14.5 4 13.5 4Z" fill="#242424"/>
+                                                </svg>
+                                                <span>39g protein</span>
+                                            </div>
+                                        </div>
+                                        <div class="recipe-card-tags">
+                                            <span class="tag">Quick</span>
+                                            <span class="tag">High Protein</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="comparison-card">
+                        <div class="comparison-card-header">Low-rated: Deprioritized</div>
+                        <div class="comparison-card-image">
+                            <div class="recipe-card-mockup">
+                                <div class="recipe-card-image">
+                                    <img src="../recipes/HelloFresh Main Image (3).jpg" alt="Stir-Fry">
+                                </div>
+                                <div class="recipe-card-content">
+                                    <div class="recipe-info">
+                                        <h3 class="recipe-card-title">Spicy Chicken Stir-Fry</h3>
+                                        <span class="recipe-card-subtitle">with Bell Peppers</span>
+                                        <div class="recipe-card-rating">
+                                            <span class="rating-number">2.4</span>
+                                            <svg width="14" height="14" viewBox="0 0 16 16" fill="black">
+                                                <path d="M8 0L9.79 5.53L16 5.53L11.1 8.94L12.89 14.47L8 11.06L3.11 14.47L4.9 8.94L0 5.53L6.21 5.53L8 0Z"/>
+                                            </svg>
+                                            <span class="rating-count">(47)</span>
+                                        </div>
+                                    </div>
+                                    <div class="recipe-quick-info">
+                                        <div class="quick-info-row">
+                                            <div class="info-item">
+                                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                                    <path d="M8 1C4.13 1 1 4.13 1 8C1 11.87 4.13 15 8 15C11.87 15 15 11.87 15 8C15 4.13 11.87 1 8 1ZM10.5 10.5L7.5 8.5V4.5H8.5V8L11 10L10.5 10.5Z" fill="#242424"/>
+                                                </svg>
+                                                <span>30 min</span>
+                                            </div>
+                                            <div class="info-item">
+                                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                                    <path d="M8 1C8 1 4 5 4 9C4 12 6 14 8 14C10 14 12 12 12 9C12 5 8 1 8 1ZM8 12C7 12 6 11 6 10C6 9 7 8 8 8C9 8 10 9 10 10C10 11 9 12 8 12Z" fill="#242424"/>
+                                                </svg>
+                                                <span>650 kcal</span>
+                                            </div>
+                                            <div class="info-item">
+                                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                                    <path d="M13.5 4C12.5 4 12 4.5 12 5.5V7H11V5C11 4 10.5 3 9 3C8 3 7.5 3.5 7.5 4V7H6.5V5C6.5 4 6 3.5 5.5 3.5C4.5 3.5 4 4 4 5V8C4 10 5 12 8 12C11 12 12 10 12 8V6H13V8C13 8.5 13.5 9 14 9C14.5 9 15 8.5 15 8V5.5C15 4.5 14.5 4 13.5 4Z" fill="#242424"/>
+                                                </svg>
+                                                <span>38g protein</span>
+                                            </div>
+                                        </div>
+                                        <div class="recipe-card-tags">
+                                            <span class="tag">Spicy</span>
+                                            <span class="tag">Quick</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <p style="margin: 12px 0 0; font-size: 0.875rem; color: var(--text-muted);"><strong>Note:</strong> Algorithm automatically boosts high-rated recipes (4.5★) to top recommendations and removes low-rated recipes (2.4★) from Top 20 lists.</p>
+
+                <h3 class="pros-title">Pros</h3>
                 <ul>
-                    <li><strong>Approach:</strong> Update recommendation algorithms to factor in ratings. Low-rated recipes (&lt;3.5★) are deprioritized automatically.</li>
-                    <li><strong>Pro:</strong> Improves recommendation quality, aligns with user expectations</li>
-                    <li><strong>Pro:</strong> No cognitive dissonance — recommended recipes will naturally have good ratings</li>
-                    <li><strong>Con:</strong> Requires backend algorithm changes (3-4 weeks implementation)</li>
-                    <li><strong>Con:</strong> May conflict with business goals (promoting new/high-margin recipes)</li>
+                    <li>Improves recommendation quality over time</li>
+                    <li>No cognitive dissonance — recommended recipes naturally have good ratings</li>
+                    <li>Aligns with user expectations</li>
+                </ul>
+                <h3 class="cons-title">Cons</h3>
+                <ul>
+                    <li>Requires backend algorithm changes (3-4 weeks implementation)</li>
+                    <li>May conflict with business goals (promoting new/high-margin recipes)</li>
                 </ul>
             </div>
 
             <div class="insights-block" style="margin-bottom: 32px;">
                 <h3>Solution Option 3: Dynamic Threshold per Context (Selected ✓)</h3>
+                <p style="margin-bottom: 16px;"><strong>Approach:</strong> Show ratings BUT apply minimum thresholds: Top 20 only shows if ≥4.0★, For You only shows if ≥3.5★, Menu browse always shows.</p>
+
+                <div class="comparison-grid" style="grid-template-columns: repeat(3, 1fr); margin-bottom: 16px;">
+                    <div class="comparison-card">
+                        <div class="comparison-card-header" style="background: #067a46;">✓ Top 20: High shown</div>
+                        <div class="comparison-card-image">
+                            <div class="recipe-card-mockup">
+                                <div class="recipe-card-image">
+                                    <img src="../recipes/HelloFresh Main Image (2).jpg" alt="Chicken">
+                                </div>
+                                <div class="recipe-card-content">
+                                    <div class="recipe-info">
+                                        <h3 class="recipe-card-title">Crispy Parmesan Chicken</h3>
+                                        <span class="recipe-card-subtitle">with Roasted Potatoes</span>
+                                        <div class="recipe-card-rating">
+                                            <span class="rating-number">4.5</span>
+                                            <svg width="14" height="14" viewBox="0 0 16 16" fill="black">
+                                                <path d="M8 0L9.79 5.53L16 5.53L11.1 8.94L12.89 14.47L8 11.06L3.11 14.47L4.9 8.94L0 5.53L6.21 5.53L8 0Z"/>
+                                            </svg>
+                                            <span class="rating-count">(89)</span>
+                                        </div>
+                                    </div>
+                                    <div class="recipe-quick-info">
+                                        <div class="quick-info-row">
+                                            <div class="info-item">
+                                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                                    <path d="M8 1C4.13 1 1 4.13 1 8C1 11.87 4.13 15 8 15C11.87 15 15 11.87 15 8C15 4.13 11.87 1 8 1ZM10.5 10.5L7.5 8.5V4.5H8.5V8L11 10L10.5 10.5Z" fill="#242424"/>
+                                                </svg>
+                                                <span>30 min</span>
+                                            </div>
+                                            <div class="info-item">
+                                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                                    <path d="M8 1C8 1 4 5 4 9C4 12 6 14 8 14C10 14 12 12 12 9C12 5 8 1 8 1ZM8 12C7 12 6 11 6 10C6 9 7 8 8 8C9 8 10 9 10 10C10 11 9 12 8 12Z" fill="#242424"/>
+                                                </svg>
+                                                <span>750 kcal</span>
+                                            </div>
+                                            <div class="info-item">
+                                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                                    <path d="M13.5 4C12.5 4 12 4.5 12 5.5V7H11V5C11 4 10.5 3 9 3C8 3 7.5 3.5 7.5 4V7H6.5V5C6.5 4 6 3.5 5.5 3.5C4.5 3.5 4 4 4 5V8C4 10 5 12 8 12C11 12 12 10 12 8V6H13V8C13 8.5 13.5 9 14 9C14.5 9 15 8.5 15 8V5.5C15 4.5 14.5 4 13.5 4Z" fill="#242424"/>
+                                                </svg>
+                                                <span>39g protein</span>
+                                            </div>
+                                        </div>
+                                        <div class="recipe-card-tags">
+                                            <span class="tag">Quick</span>
+                                            <span class="tag">High Protein</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="comparison-card">
+                        <div class="comparison-card-header" style="background: #067a46;">✓ Top 20: Low hidden</div>
+                        <div class="comparison-card-image">
+                            <div class="recipe-card-mockup">
+                                <div class="recipe-card-image">
+                                    <img src="../recipes/HelloFresh Main Image (3).jpg" alt="Stir-Fry">
+                                </div>
+                                <div class="recipe-card-content">
+                                    <div class="recipe-info">
+                                        <h3 class="recipe-card-title">Spicy Chicken Stir-Fry</h3>
+                                        <span class="recipe-card-subtitle">with Bell Peppers</span>
+                                        <div style="height: 18px; opacity: 0.3; font-size: 0.75rem; color: #656565;">(below 4.0★ threshold)</div>
+                                    </div>
+                                    <div class="recipe-quick-info">
+                                        <div class="quick-info-row">
+                                            <div class="info-item">
+                                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                                    <path d="M8 1C4.13 1 1 4.13 1 8C1 11.87 4.13 15 8 15C11.87 15 15 11.87 15 8C15 4.13 11.87 1 8 1ZM10.5 10.5L7.5 8.5V4.5H8.5V8L11 10L10.5 10.5Z" fill="#242424"/>
+                                                </svg>
+                                                <span>30 min</span>
+                                            </div>
+                                            <div class="info-item">
+                                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                                    <path d="M8 1C8 1 4 5 4 9C4 12 6 14 8 14C10 14 12 12 12 9C12 5 8 1 8 1ZM8 12C7 12 6 11 6 10C6 9 7 8 8 8C9 8 10 9 10 10C10 11 9 12 8 12Z" fill="#242424"/>
+                                                </svg>
+                                                <span>650 kcal</span>
+                                            </div>
+                                            <div class="info-item">
+                                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                                    <path d="M13.5 4C12.5 4 12 4.5 12 5.5V7H11V5C11 4 10.5 3 9 3C8 3 7.5 3.5 7.5 4V7H6.5V5C6.5 4 6 3.5 5.5 3.5C4.5 3.5 4 4 4 5V8C4 10 5 12 8 12C11 12 12 10 12 8V6H13V8C13 8.5 13.5 9 14 9C14.5 9 15 8.5 15 8V5.5C15 4.5 14.5 4 13.5 4Z" fill="#242424"/>
+                                                </svg>
+                                                <span>38g protein</span>
+                                            </div>
+                                        </div>
+                                        <div class="recipe-card-tags">
+                                            <span class="tag">Spicy</span>
+                                            <span class="tag">Quick</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="comparison-card">
+                        <div class="comparison-card-header" style="background: #067a46;">✓ Menu: Always shown</div>
+                        <div class="comparison-card-image">
+                            <div class="recipe-card-mockup">
+                                <div class="recipe-card-image">
+                                    <img src="../recipes/HelloFresh Main Image (3).jpg" alt="Stir-Fry">
+                                </div>
+                                <div class="recipe-card-content">
+                                    <div class="recipe-info">
+                                        <h3 class="recipe-card-title">Spicy Chicken Stir-Fry</h3>
+                                        <span class="recipe-card-subtitle">with Bell Peppers</span>
+                                        <div class="recipe-card-rating">
+                                            <span class="rating-number">2.4</span>
+                                            <svg width="14" height="14" viewBox="0 0 16 16" fill="black">
+                                                <path d="M8 0L9.79 5.53L16 5.53L11.1 8.94L12.89 14.47L8 11.06L3.11 14.47L4.9 8.94L0 5.53L6.21 5.53L8 0Z"/>
+                                            </svg>
+                                            <span class="rating-count">(47)</span>
+                                        </div>
+                                    </div>
+                                    <div class="recipe-quick-info">
+                                        <div class="quick-info-row">
+                                            <div class="info-item">
+                                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                                    <path d="M8 1C4.13 1 1 4.13 1 8C1 11.87 4.13 15 8 15C11.87 15 15 11.87 15 8C15 4.13 11.87 1 8 1ZM10.5 10.5L7.5 8.5V4.5H8.5V8L11 10L10.5 10.5Z" fill="#242424"/>
+                                                </svg>
+                                                <span>30 min</span>
+                                            </div>
+                                            <div class="info-item">
+                                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                                    <path d="M8 1C8 1 4 5 4 9C4 12 6 14 8 14C10 14 12 12 12 9C12 5 8 1 8 1ZM8 12C7 12 6 11 6 10C6 9 7 8 8 8C9 8 10 9 10 10C10 11 9 12 8 12Z" fill="#242424"/>
+                                                </svg>
+                                                <span>650 kcal</span>
+                                            </div>
+                                            <div class="info-item">
+                                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                                    <path d="M13.5 4C12.5 4 12 4.5 12 5.5V7H11V5C11 4 10.5 3 9 3C8 3 7.5 3.5 7.5 4V7H6.5V5C6.5 4 6 3.5 5.5 3.5C4.5 3.5 4 4 4 5V8C4 10 5 12 8 12C11 12 12 10 12 8V6H13V8C13 8.5 13.5 9 14 9C14.5 9 15 8.5 15 8V5.5C15 4.5 14.5 4 13.5 4Z" fill="#242424"/>
+                                                </svg>
+                                                <span>38g protein</span>
+                                            </div>
+                                        </div>
+                                        <div class="recipe-card-tags">
+                                            <span class="tag">Spicy</span>
+                                            <span class="tag">Quick</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <h3 class="pros-title">Pros</h3>
                 <ul>
-                    <li><strong>Approach:</strong> Show ratings BUT apply minimum thresholds based on context:</li>
-                    <li>"Top 20" / "Popular" → Only show if ≥4.0★, otherwise hide rating badge</li>
-                    <li>"For You" / Personalized → Only show if ≥3.5★</li>
-                    <li>Menu browse/search → Always show (user-initiated exploration)</li>
-                    <li><strong>Pro:</strong> Context-aware solution, protects high-visibility areas</li>
-                    <li><strong>Pro:</strong> Frontend-only changes, can implement in 1-2 weeks</li>
-                    <li><strong>Con:</strong> Same recipe shows rating on detail page but not on card (slight inconsistency)</li>
+                    <li>Context-aware solution, protects high-visibility areas</li>
+                    <li>Frontend-only changes, can implement in 1-2 weeks</li>
+                    <li>Balances transparency with brand protection</li>
                 </ul>
-            </div>
-
-            <div class="comparison-grid" style="grid-template-columns: repeat(3, 1fr);">
-                <!-- Solution 3 Example 1 -->
-                <div class="comparison-card">
-                    <div class="comparison-card-header" style="background: #067a46;">✓ Top 20: High rating shown</div>
-                    <div class="comparison-card-image">
-                        <div class="recipe-card-mockup">
-                            <div class="recipe-card-image">
-                                <img src="../recipes/HelloFresh Main Image (2).jpg" alt="Chicken Recipe">
-                            </div>
-                            <div class="recipe-card-content">
-                                <div class="recipe-info">
-                                    <h3 class="recipe-card-title">Crispy Parmesan Chicken</h3>
-                                    <span class="recipe-card-subtitle">with Roasted Potatoes</span>
-                                    <div class="recipe-card-rating">
-                                        <span class="rating-number">4.5</span>
-                                        <svg width="14" height="14" viewBox="0 0 16 16" fill="black">
-                                            <path d="M8 0L9.79 5.53L16 5.53L11.1 8.94L12.89 14.47L8 11.06L3.11 14.47L4.9 8.94L0 5.53L6.21 5.53L8 0Z"/>
-                                        </svg>
-                                        <span class="rating-count">(89)</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Solution 3 Example 2 -->
-                <div class="comparison-card">
-                    <div class="comparison-card-header" style="background: #067a46;">✓ Top 20: Low rating hidden</div>
-                    <div class="comparison-card-image">
-                        <div class="recipe-card-mockup">
-                            <div class="recipe-card-image">
-                                <img src="../recipes/HelloFresh Main Image (3).jpg" alt="Stir-Fry">
-                            </div>
-                            <div class="recipe-card-content">
-                                <div class="recipe-info">
-                                    <h3 class="recipe-card-title">Spicy Chicken Stir-Fry</h3>
-                                    <span class="recipe-card-subtitle">with Bell Peppers</span>
-                                    <div class="recipe-card-rating" style="opacity: 0.3; text-decoration: line-through;">
-                                        <span class="rating-number">2.5</span>
-                                        <svg width="14" height="14" viewBox="0 0 16 16" fill="black">
-                                            <path d="M8 0L9.79 5.53L16 5.53L11.1 8.94L12.89 14.47L8 11.06L3.11 14.47L4.9 8.94L0 5.53L6.21 5.53L8 0Z"/>
-                                        </svg>
-                                        <span class="rating-count">(47)</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Solution 3 Example 3 -->
-                <div class="comparison-card">
-                    <div class="comparison-card-header" style="background: #067a46;">✓ Menu: Always shown</div>
-                    <div class="comparison-card-image">
-                        <div class="recipe-card-mockup">
-                            <div class="recipe-card-image">
-                                <img src="../recipes/HelloFresh Main Image (3).jpg" alt="Stir-Fry">
-                            </div>
-                            <div class="recipe-card-content">
-                                <div class="recipe-info">
-                                    <h3 class="recipe-card-title">Spicy Chicken Stir-Fry</h3>
-                                    <span class="recipe-card-subtitle">with Bell Peppers</span>
-                                    <div class="recipe-card-rating">
-                                        <span class="rating-number">2.5</span>
-                                        <svg width="14" height="14" viewBox="0 0 16 16" fill="black">
-                                            <path d="M8 0L9.79 5.53L16 5.53L11.1 8.94L12.89 14.47L8 11.06L3.11 14.47L4.9 8.94L0 5.53L6.21 5.53L8 0Z"/>
-                                        </svg>
-                                        <span class="rating-count">(47)</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <h3 class="cons-title">Cons</h3>
+                <ul>
+                    <li>Same recipe shows rating on detail page but not on card (slight inconsistency)</li>
+                </ul>
             </div>
 
             <div class="proposal-box" style="margin-top: 32px; background: #f0fdf4; border-left: 4px solid #067a46;">
@@ -640,11 +1055,11 @@
             </div>
         </section>
 
-        <!-- Edge Case 1: Rating Visibility Threshold -->
+        <!-- Edge Case 2: Rating Visibility Threshold -->
         <section class="edge-case-section">
-            <h2 class="section-title">1. Rating Visibility Threshold</h2>
+            <h2 class="section-title">2. Rating Visibility Threshold</h2>
             <div class="proposal-box">
-                <p><strong>Proposal:</strong> Don't show community ratings until a recipe has at least 5 reviews. This prevents misleading averages from small sample sizes and maintains user trust in the rating system.</p>
+                <p><strong>The Edge Case:</strong> New recipes have few ratings (1-4 reviews). Showing averages from small samples can be misleading: a single 1★ review creates a 1.0 average, or two 5★ reviews create a 5.0 average — neither represents true recipe quality.</p>
             </div>
 
             <div class="comparison-grid" style="grid-template-columns: repeat(2, 1fr);">
@@ -859,55 +1274,54 @@
                 </div>
             </div>
 
-            <div class="insights-block">
-                <h3>💡 Proposed Solution: 5-Review Threshold</h3>
-                <ul>
-                    <li><strong>Hide ratings until 5+ reviews:</strong> Prevents misleading averages from 1-2 outlier reviews</li>
-                    <li><strong>Statistical validity:</strong> Minimum sample size needed for meaningful average that users can trust</li>
-                    <li><strong>Industry standard:</strong> Amazon, Yelp, and major platforms use 3-10 review thresholds before displaying ratings</li>
-                    <li><strong>Trust signal:</strong> Users inherently distrust "5.0★ (2 reviews)" but trust "4.5★ (234 reviews)"</li>
-                    <li><strong>Reduces gaming risk:</strong> Harder to manipulate ratings when threshold requires multiple reviews</li>
-                </ul>
-            </div>
+            <div class="insights-block" style="margin-bottom: 32px;">
+                <h3>Solution Option 1: No Threshold (Show All)</h3>
+                <p style="margin-bottom: 16px;"><strong>Approach:</strong> Display ratings immediately, even if recipe has only 1-2 reviews.</p>
 
-            <div class="questions-block">
-                <h3>❓ Open Questions</h3>
-                <div class="question-item"><strong>5 vs 10 threshold:</strong> Is 5 reviews enough for HelloFresh context, or should we require 10+ for higher confidence?</div>
-                <div class="question-item"><strong>Low rating intervention:</strong> If a recipe hits 5+ reviews with poor rating (2-3★), do we investigate recipe quality or menu placement?</div>
-            </div>
-
-            <!-- Premium Recipe Upsell Risk -->
-            <div style="margin-top: 56px; padding-top: 40px; border-top: 2px solid #e8e7e4;">
-                <h3 style="font-size: 1.5rem; font-weight: 700; color: var(--text); margin-bottom: 16px;">⚠️ Premium Recipe Upselling Risk</h3>
-                <div class="proposal-box">
-                    <p><strong>Business Risk:</strong> Premium recipes cost €3-5 more than standard meals. If ratings are visible and a premium recipe has a low rating, it creates conversion friction at the point of upsell.</p>
-                </div>
-
-                <div class="comparison-grid" style="margin-bottom: 24px;">
-                    <!-- High-rated Premium -->
+                <div class="comparison-grid" style="grid-template-columns: repeat(2, 1fr); margin-bottom: 16px;">
                     <div class="comparison-card">
-                        <div class="comparison-card-header">High Rating + PREMIUM</div>
+                        <div class="comparison-card-header">5.0★ from 2 reviews</div>
                         <div class="comparison-card-image">
                             <div class="recipe-card-mockup">
                                 <div class="recipe-card-image">
-                                    <img src="../recipes/HelloFresh Main High (1).jpg" alt="Roasted lamb chops">
+                                    <img src="../recipes/HelloFresh Main Image (2).jpg" alt="Chicken Recipe">
                                     <div class="new-badge">
-                                        <span class="new-badge-inner" style="background: #024426;">PREMIUM</span>
+                                        <span class="new-badge-inner">NEW</span>
                                     </div>
                                 </div>
                                 <div class="recipe-card-content">
                                     <div class="recipe-info">
-                                        <h3 class="recipe-card-title">Roasted Lamb Chops</h3>
-                                        <span class="recipe-card-subtitle">with Herbs & Roasted Vegetables</span>
+                                        <h3 class="recipe-card-title">Crispy Parmesan Chicken</h3>
+                                        <span class="recipe-card-subtitle">with Roasted Potatoes</span>
                                         <div class="recipe-card-rating">
-                                            <span class="rating-number">4.7</span>
+                                            <span class="rating-number">5.0</span>
                                             <svg width="14" height="14" viewBox="0 0 16 16" fill="black">
                                                 <path d="M8 0L9.79 5.53L16 5.53L11.1 8.94L12.89 14.47L8 11.06L3.11 14.47L4.9 8.94L0 5.53L6.21 5.53L8 0Z"/>
                                             </svg>
-                                            <span class="rating-count">(1.2k)</span>
+                                            <span class="rating-count">(2)</span>
                                         </div>
                                     </div>
                                     <div class="recipe-quick-info">
+                                        <div class="quick-info-row">
+                                            <div class="info-item">
+                                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                                    <path d="M8 1C4.13 1 1 4.13 1 8C1 11.87 4.13 15 8 15C11.87 15 15 11.87 15 8C15 4.13 11.87 1 8 1ZM10.5 10.5L7.5 8.5V4.5H8.5V8L11 10L10.5 10.5Z" fill="#242424"/>
+                                                </svg>
+                                                <span>30 min</span>
+                                            </div>
+                                            <div class="info-item">
+                                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                                    <path d="M8 1C8 1 4 5 4 9C4 12 6 14 8 14C10 14 12 12 12 9C12 5 8 1 8 1ZM8 12C7 12 6 11 6 10C6 9 7 8 8 8C9 8 10 9 10 10C10 11 9 12 8 12Z" fill="#242424"/>
+                                                </svg>
+                                                <span>750 kcal</span>
+                                            </div>
+                                            <div class="info-item">
+                                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                                    <path d="M13.5 4C12.5 4 12 4.5 12 5.5V7H11V5C11 4 10.5 3 9 3C8 3 7.5 3.5 7.5 4V7H6.5V5C6.5 4 6 3.5 5.5 3.5C4.5 3.5 4 4 4 5V8C4 10 5 12 8 12C11 12 12 10 12 8V6H13V8C13 8.5 13.5 9 14 9C14.5 9 15 8.5 15 8V5.5C15 4.5 14.5 4 13.5 4Z" fill="#242424"/>
+                                                </svg>
+                                                <span>39g protein</span>
+                                            </div>
+                                        </div>
                                         <div class="recipe-card-tags">
                                             <span class="tag">Quick</span>
                                             <span class="tag">High Protein</span>
@@ -917,33 +1331,164 @@
                             </div>
                         </div>
                     </div>
-
-                    <!-- Low-rated Premium -->
                     <div class="comparison-card">
-                        <div class="comparison-card-header">Low Rating + PREMIUM</div>
+                        <div class="comparison-card-header">1.0★ from 1 review</div>
                         <div class="comparison-card-image">
                             <div class="recipe-card-mockup">
                                 <div class="recipe-card-image">
-                                    <img src="../recipes/HelloFresh Main High (3).jpg" alt="Seared duck breast">
+                                    <img src="../recipes/HelloFresh Main Image (3).jpg" alt="Stir-Fry">
                                     <div class="new-badge">
-                                        <span class="new-badge-inner" style="background: #024426;">PREMIUM</span>
+                                        <span class="new-badge-inner">NEW</span>
                                     </div>
                                 </div>
                                 <div class="recipe-card-content">
                                     <div class="recipe-info">
-                                        <h3 class="recipe-card-title">Seared Duck Breast</h3>
-                                        <span class="recipe-card-subtitle">with Cherry Reduction & Potato Gratin</span>
+                                        <h3 class="recipe-card-title">Spicy Chicken Stir-Fry</h3>
+                                        <span class="recipe-card-subtitle">with Bell Peppers</span>
                                         <div class="recipe-card-rating">
-                                            <span class="rating-number">3.1</span>
+                                            <span class="rating-number">1.0</span>
                                             <svg width="14" height="14" viewBox="0 0 16 16" fill="black">
                                                 <path d="M8 0L9.79 5.53L16 5.53L11.1 8.94L12.89 14.47L8 11.06L3.11 14.47L4.9 8.94L0 5.53L6.21 5.53L8 0Z"/>
                                             </svg>
-                                            <span class="rating-count">(456)</span>
+                                            <span class="rating-count">(1)</span>
                                         </div>
                                     </div>
                                     <div class="recipe-quick-info">
+                                        <div class="quick-info-row">
+                                            <div class="info-item">
+                                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                                    <path d="M8 1C4.13 1 1 4.13 1 8C1 11.87 4.13 15 8 15C11.87 15 15 11.87 15 8C15 4.13 11.87 1 8 1ZM10.5 10.5L7.5 8.5V4.5H8.5V8L11 10L10.5 10.5Z" fill="#242424"/>
+                                                </svg>
+                                                <span>30 min</span>
+                                            </div>
+                                            <div class="info-item">
+                                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                                    <path d="M8 1C8 1 4 5 4 9C4 12 6 14 8 14C10 14 12 12 12 9C12 5 8 1 8 1ZM8 12C7 12 6 11 6 10C6 9 7 8 8 8C9 8 10 9 10 10C10 11 9 12 8 12Z" fill="#242424"/>
+                                                </svg>
+                                                <span>650 kcal</span>
+                                            </div>
+                                            <div class="info-item">
+                                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                                    <path d="M13.5 4C12.5 4 12 4.5 12 5.5V7H11V5C11 4 10.5 3 9 3C8 3 7.5 3.5 7.5 4V7H6.5V5C6.5 4 6 3.5 5.5 3.5C4.5 3.5 4 4 4 5V8C4 10 5 12 8 12C11 12 12 10 12 8V6H13V8C13 8.5 13.5 9 14 9C14.5 9 15 8.5 15 8V5.5C15 4.5 14.5 4 13.5 4Z" fill="#242424"/>
+                                                </svg>
+                                                <span>38g protein</span>
+                                            </div>
+                                        </div>
                                         <div class="recipe-card-tags">
-                                            <span class="tag">Gourmet</span>
+                                            <span class="tag">Spicy</span>
+                                            <span class="tag">Quick</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <h3 class="pros-title">Pros</h3>
+                <ul>
+                    <li>Maximum transparency, users see all available data</li>
+                </ul>
+                <h3 class="cons-title">Cons</h3>
+                <ul>
+                    <li>Misleading averages from small samples (1.0★ from single bad review)</li>
+                    <li>Users distrust "5.0★ (2 reviews)" — looks fake or unreliable</li>
+                </ul>
+            </div>
+
+            <div class="insights-block" style="margin-bottom: 32px;">
+                <h3>Solution Option 2: 5-Review Threshold (Selected ✓)</h3>
+                <p style="margin-bottom: 16px;"><strong>Approach:</strong> Hide ratings until recipe has at least 5 reviews, then display aggregate rating.</p>
+
+                <div class="comparison-grid" style="grid-template-columns: repeat(2, 1fr); margin-bottom: 16px;">
+                    <div class="comparison-card">
+                        <div class="comparison-card-header">4 reviews: Hidden</div>
+                        <div class="comparison-card-image">
+                            <div class="recipe-card-mockup">
+                                <div class="recipe-card-image">
+                                    <img src="../recipes/HelloFresh Main Image (2).jpg" alt="Chicken Recipe">
+                                    <div class="new-badge">
+                                        <span class="new-badge-inner">NEW</span>
+                                    </div>
+                                </div>
+                                <div class="recipe-card-content">
+                                    <div class="recipe-info">
+                                        <h3 class="recipe-card-title">Crispy Parmesan Chicken</h3>
+                                        <span class="recipe-card-subtitle">with Roasted Potatoes</span>
+                                        <div style="height: 18px; opacity: 0.3; font-size: 0.75rem; color: #656565;">(below 5-review threshold)</div>
+                                    </div>
+                                    <div class="recipe-quick-info">
+                                        <div class="quick-info-row">
+                                            <div class="info-item">
+                                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                                    <path d="M8 1C4.13 1 1 4.13 1 8C1 11.87 4.13 15 8 15C11.87 15 15 11.87 15 8C15 4.13 11.87 1 8 1ZM10.5 10.5L7.5 8.5V4.5H8.5V8L11 10L10.5 10.5Z" fill="#242424"/>
+                                                </svg>
+                                                <span>30 min</span>
+                                            </div>
+                                            <div class="info-item">
+                                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                                    <path d="M8 1C8 1 4 5 4 9C4 12 6 14 8 14C10 14 12 12 12 9C12 5 8 1 8 1ZM8 12C7 12 6 11 6 10C6 9 7 8 8 8C9 8 10 9 10 10C10 11 9 12 8 12Z" fill="#242424"/>
+                                                </svg>
+                                                <span>750 kcal</span>
+                                            </div>
+                                            <div class="info-item">
+                                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                                    <path d="M13.5 4C12.5 4 12 4.5 12 5.5V7H11V5C11 4 10.5 3 9 3C8 3 7.5 3.5 7.5 4V7H6.5V5C6.5 4 6 3.5 5.5 3.5C4.5 3.5 4 4 4 5V8C4 10 5 12 8 12C11 12 12 10 12 8V6H13V8C13 8.5 13.5 9 14 9C14.5 9 15 8.5 15 8V5.5C15 4.5 14.5 4 13.5 4Z" fill="#242424"/>
+                                                </svg>
+                                                <span>39g protein</span>
+                                            </div>
+                                        </div>
+                                        <div class="recipe-card-tags">
+                                            <span class="tag">Quick</span>
+                                            <span class="tag">High Protein</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="comparison-card">
+                        <div class="comparison-card-header">5+ reviews: Shown</div>
+                        <div class="comparison-card-image">
+                            <div class="recipe-card-mockup">
+                                <div class="recipe-card-image">
+                                    <img src="../recipes/HelloFresh Main Image (2).jpg" alt="Chicken Recipe">
+                                </div>
+                                <div class="recipe-card-content">
+                                    <div class="recipe-info">
+                                        <h3 class="recipe-card-title">Crispy Parmesan Chicken</h3>
+                                        <span class="recipe-card-subtitle">with Roasted Potatoes</span>
+                                        <div class="recipe-card-rating">
+                                            <span class="rating-number">4.5</span>
+                                            <svg width="14" height="14" viewBox="0 0 16 16" fill="black">
+                                                <path d="M8 0L9.79 5.53L16 5.53L11.1 8.94L12.89 14.47L8 11.06L3.11 14.47L4.9 8.94L0 5.53L6.21 5.53L8 0Z"/>
+                                            </svg>
+                                            <span class="rating-count">(23)</span>
+                                        </div>
+                                    </div>
+                                    <div class="recipe-quick-info">
+                                        <div class="quick-info-row">
+                                            <div class="info-item">
+                                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                                    <path d="M8 1C4.13 1 1 4.13 1 8C1 11.87 4.13 15 8 15C11.87 15 15 11.87 15 8C15 4.13 11.87 1 8 1ZM10.5 10.5L7.5 8.5V4.5H8.5V8L11 10L10.5 10.5Z" fill="#242424"/>
+                                                </svg>
+                                                <span>30 min</span>
+                                            </div>
+                                            <div class="info-item">
+                                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                                    <path d="M8 1C8 1 4 5 4 9C4 12 6 14 8 14C10 14 12 12 12 9C12 5 8 1 8 1ZM8 12C7 12 6 11 6 10C6 9 7 8 8 8C9 8 10 9 10 10C10 11 9 12 8 12Z" fill="#242424"/>
+                                                </svg>
+                                                <span>750 kcal</span>
+                                            </div>
+                                            <div class="info-item">
+                                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                                    <path d="M13.5 4C12.5 4 12 4.5 12 5.5V7H11V5C11 4 10.5 3 9 3C8 3 7.5 3.5 7.5 4V7H6.5V5C6.5 4 6 3.5 5.5 3.5C4.5 3.5 4 4 4 5V8C4 10 5 12 8 12C11 12 12 10 12 8V6H13V8C13 8.5 13.5 9 14 9C14.5 9 15 8.5 15 8V5.5C15 4.5 14.5 4 13.5 4Z" fill="#242424"/>
+                                                </svg>
+                                                <span>39g protein</span>
+                                            </div>
+                                        </div>
+                                        <div class="recipe-card-tags">
+                                            <span class="tag">Quick</span>
                                             <span class="tag">High Protein</span>
                                         </div>
                                     </div>
@@ -953,11 +1498,81 @@
                     </div>
                 </div>
 
-                <div class="questions-block">
-                    <h3>❓ Premium Strategy Questions</h3>
-                    <div class="question-item"><strong>Different threshold:</strong> Should premium recipes require 10+ reviews before showing ratings (vs 5 for standard)?</div>
-                    <div class="question-item"><strong>Quality trigger:</strong> If premium hits 3.5★ or below with 10+ reviews, investigate or remove from menu?</div>
+                <h3 class="pros-title">Pros</h3>
+                <ul>
+                    <li>Statistically meaningful sample size, prevents 1-2 outlier reviews from dominating</li>
+                    <li>Industry standard (Amazon, Yelp use 3-10 review thresholds)</li>
+                    <li>Reduces manipulation risk — harder to game with small number of fake reviews</li>
+                </ul>
+                <h3 class="cons-title">Cons</h3>
+                <ul>
+                    <li>New recipes take longer to show ratings, may reduce initial rating submissions</li>
+                </ul>
+            </div>
+
+            <div class="insights-block" style="margin-bottom: 32px;">
+                <h3>Solution Option 3: 10-Review Threshold</h3>
+                <p style="margin-bottom: 16px;"><strong>Approach:</strong> Require 10+ reviews before showing ratings for even higher confidence.</p>
+
+                <div class="comparison-grid" style="grid-template-columns: repeat(2, 1fr); margin-bottom: 16px;">
+                    <div class="comparison-card">
+                        <div class="comparison-card-header">8 reviews: Hidden</div>
+                        <div class="comparison-card-image">
+                            <div class="recipe-card-mockup">
+                                <div class="recipe-card-image">
+                                    <img src="../recipes/HelloFresh Main Image (2).jpg" alt="Chicken Recipe">
+                                    <div class="new-badge">
+                                        <span class="new-badge-inner">NEW</span>
+                                    </div>
+                                </div>
+                                <div class="recipe-card-content">
+                                    <div class="recipe-info">
+                                        <h3 class="recipe-card-title">Crispy Parmesan Chicken</h3>
+                                        <span class="recipe-card-subtitle">with Roasted Potatoes</span>
+                                        <div style="height: 18px; opacity: 0.3; font-size: 0.75rem; color: #656565;">(below 10-review threshold)</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="comparison-card">
+                        <div class="comparison-card-header">10+ reviews: Shown</div>
+                        <div class="comparison-card-image">
+                            <div class="recipe-card-mockup">
+                                <div class="recipe-card-image">
+                                    <img src="../recipes/HelloFresh Main Image (2).jpg" alt="Chicken Recipe">
+                                </div>
+                                <div class="recipe-card-content">
+                                    <div class="recipe-info">
+                                        <h3 class="recipe-card-title">Crispy Parmesan Chicken</h3>
+                                        <span class="recipe-card-subtitle">with Roasted Potatoes</span>
+                                        <div class="recipe-card-rating">
+                                            <span class="rating-number">4.5</span>
+                                            <svg width="14" height="14" viewBox="0 0 16 16" fill="black">
+                                                <path d="M8 0L9.79 5.53L16 5.53L11.1 8.94L12.89 14.47L8 11.06L3.11 14.47L4.9 8.94L0 5.53L6.21 5.53L8 0Z"/>
+                                            </svg>
+                                            <span class="rating-count">(67)</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+
+                <h3 class="pros-title">Pros</h3>
+                <ul>
+                    <li>Very reliable average, strong statistical validity</li>
+                </ul>
+                <h3 class="cons-title">Cons</h3>
+                <ul>
+                    <li>Takes much longer for recipes to reach threshold (weeks/months)</li>
+                    <li>Reduces rating value — most recipes won't show ratings for extended period</li>
+                </ul>
+            </div>
+
+            <div class="proposal-box" style="background: #f0fdf4; border-left: 4px solid #067a46;">
+                <p><strong>Why Option 2?</strong> Balances statistical validity with practical timeline. Most recipes can reach 5 reviews within 1-2 weeks, providing meaningful data without excessive delay. Aligns with industry standards and builds user trust in rating reliability.</p>
             </div>
 
             <!-- Zero Rating Count - Nudge Users -->
@@ -1055,11 +1670,131 @@
             </div>
         </section>
 
-        <!-- Edge Case 2: Personal Rating Priority -->
+        <!-- Edge Case 3: Premium Recipe Upselling Risk -->
         <section class="edge-case-section">
-            <h2 class="section-title">2. Prioritizing Personal Ratings Over Community Average</h2>
+            <h2 class="section-title">3. Premium Recipe Upselling Risk</h2>
             <div class="proposal-box">
-                <p><strong>Current Approach:</strong> We prioritize personal ratings by highlighting recipes users loved with labels like "Your top rated," even when community ratings are lower. This puts personal taste preferences first, as individual history is more relevant than crowd consensus.</p>
+                <p><strong>The Edge Case:</strong> Premium recipes cost €3-5 more than standard meals. If ratings are visible and a premium recipe has a low rating, it creates conversion friction at the point of upsell. Should we treat premium recipe ratings differently than standard recipes?</p>
+            </div>
+
+            <div class="comparison-grid" style="margin-bottom: 24px;">
+                <!-- High-rated Premium -->
+                <div class="comparison-card">
+                    <div class="comparison-card-header">High Rating + PREMIUM</div>
+                    <div class="comparison-card-image">
+                        <div class="recipe-card-mockup">
+                            <div class="recipe-card-image">
+                                <img src="../recipes/HelloFresh Main High (1).jpg" alt="Roasted lamb chops">
+                                <div class="new-badge">
+                                    <span class="new-badge-inner" style="background: #024426;">PREMIUM</span>
+                                </div>
+                            </div>
+                            <div class="recipe-card-content">
+                                <div class="recipe-info">
+                                    <h3 class="recipe-card-title">Roasted Lamb Chops</h3>
+                                    <span class="recipe-card-subtitle">with Herbs & Roasted Vegetables</span>
+                                    <div class="recipe-card-rating">
+                                        <span class="rating-number">4.7</span>
+                                        <svg width="14" height="14" viewBox="0 0 16 16" fill="black">
+                                            <path d="M8 0L9.79 5.53L16 5.53L11.1 8.94L12.89 14.47L8 11.06L3.11 14.47L4.9 8.94L0 5.53L6.21 5.53L8 0Z"/>
+                                        </svg>
+                                        <span class="rating-count">(1.2k)</span>
+                                    </div>
+                                </div>
+                                <div class="recipe-quick-info">
+                                    <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 8px;">
+                                        <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
+                                            <path d="M10 10C12.21 10 14 8.21 14 6C14 3.79 12.21 2 10 2C7.79 2 6 3.79 6 6C6 8.21 7.79 10 10 10ZM10 12C7.33 12 2 13.34 2 16V18H18V16C18 13.34 12.67 12 10 12Z" fill="#656565"/>
+                                        </svg>
+                                        <span style="font-family: 'Roboto', sans-serif; font-size: 14px; font-weight: 700; color: #656565;">2</span>
+                                        <div style="display: flex; flex-direction: column; line-height: 1.2;">
+                                            <span style="font-family: 'Roboto', sans-serif; font-size: 14px; font-weight: 700; color: #656565;">+4,99 €</span>
+                                            <span style="font-family: 'Roboto', sans-serif; font-size: 12px; font-weight: 400; color: #656565;">pro Portion</span>
+                                        </div>
+                                    </div>
+                                    <div class="recipe-card-tags">
+                                        <span class="tag">Quick</span>
+                                        <span class="tag">High Protein</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Low-rated Premium -->
+                <div class="comparison-card">
+                    <div class="comparison-card-header">Low Rating + PREMIUM</div>
+                    <div class="comparison-card-image">
+                        <div class="recipe-card-mockup">
+                            <div class="recipe-card-image">
+                                <img src="../recipes/HelloFresh Main High (3).jpg" alt="Seared duck breast">
+                                <div class="new-badge">
+                                    <span class="new-badge-inner" style="background: #024426;">PREMIUM</span>
+                                </div>
+                            </div>
+                            <div class="recipe-card-content">
+                                <div class="recipe-info">
+                                    <h3 class="recipe-card-title">Seared Duck Breast</h3>
+                                    <span class="recipe-card-subtitle">with Cherry Reduction & Potato Gratin</span>
+                                    <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 8px;">
+                                        <svg width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M10 10C12.21 10 14 8.21 14 6C14 3.79 12.21 2 10 2C7.79 2 6 3.79 6 6C6 8.21 7.79 10 10 10ZM10 12C7.33 12 2 13.34 2 16V18H18V16C18 13.34 12.67 12 10 12Z" fill="#656565"/>
+                                        </svg>
+                                        <span style="font-family: 'Roboto', sans-serif; font-size: 14px; font-weight: 700; color: #656565;">2</span>
+                                        <div style="display: flex; flex-direction: column; line-height: 1.2;">
+                                            <span style="font-family: 'Roboto', sans-serif; font-size: 14px; font-weight: 700; color: #656565;">+4,99 €</span>
+                                            <span style="font-family: 'Roboto', sans-serif; font-size: 12px; font-weight: 400; color: #656565;">pro Portion</span>
+                                        </div>
+                                    </div>
+                                    <div class="recipe-card-rating">
+                                        <span class="rating-number">3.1</span>
+                                        <svg width="14" height="14" viewBox="0 0 16 16" fill="black">
+                                            <path d="M8 0L9.79 5.53L16 5.53L11.1 8.94L12.89 14.47L8 11.06L3.11 14.47L4.9 8.94L0 5.53L6.21 5.53L8 0Z"/>
+                                        </svg>
+                                        <span class="rating-count">(456)</span>
+                                    </div>
+                                </div>
+                                <div class="recipe-quick-info">
+                                    <div class="recipe-card-tags">
+                                        <span class="tag">Gourmet</span>
+                                        <span class="tag">High Protein</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="insights-block" style="margin-bottom: 32px;">
+                <h3 class="pros-title">Considerations</h3>
+                <ul>
+                    <li>Premium recipes have smaller order volumes → slower to reach review thresholds</li>
+                    <li>Higher price point = higher expectations → ratings may skew lower relative to standard recipes</li>
+                    <li>Low ratings on premium could discourage upsells and impact revenue</li>
+                </ul>
+            </div>
+
+            <div class="insights-block" style="margin-bottom: 32px;">
+                <h3>Strategy Questions</h3>
+                <ul>
+                    <li><strong>Different threshold:</strong> Should premium recipes require 10+ reviews before showing ratings (vs 5 for standard)?</li>
+                    <li><strong>Quality trigger:</strong> If premium hits 3.5★ or below with 10+ reviews, investigate or remove from menu?</li>
+                    <li><strong>Unified vs separate:</strong> Show premium and standard ratings separately, or combine into one pool?</li>
+                </ul>
+            </div>
+
+            <div class="proposal-box" style="background: #f0fdf4; border-left: 4px solid #067a46;">
+                <p><strong>Recommendation:</strong> Use same 5-review threshold for M1, but monitor premium conversion rates. If low-rated premiums impact revenue, consider higher threshold (10 reviews) or quality triggers in M2.</p>
+            </div>
+        </section>
+
+        <!-- Edge Case 4: Personal Rating Priority -->
+        <section class="edge-case-section">
+            <h2 class="section-title">4. Prioritizing Personal Ratings Over Community Average</h2>
+            <div class="proposal-box">
+                <p><strong>The Edge Case:</strong> When a user's personal rating (e.g., 5★) conflicts with community rating (e.g., 3.2★), which should we prioritize? Should we highlight "Your top rated" recipes even if the community rated them lower?</p>
             </div>
 
             <div class="comparison-grid" style="margin-bottom: 32px;">
@@ -1177,61 +1912,352 @@
                 </div>
             </div>
 
-            <div class="insights-block">
-                <h3>💡 Why Personal First</h3>
+            <div class="insights-block" style="margin-bottom: 32px;">
+                <h3>Solution Option 1: Community Rating Takes Priority</h3>
+                <p style="margin-bottom: 16px;"><strong>Approach:</strong> Always show community rating prominently. Personal ratings are secondary or not highlighted.</p>
+
+                <div class="comparison-grid" style="grid-template-columns: 1fr; margin-bottom: 16px;">
+                    <div class="comparison-card">
+                        <div class="comparison-card-header">Community rating prominent</div>
+                        <div class="comparison-card-image">
+                            <div class="recipe-card-mockup">
+                                <div class="recipe-card-image">
+                                    <img src="../recipes/HelloFresh Main Image (4).jpg" alt="Spicy Thai Curry">
+                                </div>
+                                <div class="recipe-card-content">
+                                    <div class="recipe-info">
+                                        <h3 class="recipe-card-title">Spicy Thai Curry</h3>
+                                        <span class="recipe-card-subtitle">with Jasmine Rice</span>
+                                        <div class="recipe-card-rating">
+                                            <span class="rating-number">3.2</span>
+                                            <svg width="14" height="14" viewBox="0 0 16 16" fill="black">
+                                                <path d="M8 0L9.79 5.53L16 5.53L11.1 8.94L12.89 14.47L8 11.06L3.11 14.47L4.9 8.94L0 5.53L6.21 5.53L8 0Z"/>
+                                            </svg>
+                                            <span class="rating-count">(156)</span>
+                                        </div>
+                                        <div style="font-size: 0.75rem; color: #656565; margin-top: 4px;">You rated: 5★</div>
+                                    </div>
+                                    <div class="recipe-quick-info">
+                                        <div class="quick-info-row">
+                                            <div class="info-item">
+                                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                                    <path d="M8 1C4.13 1 1 4.13 1 8C1 11.87 4.13 15 8 15C11.87 15 15 11.87 15 8C15 4.13 11.87 1 8 1ZM10.5 10.5L7.5 8.5V4.5H8.5V8L11 10L10.5 10.5Z" fill="#242424"/>
+                                                </svg>
+                                                <span>35 min</span>
+                                            </div>
+                                            <div class="info-item">
+                                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                                    <path d="M8 1C8 1 4 5 4 9C4 12 6 14 8 14C10 14 12 12 12 9C12 5 8 1 8 1ZM8 12C7 12 6 11 6 10C6 9 7 8 8 8C9 8 10 9 10 10C10 11 9 12 8 12Z" fill="#242424"/>
+                                                </svg>
+                                                <span>620 kcal</span>
+                                            </div>
+                                            <div class="info-item">
+                                                <span>🌶️🌶️🌶️</span>
+                                            </div>
+                                        </div>
+                                        <div class="recipe-card-tags">
+                                            <span class="tag">Spicy</span>
+                                            <span class="tag">Asian</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <h3 class="pros-title">Pros</h3>
                 <ul>
-                    <li><strong>Individual taste matters more:</strong> A 5★ personal rating is more predictive of future satisfaction than community consensus</li>
-                    <li><strong>Builds trust in recommendations:</strong> Surfacing recipes users already love reinforces that we understand their preferences</li>
-                    <li><strong>Encourages exploration:</strong> Users may discover they like recipes the broader community rated lower</li>
+                    <li>Social proof dominates — most users trust crowd wisdom</li>
+                </ul>
+                <h3 class="cons-title">Cons</h3>
+                <ul>
+                    <li>Ignores individual taste differences. User's 5★ experience gets buried by community 3.2★</li>
+                    <li>Reduces personalization value — we're not learning from personal preferences</li>
                 </ul>
             </div>
 
-            <div class="questions-block">
-                <h3>❓ Checking for Concerns</h3>
-                <div class="question-item"><strong>User confusion:</strong> Could showing "Your top rated" with a low community rating confuse users or make them question their own taste?</div>
-                <div class="question-item"><strong>Social proof conflict:</strong> Does highlighting personal preference over social proof reduce the value of community ratings?</div>
-            </div>
-        </section>
+            <div class="insights-block" style="margin-bottom: 32px;">
+                <h3>Solution Option 2: Personal Rating Takes Priority (Selected ✓)</h3>
+                <p style="margin-bottom: 16px;"><strong>Approach:</strong> Highlight "Your top rated" recipes prominently, even if community rating is lower. Show both ratings but prioritize personal experience.</p>
 
-        <!-- Edge Case 3: Market-Specific Content -->
-        <section class="edge-case-section">
-            <h2 class="section-title">3. Market-Specific Ratings (For Discussion)</h2>
-            <div class="proposal-box">
-                <p><strong>Strategic Question:</strong> Same recipe in different markets (Germany vs Netherlands) may have different ratings due to local taste preferences or ingredient sourcing. Should we use global data or keep ratings market-specific?</p>
-            </div>
+                <div class="comparison-grid" style="grid-template-columns: 1fr; margin-bottom: 16px;">
+                    <div class="comparison-card">
+                        <div class="comparison-card-header" style="background: #067a46;">✓ Personal badge + both ratings</div>
+                        <div class="comparison-card-image">
+                            <div class="recipe-card-mockup">
+                                <div class="recipe-card-image">
+                                    <img src="../recipes/HelloFresh Main Image (4).jpg" alt="Spicy Thai Curry">
+                                    <div style="position: absolute; bottom: 0; left: 0; display: inline-flex; align-items: center; gap: 4px; background-color: #8c6e00; border-radius: 0 12px 0 0; padding: 4px 8px;">
+                                        <span style="font-family: 'Roboto', sans-serif; font-size: 12px; font-weight: 700; color: #ffffff; line-height: 16px;">5</span>
+                                        <svg width="16" height="16" viewBox="0 0 28 26" fill="none">
+                                            <path d="M14 0L18.1532 8.79122L28 9.93112L20.72 16.5043L22.6525 26L14 21.2712L5.34752 26L7.28 16.5043L0 9.93112L9.84681 8.79122L14 0Z" fill="#ffffff"/>
+                                        </svg>
+                                        <span style="font-family: 'Roboto', sans-serif; font-size: 12px; font-weight: 700; color: #ffffff; line-height: 16px;">Your top rated</span>
+                                    </div>
+                                </div>
+                                <div class="recipe-card-content">
+                                    <div class="recipe-info">
+                                        <h3 class="recipe-card-title">Spicy Thai Curry</h3>
+                                        <span class="recipe-card-subtitle">with Jasmine Rice</span>
+                                        <div class="recipe-card-rating">
+                                            <span class="rating-number">3.2</span>
+                                            <svg width="14" height="14" viewBox="0 0 16 16" fill="black">
+                                                <path d="M8 0L9.79 5.53L16 5.53L11.1 8.94L12.89 14.47L8 11.06L3.11 14.47L4.9 8.94L0 5.53L6.21 5.53L8 0Z"/>
+                                            </svg>
+                                            <span class="rating-count">(156)</span>
+                                        </div>
+                                    </div>
+                                    <div class="recipe-quick-info">
+                                        <div class="quick-info-row">
+                                            <div class="info-item">
+                                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                                    <path d="M8 1C4.13 1 1 4.13 1 8C1 11.87 4.13 15 8 15C11.87 15 15 11.87 15 8C15 4.13 11.87 1 8 1ZM10.5 10.5L7.5 8.5V4.5H8.5V8L11 10L10.5 10.5Z" fill="#242424"/>
+                                                </svg>
+                                                <span>35 min</span>
+                                            </div>
+                                            <div class="info-item">
+                                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                                    <path d="M8 1C8 1 4 5 4 9C4 12 6 14 8 14C10 14 12 12 12 9C12 5 8 1 8 1ZM8 12C7 12 6 11 6 10C6 9 7 8 8 8C9 8 10 9 10 10C10 11 9 12 8 12Z" fill="#242424"/>
+                                                </svg>
+                                                <span>620 kcal</span>
+                                            </div>
+                                            <div class="info-item">
+                                                <span>🌶️🌶️🌶️</span>
+                                            </div>
+                                        </div>
+                                        <div class="recipe-card-tags">
+                                            <span class="tag">Spicy</span>
+                                            <span class="tag">Asian</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-            <div class="questions-block">
-                <h3>❓ Key Decisions</h3>
-                <div class="question-item"><strong>Global vs local data:</strong> Should we show global rating data aggregated across all markets, or keep ratings strictly market-specific?</div>
-                <div class="question-item"><strong>Pattern analysis:</strong> Can we identify patterns showing when ratings differ significantly between markets? Is this driven by ingredient quality, taste preferences, or recipe execution differences?</div>
-                <div class="question-item"><strong>Volume-based strategy:</strong> Should the decision depend on rating volume? For example: use market-specific when we have 20+ local reviews, but fall back to global data when volume is low?</div>
-                <div class="question-item"><strong>Data validation:</strong> Do we have enough historical data to determine if market differences are statistically significant or just noise from small sample sizes?</div>
-            </div>
-        </section>
-
-        <!-- Edge Case 4: Abusive/Fake Ratings -->
-        <section class="edge-case-section">
-            <h2 class="section-title">4. Suspicious Rating Patterns</h2>
-            <div class="proposal-box">
-                <p><strong>Proposed Approach:</strong> For now, show a curated subset of ratings rather than all reviews. This allows us to filter out suspicious patterns, maintain quality control, and present the most helpful ratings first. We won't display the full review list yet — focus on aggregate ratings plus a tailored selection of representative reviews.</p>
-            </div>
-
-            <div class="insights-block">
-                <h3>💡 Why Tailored Subset First</h3>
+                <h3 class="pros-title">Pros</h3>
                 <ul>
-                    <li><strong>Quality over quantity:</strong> Surface the most helpful and verified reviews instead of overwhelming users with volume</li>
-                    <li><strong>Spam protection:</strong> Gives us time to implement detection systems before exposing full review streams</li>
-                    <li><strong>Gradual rollout:</strong> Start with aggregate ratings + curated subset, then expand to full reviews once moderation is proven</li>
-                    <li><strong>Learning phase:</strong> Allows us to understand rating patterns and user behavior before committing to full transparency</li>
+                    <li>Personal 5★ is more predictive of future satisfaction than community consensus</li>
+                    <li>Builds trust in recommendations — "HelloFresh understands MY taste"</li>
+                    <li>Encourages exploration of recipes that match personal preference but aren't crowd favorites</li>
+                </ul>
+                <h3 class="cons-title">Cons</h3>
+                <ul>
+                    <li>Potential confusion if personal rating conflicts strongly with community (5★ vs 2★)</li>
                 </ul>
             </div>
 
-            <div class="questions-block">
-                <h3>❓ Open Questions</h3>
-                <div class="question-item"><strong>Selection criteria:</strong> What makes a review "helpful" enough to show in the subset? (verification status, helpfulness votes, detailed feedback)</div>
-                <div class="question-item"><strong>Subset size:</strong> Currently the subset is 10 reviews. Should we show more based on total volume?</div>
+            <div class="insights-block" style="margin-bottom: 32px;">
+                <h3>Solution Option 3: Blended Approach</h3>
+                <p style="margin-bottom: 16px;"><strong>Approach:</strong> Calculate weighted score: 70% personal rating + 30% community rating. Display blended score.</p>
+
+                <div class="comparison-grid" style="grid-template-columns: 1fr; margin-bottom: 16px;">
+                    <div class="comparison-card">
+                        <div class="comparison-card-header">Blended score shown</div>
+                        <div class="comparison-card-image">
+                            <div class="recipe-card-mockup">
+                                <div class="recipe-card-image">
+                                    <img src="../recipes/HelloFresh Main Image (4).jpg" alt="Spicy Thai Curry">
+                                </div>
+                                <div class="recipe-card-content">
+                                    <div class="recipe-info">
+                                        <h3 class="recipe-card-title">Spicy Thai Curry</h3>
+                                        <span class="recipe-card-subtitle">with Jasmine Rice</span>
+                                        <div class="recipe-card-rating">
+                                            <span class="rating-number">4.1</span>
+                                            <svg width="14" height="14" viewBox="0 0 16 16" fill="black">
+                                                <path d="M8 0L9.79 5.53L16 5.53L11.1 8.94L12.89 14.47L8 11.06L3.11 14.47L4.9 8.94L0 5.53L6.21 5.53L8 0Z"/>
+                                            </svg>
+                                            <span class="rating-count" style="text-decoration: none;">(personalized)</span>
+                                        </div>
+                                        <div style="font-size: 0.75rem; color: #656565; margin-top: 4px;">70% your rating + 30% community</div>
+                                    </div>
+                                    <div class="recipe-quick-info">
+                                        <div class="quick-info-row">
+                                            <div class="info-item">
+                                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                                    <path d="M8 1C4.13 1 1 4.13 1 8C1 11.87 4.13 15 8 15C11.87 15 15 11.87 15 8C15 4.13 11.87 1 8 1ZM10.5 10.5L7.5 8.5V4.5H8.5V8L11 10L10.5 10.5Z" fill="#242424"/>
+                                                </svg>
+                                                <span>35 min</span>
+                                            </div>
+                                            <div class="info-item">
+                                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                                    <path d="M8 1C8 1 4 5 4 9C4 12 6 14 8 14C10 14 12 12 12 9C12 5 8 1 8 1ZM8 12C7 12 6 11 6 10C6 9 7 8 8 8C9 8 10 9 10 10C10 11 9 12 8 12Z" fill="#242424"/>
+                                                </svg>
+                                                <span>620 kcal</span>
+                                            </div>
+                                            <div class="info-item">
+                                                <span>🌶️🌶️🌶️</span>
+                                            </div>
+                                        </div>
+                                        <div class="recipe-card-tags">
+                                            <span class="tag">Spicy</span>
+                                            <span class="tag">Asian</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <h3 class="pros-title">Pros</h3>
+                <ul>
+                    <li>Balances individual taste with social proof</li>
+                </ul>
+                <h3 class="cons-title">Cons</h3>
+                <ul>
+                    <li>Confusing to users — "What does this score mean? Is it my rating or community?"</li>
+                    <li>Less transparent than showing both ratings clearly</li>
+                </ul>
+            </div>
+
+            <div class="proposal-box" style="background: #f0fdf4; border-left: 4px solid #067a46;">
+                <p><strong>Why Option 2?</strong> Individual taste is more predictive than crowd consensus. A user who gave 5★ is likely to enjoy that recipe again, regardless of community average. This approach builds trust in personalization and respects individual preferences while still showing community data for context.</p>
             </div>
         </section>
+
+        <!-- Archive Section -->
+        <div class="archive-section">
+            <div class="archive-toggle" onclick="toggleArchive()">
+                <h2>Archive</h2>
+                <svg class="archive-arrow" id="archiveArrow" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+            </div>
+
+            <div class="archive-content" id="archiveContent">
+                <!-- Edge Case 5: Market-Specific Content -->
+        <section class="edge-case-section">
+            <h2 class="section-title">5. Market-Specific Ratings</h2>
+            <div class="proposal-box">
+                <p><strong>The Edge Case:</strong> Same recipe in different markets (Germany vs Netherlands) may have different ratings due to local taste preferences or ingredient sourcing. Should we show global aggregated data or keep ratings market-specific?</p>
+            </div>
+
+            <div class="insights-block" style="margin-bottom: 32px;">
+                <h3>Solution Option 1: Global Aggregated Ratings</h3>
+                <p style="margin-bottom: 16px;"><strong>Approach:</strong> Combine all ratings across all markets. Show single global average for each recipe.</p>
+
+                <h3 class="pros-title">Pros</h3>
+                <ul>
+                    <li>Higher rating volume — recipes reach threshold faster</li>
+                    <li>Simpler data infrastructure (one rating pool per recipe)</li>
+                </ul>
+                <h3 class="cons-title">Cons</h3>
+                <ul>
+                    <li>May not reflect local ingredient quality or taste preferences</li>
+                    <li>German users see ratings from Dutch/Belgian users with different context</li>
+                </ul>
+            </div>
+
+            <div class="insights-block" style="margin-bottom: 32px;">
+                <h3>Solution Option 2: Market-Specific Ratings (Selected ✓)</h3>
+                <p style="margin-bottom: 16px;"><strong>Approach:</strong> Keep ratings separate per market. German users only see German ratings, Dutch see Dutch ratings.</p>
+
+                <h3 class="pros-title">Pros</h3>
+                <ul>
+                    <li>More relevant to local context (ingredient sourcing, taste preferences)</li>
+                    <li>Reflects local execution quality (fulfillment center differences)</li>
+                </ul>
+                <h3 class="cons-title">Cons</h3>
+                <ul>
+                    <li>Lower rating volume per market — takes longer to reach threshold</li>
+                    <li>More complex data infrastructure (separate pools per market)</li>
+                </ul>
+            </div>
+
+            <div class="insights-block" style="margin-bottom: 32px;">
+                <h3>Solution Option 3: Hybrid (Volume-Based Fallback)</h3>
+                <p style="margin-bottom: 16px;"><strong>Approach:</strong> Use market-specific ratings when available (10+ reviews). Fall back to global when market-specific volume is low.</p>
+
+                <h3 class="pros-title">Pros</h3>
+                <ul>
+                    <li>Balances relevance (local when possible) with volume (global as backup)</li>
+                </ul>
+                <h3 class="cons-title">Cons</h3>
+                <ul>
+                    <li>Inconsistent logic — users may not understand why rating changes</li>
+                    <li>More complex to implement and maintain</li>
+                </ul>
+            </div>
+
+            <div class="proposal-box" style="background: #f0fdf4; border-left: 4px solid #067a46;">
+                <p><strong>Why Option 2?</strong> Local relevance is more valuable than higher volume. Ingredient quality and taste preferences vary significantly by market. German users should see German experiences. Start market-specific in M1, monitor if rating volume is sufficient, and can revisit global fallback in M2 if needed.</p>
+            </div>
+        </section>
+
+        <!-- Edge Case 6: Abusive/Fake Ratings -->
+        <section class="edge-case-section">
+            <h2 class="section-title">6. Suspicious Rating Patterns</h2>
+            <div class="proposal-box">
+                <p><strong>The Edge Case:</strong> As ratings grow, we may encounter spam, fake reviews, or manipulation attempts. How do we protect rating integrity while maintaining transparency and user trust?</p>
+            </div>
+
+            <div class="insights-block" style="margin-bottom: 32px;">
+                <h3>Solution Option 1: Show All Reviews (Full Transparency)</h3>
+                <p style="margin-bottom: 16px;"><strong>Approach:</strong> Display every review submitted. No filtering or curation.</p>
+
+                <h3 class="pros-title">Pros</h3>
+                <ul>
+                    <li>Maximum transparency — users see everything</li>
+                </ul>
+                <h3 class="cons-title">Cons</h3>
+                <ul>
+                    <li>Spam and fake reviews pollute the feed</li>
+                    <li>No quality control — unhelpful reviews dominate</li>
+                    <li>Vulnerable to manipulation (competitors, bad actors)</li>
+                </ul>
+            </div>
+
+            <div class="insights-block" style="margin-bottom: 32px;">
+                <h3>Solution Option 2: Curated Subset (Selected ✓)</h3>
+                <p style="margin-bottom: 16px;"><strong>Approach:</strong> Show aggregate rating (all reviews count) but display curated subset of ~10 most helpful reviews. Filter out suspicious patterns.</p>
+
+                <h3 class="pros-title">Pros</h3>
+                <ul>
+                    <li>Quality over quantity — surface helpful, verified reviews first</li>
+                    <li>Spam protection without full moderation infrastructure (gradual rollout)</li>
+                    <li>Learning phase — understand patterns before committing to full transparency</li>
+                </ul>
+                <h3 class="cons-title">Cons</h3>
+                <ul>
+                    <li>Less transparent — not all reviews are visible</li>
+                </ul>
+            </div>
+
+            <div class="insights-block" style="margin-bottom: 32px;">
+                <h3>Solution Option 3: Heavy Moderation + Report System</h3>
+                <p style="margin-bottom: 16px;"><strong>Approach:</strong> Show all reviews but implement strong moderation tools, user reporting, and "helpful" voting.</p>
+
+                <h3 class="pros-title">Pros</h3>
+                <ul>
+                    <li>Full transparency with safety nets</li>
+                </ul>
+                <h3 class="cons-title">Cons</h3>
+                <ul>
+                    <li>Requires significant moderation resources (team, tools, processes)</li>
+                    <li>Slower to market — need to build moderation infrastructure first</li>
+                </ul>
+            </div>
+
+            <div class="proposal-box" style="background: #f0fdf4; border-left: 4px solid #067a46;">
+                <p><strong>Why Option 2?</strong> Start with curated subset in M1 to protect quality during initial rollout. Build moderation tools in background. Expand to more reviews in M2, then full transparency with reporting in M3 once we understand rating patterns and have proper safety measures.</p>
+            </div>
+        </section>
+            </div>
+        </div>
     </div>
+
+    <script>
+        function toggleArchive() {
+            const content = document.getElementById('archiveContent');
+            const arrow = document.getElementById('archiveArrow');
+
+            content.classList.toggle('expanded');
+            arrow.classList.toggle('expanded');
+        }
+    </script>
 </body>
 </html>

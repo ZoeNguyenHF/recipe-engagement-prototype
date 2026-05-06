@@ -15687,34 +15687,33 @@
                                     margin: 0,
                                   }}>
                                     {displayComment}
+                                    {isLong && (
+                                      <button
+                                        onClick={() => {
+                                          const newSet = new Set(expandedReviews);
+                                          if (isExpanded) {
+                                            newSet.delete(reviewKey);
+                                          } else {
+                                            newSet.add(reviewKey);
+                                          }
+                                          setExpandedReviews(newSet);
+                                        }}
+                                        style={{
+                                          background: 'transparent',
+                                          border: 'none',
+                                          padding: 0,
+                                          marginLeft: 4,
+                                          cursor: 'pointer',
+                                          fontFamily: 'var(--font-body)',
+                                          fontSize: 12,
+                                          fontWeight: 700,
+                                          color: '#232323',
+                                          textDecoration: 'underline',
+                                        }}>
+                                        {isExpanded ? 'Read less' : 'Read more'}
+                                      </button>
+                                    )}
                                   </p>
-                                  {isLong && (
-                                    <button
-                                      onClick={() => {
-                                        const newSet = new Set(expandedReviews);
-                                        if (isExpanded) {
-                                          newSet.delete(reviewKey);
-                                        } else {
-                                          newSet.add(reviewKey);
-                                        }
-                                        setExpandedReviews(newSet);
-                                      }}
-                                      style={{
-                                        background: 'transparent',
-                                        border: 'none',
-                                        padding: 0,
-                                        cursor: 'pointer',
-                                        fontFamily: 'var(--font-body)',
-                                        fontSize: 12,
-                                        fontWeight: 700,
-                                        color: '#232323',
-                                        textDecoration: 'underline',
-                                        marginTop: 4,
-                                        display: 'block',
-                                      }}>
-                                      {isExpanded ? 'Read less' : 'Read more'}
-                                    </button>
-                                  )}
                                 </div>
                               );
                             })()}
@@ -15746,7 +15745,7 @@
                                     backgroundColor: '#efe9de',
                                     fontFamily: 'var(--font-body)',
                                     fontSize: 12,
-                                    fontWeight: 700,
+                                    fontWeight: 400,
                                     color: '#232323',
                                   }}>{themes[key]}</span>
                                 ))}
@@ -15774,7 +15773,7 @@
                                     backgroundColor: '#efe9de',
                                     fontFamily: 'var(--font-body)',
                                     fontSize: 12,
-                                    fontWeight: 700,
+                                    fontWeight: 400,
                                     color: '#232323',
                                   }}>{themes[key]}</span>
                                 ))}
@@ -15848,7 +15847,7 @@
                                       )}
                                       <span style={{
                                         fontFamily: 'var(--font-body)',
-                                        fontSize: 14,
+                                        fontSize: 12,
                                         fontWeight: 700,
                                         color: '#232323',
                                         textDecoration: 'underline',

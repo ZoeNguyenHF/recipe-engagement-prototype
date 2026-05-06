@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Milestone Breakdown - Community Rating</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #024426;
+            --primary-light: #067a46;
+            --accent: #c8f542;
+            --secondary: #1A1A2E;
+            --bg: #FAFBFC;
+            --card-bg: #FFFFFF;
+            --text: #1A1A2E;
+            --text-muted: #6B7280;
+            --border: #E5E7EB;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        /* Navigation Bar */
+        .top-nav {
+            background: white;
+            border-bottom: 1px solid var(--border);
+            padding: 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+        }
+
+        .nav-container {
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 0 48px;
+            display: flex;
+            align-items: center;
+            gap: 32px;
+        }
+
+        .nav-link {
+            padding: 20px 0;
+            text-decoration: none;
+            color: var(--text-muted);
+            font-size: 0.875rem;
+            font-weight: 500;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .nav-link:hover {
+            color: var(--primary);
+        }
+
+        .nav-link.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+
+        /* Milestone Timeline Styles */
+        .milestone-timeline-container {
+            padding: 60px 48px 80px;
+            max-width: 1400px;
+            margin: 0 auto;
+            background: #ffffff;
+            min-height: calc(100vh - 70px);
+        }
+
+        .timeline-header {
+            margin-bottom: 80px;
+            text-align: center;
+        }
+
+        .timeline-header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--text);
+            margin: 0 0 12px 0;
+        }
+
+        .timeline-header p {
+            font-size: 1.125rem;
+            color: var(--text-muted);
+            margin: 0;
+        }
+
+        .timeline {
+            position: relative;
+            display: flex;
+            align-items: stretch;
+            gap: 40px;
+            justify-content: center;
+        }
+
+        .timeline-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+            max-width: 280px;
+            position: relative;
+        }
+
+        .timeline-marker {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 28px;
+            position: relative;
+        }
+
+        .timeline-dot {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--primary-light);
+            border: 3px solid #ffffff;
+            box-shadow: 0 0 0 2px var(--primary-light);
+            z-index: 2;
+            flex-shrink: 0;
+        }
+
+        .timeline-line {
+            position: absolute;
+            left: calc(100% + 10px);
+            width: 40px;
+            top: 50%;
+            transform: translateY(-50%);
+            height: 2px;
+            background: #e0e0e0;
+            z-index: 1;
+        }
+
+        .timeline-item:last-child .timeline-line {
+            display: none;
+        }
+
+        .timeline-content {
+            flex: 1;
+            width: 100%;
+            background: var(--bg);
+            border-radius: 12px;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border: 1px solid var(--border);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+
+        .timeline-badge {
+            display: inline-block;
+            padding: 6px 16px;
+            background: var(--primary-light);
+            color: white;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            border-radius: 20px;
+            margin-bottom: 16px;
+        }
+
+        .timeline-badge.later {
+            background: #7a6a4f;
+        }
+
+        .timeline-content h3 {
+            font-size: 1.125rem;
+            font-weight: 700;
+            color: var(--text);
+            margin: 0 0 12px 0;
+            text-align: center;
+        }
+
+        .builds-on {
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            margin: 0 0 20px 0;
+            text-align: center;
+        }
+
+        .feature-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            width: 100%;
+        }
+
+        .feature-list li {
+            font-size: 0.875rem;
+            color: var(--text);
+            padding: 10px 12px;
+            background: white;
+            border-radius: 6px;
+            margin-bottom: 6px;
+            border: 1px solid var(--border);
+        }
+
+        .feature-list li:last-child {
+            margin-bottom: 0;
+        }
+
+        .milestone-goal {
+            width: 100%;
+            margin-bottom: 24px;
+        }
+
+        .goal-section {
+            margin-bottom: 16px;
+        }
+
+        .goal-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .goal-section h4 {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--primary);
+            margin: 0 0 6px 0;
+            letter-spacing: 0.5px;
+        }
+
+        .goal-section p {
+            font-size: 0.8125rem;
+            color: var(--text);
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        .feature-section {
+            width: 100%;
+            margin-top: 24px;
+            padding-top: 24px;
+            border-top: 2px solid var(--border);
+        }
+
+        .feature-section h4 {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin: 0 0 12px 0;
+            letter-spacing: 0.5px;
+            text-align: center;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .milestone-timeline-container {
+                padding: 40px 24px;
+            }
+
+            .nav-container {
+                padding: 0 24px;
+                gap: 16px;
+            }
+
+            .nav-link {
+                font-size: 0.8125rem;
+                padding: 16px 0;
+            }
+
+            .timeline {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .timeline-item {
+                flex-direction: row;
+                align-items: flex-start;
+                margin-bottom: 40px;
+                max-width: none;
+            }
+
+            .timeline-marker {
+                flex-direction: column;
+                width: auto;
+                margin-bottom: 0;
+                margin-right: 24px;
+            }
+
+            .timeline-dot {
+                margin: 0;
+            }
+
+            .timeline-line {
+                width: 2px;
+                height: 100%;
+                min-height: 100px;
+                left: auto;
+                top: 100%;
+                transform: none;
+                background: #e0e0e0;
+            }
+
+            .timeline-content {
+                text-align: left;
+            }
+
+            .timeline-content h3 {
+                font-size: 1rem;
+                text-align: left;
+            }
+
+            .builds-on {
+                text-align: left;
+            }
+
+            .feature-section h4 {
+                text-align: left;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-title {
+                display: none;
+            }
+
+            .timeline-header h1 {
+                font-size: 1.75rem;
+            }
+
+            .timeline-header p {
+                font-size: 1rem;
+            }
+
+            .timeline-content {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="community-rating-presentation.html" class="nav-link">Overview</a>
+            <a href="milestone-breakdown.html" class="nav-link active">Milestone</a>
+            <a href="prototype-enhanced.html" class="nav-link">Prototype</a>
+            <a href="edge-cases.html" class="nav-link">Edge Cases</a>
+        </div>
+    </nav>
+
+    <!-- Milestone Timeline -->
+    <div class="milestone-timeline-container">
+        <div class="timeline-header">
+            <h1>Feature Roadmap: Milestone Evolution</h1>
+            <p>How community rating features evolve from MVP to full scope experience</p>
+        </div>
+
+        <div class="timeline">
+            <!-- Milestone 1 -->
+            <div class="timeline-item">
+                <div class="timeline-marker">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-line"></div>
+                </div>
+                <div class="timeline-content">
+                    <div class="timeline-badge">Milestone 1</div>
+                    <h3>Foundation: Establish Trust</h3>
+
+                    <div class="milestone-goal">
+                        <div class="goal-section">
+                            <h4>Problem</h4>
+                            <p>Users face decision paralysis with 20+ weekly recipes and lack trusted signals for confident meal selection.</p>
+                        </div>
+
+                        <div class="goal-section">
+                            <h4>Goal</h4>
+                            <p>Establish ratings as a reliable decision-making tool and create baseline rating behavior.</p>
+                        </div>
+
+                        <div class="goal-section">
+                            <h4>Track</h4>
+                            <p>Rating submission rate, time to menu completion, recipe trial rate (new vs repeat)</p>
+                        </div>
+
+                        <div class="goal-section">
+                            <h4>Signal</h4>
+                            <p>Success: Increased rating rate, faster menu completion. Risk: Low engagement, negative feedback dominance</p>
+                        </div>
+                    </div>
+
+                    <div class="feature-section">
+                        <h4>Features</h4>
+                        <ul class="feature-list">
+                            <li>PDP top rating display</li>
+                            <li>Overall rating section</li>
+                            <li>Rating prompt banner</li>
+                            <li>Community reviews (subset defined by cookbook)</li>
+                            <li>User review card</li>
+                            <li>Old rating drawer</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Milestone 2 -->
+            <div class="timeline-item">
+                <div class="timeline-marker">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-line"></div>
+                </div>
+                <div class="timeline-content">
+                    <div class="timeline-badge">Milestone 2</div>
+                    <h3>Insights: Deepen Understanding</h3>
+                    <p class="builds-on">Builds on M1</p>
+
+                    <div class="milestone-goal">
+                        <div class="goal-section">
+                            <h4>Problem</h4>
+                            <p>Users need more context beyond star ratings to understand why recipes are highly rated and what makes them work.</p>
+                        </div>
+
+                        <div class="goal-section">
+                            <h4>Goal</h4>
+                            <p>Provide deeper insights through distribution data, AI summaries, and thematic analysis to drive informed choices.</p>
+                        </div>
+
+                        <div class="goal-section">
+                            <h4>Track</h4>
+                            <p>AI summary engagement, theme click-through, rating distribution interaction, menu browse patterns</p>
+                        </div>
+
+                        <div class="goal-section">
+                            <h4>Signal</h4>
+                            <p>Success: Increased variety in selections, higher recipe trial rate. Risk: Information overload, AI summary trust issues</p>
+                        </div>
+                    </div>
+
+                    <div class="feature-section">
+                        <h4>New Features</h4>
+                        <ul class="feature-list">
+                            <li>Rating distribution</li>
+                            <li>AI summary CTA</li>
+                            <li>Comment themes</li>
+                            <li>Menu card ratings</li>
+                            <li>Community reviews (new logic for subset)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Milestone 3 -->
+            <div class="timeline-item">
+                <div class="timeline-marker">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-line"></div>
+                </div>
+                <div class="timeline-content">
+                    <div class="timeline-badge">Milestone 3</div>
+                    <h3>Rich Content: Personalize Discovery</h3>
+                    <p class="builds-on">Builds on M1 + M2</p>
+
+                    <div class="milestone-goal">
+                        <div class="goal-section">
+                            <h4>Problem</h4>
+                            <p>Users want to find recipes matching specific preferences (taste, difficulty, dietary) and see visual proof before selection.</p>
+                        </div>
+
+                        <div class="goal-section">
+                            <h4>Goal</h4>
+                            <p>Enable self-service discovery through filtering, visual content, and improved rating UX to match personal preferences.</p>
+                        </div>
+
+                        <div class="goal-section">
+                            <h4>Track</h4>
+                            <p>Filter usage, photo review engagement, rating completion rate (new drawer), menu filter adoption, theme filter patterns</p>
+                        </div>
+
+                        <div class="goal-section">
+                            <h4>Signal</h4>
+                            <p>Success: Higher satisfaction scores, reduced skip rate. Risk: Filter bias creates echo chamber, photo requirements slow submissions</p>
+                        </div>
+                    </div>
+
+                    <div class="feature-section">
+                        <h4>New Features</h4>
+                        <ul class="feature-list">
+                            <li>Filters (rating & themes)</li>
+                            <li>Theme overview</li>
+                            <li>Use photo captured from cookbook flow</li>
+                            <li>New rating drawer</li>
+                            <li>Menu filters</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Later -->
+            <div class="timeline-item">
+                <div class="timeline-marker">
+                    <div class="timeline-dot"></div>
+                </div>
+                <div class="timeline-content">
+                    <div class="timeline-badge later">Later</div>
+                    <h3>Future: Community Engagement</h3>
+                    <p class="builds-on">Data-driven enhancements</p>
+
+                    <div class="milestone-goal">
+                        <div class="goal-section">
+                            <h4>Problem</h4>
+                            <p>To be determined based on M1-M3 performance data and observed user engagement patterns.</p>
+                        </div>
+
+                        <div class="goal-section">
+                            <h4>Goal</h4>
+                            <p>Enhance community quality and reduce noise through moderation tools and engagement mechanics.</p>
+                        </div>
+
+                        <div class="goal-section">
+                            <h4>Track</h4>
+                            <p>Review quality metrics, spam/fake review reports, helpful button usage, community moderation effectiveness</p>
+                        </div>
+
+                        <div class="goal-section">
+                            <h4>Signal</h4>
+                            <p>Success: Improved review quality perception, reduced support tickets. Risk: Over-moderation dampens honest feedback</p>
+                        </div>
+                    </div>
+
+                    <div class="feature-section">
+                        <h4>Potential Features</h4>
+                        <ul class="feature-list">
+                            <li>Helpful/Report buttons</li>
+                            <li>Photo from feedback</li>
+                            <li>Engagement features based on user behavior</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

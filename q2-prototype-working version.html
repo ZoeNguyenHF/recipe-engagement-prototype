@@ -985,7 +985,7 @@
         kcal: "750 kcal",
         protein: "19g protein",
         img: "recipes/HelloFresh Main Image (3).jpg",
-        rating: "4.0",
+        rating: "5.0",
         isPersonalRating: true,
         customerRating: "4.5",
         reviewCount: "23k",
@@ -1648,7 +1648,7 @@
     }
 
     // ========== FILTER TAGS ROW ==========
-    function FilterTagsRow() {
+    function FilterTagsRow({ onFilterClick }) {
       const filters = [
         { label: 'High Protein' },
         { label: 'Keto' },
@@ -1668,19 +1668,22 @@
           overflowX: 'auto',
         }} className="h-scroll">
           {/* Sort/Filter button */}
-          <button style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: 4,
-            padding: '4px 8px',
-            background: 'var(--color-tag-interactive-bg)',
-            border: 'none',
-            borderRadius: 'var(--radius-tag-rect)',
-            cursor: 'pointer',
-            height: 28,
-            flexShrink: 0,
-          }}>
+          <button
+            data-menu-filter-rating=""
+            onClick={onFilterClick}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: 4,
+              padding: '4px 8px',
+              background: 'var(--color-tag-interactive-bg)',
+              border: 'none',
+              borderRadius: 'var(--radius-tag-rect)',
+              cursor: 'pointer',
+              height: 28,
+              flexShrink: 0,
+            }}>
             {Icons.sort(16, 'var(--color-tag-interactive-fg)')}
           </button>
 
@@ -1717,8 +1720,9 @@
     }
 
     // ========== PRODUCT CARD ==========
-    function ProductCard({ meal, quantity, onAdd, onRemove, fullWidth = false, bookmarkedRecipes, toggleBookmark, onClick }) {
+    function ProductCard({ meal, quantity, onAdd, onRemove, fullWidth = false, bookmarkedRecipes, toggleBookmark, onClick, userRatings }) {
       const isSelected = quantity > 0;
+      const userRating = userRatings?.[meal.id] || meal.userRating || 0;
 
       return (
         <div style={{
@@ -1747,6 +1751,118 @@
               style={{ width: '100%', height: '100%', objectFit: 'cover' }}
               onError={(e) => { e.target.style.display = 'none'; }}
             />
+
+            {/* Order Status / Rating Badge */}
+            {(() => {
+              const rating = userRating;
+
+              // Don't show badge if meal.canRate is false (not asking for rating)
+              if (meal.canRate === false) {
+                return null;
+              }
+
+              // Don't show "weeks ago" badge if there's already a meal label (Premium, New, etc.) to avoid overlap
+              if ((!rating || rating === 0) && meal.label) {
+                return null;
+              }
+
+              // No rating: show "Ordered 2 weeks ago" with cart icon (beige/grey)
+              if (!rating || rating === 0) {
+                return (
+                  <div style={{
+                    position: 'absolute',
+                    bottom: 0,
+                    left: 0,
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: 6,
+                    backgroundColor: '#efe9de',
+                    borderRadius: '0 12px 0 0',
+                    padding: '6px 10px',
+                  }}>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z" fill="#242424"/>
+                    </svg>
+                    <span style={{
+                      fontFamily: 'var(--font-body)',
+                      fontSize: 12,
+                      fontWeight: 600,
+                      color: '#242424',
+                      lineHeight: '16px',
+                    }}>Ordered 2 weeks ago</span>
+                  </div>
+                );
+              }
+
+              // Rating 4-5: show "Your top rated" (yellow/gold)
+              if (rating >= 4) {
+                return (
+                  <div style={{
+                    position: 'absolute',
+                    bottom: 0,
+                    left: 0,
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: 4,
+                    backgroundColor: '#8c6e00',
+                    borderRadius: '0 12px 0 0',
+                    padding: '4px 8px',
+                  }}>
+                    <span style={{
+                      fontFamily: 'var(--font-body)',
+                      fontSize: 12,
+                      fontWeight: 700,
+                      color: '#ffffff',
+                      lineHeight: '16px',
+                    }}>{rating}</span>
+                    <svg width="16" height="16" viewBox="0 0 28 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M14 0L18.1532 8.79122L28 9.93112L20.72 16.5043L22.6525 26L14 21.2712L5.34752 26L7.28 16.5043L0 9.93112L9.84681 8.79122L14 0Z" fill="#ffffff"/>
+                    </svg>
+                    <span style={{
+                      fontFamily: 'var(--font-body)',
+                      fontSize: 12,
+                      fontWeight: 700,
+                      color: '#ffffff',
+                      lineHeight: '16px',
+                    }}>Your top rated</span>
+                  </div>
+                );
+              }
+
+              // Rating 1-3: show "Your last rating" (beige/grey)
+              return (
+                <div style={{
+                  position: 'absolute',
+                  bottom: 0,
+                  left: 0,
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: 4,
+                  backgroundColor: '#efe9de',
+                  borderRadius: '0 12px 0 0',
+                  padding: '4px 8px',
+                }}>
+                  <span style={{
+                    fontFamily: 'var(--font-body)',
+                    fontSize: 12,
+                    fontWeight: 700,
+                    color: '#242424',
+                    lineHeight: '16px',
+                  }}>{rating}</span>
+                  <svg width="16" height="16" viewBox="0 0 28 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M14 0L18.1532 8.79122L28 9.93112L20.72 16.5043L22.6525 26L14 21.2712L5.34752 26L7.28 16.5043L0 9.93112L9.84681 8.79122L14 0Z" fill="#242424"/>
+                  </svg>
+                  <span style={{
+                    fontFamily: 'var(--font-body)',
+                    fontSize: 12,
+                    fontWeight: 700,
+                    color: '#242424',
+                    lineHeight: '16px',
+                  }}>Your last rating</span>
+                </div>
+              );
+            })()}
+
             {/* Category tag - bottom left with white background wrapper */}
             {meal.label && (
               <div style={{
@@ -1858,7 +1974,7 @@
 
               {/* Community Rating */}
               {meal.customerRating && (
-                <div style={{
+                <div data-menu-card-rating="" style={{
                   display: 'flex',
                   alignItems: 'center',
                   gap: 4,
@@ -6861,38 +6977,106 @@
                           }}
                         />
 
-                        {/* Your Top Rated Badge */}
-                        {ratings[recipeIndex] >= 4 && (
-                          <div data-top-rated-badge="" style={{
-                            position: 'absolute',
-                            bottom: 0,
-                            left: 0,
-                            display: 'inline-flex',
-                            alignItems: 'center',
-                            gap: 4,
-                            backgroundColor: '#8c6e00',
-                            borderRadius: '0 12px 0 0',
-                            padding: '4px 8px',
-                          }}>
-                            <span style={{
-                              fontFamily: 'var(--font-body)',
-                              fontSize: 12,
-                              fontWeight: 700,
-                              color: '#ffffff',
-                              lineHeight: '16px',
-                            }}>{ratings[recipeIndex]}</span>
-                            <svg width="16" height="16" viewBox="0 0 28 26" fill="none" xmlns="http://www.w3.org/2000/svg">
-                              <path d="M14 0L18.1532 8.79122L28 9.93112L20.72 16.5043L22.6525 26L14 21.2712L5.34752 26L7.28 16.5043L0 9.93112L9.84681 8.79122L14 0Z" fill="#ffffff"/>
-                            </svg>
-                            <span style={{
-                              fontFamily: 'var(--font-body)',
-                              fontSize: 12,
-                              fontWeight: 700,
-                              color: '#ffffff',
-                              lineHeight: '16px',
-                            }}>Your top rated</span>
-                          </div>
-                        )}
+                        {/* Order Status / Rating Badge */}
+                        {(() => {
+                          const rating = ratings[recipeIndex];
+
+                          // No rating: show "Ordered 2 weeks ago" with cart icon (beige/grey)
+                          if (!rating || rating === 0) {
+                            return (
+                              <div style={{
+                                position: 'absolute',
+                                bottom: 0,
+                                left: 0,
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                gap: 6,
+                                backgroundColor: '#efe9de',
+                                borderRadius: '0 12px 0 0',
+                                padding: '6px 10px',
+                              }}>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                  <path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z" fill="#242424"/>
+                                </svg>
+                                <span style={{
+                                  fontFamily: 'var(--font-body)',
+                                  fontSize: 12,
+                                  fontWeight: 600,
+                                  color: '#242424',
+                                  lineHeight: '16px',
+                                }}>Ordered 2 weeks ago</span>
+                              </div>
+                            );
+                          }
+
+                          // Rating 4-5: show "Your top rated" (yellow/gold)
+                          if (rating >= 4) {
+                            return (
+                              <div data-top-rated-badge="" style={{
+                                position: 'absolute',
+                                bottom: 0,
+                                left: 0,
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                gap: 4,
+                                backgroundColor: '#8c6e00',
+                                borderRadius: '0 12px 0 0',
+                                padding: '4px 8px',
+                              }}>
+                                <span style={{
+                                  fontFamily: 'var(--font-body)',
+                                  fontSize: 12,
+                                  fontWeight: 700,
+                                  color: '#ffffff',
+                                  lineHeight: '16px',
+                                }}>{rating}</span>
+                                <svg width="16" height="16" viewBox="0 0 28 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                  <path d="M14 0L18.1532 8.79122L28 9.93112L20.72 16.5043L22.6525 26L14 21.2712L5.34752 26L7.28 16.5043L0 9.93112L9.84681 8.79122L14 0Z" fill="#ffffff"/>
+                                </svg>
+                                <span style={{
+                                  fontFamily: 'var(--font-body)',
+                                  fontSize: 12,
+                                  fontWeight: 700,
+                                  color: '#ffffff',
+                                  lineHeight: '16px',
+                                }}>Your top rated</span>
+                              </div>
+                            );
+                          }
+
+                          // Rating 1-3: show "Your last rating" (beige/grey)
+                          return (
+                            <div style={{
+                              position: 'absolute',
+                              bottom: 0,
+                              left: 0,
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              gap: 4,
+                              backgroundColor: '#efe9de',
+                              borderRadius: '0 12px 0 0',
+                              padding: '4px 8px',
+                            }}>
+                              <span style={{
+                                fontFamily: 'var(--font-body)',
+                                fontSize: 12,
+                                fontWeight: 700,
+                                color: '#242424',
+                                lineHeight: '16px',
+                              }}>{rating}</span>
+                              <svg width="16" height="16" viewBox="0 0 28 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M14 0L18.1532 8.79122L28 9.93112L20.72 16.5043L22.6525 26L14 21.2712L5.34752 26L7.28 16.5043L0 9.93112L9.84681 8.79122L14 0Z" fill="#242424"/>
+                              </svg>
+                              <span style={{
+                                fontFamily: 'var(--font-body)',
+                                fontSize: 12,
+                                fontWeight: 700,
+                                color: '#242424',
+                                lineHeight: '16px',
+                              }}>Your last rating</span>
+                            </div>
+                          );
+                        })()}
                       </div>
 
                       {/* Recipe name */}
@@ -8275,38 +8459,106 @@
                           }}
                         />
 
-                        {/* Your Top Rated Badge */}
-                        {ratings[recipeIndex] >= 4 && (
-                          <div data-top-rated-badge="" style={{
-                            position: 'absolute',
-                            bottom: 0,
-                            left: 0,
-                            display: 'inline-flex',
-                            alignItems: 'center',
-                            gap: 4,
-                            backgroundColor: '#8c6e00',
-                            borderRadius: '0 12px 0 0',
-                            padding: '4px 8px',
-                          }}>
-                            <span style={{
-                              fontFamily: 'var(--font-body)',
-                              fontSize: 12,
-                              fontWeight: 700,
-                              color: '#ffffff',
-                              lineHeight: '16px',
-                            }}>{ratings[recipeIndex]}</span>
-                            <svg width="16" height="16" viewBox="0 0 28 26" fill="none" xmlns="http://www.w3.org/2000/svg">
-                              <path d="M14 0L18.1532 8.79122L28 9.93112L20.72 16.5043L22.6525 26L14 21.2712L5.34752 26L7.28 16.5043L0 9.93112L9.84681 8.79122L14 0Z" fill="#ffffff"/>
-                            </svg>
-                            <span style={{
-                              fontFamily: 'var(--font-body)',
-                              fontSize: 12,
-                              fontWeight: 700,
-                              color: '#ffffff',
-                              lineHeight: '16px',
-                            }}>Your top rated</span>
-                          </div>
-                        )}
+                        {/* Order Status / Rating Badge */}
+                        {(() => {
+                          const rating = ratings[recipeIndex];
+
+                          // No rating: show "Ordered 2 weeks ago" with cart icon (beige/grey)
+                          if (!rating || rating === 0) {
+                            return (
+                              <div style={{
+                                position: 'absolute',
+                                bottom: 0,
+                                left: 0,
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                gap: 6,
+                                backgroundColor: '#efe9de',
+                                borderRadius: '0 12px 0 0',
+                                padding: '6px 10px',
+                              }}>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                  <path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z" fill="#242424"/>
+                                </svg>
+                                <span style={{
+                                  fontFamily: 'var(--font-body)',
+                                  fontSize: 12,
+                                  fontWeight: 600,
+                                  color: '#242424',
+                                  lineHeight: '16px',
+                                }}>Ordered 2 weeks ago</span>
+                              </div>
+                            );
+                          }
+
+                          // Rating 4-5: show "Your top rated" (yellow/gold)
+                          if (rating >= 4) {
+                            return (
+                              <div data-top-rated-badge="" style={{
+                                position: 'absolute',
+                                bottom: 0,
+                                left: 0,
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                gap: 4,
+                                backgroundColor: '#8c6e00',
+                                borderRadius: '0 12px 0 0',
+                                padding: '4px 8px',
+                              }}>
+                                <span style={{
+                                  fontFamily: 'var(--font-body)',
+                                  fontSize: 12,
+                                  fontWeight: 700,
+                                  color: '#ffffff',
+                                  lineHeight: '16px',
+                                }}>{rating}</span>
+                                <svg width="16" height="16" viewBox="0 0 28 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                  <path d="M14 0L18.1532 8.79122L28 9.93112L20.72 16.5043L22.6525 26L14 21.2712L5.34752 26L7.28 16.5043L0 9.93112L9.84681 8.79122L14 0Z" fill="#ffffff"/>
+                                </svg>
+                                <span style={{
+                                  fontFamily: 'var(--font-body)',
+                                  fontSize: 12,
+                                  fontWeight: 700,
+                                  color: '#ffffff',
+                                  lineHeight: '16px',
+                                }}>Your top rated</span>
+                              </div>
+                            );
+                          }
+
+                          // Rating 1-3: show "Your last rating" (beige/grey)
+                          return (
+                            <div style={{
+                              position: 'absolute',
+                              bottom: 0,
+                              left: 0,
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              gap: 4,
+                              backgroundColor: '#efe9de',
+                              borderRadius: '0 12px 0 0',
+                              padding: '4px 8px',
+                            }}>
+                              <span style={{
+                                fontFamily: 'var(--font-body)',
+                                fontSize: 12,
+                                fontWeight: 700,
+                                color: '#242424',
+                                lineHeight: '16px',
+                              }}>{rating}</span>
+                              <svg width="16" height="16" viewBox="0 0 28 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M14 0L18.1532 8.79122L28 9.93112L20.72 16.5043L22.6525 26L14 21.2712L5.34752 26L7.28 16.5043L0 9.93112L9.84681 8.79122L14 0Z" fill="#242424"/>
+                              </svg>
+                              <span style={{
+                                fontFamily: 'var(--font-body)',
+                                fontSize: 12,
+                                fontWeight: 700,
+                                color: '#242424',
+                                lineHeight: '16px',
+                              }}>Your last rating</span>
+                            </div>
+                          );
+                        })()}
                       </div>
 
                       {/* Recipe name */}
@@ -10145,38 +10397,106 @@
                             }}
                           />
 
-                          {/* Your Top Rated Badge */}
-                          {currentRating >= 4 && (
-                            <div style={{
-                              position: 'absolute',
-                              bottom: 0,
-                              left: 0,
-                              display: 'inline-flex',
-                              alignItems: 'center',
-                              gap: 4,
-                              backgroundColor: '#8c6e00',
-                              borderRadius: '0 12px 0 0',
-                              padding: '4px 8px',
-                            }}>
-                              <span style={{
-                                fontFamily: 'var(--font-body)',
-                                fontSize: 12,
-                                fontWeight: 700,
-                                color: '#ffffff',
-                                lineHeight: '16px',
-                              }}>{currentRating}</span>
-                              <svg width="16" height="16" viewBox="0 0 28 26" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M14 0L18.1532 8.79122L28 9.93112L20.72 16.5043L22.6525 26L14 21.2712L5.34752 26L7.28 16.5043L0 9.93112L9.84681 8.79122L14 0Z" fill="#ffffff"/>
-                              </svg>
-                              <span style={{
-                                fontFamily: 'var(--font-body)',
-                                fontSize: 12,
-                                fontWeight: 700,
-                                color: '#ffffff',
-                                lineHeight: '16px',
-                              }}>Your top rated</span>
-                            </div>
-                          )}
+                          {/* Order Status / Rating Badge */}
+                          {(() => {
+                            const rating = currentRating;
+
+                            // No rating: show "Ordered 2 weeks ago" with cart icon (beige/grey)
+                            if (!rating || rating === 0) {
+                              return (
+                                <div style={{
+                                  position: 'absolute',
+                                  bottom: 0,
+                                  left: 0,
+                                  display: 'inline-flex',
+                                  alignItems: 'center',
+                                  gap: 6,
+                                  backgroundColor: '#efe9de',
+                                  borderRadius: '0 12px 0 0',
+                                  padding: '6px 10px',
+                                }}>
+                                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z" fill="#242424"/>
+                                  </svg>
+                                  <span style={{
+                                    fontFamily: 'var(--font-body)',
+                                    fontSize: 12,
+                                    fontWeight: 600,
+                                    color: '#242424',
+                                    lineHeight: '16px',
+                                  }}>Ordered 2 weeks ago</span>
+                                </div>
+                              );
+                            }
+
+                            // Rating 4-5: show "Your top rated" (yellow/gold)
+                            if (rating >= 4) {
+                              return (
+                                <div style={{
+                                  position: 'absolute',
+                                  bottom: 0,
+                                  left: 0,
+                                  display: 'inline-flex',
+                                  alignItems: 'center',
+                                  gap: 4,
+                                  backgroundColor: '#8c6e00',
+                                  borderRadius: '0 12px 0 0',
+                                  padding: '4px 8px',
+                                }}>
+                                  <span style={{
+                                    fontFamily: 'var(--font-body)',
+                                    fontSize: 12,
+                                    fontWeight: 700,
+                                    color: '#ffffff',
+                                    lineHeight: '16px',
+                                  }}>{rating}</span>
+                                  <svg width="16" height="16" viewBox="0 0 28 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M14 0L18.1532 8.79122L28 9.93112L20.72 16.5043L22.6525 26L14 21.2712L5.34752 26L7.28 16.5043L0 9.93112L9.84681 8.79122L14 0Z" fill="#ffffff"/>
+                                  </svg>
+                                  <span style={{
+                                    fontFamily: 'var(--font-body)',
+                                    fontSize: 12,
+                                    fontWeight: 700,
+                                    color: '#ffffff',
+                                    lineHeight: '16px',
+                                  }}>Your top rated</span>
+                                </div>
+                              );
+                            }
+
+                            // Rating 1-3: show "Your last rating" (beige/grey)
+                            return (
+                              <div style={{
+                                position: 'absolute',
+                                bottom: 0,
+                                left: 0,
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                gap: 4,
+                                backgroundColor: '#efe9de',
+                                borderRadius: '0 12px 0 0',
+                                padding: '4px 8px',
+                              }}>
+                                <span style={{
+                                  fontFamily: 'var(--font-body)',
+                                  fontSize: 12,
+                                  fontWeight: 700,
+                                  color: '#242424',
+                                  lineHeight: '16px',
+                                }}>{rating}</span>
+                                <svg width="16" height="16" viewBox="0 0 28 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                  <path d="M14 0L18.1532 8.79122L28 9.93112L20.72 16.5043L22.6525 26L14 21.2712L5.34752 26L7.28 16.5043L0 9.93112L9.84681 8.79122L14 0Z" fill="#242424"/>
+                                </svg>
+                                <span style={{
+                                  fontFamily: 'var(--font-body)',
+                                  fontSize: 12,
+                                  fontWeight: 700,
+                                  color: '#242424',
+                                  lineHeight: '16px',
+                                }}>Your last rating</span>
+                              </div>
+                            );
+                          })()}
 
                           {/* Bookmark */}
                           <button
@@ -11129,8 +11449,8 @@
             </>
           )}
 
-          {/* Feedback Drawer for Unrated filter */}
-          {showFeedbackDrawer && feedbackRecipe && (
+          {/* Feedback Drawer for Unrated filter - OLD VERSION */}
+          {showFeedbackDrawer && feedbackRecipe && features.newRatingDrawer === false && (
             <>
               {/* Backdrop */}
               <div
@@ -11213,7 +11533,7 @@
                             overflow: 'hidden',
                           }}>
                             <img
-                              src={`Emoji rating/gif/rate ${Math.round(feedbackRating)}.gif`}
+                              src={`Emoji rating/${Math.round(feedbackRating)}.png`}
                               alt="Rating emoji"
                               style={{
                                 width: '100%',
@@ -11368,7 +11688,7 @@
                                       fontSize: 14,
                                       fontWeight: 500,
                                       lineHeight: '20px',
-                                      color: isSelected ? '#2E7D32' : '#232323',
+                                      color: '#232323',
                                       cursor: 'pointer',
                                       transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
                                     }}
@@ -11458,7 +11778,7 @@
                                       fontSize: 14,
                                       fontWeight: 500,
                                       lineHeight: '20px',
-                                      color: isSelected ? '#C62828' : '#232323',
+                                      color: '#232323',
                                       cursor: 'pointer',
                                       transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
                                     }}
@@ -11580,7 +11900,7 @@
                                       fontSize: 14,
                                       fontWeight: 500,
                                       lineHeight: '20px',
-                                      color: isSelected ? '#C62828' : '#232323',
+                                      color: '#232323',
                                       cursor: 'pointer',
                                       transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
                                     }}
@@ -11698,7 +12018,7 @@
                                       fontSize: 14,
                                       fontWeight: 500,
                                       lineHeight: '20px',
-                                      color: isSelected ? '#2E7D32' : '#232323',
+                                      color: '#232323',
                                       cursor: 'pointer',
                                       transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
                                     }}
@@ -12300,9 +12620,9 @@
 
                     {/* Community Photo Cards */}
                     {[
-                      { img: 'recipes/HelloFresh Main Image (2).jpg', name: 'Sarah M.', time: '2 days ago', rating: 5, comment: 'Absolutely delicious! My family loved it. Will definitely make again.' },
+                      { img: 'recipes/HelloFresh Main Image (2).jpg', name: 'Sarah M.', time: '2 days ago', rating: 5, comment: 'Absolutely delicious! My family loved it. Will definitely make again.', customisation: 'salmon' },
                       { img: 'recipes/HelloFresh Main Image (3).jpg', name: 'Mike R.', time: '1 week ago', rating: 4, comment: 'Great flavors! Added extra spice and it turned out perfect.' },
-                      { img: 'recipes/HelloFresh Main Image (4).jpg', name: 'Emily K.', time: '2 weeks ago', rating: 5, comment: 'Easy to follow recipe. The presentation looked restaurant-quality!' }
+                      { img: 'recipes/HelloFresh Main Image (4).jpg', name: 'Emily K.', time: '2 weeks ago', rating: 5, comment: 'Easy to follow recipe. The presentation looked restaurant-quality!', customisation: 'prawns' }
                     ].map((review, idx) => (
                       <div key={idx} className="photo-card">
                         <div className="photo-card-image-container">
@@ -12315,7 +12635,10 @@
                         <div className="photo-card-content">
                           <div className="photo-card-header">
                             <span className="photo-card-user">{review.name}</span>
-                            <span className="photo-card-date">{review.time}</span>
+                            <span className="photo-card-date">
+                              {review.time}
+                              {features.customisationLabel && review.customisation && ` | customised with ${review.customisation}`}
+                            </span>
                           </div>
                           <div className="photo-card-rating">
                             {[0, 1, 2, 3, 4].map((i) => (
@@ -12606,7 +12929,7 @@
                                   fontSize: 14,
                                   fontWeight: 500,
                                   lineHeight: '20px',
-                                  color: isSelected ? '#2E7D32' : '#232323',
+                                  color: '#232323',
                                   cursor: 'pointer',
                                   transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
                                 }}
@@ -13696,7 +14019,24 @@
     }
 
     // ========== RECIPE DETAIL PAGE ==========
-    function RecipeDetailPage({ recipe, onClose, onAddToCart, cart, onNavigateToPastOrders }) {
+    function RecipeDetailPage({ recipe, onClose, onAddToCart, cart, onNavigateToPastOrders, userRatings, setUserRatings }) {
+      // Get feature state from sessionStorage - reactive to changes
+      const [features, setFeatures] = useState(() =>
+        JSON.parse(sessionStorage.getItem('featureState') || '{"newRatingDrawer": true}')
+      );
+
+      // Listen for feature changes from control panel
+      React.useEffect(() => {
+        const handleFeatureUpdate = (event) => {
+          if (event.data.type === 'featureToggle' || event.data.type === 'initFeatures') {
+            const newFeatures = event.data.allFeatures || JSON.parse(sessionStorage.getItem('featureState') || '{"newRatingDrawer": true}');
+            setFeatures(newFeatures);
+          }
+        };
+        window.addEventListener('message', handleFeatureUpdate);
+        return () => window.removeEventListener('message', handleFeatureUpdate);
+      }, []);
+
       const [quantity, setQuantity] = useState(cart[recipe.id] || 0);
       const [isCommunityRatingExpanded, setIsCommunityRatingExpanded] = useState(true);
       const [showAISummaryDrawer, setShowAISummaryDrawer] = useState(false);
@@ -13715,6 +14055,8 @@
       const [expandedReviews, setExpandedReviews] = useState(new Set()); // Track which reviews are expanded
       const [userSubmittedRating, setUserSubmittedRating] = useState(null);
       const [userSubmittedFeedback, setUserSubmittedFeedback] = useState({ positive: new Set(), negative: new Set(), comment: '' });
+      const [feedbackRecipe, setFeedbackRecipe] = useState(null); // For old rating drawer
+      const [feedbackRating, setFeedbackRating] = useState(0); // For old rating drawer
       const customerRatingRef = React.useRef(null);
       const drawerContentRef = React.useRef(null);
       const ratingStarsRef = React.useRef(null);
@@ -13736,8 +14078,8 @@
       const stickyBurstAnimInstanceRef = useRef(null);
 
       // Check if user has a rating (either from recipe data or newly submitted)
-      const hasUserRating = userSubmittedRating !== null || (recipe.rating && recipe.isPersonalRating);
-      const currentUserRating = userSubmittedRating !== null ? userSubmittedRating : (recipe.isPersonalRating ? parseFloat(recipe.rating) : 0);
+      const hasUserRating = userSubmittedRating !== null || (recipe.rating && recipe.isPersonalRating) || (userRatings && userRatings[recipe.id]);
+      const currentUserRating = userSubmittedRating !== null ? userSubmittedRating : (userRatings?.[recipe.id] || (recipe.isPersonalRating ? parseFloat(recipe.rating) : 0));
 
       // Sync local quantity with cart changes
       React.useEffect(() => {
@@ -13910,38 +14252,111 @@
                 }}
               />
 
-              {/* Your Top Rated Badge */}
-              {currentUserRating >= 4 && (
-                <div style={{
-                  position: 'absolute',
-                  bottom: 0,
-                  left: 0,
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: 4,
-                  backgroundColor: '#8c6e00',
-                  borderRadius: '0 8px 0 0',
-                  padding: '4px 8px',
-                }}>
-                  <span style={{
-                    fontFamily: 'var(--font-body)',
-                    fontSize: 12,
-                    fontWeight: 700,
-                    color: '#ffffff',
-                    lineHeight: '16px',
-                  }}>{currentUserRating}</span>
-                  <svg width="16" height="16" viewBox="0 0 28 26" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M14 0L18.1532 8.79122L28 9.93112L20.72 16.5043L22.6525 26L14 21.2712L5.34752 26L7.28 16.5043L0 9.93112L9.84681 8.79122L14 0Z" fill="#ffffff"/>
-                  </svg>
-                  <span style={{
-                    fontFamily: 'var(--font-body)',
-                    fontSize: 12,
-                    fontWeight: 700,
-                    color: '#ffffff',
-                    lineHeight: '16px',
-                  }}>Your top rated</span>
-                </div>
-              )}
+              {/* Order Status / Rating Badge */}
+              {(() => {
+                const rating = currentUserRating;
+
+                // Don't show "weeks ago" badge if there's already a recipe label (Premium, New, etc.) to avoid overlap
+                if ((!rating || rating === 0) && recipe.label) {
+                  return null;
+                }
+
+                // No rating: show "Ordered 2 weeks ago" with cart icon (beige/grey)
+                if (!rating || rating === 0) {
+                  return (
+                    <div style={{
+                      position: 'absolute',
+                      bottom: 0,
+                      left: 0,
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: 6,
+                      backgroundColor: '#efe9de',
+                      borderRadius: '0 8px 0 0',
+                      padding: '6px 10px',
+                    }}>
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z" fill="#242424"/>
+                      </svg>
+                      <span style={{
+                        fontFamily: 'var(--font-body)',
+                        fontSize: 12,
+                        fontWeight: 600,
+                        color: '#242424',
+                        lineHeight: '16px',
+                      }}>Ordered 2 weeks ago</span>
+                    </div>
+                  );
+                }
+
+                // Rating 4-5: show "Your top rated" (yellow/gold)
+                if (rating >= 4) {
+                  return (
+                    <div style={{
+                      position: 'absolute',
+                      bottom: 0,
+                      left: 0,
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: 4,
+                      backgroundColor: '#8c6e00',
+                      borderRadius: '0 8px 0 0',
+                      padding: '4px 8px',
+                    }}>
+                      <span style={{
+                        fontFamily: 'var(--font-body)',
+                        fontSize: 12,
+                        fontWeight: 700,
+                        color: '#ffffff',
+                        lineHeight: '16px',
+                      }}>{rating}</span>
+                      <svg width="16" height="16" viewBox="0 0 28 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M14 0L18.1532 8.79122L28 9.93112L20.72 16.5043L22.6525 26L14 21.2712L5.34752 26L7.28 16.5043L0 9.93112L9.84681 8.79122L14 0Z" fill="#ffffff"/>
+                      </svg>
+                      <span style={{
+                        fontFamily: 'var(--font-body)',
+                        fontSize: 12,
+                        fontWeight: 700,
+                        color: '#ffffff',
+                        lineHeight: '16px',
+                      }}>Your top rated</span>
+                    </div>
+                  );
+                }
+
+                // Rating 1-3: show "Your last rating" (beige/grey)
+                return (
+                  <div style={{
+                    position: 'absolute',
+                    bottom: 0,
+                    left: 0,
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: 4,
+                    backgroundColor: '#efe9de',
+                    borderRadius: '0 8px 0 0',
+                    padding: '4px 8px',
+                  }}>
+                    <span style={{
+                      fontFamily: 'var(--font-body)',
+                      fontSize: 12,
+                      fontWeight: 700,
+                      color: '#242424',
+                      lineHeight: '16px',
+                    }}>{rating}</span>
+                    <svg width="16" height="16" viewBox="0 0 28 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M14 0L18.1532 8.79122L28 9.93112L20.72 16.5043L22.6525 26L14 21.2712L5.34752 26L7.28 16.5043L0 9.93112L9.84681 8.79122L14 0Z" fill="#242424"/>
+                    </svg>
+                    <span style={{
+                      fontFamily: 'var(--font-body)',
+                      fontSize: 12,
+                      fontWeight: 700,
+                      color: '#242424',
+                      lineHeight: '16px',
+                    }}>Your last rating</span>
+                  </div>
+                );
+              })()}
 
               {/* Close Button */}
               <button
@@ -14034,6 +14449,7 @@
 
             {/* Community Rating */}
             <div
+              data-pdp-top-rating=""
               style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -14077,6 +14493,8 @@
                     setSelectedNegativeChips(new Set());
                     setIsPositiveFeedbackExpanded(true);
                     setIsNegativeFeedbackExpanded(false);
+                    setFeedbackRecipe(recipe); // For old rating drawer
+                    setFeedbackRating(0); // For old rating drawer
                     setShowFeedbackDrawer(true);
                   }}
                   style={{
@@ -14365,6 +14783,8 @@
                                   setIsPositiveFeedbackExpanded(false);
                                   setIsNegativeFeedbackExpanded(true);
                                 }
+                                setFeedbackRecipe(recipe); // For old rating drawer
+                                setFeedbackRating(star); // For old rating drawer
                                 setShowFeedbackDrawer(true);
                               }}
                               style={{ cursor: 'pointer' }}
@@ -14810,11 +15230,11 @@
 
                   // All reviews data with theme-based feedback (randomized for realism)
                   let allReviews = [
-                    { rating: 5, name: 'Sarah M.', time: '2 days ago', comment: 'This recipe was absolutely delicious! The flavors were perfectly balanced and my family loved it. The instructions were clear and easy to follow, even for someone like me who is not an experienced cook. I particularly enjoyed how the spices complemented each other without being overwhelming. My family couldn\'t stop raving about it at dinner, and my picky eater actually asked for seconds! The portion sizes were generous, and we even had leftovers for lunch the next day. I\'ve already added this to my regular rotation and will definitely make this again. Highly recommend to anyone looking for a flavorful, satisfying meal!', positive: ['taste', 'ingredientQuality', 'easeOfCooking', 'portionSize'], negative: [], photos: ['recipes/HelloFresh Main Image.jpg', 'recipes/HelloFresh Main High.jpg'], helpfulCount: 24 },
+                    { rating: 5, name: 'Sarah M.', time: '2 days ago', comment: 'This recipe was absolutely delicious! The flavors were perfectly balanced and my family loved it. The instructions were clear and easy to follow, even for someone like me who is not an experienced cook. I particularly enjoyed how the spices complemented each other without being overwhelming. My family couldn\'t stop raving about it at dinner, and my picky eater actually asked for seconds! The portion sizes were generous, and we even had leftovers for lunch the next day. I\'ve already added this to my regular rotation and will definitely make this again. Highly recommend to anyone looking for a flavorful, satisfying meal!', positive: ['taste', 'ingredientQuality', 'easeOfCooking', 'portionSize'], negative: [], photos: ['recipes/HelloFresh Main Image.jpg', 'recipes/HelloFresh Main High.jpg'], helpfulCount: 24, customisation: 'salmon' },
                     { rating: 5, name: 'Jessica L.', time: '2 weeks ago', comment: 'Perfect weeknight dinner! Quick, healthy, and tasty. Kids ate everything on their plates which is a win in my book!', positive: ['easeOfCooking', 'taste', 'portionSize'], negative: [], photos: [], helpfulCount: 18 },
-                    { rating: 5, name: 'David R.', time: '3 weeks ago', comment: 'Outstanding meal! The ingredients were fresh and the instructions were easy to follow. Highly recommend!', positive: ['ingredientQuality', 'easeOfCooking'], negative: [], photos: ['recipes/HelloFresh Main High.jpg'], helpfulCount: 12 },
+                    { rating: 5, name: 'David R.', time: '3 weeks ago', comment: 'Outstanding meal! The ingredients were fresh and the instructions were easy to follow. Highly recommend!', positive: ['ingredientQuality', 'easeOfCooking'], negative: [], photos: ['recipes/HelloFresh Main High.jpg'], helpfulCount: 12, customisation: 'beef' },
                     { rating: 4, name: 'Mike T.', time: '1 week ago', comment: 'Great recipe! Easy to follow instructions. Only gave 4 stars because portions could be bigger, but that\'s just personal preference.', positive: ['easeOfCooking', 'taste'], negative: ['portionSize'], photos: ['recipes/HelloFresh Main Image.jpg'], helpfulCount: 7 },
-                    { rating: 4, name: 'Emily S.', time: '5 days ago', comment: 'Really good overall. Cooking time was accurate and the meal was filling. Great value for the price.', positive: ['portionSize', 'valueForMoney'], negative: [], photos: [], helpfulCount: 3 },
+                    { rating: 4, name: 'Emily S.', time: '5 days ago', comment: 'Really good overall. Cooking time was accurate and the meal was filling. Great value for the price.', positive: ['portionSize', 'valueForMoney'], negative: [], photos: [], helpfulCount: 3, customisation: 'chicken' },
                     { rating: 4, name: 'Robert K.', time: '1 month ago', comment: 'Solid recipe. The portion sizes were generous and it tasted great. I took off a star because prep took longer than expected.', positive: ['taste', 'portionSize'], negative: ['easeOfCooking'], photos: ['recipes/HelloFresh Main Image.jpg', 'recipes/HelloFresh Main High.jpg'], helpfulCount: 15 },
                     { rating: 3, name: 'Amanda P.', time: '2 weeks ago', comment: 'It was okay. Nothing special but not bad either. I think I expected more flavor based on the description.', positive: ['delivery'], negative: ['taste'], photos: [], helpfulCount: 2 },
                     { rating: 3, name: 'Chris B.', time: '3 weeks ago', comment: 'Average meal. The ingredients were fine but the overall taste was a bit bland for my liking. Needed more seasoning.', positive: ['ingredientQuality'], negative: ['taste'], photos: [], helpfulCount: 0 },
@@ -15053,6 +15473,77 @@
                         )}
                       </div>
 
+                      {/* Highlighted Reviews Title */}
+                      <div data-review-title="" style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 8,
+                        marginBottom: 8,
+                      }}>
+                        <h3 style={{
+                          fontFamily: 'var(--font-headline)',
+                          fontSize: 16,
+                          fontWeight: 700,
+                          lineHeight: '20px',
+                          color: '#232323',
+                          margin: 0,
+                        }}>Highlighted reviews</h3>
+                        <div style={{ position: 'relative', display: 'inline-flex' }}>
+                          <button
+                            onClick={(e) => {
+                              const tooltip = e.currentTarget.nextElementSibling;
+                              tooltip.style.display = tooltip.style.display === 'none' || !tooltip.style.display ? 'block' : 'none';
+                            }}
+                            style={{
+                              background: 'transparent',
+                              border: 'none',
+                              cursor: 'pointer',
+                              padding: 0,
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                            }}
+                            aria-label="Information about highlighted reviews"
+                          >
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <circle cx="8" cy="8" r="7" stroke="#656565" strokeWidth="1.5"/>
+                              <path d="M8 7V11" stroke="#656565" strokeWidth="1.5" strokeLinecap="round"/>
+                              <circle cx="8" cy="5" r="0.75" fill="#656565"/>
+                            </svg>
+                          </button>
+                          <div style={{
+                            display: 'none',
+                            position: 'absolute',
+                            top: '24px',
+                            left: '50%',
+                            transform: 'translateX(-50%)',
+                            backgroundColor: '#232323',
+                            color: '#ffffff',
+                            padding: '12px',
+                            borderRadius: '8px',
+                            fontSize: '12px',
+                            lineHeight: '16px',
+                            width: '240px',
+                            zIndex: 1000,
+                            fontFamily: 'var(--font-body)',
+                            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+                          }}>
+                            We curated the top 10 reviews by analysing feedback, highlighting insightful experiences and diverse opinions
+                            <div style={{
+                              position: 'absolute',
+                              top: '-4px',
+                              left: '50%',
+                              transform: 'translateX(-50%)',
+                              width: 0,
+                              height: 0,
+                              borderLeft: '6px solid transparent',
+                              borderRight: '6px solid transparent',
+                              borderBottom: '6px solid #232323',
+                            }}></div>
+                          </div>
+                        </div>
+                      </div>
+
                       {/* Filtered Reviews */}
                       <div style={{
                         display: 'flex',
@@ -15097,6 +15588,8 @@
                                     setIsPositiveFeedbackExpanded(false);
                                     setIsNegativeFeedbackExpanded(true);
                                   }
+                                  setFeedbackRecipe(recipe); // For old rating drawer
+                                  setFeedbackRating(currentUserRating); // For old rating drawer
                                   setShowFeedbackDrawer(true);
                                 }}
                                 style={{
@@ -15158,7 +15651,12 @@
                                   fontWeight: 400,
                                   color: '#656565',
                                   lineHeight: '16px',
-                                }}>{review.time}</span>
+                                }}>
+                                  {review.time}
+                                  {features.customisationLabel && review.customisation && (
+                                    <span> | customised with {review.customisation}</span>
+                                  )}
+                                </span>
                               </div>
                             </div>
 
@@ -15222,22 +15720,26 @@
                             })()}
 
                           {/* Like/Dislike themes for this review in pill format */}
-                          {review.positive.length > 0 && (
-                            <>
-                              <p style={{
-                                fontFamily: 'var(--font-body)',
-                                fontSize: 12,
-                                fontWeight: 700,
-                                color: '#232323',
-                                margin: '0 0 4px 0',
-                              }}>Like</p>
+                          <div {...(review.isUserReview ? { 'data-user-comment-themes': '' } : { 'data-community-comment-themes': '' })} style={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            gap: 8,
+                          }}>
+                            {review.positive.length > 0 && (
                               <div style={{
                                 display: 'flex',
-                                flexWrap: 'wrap',
+                                alignItems: 'center',
                                 gap: 8,
-                                marginTop: -8,
-                                marginBottom: review.negative.length > 0 ? 0 : 0,
+                                flexWrap: 'wrap',
                               }}>
+                                <span style={{
+                                  fontFamily: 'var(--font-body)',
+                                  fontSize: 12,
+                                  fontWeight: 700,
+                                  color: '#232323',
+                                  margin: 0,
+                                  whiteSpace: 'nowrap',
+                                }}>Like</span>
                                 {review.positive.map((key, idx) => (
                                   <span key={idx} style={{
                                     padding: '0 4px',
@@ -15249,24 +15751,23 @@
                                   }}>{themes[key]}</span>
                                 ))}
                               </div>
-                            </>
-                          )}
+                            )}
 
-                          {review.negative.length > 0 && (
-                            <>
-                              <p style={{
-                                fontFamily: 'var(--font-body)',
-                                fontSize: 12,
-                                fontWeight: 700,
-                                color: '#232323',
-                                margin: '0 0 4px 0',
-                              }}>Dislike</p>
+                            {review.negative.length > 0 && (
                               <div style={{
                                 display: 'flex',
-                                flexWrap: 'wrap',
+                                alignItems: 'center',
                                 gap: 8,
-                                marginTop: -8,
+                                flexWrap: 'wrap',
                               }}>
+                                <span style={{
+                                  fontFamily: 'var(--font-body)',
+                                  fontSize: 12,
+                                  fontWeight: 700,
+                                  color: '#232323',
+                                  margin: 0,
+                                  whiteSpace: 'nowrap',
+                                }}>Dislike</span>
                                 {review.negative.map((key, idx) => (
                                   <span key={idx} style={{
                                     padding: '0 4px',
@@ -15278,8 +15779,8 @@
                                   }}>{themes[key]}</span>
                                 ))}
                               </div>
-                            </>
-                          )}
+                            )}
+                          </div>
 
                             {/* Review Photos */}
                             {review.photos && review.photos.length > 0 && (
@@ -15746,8 +16247,631 @@
             </>
           )}
 
+          {/* Feedback Drawer - OLD VERSION */}
+          {showFeedbackDrawer && feedbackRecipe && features.newRatingDrawer === false && (
+            <>
+              {/* Backdrop */}
+              <div
+                onClick={() => setShowFeedbackDrawer(false)}
+                style={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  background: 'rgba(0, 0, 0, 0.4)',
+                  zIndex: 999,
+                  animation: 'fadeIn 0.3s ease-out',
+                }}
+              />
+
+              {/* Drawer Container */}
+              <div style={{
+                position: 'absolute',
+                bottom: 0,
+                left: 0,
+                right: 0,
+                zIndex: 1000,
+                animation: 'slideUpDrawer 0.3s ease-out',
+              }}>
+                {/* Main Drawer Content */}
+                <div style={{
+                  background: 'white',
+                  borderRadius: '16px 16px 0 0',
+                  boxShadow: '0 4px 16px rgba(0, 0, 0, 0.2)',
+                  padding: 16,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: 16,
+                  maxHeight: '75vh',
+                  overflowY: 'auto',
+                }}>
+                  {/* Handle bar */}
+                  <div style={{
+                    width: 40,
+                    height: 6,
+                    background: '#e0e0e0',
+                    borderRadius: 4,
+                    margin: '0 auto',
+                  }} />
+
+                  {/* Recipe Info and Rating */}
+                  <div style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    gap: 16,
+                  }}>
+                    {/* Recipe name */}
+                    <h2 style={{
+                      fontFamily: 'var(--font-headline)',
+                      fontSize: 20,
+                      fontWeight: 500,
+                      lineHeight: '24px',
+                      color: '#232323',
+                      margin: 0,
+                      textAlign: 'center',
+                    }}>{feedbackRecipe.name}</h2>
+
+                    {/* Emoji + Text + Stars */}
+                    <div style={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      gap: 0,
+                    }}>
+                      {feedbackRating > 0 && (
+                        <>
+                          <div style={{
+                            width: 64,
+                            height: 64,
+                            borderRadius: 6.4,
+                            overflow: 'hidden',
+                          }}>
+                            <img
+                              src={`Emoji rating/${Math.round(feedbackRating)}.png`}
+                              alt="Rating emoji"
+                              style={{
+                                width: '100%',
+                                height: '100%',
+                                objectFit: 'cover',
+                              }}
+                            />
+                          </div>
+                          <p style={{
+                            fontFamily: 'var(--font-body)',
+                            fontSize: 16,
+                            fontWeight: 400,
+                            lineHeight: '24px',
+                            color: '#232323',
+                            margin: 0,
+                          }}>
+                            {feedbackRating === 5 ? 'Loved it!' :
+                             feedbackRating === 4 ? 'Really liked it!' :
+                             feedbackRating === 3 ? 'It was okay' :
+                             feedbackRating === 2 ? 'Not great' :
+                             feedbackRating === 1 ? 'Didn\'t like it' : ''}
+                          </p>
+                        </>
+                      )}
+
+                      {/* Star rating - clickable */}
+                      <div style={{
+                        display: 'flex',
+                        gap: 0,
+                        marginTop: 0,
+                      }}>
+                        {[1, 2, 3, 4, 5].map((star) => (
+                          <svg
+                            key={star}
+                            onClick={() => {
+                              setFeedbackRating(star);
+                              setEditingRating(star);
+                              // Set expanded state based on rating
+                              if (star >= 4) {
+                                setIsPositiveFeedbackExpanded(true);
+                                setIsNegativeFeedbackExpanded(false);
+                              } else {
+                                setIsPositiveFeedbackExpanded(false);
+                                setIsNegativeFeedbackExpanded(true);
+                              }
+                            }}
+                            width={32}
+                            height={32}
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            style={{ cursor: 'pointer' }}
+                          >
+                            <path
+                              d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"
+                              fill={star <= feedbackRating ? '#232323' : 'white'}
+                              stroke="#232323"
+                              strokeWidth="1.5"
+                              strokeLinejoin="round"
+                            />
+                          </svg>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Divider */}
+                    <div style={{
+                      height: 1,
+                      background: '#c1c1c1',
+                      width: '100%',
+                    }} />
+                  </div>
+
+                  {/* Feedback Section */}
+                  <div style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: 16,
+                  }}>
+                    {feedbackRating >= 4 ? (
+                      <>
+                        {/* Positive feedback section */}
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                          <button
+                            onClick={() => setIsPositiveFeedbackExpanded(!isPositiveFeedbackExpanded)}
+                            style={{
+                              width: '100%',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'space-between',
+                              background: 'transparent',
+                              border: 'none',
+                              padding: 0,
+                              cursor: 'pointer',
+                            }}
+                          >
+                            <span style={{
+                              fontFamily: 'var(--font-body)',
+                              fontSize: 16,
+                              fontWeight: 700,
+                              lineHeight: '24px',
+                              color: '#232323',
+                            }}>What worked for you?</span>
+                            <svg
+                              width={16}
+                              height={16}
+                              viewBox="0 0 16 16"
+                              fill="none"
+                              style={{
+                                transform: isPositiveFeedbackExpanded ? 'rotate(180deg)' : 'rotate(0deg)',
+                                transition: 'transform 0.2s',
+                              }}
+                            >
+                              <path d="M4 6l4 4 4-4" stroke="#232323" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                            </svg>
+                          </button>
+
+                          {isPositiveFeedbackExpanded && (
+                            <div style={{
+                              display: 'flex',
+                              flexWrap: 'wrap',
+                              gap: 10,
+                              paddingTop: 8,
+                              paddingBottom: 8,
+                            }}>
+                              {[
+                                { id: 1, label: 'Ingredient quality' },
+                                { id: 2, label: 'Ease of cooking' },
+                                { id: 3, label: 'Portion size' },
+                                { id: 4, label: 'Value for money' },
+                                { id: 5, label: 'Delivery' },
+                                { id: 6, label: 'Taste' },
+                              ].map((option) => {
+                                const isSelected = selectedPositiveChips.has(option.id);
+                                return (
+                                  <button
+                                    key={option.id}
+                                    onClick={() => {
+                                      const newSet = new Set(selectedPositiveChips);
+                                      if (isSelected) {
+                                        newSet.delete(option.id);
+                                      } else {
+                                        newSet.add(option.id);
+                                      }
+                                      setSelectedPositiveChips(newSet);
+                                    }}
+                                    style={{
+                                      height: 'auto',
+                                      padding: '8px 16px',
+                                      background: isSelected ? '#E8F5E9' : 'white',
+                                      border: isSelected ? '1.5px solid #4CAF50' : '1.5px solid #E0E0E0',
+                                      borderRadius: 20,
+                                      fontFamily: 'var(--font-body)',
+                                      fontSize: 14,
+                                      fontWeight: 500,
+                                      lineHeight: '20px',
+                                      color: '#232323',
+                                      cursor: 'pointer',
+                                      transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
+                                    }}
+                                  >
+                                    {option.label}
+                                  </button>
+                                );
+                              })}
+                            </div>
+                          )}
+                        </div>
+
+                        {/* Negative feedback section */}
+                        <div>
+                          <button
+                            onClick={() => setIsNegativeFeedbackExpanded(!isNegativeFeedbackExpanded)}
+                            style={{
+                              width: '100%',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'space-between',
+                              background: 'transparent',
+                              border: 'none',
+                              padding: 0,
+                              cursor: 'pointer',
+                            }}
+                          >
+                            <span style={{
+                              fontFamily: 'var(--font-body)',
+                              fontSize: 16,
+                              fontWeight: 700,
+                              lineHeight: '24px',
+                              color: '#232323',
+                            }}>What didn't work for you?</span>
+                            <svg
+                              width={16}
+                              height={16}
+                              viewBox="0 0 16 16"
+                              fill="none"
+                              style={{
+                                transform: isNegativeFeedbackExpanded ? 'rotate(180deg)' : 'rotate(0deg)',
+                                transition: 'transform 0.2s',
+                              }}
+                            >
+                              <path d="M4 6l4 4 4-4" stroke="#232323" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                            </svg>
+                          </button>
+
+                          {isNegativeFeedbackExpanded && (
+                            <div style={{
+                              display: 'flex',
+                              flexWrap: 'wrap',
+                              gap: 10,
+                              paddingTop: 8,
+                              paddingBottom: 8,
+                            }}>
+                              {[
+                                { id: 9, label: 'Not healthy enough' },
+                                { id: 10, label: 'Confusing instructions' },
+                                { id: 11, label: 'Bland / didn\'t like flavors' },
+                                { id: 12, label: 'Hard to cook' },
+                                { id: 13, label: 'Didn\'t like ingredient(s)' },
+                                { id: 14, label: 'Took too long' },
+                                { id: 15, label: 'Not family / kid-friendly' },
+                                { id: 16, label: 'Other' },
+                              ].map((option) => {
+                                const isSelected = selectedNegativeChips.has(option.id);
+                                return (
+                                  <button
+                                    key={option.id}
+                                    onClick={() => {
+                                      const newSet = new Set(selectedNegativeChips);
+                                      if (isSelected) {
+                                        newSet.delete(option.id);
+                                      } else {
+                                        newSet.add(option.id);
+                                      }
+                                      setSelectedNegativeChips(newSet);
+                                    }}
+                                    style={{
+                                      height: 'auto',
+                                      padding: '8px 16px',
+                                      background: isSelected ? '#FFEBEE' : 'white',
+                                      border: isSelected ? '1.5px solid #F44336' : '1.5px solid #E0E0E0',
+                                      borderRadius: 20,
+                                      fontFamily: 'var(--font-body)',
+                                      fontSize: 14,
+                                      fontWeight: 500,
+                                      lineHeight: '20px',
+                                      color: '#232323',
+                                      cursor: 'pointer',
+                                      transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
+                                    }}
+                                  >
+                                    {option.label}
+                                  </button>
+                                );
+                              })}
+                            </div>
+                          )}
+                        </div>
+
+                        {/* Comment text area */}
+                        <div style={{
+                          display: 'flex',
+                          flexDirection: 'column',
+                          gap: 4,
+                        }}>
+                          <textarea
+                            value={feedbackComment}
+                            onChange={(e) => setFeedbackComment(e.target.value)}
+                            placeholder="How can we make it better?"
+                            style={{
+                              width: '100%',
+                              minHeight: 80,
+                              border: '1.5px solid #c1c1c1',
+                              borderRadius: 8,
+                              padding: 12,
+                              fontFamily: 'var(--font-body)',
+                              fontSize: 14,
+                              fontWeight: 400,
+                              lineHeight: '20px',
+                              color: '#232323',
+                              resize: 'vertical',
+                              boxSizing: 'border-box',
+                              transition: 'border-color 0.2s',
+                            }}
+                            onFocus={(e) => e.target.style.borderColor = '#232323'}
+                            onBlur={(e) => e.target.style.borderColor = '#c1c1c1'}
+                          />
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        {/* Negative feedback section */}
+                        <div>
+                          <button
+                            onClick={() => setIsNegativeFeedbackExpanded(!isNegativeFeedbackExpanded)}
+                            style={{
+                              width: '100%',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'space-between',
+                              background: 'transparent',
+                              border: 'none',
+                              padding: 0,
+                              cursor: 'pointer',
+                            }}
+                          >
+                            <span style={{
+                              fontFamily: 'var(--font-body)',
+                              fontSize: 16,
+                              fontWeight: 700,
+                              lineHeight: '24px',
+                              color: '#232323',
+                            }}>What didn't work for you?</span>
+                            <svg
+                              width={16}
+                              height={16}
+                              viewBox="0 0 16 16"
+                              fill="none"
+                              style={{
+                                transform: isNegativeFeedbackExpanded ? 'rotate(180deg)' : 'rotate(0deg)',
+                                transition: 'transform 0.2s',
+                              }}
+                            >
+                              <path d="M4 6l4 4 4-4" stroke="#232323" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                            </svg>
+                          </button>
+
+                          {isNegativeFeedbackExpanded && (
+                            <div style={{
+                              display: 'flex',
+                              flexWrap: 'wrap',
+                              gap: 10,
+                              paddingTop: 8,
+                              paddingBottom: 8,
+                            }}>
+                              {[
+                                { id: 9, label: 'Not healthy enough' },
+                                { id: 10, label: 'Confusing instructions' },
+                                { id: 11, label: 'Bland / didn\'t like flavors' },
+                                { id: 12, label: 'Hard to cook' },
+                                { id: 13, label: 'Didn\'t like ingredient(s)' },
+                                { id: 14, label: 'Took too long' },
+                                { id: 15, label: 'Not family / kid-friendly' },
+                                { id: 16, label: 'Other' },
+                              ].map((option) => {
+                                const isSelected = selectedNegativeChips.has(option.id);
+                                return (
+                                  <button
+                                    key={option.id}
+                                    onClick={() => {
+                                      const newSet = new Set(selectedNegativeChips);
+                                      if (isSelected) {
+                                        newSet.delete(option.id);
+                                      } else {
+                                        newSet.add(option.id);
+                                      }
+                                      setSelectedNegativeChips(newSet);
+                                    }}
+                                    style={{
+                                      height: 'auto',
+                                      padding: '8px 16px',
+                                      background: isSelected ? '#FFEBEE' : 'white',
+                                      border: isSelected ? '1.5px solid #F44336' : '1.5px solid #E0E0E0',
+                                      borderRadius: 20,
+                                      fontFamily: 'var(--font-body)',
+                                      fontSize: 14,
+                                      fontWeight: 500,
+                                      lineHeight: '20px',
+                                      color: '#232323',
+                                      cursor: 'pointer',
+                                      transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
+                                    }}
+                                  >
+                                    {option.label}
+                                  </button>
+                                );
+                              })}
+                            </div>
+                          )}
+                        </div>
+
+                        {/* Comment text area */}
+                        <div style={{
+                          display: 'flex',
+                          flexDirection: 'column',
+                          gap: 4,
+                        }}>
+                          <textarea
+                            value={feedbackComment}
+                            onChange={(e) => setFeedbackComment(e.target.value)}
+                            placeholder="How can we make it better?"
+                            style={{
+                              width: '100%',
+                              minHeight: 80,
+                              border: '1.5px solid #c1c1c1',
+                              borderRadius: 8,
+                              padding: 12,
+                              fontFamily: 'var(--font-body)',
+                              fontSize: 14,
+                              fontWeight: 400,
+                              lineHeight: '20px',
+                              color: '#232323',
+                              resize: 'vertical',
+                              boxSizing: 'border-box',
+                              transition: 'border-color 0.2s',
+                            }}
+                            onFocus={(e) => e.target.style.borderColor = '#232323'}
+                            onBlur={(e) => e.target.style.borderColor = '#c1c1c1'}
+                          />
+                        </div>
+
+                        {/* Positive feedback section */}
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                          <button
+                            onClick={() => setIsPositiveFeedbackExpanded(!isPositiveFeedbackExpanded)}
+                            style={{
+                              width: '100%',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'space-between',
+                              background: 'transparent',
+                              border: 'none',
+                              padding: 0,
+                              cursor: 'pointer',
+                            }}
+                          >
+                            <span style={{
+                              fontFamily: 'var(--font-body)',
+                              fontSize: 16,
+                              fontWeight: 700,
+                              lineHeight: '24px',
+                              color: '#232323',
+                            }}>What worked for you?</span>
+                            <svg
+                              width={16}
+                              height={16}
+                              viewBox="0 0 16 16"
+                              fill="none"
+                              style={{
+                                transform: isPositiveFeedbackExpanded ? 'rotate(180deg)' : 'rotate(0deg)',
+                                transition: 'transform 0.2s',
+                              }}
+                            >
+                              <path d="M4 6l4 4 4-4" stroke="#232323" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                            </svg>
+                          </button>
+
+                          {isPositiveFeedbackExpanded && (
+                            <div style={{
+                              display: 'flex',
+                              flexWrap: 'wrap',
+                              gap: 10,
+                              paddingTop: 8,
+                              paddingBottom: 8,
+                            }}>
+                              {[
+                                { id: 1, label: 'Ingredient quality' },
+                                { id: 2, label: 'Ease of cooking' },
+                                { id: 3, label: 'Portion size' },
+                                { id: 4, label: 'Value for money' },
+                                { id: 5, label: 'Delivery' },
+                                { id: 6, label: 'Taste' },
+                              ].map((option) => {
+                                const isSelected = selectedPositiveChips.has(option.id);
+                                return (
+                                  <button
+                                    key={option.id}
+                                    onClick={() => {
+                                      const newSet = new Set(selectedPositiveChips);
+                                      if (isSelected) {
+                                        newSet.delete(option.id);
+                                      } else {
+                                        newSet.add(option.id);
+                                      }
+                                      setSelectedPositiveChips(newSet);
+                                    }}
+                                    style={{
+                                      height: 'auto',
+                                      padding: '8px 16px',
+                                      background: isSelected ? '#E8F5E9' : 'white',
+                                      border: isSelected ? '1.5px solid #4CAF50' : '1.5px solid #E0E0E0',
+                                      borderRadius: 20,
+                                      fontFamily: 'var(--font-body)',
+                                      fontSize: 14,
+                                      fontWeight: 500,
+                                      lineHeight: '20px',
+                                      color: '#232323',
+                                      cursor: 'pointer',
+                                      transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
+                                    }}
+                                  >
+                                    {option.label}
+                                  </button>
+                                );
+                              })}
+                            </div>
+                          )}
+                        </div>
+                      </>
+                    )}
+                  </div>
+
+                  {/* Submit Button */}
+                  <button
+                    onClick={() => {
+                      // Save the rating
+                      if (feedbackRating > 0 && feedbackRecipe) {
+                        setUserSubmittedRating(feedbackRating);
+                        setUserSubmittedFeedback({
+                          positive: selectedPositiveChips,
+                          negative: selectedNegativeChips,
+                          comment: feedbackComment
+                        });
+                      }
+                      setShowFeedbackDrawer(false);
+                      setFeedbackComment('');
+                      setSelectedPositiveChips(new Set());
+                      setSelectedNegativeChips(new Set());
+                    }}
+                    disabled={feedbackRating === 0}
+                    style={{
+                      width: '100%',
+                      padding: '14px 24px',
+                      background: feedbackRating > 0 ? '#232323' : '#E0E0E0',
+                      border: 'none',
+                      borderRadius: 8,
+                      fontFamily: 'var(--font-body)',
+                      fontSize: 16,
+                      fontWeight: 700,
+                      color: feedbackRating > 0 ? 'white' : '#999',
+                      cursor: feedbackRating > 0 ? 'pointer' : 'not-allowed',
+                      transition: 'background 0.2s',
+                    }}
+                  >
+                    Send feedback
+                  </button>
+                </div>
+              </div>
+            </>
+          )}
+
           {/* Feedback Drawer - New Theme-Based Design */}
-          {showFeedbackDrawer && (
+          {showFeedbackDrawer && features.newRatingDrawer !== false && (
             <>
               {/* Backdrop */}
               <div
@@ -15778,7 +16902,7 @@
                 animation: 'slideUpDrawer 0.3s ease-out',
                 display: 'flex',
                 flexDirection: 'column',
-                maxHeight: '60vh',
+                maxHeight: '650px',
               }}>
                 {/* Scrollable Content Area */}
                 <div
@@ -16289,6 +17413,9 @@
                     onClick={() => {
                       if (editingRating > 0) {
                         setUserSubmittedRating(editingRating);
+                        if (setUserRatings) {
+                          setUserRatings(prev => ({ ...prev, [recipe.id]: editingRating }));
+                        }
                         setUserSubmittedFeedback({
                           positive: new Set(selectedPositiveChips),
                           negative: new Set(selectedNegativeChips),
@@ -16602,7 +17729,7 @@
     }
 
     // ========== HOME PAGE ==========
-    function HomePage({ onNavigateToMenu, onShowRating, onNavigateToPastOrders, onRecipeClick, onGetStarted, showMealkitCard, onHideMealkitCard, userType, onOpenLoyaltyRating, onOpenCookbook, initialSelectedRecipe }) {
+    function HomePage({ onNavigateToMenu, onShowRating, onNavigateToPastOrders, onRecipeClick, onGetStarted, showMealkitCard, onHideMealkitCard, userType, onOpenLoyaltyRating, onOpenCookbook, initialSelectedRecipe, userRatings, setUserRatings }) {
       const [promoBannerIndex, setPromoBannerIndex] = useState(1);
       const [isAutoPlaying, setIsAutoPlaying] = useState(false);
       const [expandedCards, setExpandedCards] = useState({});
@@ -16803,6 +17930,8 @@
               }}
               cart={cart}
               onNavigateToPastOrders={onNavigateToPastOrders}
+              userRatings={userRatings}
+              setUserRatings={setUserRatings}
             />
           )}
 
@@ -17844,7 +18973,24 @@
     }
 
     // ========== MENU PAGE ==========
-    function MenuPage({ cart, setCart, onCartClick, onShowRating, bookmarkedRecipes, toggleBookmark, onViewSavedRecipes, onNavigateToPastOrders, openedFromRateMeals, setOpenedFromRateMeals, rateMealsUpdated, rateMealsToastFromApp, setRateMealsToastFromApp }) {
+    function MenuPage({ cart, setCart, onCartClick, onShowRating, bookmarkedRecipes, toggleBookmark, onViewSavedRecipes, onNavigateToPastOrders, openedFromRateMeals, setOpenedFromRateMeals, rateMealsUpdated, rateMealsToastFromApp, setRateMealsToastFromApp, userRatings, setUserRatings }) {
+      // Get feature state from sessionStorage - reactive to changes
+      const [features, setFeatures] = useState(() =>
+        JSON.parse(sessionStorage.getItem('featureState') || '{"newRatingDrawer": true}')
+      );
+
+      // Listen for feature changes from control panel
+      React.useEffect(() => {
+        const handleFeatureUpdate = (event) => {
+          if (event.data.type === 'featureToggle' || event.data.type === 'initFeatures') {
+            const newFeatures = event.data.allFeatures || JSON.parse(sessionStorage.getItem('featureState') || '{"newRatingDrawer": true}');
+            setFeatures(newFeatures);
+          }
+        };
+        window.addEventListener('message', handleFeatureUpdate);
+        return () => window.removeEventListener('message', handleFeatureUpdate);
+      }, []);
+
       const [showExitDialog, setShowExitDialog] = useState(false);
       const [customizeMeal, setCustomizeMeal] = useState(null);
       const [isScrolling, setIsScrolling] = useState(false);
@@ -17860,6 +19006,10 @@
       const [toastAction, setToastAction] = useState('saved');
       const scrollTimeoutRef = useRef(null);
       const toastTimeoutRef = useRef(null);
+
+      // Rating filter state
+      const [showRatingFilter, setShowRatingFilter] = useState(false);
+      const [selectedRatingFilter, setSelectedRatingFilter] = useState(null);
 
       // Wrapper function to handle bookmark toggle and toast display
       const handleToggleBookmark = (recipeId) => {
@@ -18336,6 +19486,8 @@
               }}
               cart={cart}
               onNavigateToPastOrders={onNavigateToPastOrders}
+              userRatings={userRatings}
+              setUserRatings={setUserRatings}
             />
           )}
 
@@ -18386,7 +19538,7 @@
             transform: isScrolling ? 'translateY(-10px)' : 'translateY(0)',
             pointerEvents: isScrolling ? 'none' : 'auto',
           }}>
-            <FilterTagsRow />
+            <FilterTagsRow onFilterClick={() => setShowRatingFilter(true)} />
           </div>
 
           {/* Scrollable content area */}
@@ -18415,6 +19567,7 @@
                     bookmarkedRecipes={bookmarkedRecipes}
                     toggleBookmark={handleToggleBookmark}
                     onClick={setSelectedRecipe}
+                    userRatings={userRatings}
                   />
                 ))}
               </div>
@@ -18435,6 +19588,7 @@
                     bookmarkedRecipes={bookmarkedRecipes}
                     toggleBookmark={handleToggleBookmark}
                     onClick={setSelectedRecipe}
+                    userRatings={userRatings}
                   />
                 ))}
                 {mealsData.slice(6, 13).map((meal, index) => {
@@ -18840,6 +19994,7 @@
                     bookmarkedRecipes={bookmarkedRecipes}
                     toggleBookmark={handleToggleBookmark}
                     onClick={setSelectedRecipe}
+                    userRatings={userRatings}
                   />
                 ))}
               </div>
@@ -20254,6 +21409,185 @@
             />
           )}
 
+          {/* Rating Filter Drawer */}
+          {showRatingFilter && (
+            <>
+              {/* Backdrop */}
+              <div
+                onClick={() => setShowRatingFilter(false)}
+                style={{
+                  position: 'absolute',
+                  inset: 0,
+                  background: 'rgba(0, 0, 0, 0.4)',
+                  zIndex: 999,
+                  animation: 'fadeIn 0.3s ease-out',
+                }}
+              />
+
+              {/* Drawer */}
+              <div
+                data-menu-filter-rating-drawer=""
+                onClick={(e) => e.stopPropagation()}
+                style={{
+                  position: 'absolute',
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  background: 'white',
+                  borderRadius: '16px 16px 0 0',
+                  boxShadow: '0 -4px 20px rgba(0,0,0,0.2)',
+                  zIndex: 1000,
+                  animation: 'slideUpDrawer 0.3s ease-out',
+                  maxHeight: '70%',
+                  overflowY: 'auto',
+                  padding: '24px 16px 32px',
+                }}
+              >
+                {/* Header */}
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  marginBottom: 24,
+                }}>
+                  <h2 style={{
+                    fontFamily: 'var(--font-headline)',
+                    fontSize: 20,
+                    fontWeight: 700,
+                    color: '#232323',
+                    margin: 0,
+                  }}>Filter by rating</h2>
+                  <button
+                    onClick={() => setShowRatingFilter(false)}
+                    style={{
+                      background: 'transparent',
+                      border: 'none',
+                      cursor: 'pointer',
+                      padding: 4,
+                    }}
+                  >
+                    {Icons.close(24, '#232323')}
+                  </button>
+                </div>
+
+                {/* Filter Options */}
+                <div style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: 12,
+                }}>
+                  {/* All ratings */}
+                  <button
+                    onClick={() => {
+                      setSelectedRatingFilter(null);
+                      setShowRatingFilter(false);
+                    }}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      padding: '16px',
+                      background: selectedRatingFilter === null ? '#f5f5f5' : 'white',
+                      border: '1px solid #e0e0e0',
+                      borderRadius: 8,
+                      cursor: 'pointer',
+                      fontFamily: 'var(--font-body)',
+                      fontSize: 16,
+                      fontWeight: selectedRatingFilter === null ? 700 : 400,
+                      color: '#232323',
+                      textAlign: 'left',
+                    }}
+                  >
+                    <span>All ratings</span>
+                    {selectedRatingFilter === null && (
+                      <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <path d="M8.5 13.5L4.5 9.5L5.91 8.09L8.5 10.67L14.09 5.09L15.5 6.5L8.5 13.5Z" fill="#067a46"/>
+                      </svg>
+                    )}
+                  </button>
+
+                  {/* 3+ stars */}
+                  <button
+                    onClick={() => {
+                      setSelectedRatingFilter('3+');
+                      setShowRatingFilter(false);
+                    }}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      padding: '16px',
+                      background: selectedRatingFilter === '3+' ? '#f5f5f5' : 'white',
+                      border: '1px solid #e0e0e0',
+                      borderRadius: 8,
+                      cursor: 'pointer',
+                      fontFamily: 'var(--font-body)',
+                      fontSize: 16,
+                      fontWeight: selectedRatingFilter === '3+' ? 700 : 400,
+                      color: '#232323',
+                      textAlign: 'left',
+                    }}
+                  >
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                      <span>3+ stars</span>
+                      <div style={{ display: 'flex', gap: 2 }}>
+                        {[...Array(3)].map((_, i) => (
+                          <svg key={i} width="16" height="16" viewBox="0 0 28 26" fill="none">
+                            <path d="M14 0L18.1532 8.79122L28 9.93112L20.72 16.5043L22.6525 26L14 21.2712L5.34752 26L7.28 16.5043L0 9.93112L9.84681 8.79122L14 0Z" fill="#232323"/>
+                          </svg>
+                        ))}
+                      </div>
+                    </div>
+                    {selectedRatingFilter === '3+' && (
+                      <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <path d="M8.5 13.5L4.5 9.5L5.91 8.09L8.5 10.67L14.09 5.09L15.5 6.5L8.5 13.5Z" fill="#067a46"/>
+                      </svg>
+                    )}
+                  </button>
+
+                  {/* 4+ stars */}
+                  <button
+                    onClick={() => {
+                      setSelectedRatingFilter('4+');
+                      setShowRatingFilter(false);
+                    }}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      padding: '16px',
+                      background: selectedRatingFilter === '4+' ? '#f5f5f5' : 'white',
+                      border: '1px solid #e0e0e0',
+                      borderRadius: 8,
+                      cursor: 'pointer',
+                      fontFamily: 'var(--font-body)',
+                      fontSize: 16,
+                      fontWeight: selectedRatingFilter === '4+' ? 700 : 400,
+                      color: '#232323',
+                      textAlign: 'left',
+                    }}
+                  >
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                      <span>4+ stars</span>
+                      <div style={{ display: 'flex', gap: 2 }}>
+                        {[...Array(4)].map((_, i) => (
+                          <svg key={i} width="16" height="16" viewBox="0 0 28 26" fill="none">
+                            <path d="M14 0L18.1532 8.79122L28 9.93112L20.72 16.5043L22.6525 26L14 21.2712L5.34752 26L7.28 16.5043L0 9.93112L9.84681 8.79122L14 0Z" fill="#232323"/>
+                          </svg>
+                        ))}
+                      </div>
+                    </div>
+                    {selectedRatingFilter === '4+' && (
+                      <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <path d="M8.5 13.5L4.5 9.5L5.91 8.09L8.5 10.67L14.09 5.09L15.5 6.5L8.5 13.5Z" fill="#067a46"/>
+                      </svg>
+                    )}
+                  </button>
+                </div>
+              </div>
+            </>
+          )}
+
           {/* Toast notification */}
           <Toast
             show={showToast}
@@ -20270,6 +21604,23 @@
 
     // ========== COOKBOOK PAGE ==========
     function CookbookPage({ onBack, initialFeedbackRating = 0 }) {
+      // Get feature state from sessionStorage - reactive to changes
+      const [features, setFeatures] = useState(() =>
+        JSON.parse(sessionStorage.getItem('featureState') || '{"newRatingDrawer": true}')
+      );
+
+      // Listen for feature changes from control panel
+      React.useEffect(() => {
+        const handleFeatureUpdate = (event) => {
+          if (event.data.type === 'featureToggle' || event.data.type === 'initFeatures') {
+            const newFeatures = event.data.allFeatures || JSON.parse(sessionStorage.getItem('featureState') || '{"newRatingDrawer": true}');
+            setFeatures(newFeatures);
+          }
+        };
+        window.addEventListener('message', handleFeatureUpdate);
+        return () => window.removeEventListener('message', handleFeatureUpdate);
+      }, []);
+
       const [selectedRecipe, setSelectedRecipe] = useState(null);
       const [showFeedbackDrawer, setShowFeedbackDrawer] = useState(initialFeedbackRating > 0);
       const [feedbackRating, setFeedbackRating] = useState(initialFeedbackRating);
@@ -21108,7 +22459,7 @@
                         }}>
                           {feedbackRating > 0 && (
                             <img
-                              src={`Emoji rating/gif/rate ${Math.round(feedbackRating)}.gif`}
+                              src={`Emoji rating/${Math.round(feedbackRating)}.png`}
                               alt="Rating emoji"
                               style={{
                                 width: '100%',
@@ -21880,6 +23231,7 @@
       const [showRatingDrawer, setShowRatingDrawer] = useState(false);
       const [ratingDrawerSource, setRatingDrawerSource] = useState('home'); // 'home' or 'menu'
       const [recipeRatings, setRecipeRatings] = useState({});
+      const [userRatings, setUserRatings] = useState({ 2: 5 }); // Track user's ratings for each recipe (recipe id -> rating)
       const [showMoreRecipes, setShowMoreRecipes] = useState(false);
       const [showLoyaltyMission, setShowLoyaltyMission] = useState(false);
       const [showPastOrders, setShowPastOrders] = useState(false);
@@ -22109,6 +23461,8 @@
               }}
               onOpenCookbook={() => setShowCookbook(true)}
               initialSelectedRecipe={selectedRecipeFromHash}
+              userRatings={userRatings}
+              setUserRatings={setUserRatings}
             />
           ) : (
             <MenuPage
@@ -22131,6 +23485,8 @@
               rateMealsUpdated={openedFromRateMeals}
               rateMealsToastFromApp={rateMealsToast}
               setRateMealsToastFromApp={setRateMealsToast}
+              userRatings={userRatings}
+              setUserRatings={setUserRatings}
             />
           )}
 
@@ -22841,10 +24197,16 @@
         alternativeOverallRating: '[data-alternative-overall-rating]',
         addYourRating: '[data-add-your-rating]',
         themeBreakdown: '[data-theme-breakdown]',
+        reviewTitle: '[data-review-title]',
         userReview: '[data-user-review]',
+        userCommentThemes: '[data-user-comment-themes]',
         communityReviews: '[data-community-reviews]',
+        communityCommentThemes: '[data-community-comment-themes]',
         helpfulButtons: '[data-helpful-buttons]',
         photoReviews: '[data-photo-reviews]',
+        menuCardRating: '[data-menu-card-rating]',
+        menuFilterRating: '[data-menu-filter-rating]',
+        pdpTopRating: '[data-pdp-top-rating]',
         cookingFlowRating: '[data-cooking-flow-rating]',
         filterText: '[data-filter-text]'
       };
@@ -22858,7 +24220,12 @@
               css += `${featureSelectors[feature]} { pointer-events: none !important; cursor: default !important; }\n`;
               // Also hide the filter text
               css += `${featureSelectors['filterText']} { display: none !important; }\n`;
-            } else {
+            }
+            // Special handling for menu filter rating - disable clicks but keep button visible
+            else if (feature === 'menuFilterRating') {
+              css += `${featureSelectors[feature]} { pointer-events: none !important; cursor: default !important; opacity: 0.5 !important; }\n`;
+            }
+            else {
               css += `${featureSelectors[feature]} { display: none !important; }\n`;
             }
           }

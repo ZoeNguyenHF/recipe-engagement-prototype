@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Community Rating Initiative - Q2 2026</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #024426;
+            --primary-light: #067a46;
+            --accent: #c8f542;
+            --secondary: #1A1A2E;
+            --bg: #FAFBFC;
+            --card-bg: #FFFFFF;
+            --text: #1A1A2E;
+            --text-muted: #6B7280;
+            --border: #E5E7EB;
+            --gradient-1: linear-gradient(135deg, #024426 0%, #067a46 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: var(--gradient-1);
+            padding: 80px 0 100px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 600px;
+            height: 600px;
+            background: rgba(200, 245, 66, 0.1);
+            border-radius: 50%;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 48px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-eyebrow {
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.6);
+            margin-bottom: 20px;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: white;
+            line-height: 1.15;
+            margin-bottom: 20px;
+            max-width: 800px;
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: rgba(255,255,255,0.85);
+            max-width: 700px;
+            line-height: 1.6;
+        }
+
+        .hero .meta {
+            margin-top: 40px;
+            font-size: 0.875rem;
+            color: rgba(255,255,255,0.5);
+        }
+
+        /* Floating Stats */
+        .floating-stats {
+            position: absolute;
+            right: 10%;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .floating-stat {
+            background: white;
+            padding: 20px 24px;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+            min-width: 200px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .floating-stat:nth-child(2) { animation-delay: 0.5s; }
+        .floating-stat:nth-child(3) { animation-delay: 1s; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        .floating-stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+
+        .floating-stat-label {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+        }
+
+        /* Section */
+        .section {
+            padding: 80px 0;
+        }
+
+        .section-number {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--primary);
+            letter-spacing: 2px;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: var(--text);
+        }
+
+        .section-subtitle {
+            color: var(--text-muted);
+            font-size: 1.125rem;
+            max-width: 700px;
+            margin-bottom: 40px;
+        }
+
+        /* Overview Cards */
+        .overview-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-top: 40px;
+        }
+
+        .overview-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 32px;
+            border: 1px solid var(--border);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .overview-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+        }
+
+        .overview-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+        }
+
+        .overview-card.problem::before { background: #F59E0B; }
+        .overview-card.hypothesis::before { background: #3B82F6; }
+        .overview-card.goal::before { background: #10B981; }
+
+        .card-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 12px;
+        }
+
+        .overview-card.problem .card-label { color: #F59E0B; }
+        .overview-card.hypothesis .card-label { color: #3B82F6; }
+        .overview-card.goal .card-label { color: #10B981; }
+
+        .card-content {
+            font-size: 1rem;
+            color: var(--text);
+            line-height: 1.7;
+        }
+
+        /* Navigation Cards */
+        .nav-cards-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-top: 48px;
+        }
+
+        .nav-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 40px 32px;
+            border: 1px solid var(--border);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            text-decoration: none;
+            color: var(--text);
+            transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .nav-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+            border-color: var(--primary);
+        }
+
+        .nav-card-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+
+        .nav-card:nth-child(1) .nav-card-icon {
+            background: linear-gradient(135deg, #3B82F6, #2563EB);
+        }
+
+        .nav-card:nth-child(2) .nav-card-icon {
+            background: linear-gradient(135deg, #10B981, #059669);
+        }
+
+        .nav-card:nth-child(3) .nav-card-icon {
+            background: linear-gradient(135deg, #F59E0B, #D97706);
+        }
+
+        .nav-card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: var(--text);
+        }
+
+        .nav-card-desc {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        /* Highlight Card */
+        .highlight-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 40px 48px;
+            border: 2px solid var(--primary);
+            box-shadow: 0 8px 30px rgba(2, 68, 38, 0.12);
+            margin: 60px 0;
+        }
+
+        .highlight-content {
+            font-size: 1.375rem;
+            font-weight: 600;
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        /* Metrics Section */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+            margin-top: 40px;
+        }
+
+        .metric-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 32px;
+            text-align: center;
+            border: 1px solid var(--border);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+        }
+
+        .metric-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+
+        .metric-label {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        /* Footer */
+        .footer {
+            background: #F9FAFB;
+            padding: 40px 0;
+            text-align: center;
+            border-top: 1px solid var(--border);
+        }
+
+        .footer-text {
+            color: var(--text-muted);
+            font-size: 0.875rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .floating-stats {
+                position: static;
+                transform: none;
+                flex-direction: row;
+                margin-top: 40px;
+                flex-wrap: wrap;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .overview-grid,
+            .nav-cards-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .metrics-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <p class="hero-eyebrow">HelloFresh Product Strategy • Q2 2026</p>
+            <h1>Community Rating Initiative</h1>
+            <p class="hero-subtitle">Transform recipe ratings from an underutilized metric into an engaging community feature that drives user participation and confident meal selection.</p>
+            <p class="meta">Consumer UX · Recipe Engagement Team</p>
+        </div>
+        <div class="floating-stats">
+            <div class="floating-stat">
+                <div class="floating-stat-value">4</div>
+                <div class="floating-stat-label">Milestone releases</div>
+            </div>
+            <div class="floating-stat">
+                <div class="floating-stat-value">15%+</div>
+                <div class="floating-stat-label">Target rating increase</div>
+            </div>
+            <div class="floating-stat">
+                <div class="floating-stat-value">6</div>
+                <div class="floating-stat-label">Entry points</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Overview Section -->
+    <section class="section">
+        <div class="container">
+            <span class="section-number">Overview</span>
+            <h2 class="section-title">The Opportunity</h2>
+            <p class="section-subtitle">Recipe ratings are valuable but underutilized. This initiative creates a visible, engaging rating system that motivates users to share feedback and helps others make confident meal choices.</p>
+
+            <div class="overview-grid">
+                <div class="overview-card problem">
+                    <div class="card-label">Problem</div>
+                    <div class="card-content">
+                        Currently, recipe ratings are not prominently displayed throughout the platform. Users don't see the value their ratings provide to the community, reducing motivation to participate.
+                    </div>
+                </div>
+
+                <div class="overview-card hypothesis">
+                    <div class="card-label">Hypothesis</div>
+                    <div class="card-content">
+                        If we display community ratings prominently and provide contextual rating opportunities, users will be motivated to rate recipes because they see their contributions influence the community.
+                    </div>
+                </div>
+
+                <div class="overview-card goal">
+                    <div class="card-label">Success Metric</div>
+                    <div class="card-content">
+                        Achieve increased rating rate through visible community ratings and strategic rating entry points across cooking flow, past orders, and recipe details.
+                    </div>
+                </div>
+            </div>
+
+            <div class="highlight-card">
+                <div class="highlight-content">
+                    "Make ratings visible everywhere, provide feedback opportunities at contextually relevant moments, and create a feedback loop where contributions directly benefit the community."
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Key Metrics Section -->
+    <section class="section" style="background: #F9FAFB; padding: 60px 0;">
+        <div class="container">
+            <span class="section-number">Key Features</span>
+            <h2 class="section-title">What We're Building</h2>
+
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-value">★</div>
+                    <div class="metric-label">Community ratings on all recipe cards</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">📊</div>
+                    <div class="metric-label">Rating distribution & breakdown</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">💬</div>
+                    <div class="metric-label">Structured feedback with themes</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">📸</div>
+                    <div class="metric-label">Photo reviews from cooking flow</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Navigation Section -->
+    <section class="section">
+        <div class="container">
+            <span class="section-number">Explore</span>
+            <h2 class="section-title">Dive Deeper</h2>
+            <p class="section-subtitle">Navigate to detailed views of the milestone strategy, interactive prototype, and feature breakdowns.</p>
+
+            <div class="nav-cards-grid">
+                <a href="community-rating.html" class="nav-card">
+                    <div class="nav-card-icon">📅</div>
+                    <div class="nav-card-title">Milestone Timeline</div>
+                    <div class="nav-card-desc">View the phased rollout strategy with detailed feature progression from M1 through Later milestones</div>
+                </a>
+
+                <a href="prototype-enhanced.html" class="nav-card">
+                    <div class="nav-card-icon">🎮</div>
+                    <div class="nav-card-title">Interactive Prototype</div>
+                    <div class="nav-card-desc">Explore the working prototype with milestone controls and feature toggles</div>
+                </a>
+
+                <a href="index.html" class="nav-card">
+                    <div class="nav-card-icon">⚡</div>
+                    <div class="nav-card-title">Rating Entry Points</div>
+                    <div class="nav-card-desc">See all contextual moments where users can submit ratings across the app</div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p class="footer-text">Community Rating Initiative · HelloFresh Consumer UX · Q2 2026</p>
+        </div>
+    </footer>
+</body>
+</html>

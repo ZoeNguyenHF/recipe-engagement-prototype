@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Community Rating - Q2 2026</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #024426;
+            --primary-light: #067a46;
+            --accent: #c8f542;
+            --secondary: #1A1A2E;
+            --bg: #FAFBFC;
+            --card-bg: #FFFFFF;
+            --text: #1A1A2E;
+            --text-muted: #6B7280;
+            --border: #E5E7EB;
+            --gradient-1: linear-gradient(135deg, #1A1A2E 0%, #000000 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: var(--gradient-1);
+            padding: 80px 0 100px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 48px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-eyebrow {
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.6);
+            margin-bottom: 20px;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: white;
+            line-height: 1.15;
+            margin-bottom: 20px;
+            max-width: 800px;
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: rgba(255,255,255,0.85);
+            max-width: 700px;
+            line-height: 1.6;
+        }
+
+        .hero .meta {
+            margin-top: 40px;
+            font-size: 0.875rem;
+            color: rgba(255,255,255,0.5);
+        }
+
+        /* Floating Stats */
+        .floating-stats {
+            position: absolute;
+            right: 10%;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .floating-stat {
+            background: white;
+            padding: 20px 24px;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+            min-width: 200px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .floating-stat:nth-child(2) { animation-delay: 0.5s; }
+        .floating-stat:nth-child(3) { animation-delay: 1s; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        .floating-stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+
+        .floating-stat-label {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+        }
+
+        /* Section */
+        .section {
+            padding: 80px 0;
+        }
+
+        .section-number {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--primary);
+            letter-spacing: 2px;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: var(--text);
+        }
+
+        .section-subtitle {
+            color: var(--text-muted);
+            font-size: 1.125rem;
+            max-width: 700px;
+            margin-bottom: 40px;
+        }
+
+        /* Overview Cards */
+        .overview-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-top: 40px;
+        }
+
+        .overview-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 32px;
+            border: 1px solid var(--border);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .overview-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+        }
+
+        .overview-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+        }
+
+        .overview-card.problem::before { background: #F59E0B; }
+        .overview-card.hypothesis::before { background: #3B82F6; }
+        .overview-card.goal::before { background: #10B981; }
+
+        .card-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 12px;
+        }
+
+        .overview-card.problem .card-label { color: #F59E0B; }
+        .overview-card.hypothesis .card-label { color: #3B82F6; }
+        .overview-card.goal .card-label { color: #10B981; }
+
+        .card-content {
+            font-size: 1rem;
+            color: var(--text);
+            line-height: 1.7;
+        }
+
+        /* Navigation Cards */
+        .nav-cards-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-top: 48px;
+        }
+
+        .nav-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 40px 32px;
+            border: 1px solid var(--border);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            text-decoration: none;
+            color: var(--text);
+            transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .nav-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+            border-color: var(--primary);
+        }
+
+        .nav-card-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+
+        .nav-card:nth-child(1) .nav-card-icon {
+            background: linear-gradient(135deg, #3B82F6, #2563EB);
+        }
+
+        .nav-card:nth-child(2) .nav-card-icon {
+            background: linear-gradient(135deg, #10B981, #059669);
+        }
+
+        .nav-card:nth-child(3) .nav-card-icon {
+            background: linear-gradient(135deg, #F59E0B, #D97706);
+        }
+
+        .nav-card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: var(--text);
+        }
+
+        .nav-card-desc {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        /* Highlight Card */
+        .highlight-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 40px 48px;
+            border: 2px solid var(--primary);
+            box-shadow: 0 8px 30px rgba(2, 68, 38, 0.12);
+            margin: 60px 0;
+        }
+
+        .highlight-content {
+            font-size: 1.375rem;
+            font-weight: 600;
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        /* Metrics Section */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+            margin-top: 40px;
+        }
+
+        .metric-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 32px;
+            text-align: center;
+            border: 1px solid var(--border);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+        }
+
+        .metric-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+
+        .metric-label {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        /* Footer */
+        .footer {
+            background: #F9FAFB;
+            padding: 40px 0;
+            text-align: center;
+            border-top: 1px solid var(--border);
+        }
+
+        .footer-text {
+            color: var(--text-muted);
+            font-size: 0.875rem;
+        }
+
+        /* Navigation Bar */
+        .top-nav {
+            background: white;
+            border-bottom: 1px solid var(--border);
+            padding: 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+        }
+
+        .nav-container {
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 0 48px;
+            display: flex;
+            align-items: center;
+            gap: 32px;
+        }
+
+        .nav-link {
+            padding: 20px 0;
+            text-decoration: none;
+            color: var(--text-muted);
+            font-size: 0.875rem;
+            font-weight: 500;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .nav-link:hover {
+            color: var(--primary);
+        }
+
+        .nav-link.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .overview-grid,
+            .nav-cards-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .metrics-grid {
+                grid-template-columns: 1fr !important;
+            }
+
+            .nav-container {
+                padding: 0 24px;
+                gap: 16px;
+            }
+
+            .nav-link {
+                font-size: 0.8125rem;
+                padding: 16px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="community-rating-presentation.html" class="nav-link active">Overview</a>
+            <a href="milestone-breakdown.html" class="nav-link">Milestone</a>
+            <a href="prototype-enhanced.html" class="nav-link">Prototype</a>
+            <a href="edge-cases.html" class="nav-link">Edge Cases</a>
+        </div>
+    </nav>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <p class="hero-eyebrow">Recipe Engagement Initiative • Q2 2026</p>
+            <h1>Community Rating</h1>
+            <p class="hero-subtitle">Displaying community ratings during meal selection will increase decision confidence and create a virtuous cycle that motivates users to contribute more ratings, building a self-reinforcing feedback loop.</p>
+        </div>
+    </section>
+
+    <!-- Part 1: Meal Selection Confidence -->
+    <section class="section">
+        <div class="container">
+            <span class="section-number">Part 1</span>
+            <h2 class="section-title">Confidence in Meal Selection</h2>
+            <p class="section-subtitle">Users have problems choosing meals confidently, especially with broader menus.</p>
+
+            <div class="overview-grid">
+                <div class="overview-card problem">
+                    <div class="card-label">Problem</div>
+                    <div class="card-content">
+                        Customers lack confidence because they don't trust the system to select for them, and they feel overwhelmed when trying to do it themselves at scale. The expanded menu amplifies both sides of this tension.
+                    </div>
+                </div>
+
+                <div class="overview-card hypothesis">
+                    <div class="card-label">Solution</div>
+                    <div class="card-content">
+                        Display community ratings as social proof to reduce decision friction and help users make confident choices faster, without relying solely on system preselection.
+                    </div>
+                </div>
+
+                <div class="overview-card goal">
+                    <div class="card-label">Hypothesis</div>
+                    <div class="card-content">
+                        Displaying community ratings during meal selection will increase decision confidence, especially as menus expand and choice complexity grows.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Data: Meal Selection -->
+    <section class="section" style="background: #F9FAFB; padding: 60px 0;">
+        <div class="container">
+            <span class="section-number">Data at a Glance</span>
+            <h2 class="section-title">Meal Selection Impact</h2>
+            <p class="section-subtitle">Use community ratings to support meal selection, especially for early users.</p>
+
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-value">+270%</div>
+                    <div class="metric-label">Conversion lift from displaying community ratings (Spiegel Research)</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">+43%</div>
+                    <div class="metric-label">Add-to-cart rate from top recipe widget with personal rating display</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">+19–22pp</div>
+                    <div class="metric-label">Box 2 meal selection effect on Settled Conversion — strongest causal retention lever</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">12/12</div>
+                    <div class="metric-label">Customers want ratings reflected in preselections and recommendations</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Part 2: Rating Engagement -->
+    <section class="section">
+        <div class="container">
+            <span class="section-number">Part 2</span>
+            <h2 class="section-title">A Bet for Rating Engagement</h2>
+            <p class="section-subtitle">Users stop rating because they don't see the value. Displaying community ratings closes the loop and creates a virtuous cycle.</p>
+
+            <div class="overview-grid">
+                <div class="overview-card problem">
+                    <div class="card-label">Problem</div>
+                    <div class="card-content">
+                        ~80% of customers never rate a single recipe. The dominant pattern is "early then stop" — users rate initially, then stop when they don't see value of rating.
+                    </div>
+                </div>
+
+                <div class="overview-card hypothesis">
+                    <div class="card-label">Hypothesis</div>
+                    <div class="card-content">
+                        Displaying community ratings demonstrates the direct value of providing feedback, creating a self-feeding flywheel that motivates users to contribute more ratings.
+                    </div>
+                </div>
+
+                <div class="overview-card goal">
+                    <div class="card-label">Solution</div>
+                    <div class="card-content">
+                        Make community ratings visible throughout meal selection so users see their contributions helping others make confident decisions, proving the collective value of rating.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Data: Rating Engagement -->
+    <section class="section" style="background: #F9FAFB; padding: 60px 0;">
+        <div class="container">
+            <span class="section-number">Data at a Glance</span>
+            <h2 class="section-title">Rating Engagement Impact</h2>
+            <p class="section-subtitle">Displaying community ratings creates a virtuous cycle that drives rating behavior and business value.</p>
+
+            <div class="metrics-grid" style="grid-template-columns: repeat(2, 1fr);">
+                <div class="metric-card">
+                    <div class="metric-value">+28%</div>
+                    <div class="metric-label">More user ratings when community ratings are visible (Netflix benchmark)</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">+56%</div>
+                    <div class="metric-label">YoY recipe response rate after making ratings more visible and reducing friction</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Metrics to Track -->
+    <section class="section">
+        <div class="container">
+            <span class="section-number">Measurement</span>
+            <h2 class="section-title">Metrics to Track</h2>
+            <p class="section-subtitle">How we'll measure success for both meal selection confidence and rating engagement.</p>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-top: 40px;">
+                <div>
+                    <h3 style="font-size: 1.25rem; font-weight: 600; margin-bottom: 20px; color: var(--primary);">Meal Selection Confidence</h3>
+                    <ul style="list-style: none; padding: 0;">
+                        <li style="padding: 12px 0; border-bottom: 1px solid var(--border); color: var(--text);">• Box 1 to Box 2 conversion rate</li>
+                        <li style="padding: 12px 0; border-bottom: 1px solid var(--border); color: var(--text);">• Settled Conversion rate</li>
+                        <li style="padding: 12px 0; border-bottom: 1px solid var(--border); color: var(--text);">• Time to complete meal selection</li>
+                        <li style="padding: 12px 0; border-bottom: 1px solid var(--border); color: var(--text);">• Decision confidence (qualitative)</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 style="font-size: 1.25rem; font-weight: 600; margin-bottom: 20px; color: var(--primary);">Rating Engagement</h3>
+                    <ul style="list-style: none; padding: 0;">
+                        <li style="padding: 12px 0; border-bottom: 1px solid var(--border); color: var(--text);">• % of customers who rate at least once</li>
+                        <li style="padding: 12px 0; border-bottom: 1px solid var(--border); color: var(--text);">• Recipe response rate</li>
+                        <li style="padding: 12px 0; border-bottom: 1px solid var(--border); color: var(--text);">• Ratings per customer per week</li>
+                        <li style="padding: 12px 0; border-bottom: 1px solid var(--border); color: var(--text);">• Reduction in "early then stop" pattern</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Navigation Section -->
+    <section class="section" style="background: #F9FAFB; padding: 60px 0;">
+        <div class="container">
+            <span class="section-number">Explore</span>
+            <h2 class="section-title">Dive Deeper</h2>
+
+            <div class="nav-cards-grid">
+                <a href="milestone-breakdown.html" class="nav-card">
+                    <div class="nav-card-icon">📅</div>
+                    <div class="nav-card-title">Milestone Breakdown</div>
+                    <div class="nav-card-desc">View the phased rollout strategy with detailed feature progression from M1 through Later milestones</div>
+                </a>
+
+                <a href="prototype-enhanced.html" class="nav-card">
+                    <div class="nav-card-icon">🎮</div>
+                    <div class="nav-card-title">Interactive Prototype</div>
+                    <div class="nav-card-desc">Explore the working prototype with milestone controls and feature toggles</div>
+                </a>
+
+                <a href="edge-cases.html" class="nav-card">
+                    <div class="nav-card-icon">🔍</div>
+                    <div class="nav-card-title">Edge Cases</div>
+                    <div class="nav-card-desc">Review handling of edge scenarios and exceptional user states</div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p class="footer-text">Community Rating · HelloFresh Consumer UX · Q2 2026</p>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Prototype - Community Rating</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #024426;
+            --primary-light: #067a46;
+            --accent: #c8f542;
+            --bg: #FAFBFC;
+            --card-bg: #FFFFFF;
+            --text: #1A1A2E;
+            --text-muted: #6B7280;
+            --border: #E5E7EB;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #e8e8e8;
+            color: var(--text);
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+            margin: 0;
+        }
+
+        /* Control Panel */
+        .control-panel {
+            width: 380px;
+            background: white;
+            display: flex;
+            flex-direction: column;
+            box-shadow: -2px 0 8px rgba(0, 0, 0, 0.1);
+            z-index: 100;
+        }
+
+        .control-header {
+            background: linear-gradient(135deg, #024426 0%, #067a46 100%);
+            padding: 24px;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .control-header-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .control-header-desc {
+            font-size: 0.8125rem;
+            color: rgba(255,255,255,0.85);
+            line-height: 1.4;
+        }
+
+        .control-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 24px;
+        }
+
+        /* Milestone Selector */
+        .milestone-section {
+            margin-bottom: 24px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .section-label {
+            font-size: 0.6875rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            margin-bottom: 14px;
+        }
+
+        .milestone-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        .milestone-btn {
+            padding: 12px 14px;
+            background: white;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.8125rem;
+            font-weight: 500;
+            color: var(--text);
+            transition: all 0.15s;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 6px;
+        }
+
+        .milestone-btn:hover {
+            border-color: var(--primary);
+            background: #f9fafb;
+        }
+
+        .milestone-btn.active {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+            font-weight: 600;
+        }
+
+        .milestone-refresh {
+            font-size: 0.9375rem;
+            opacity: 0.4;
+            transition: opacity 0.15s;
+        }
+
+        .milestone-btn:hover .milestone-refresh {
+            opacity: 0.7;
+        }
+
+        .milestone-btn.active .milestone-refresh {
+            opacity: 0.8;
+        }
+
+        /* Context Card */
+        .context-section {
+            margin-bottom: 24px;
+        }
+
+        .context-card {
+            background: #F9FAFB;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 16px;
+        }
+
+        .context-title {
+            font-size: 0.8125rem;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 6px;
+        }
+
+        .context-text {
+            font-size: 0.8125rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        /* Feature Groups */
+        .feature-group {
+            margin-bottom: 24px;
+        }
+
+        .feature-group-title {
+            font-size: 0.6875rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            letter-spacing: 1.2px;
+            margin-bottom: 12px;
+        }
+
+        /* Feature Toggles */
+        .feature-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .feature-toggle:last-child {
+            border-bottom: none;
+        }
+
+        .feature-toggle.child-feature {
+            padding-left: 16px;
+            background: #fafafa;
+            margin-left: -24px;
+            margin-right: -24px;
+            padding-left: 40px;
+            padding-right: 24px;
+        }
+
+        .feature-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .feature-label {
+            font-size: 0.8125rem;
+            color: var(--text);
+            font-weight: 500;
+            line-height: 1.3;
+        }
+
+        .feature-description {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-top: 3px;
+            line-height: 1.4;
+        }
+
+        .feature-toggle.child-feature .feature-label {
+            font-size: 0.78125rem;
+        }
+
+        .feature-toggle.child-feature .feature-description {
+            font-size: 0.6875rem;
+        }
+
+        /* Toggle Switch */
+        .toggle-switch {
+            width: 42px;
+            height: 22px;
+            background: #E5E7EB;
+            border-radius: 11px;
+            position: relative;
+            cursor: pointer;
+            transition: background 0.2s;
+            flex-shrink: 0;
+            margin-left: 12px;
+        }
+
+        .toggle-switch.active {
+            background: var(--primary);
+        }
+
+        .toggle-switch::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 18px;
+            height: 18px;
+            background: white;
+            border-radius: 50%;
+            transition: transform 0.2s;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+        }
+
+        .toggle-switch.active::after {
+            transform: translateX(20px);
+        }
+
+        .toggle-switch.disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        /* Prototype Frame */
+        .prototype-frame {
+            flex: 1;
+            background: #e8e8e8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .prototype-frame iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* Scrollbar styling */
+        .control-content::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .control-content::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        .control-content::-webkit-scrollbar-thumb {
+            background: #c1c1c1;
+            border-radius: 3px;
+        }
+
+        .control-content::-webkit-scrollbar-thumb:hover {
+            background: #a8a8a8;
+        }
+
+        /* Navigation Bar */
+        .top-nav {
+            background: white;
+            border-bottom: 1px solid var(--border);
+            padding: 0;
+            position: sticky;
+            top: 0;
+            z-index: 200;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+        }
+
+        .nav-container {
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 0 48px;
+            display: flex;
+            align-items: center;
+            gap: 32px;
+        }
+
+        .nav-link {
+            padding: 20px 0;
+            text-decoration: none;
+            color: var(--text-muted);
+            font-size: 0.875rem;
+            font-weight: 500;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .nav-link:hover {
+            color: var(--primary);
+        }
+
+        .nav-link.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+
+        /* Main content wrapper */
+        .main-content {
+            display: flex;
+            flex-direction: row-reverse;
+            flex: 1;
+            height: calc(100vh - 61px);
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="community-rating-presentation.html" class="nav-link">Overview</a>
+            <a href="milestone-breakdown.html" class="nav-link">Milestone</a>
+            <a href="prototype-enhanced.html" class="nav-link active">Prototype</a>
+            <a href="edge-cases.html" class="nav-link">Edge Cases</a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-content">
+    <!-- Control Panel -->
+    <div class="control-panel">
+        <div class="control-header">
+            <div class="control-header-title">Feature Controls</div>
+            <div class="control-header-desc">Select milestone presets or toggle individual features</div>
+        </div>
+
+        <div class="control-content">
+            <!-- Milestone Selector -->
+            <div class="milestone-section">
+                <div class="section-label">Milestone View</div>
+                <div class="milestone-grid">
+                    <button class="milestone-btn" data-milestone="m1">
+                        <span>Milestone 1</span>
+                        <span class="milestone-refresh">↻</span>
+                    </button>
+                    <button class="milestone-btn" data-milestone="m2">
+                        <span>Milestone 2</span>
+                        <span class="milestone-refresh">↻</span>
+                    </button>
+                    <button class="milestone-btn" data-milestone="m3">
+                        <span>Milestone 3</span>
+                        <span class="milestone-refresh">↻</span>
+                    </button>
+                    <button class="milestone-btn active" data-milestone="later">
+                        <span>Full scope</span>
+                        <span class="milestone-refresh">↻</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Context Info -->
+            <div class="context-section">
+                <div class="context-card">
+                    <div class="context-title" id="contextTitle">Milestone 1</div>
+                    <div class="context-text" id="contextDesc">Core rating display with basic community reviews</div>
+                </div>
+            </div>
+
+            <!-- PDP & Overall Rating Features -->
+            <div class="feature-group">
+                <div class="feature-group-title">PDP & Overall Rating</div>
+
+                <div class="feature-toggle">
+                    <div class="feature-info">
+                        <div class="feature-label">PDP Top Rating</div>
+                        <div class="feature-description">Rating display at top of product detail page</div>
+                    </div>
+                    <div class="toggle-switch active" data-feature="pdpTopRating"></div>
+                </div>
+
+                <div class="feature-toggle">
+                    <div class="feature-info">
+                        <div class="feature-label">Overall Rating</div>
+                        <div class="feature-description">Star rating and average score</div>
+                    </div>
+                    <div class="toggle-switch active" data-feature="overallRating"></div>
+                </div>
+
+                <div class="feature-toggle child-feature">
+                    <div class="feature-info">
+                        <div class="feature-label">Rating count</div>
+                        <div class="feature-description">Number of ratings</div>
+                    </div>
+                    <div class="toggle-switch active" data-feature="ratingCount"></div>
+                </div>
+
+                <div class="feature-toggle child-feature">
+                    <div class="feature-info">
+                        <div class="feature-label">Review count</div>
+                        <div class="feature-description">Number of written reviews</div>
+                    </div>
+                    <div class="toggle-switch active" data-feature="reviewCount"></div>
+                </div>
+
+                <div class="feature-toggle">
+                    <div class="feature-info">
+                        <div class="feature-label">Rating Distribution</div>
+                        <div class="feature-description">Bar chart showing 5→1 star breakdown</div>
+                    </div>
+                    <div class="toggle-switch" data-feature="ratingDistribution"></div>
+                </div>
+
+                <div class="feature-toggle">
+                    <div class="feature-info">
+                        <div class="feature-label">Alternative Overall Rating</div>
+                        <div class="feature-description">Alternative rating display style</div>
+                    </div>
+                    <div class="toggle-switch" data-feature="alternativeOverallRating"></div>
+                </div>
+            </div>
+
+            <!-- Interaction Features -->
+            <div class="feature-group">
+                <div class="feature-group-title">Interaction</div>
+
+                <div class="feature-toggle">
+                    <div class="feature-info">
+                        <div class="feature-label">Add Your Rating</div>
+                        <div class="feature-description">Button to submit new rating</div>
+                    </div>
+                    <div class="toggle-switch active" data-feature="addYourRating"></div>
+                </div>
+
+                <div class="feature-toggle">
+                    <div class="feature-info">
+                        <div class="feature-label">New Rating Drawer</div>
+                        <div class="feature-description">Theme-based rating submission flow</div>
+                    </div>
+                    <div class="toggle-switch" data-feature="newRatingDrawer"></div>
+                </div>
+
+                <div class="feature-toggle">
+                    <div class="feature-info">
+                        <div class="feature-label">Filter Reviews</div>
+                        <div class="feature-description">Filter by star rating</div>
+                    </div>
+                    <div class="toggle-switch" data-feature="filterFeature"></div>
+                </div>
+
+                <div class="feature-toggle">
+                    <div class="feature-info">
+                        <div class="feature-label">AI Summary (CTA)</div>
+                        <div class="feature-description">Button to view AI-generated summary</div>
+                    </div>
+                    <div class="toggle-switch" data-feature="aiSummary"></div>
+                </div>
+
+                <div class="feature-toggle">
+                    <div class="feature-info">
+                        <div class="feature-label">AI Summary Section</div>
+                        <div class="feature-description">Expanded AI summary content</div>
+                    </div>
+                    <div class="toggle-switch" data-feature="aiSummarySection"></div>
+                </div>
+            </div>
+
+            <!-- Reviews Features -->
+            <div class="feature-group">
+                <div class="feature-group-title">Reviews</div>
+
+                <div class="feature-toggle">
+                    <div class="feature-info">
+                        <div class="feature-label">Review Title</div>
+                        <div class="feature-description">Section heading for reviews</div>
+                    </div>
+                    <div class="toggle-switch active" data-feature="reviewTitle"></div>
+                </div>
+
+                <div class="feature-toggle">
+                    <div class="feature-info">
+                        <div class="feature-label">Theme Breakdown</div>
+                        <div class="feature-description">Summary of common feedback themes</div>
+                    </div>
+                    <div class="toggle-switch" data-feature="themeBreakdown"></div>
+                </div>
+
+                <div class="feature-toggle">
+                    <div class="feature-info">
+                        <div class="feature-label">User's Own Review</div>
+                        <div class="feature-description">Show user's submitted review</div>
+                    </div>
+                    <div class="toggle-switch active" data-feature="userReview"></div>
+                </div>
+
+                <div class="feature-toggle child-feature">
+                    <div class="feature-info">
+                        <div class="feature-label">Comment themes for user</div>
+                        <div class="feature-description">Show like/dislike pills in user's own review</div>
+                    </div>
+                    <div class="toggle-switch" data-feature="userCommentThemes"></div>
+                </div>
+
+                <div class="feature-toggle">
+                    <div class="feature-info">
+                        <div class="feature-label">Community Reviews</div>
+                        <div class="feature-description">Show reviews from other users</div>
+                    </div>
+                    <div class="toggle-switch active" data-feature="communityReviews"></div>
+                </div>
+
+                <div class="feature-toggle child-feature">
+                    <div class="feature-info">
+                        <div class="feature-label">Comment themes for community</div>
+                        <div class="feature-description">Show like/dislike pills inside community review cards</div>
+                    </div>
+                    <div class="toggle-switch" data-feature="communityCommentThemes"></div>
+                </div>
+
+                <div class="feature-toggle">
+                    <div class="feature-info">
+                        <div class="feature-label">Helpful and report</div>
+                        <div class="feature-description">Show helpful button and report flag on reviews</div>
+                    </div>
+                    <div class="toggle-switch" data-feature="helpfulButtons"></div>
+                </div>
+
+                <div class="feature-toggle">
+                    <div class="feature-info">
+                        <div class="feature-label">Photo Reviews</div>
+                        <div class="feature-description">Display user-submitted photos</div>
+                    </div>
+                    <div class="toggle-switch" data-feature="photoReviews"></div>
+                </div>
+
+                <div class="feature-toggle">
+                    <div class="feature-info">
+                        <div class="feature-label">Customisation label</div>
+                        <div class="feature-description">Show "customised with [protein]" on some review cards</div>
+                    </div>
+                    <div class="toggle-switch" data-feature="customisationLabel"></div>
+                </div>
+            </div>
+
+            <!-- Menu Features -->
+            <div class="feature-group">
+                <div class="feature-group-title">Menu</div>
+
+                <div class="feature-toggle">
+                    <div class="feature-info">
+                        <div class="feature-label">Menu Card Rating</div>
+                        <div class="feature-description">Star rating on menu recipe cards</div>
+                    </div>
+                    <div class="toggle-switch" data-feature="menuCardRating"></div>
+                </div>
+
+                <div class="feature-toggle">
+                    <div class="feature-info">
+                        <div class="feature-label">Menu Filter Rating</div>
+                        <div class="feature-description">Filter recipes by rating in menu</div>
+                    </div>
+                    <div class="toggle-switch" data-feature="menuFilterRating"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Prototype Frame -->
+    <div class="prototype-frame">
+        <iframe id="prototypeFrame" src="../q2-prototype-working version.html#menu"></iframe>
+    </div>
+
+    <script>
+        // Milestone presets
+        const milestonePresets = {
+            m1: {
+                name: 'Milestone 1',
+                description: 'Core rating display with basic community reviews',
+                features: {
+                    pdpTopRating: true,
+                    overallRating: true,
+                    ratingCount: true,
+                    reviewCount: true,
+                    ratingDistribution: false,
+                    alternativeOverallRating: false,
+                    addYourRating: true,
+                    newRatingDrawer: false,
+                    filterFeature: false,
+                    aiSummary: false,
+                    aiSummarySection: false,
+                    reviewTitle: true,
+                    themeBreakdown: false,
+                    userReview: true,
+                    userCommentThemes: false,
+                    communityReviews: true,
+                    communityCommentThemes: false,
+                    helpfulButtons: false,
+                    photoReviews: false,
+                    customisationLabel: false,
+                    menuCardRating: false,
+                    menuFilterRating: false
+                }
+            },
+            m2: {
+                name: 'Milestone 2',
+                description: 'Adds rating distribution, AI summary, and comment themes',
+                features: {
+                    pdpTopRating: true,
+                    overallRating: true,
+                    ratingCount: true,
+                    reviewCount: true,
+                    ratingDistribution: true,
+                    alternativeOverallRating: false,
+                    addYourRating: true,
+                    newRatingDrawer: false,
+                    filterFeature: false,
+                    aiSummary: true,
+                    aiSummarySection: false,
+                    reviewTitle: true,
+                    themeBreakdown: false,
+                    userReview: true,
+                    userCommentThemes: false,
+                    communityReviews: true,
+                    communityCommentThemes: true,
+                    helpfulButtons: false,
+                    photoReviews: false,
+                    customisationLabel: false,
+                    menuCardRating: true,
+                    menuFilterRating: false
+                }
+            },
+            m3: {
+                name: 'Milestone 3',
+                description: 'Adds filters, photo reviews, theme breakdown, and new rating drawer',
+                features: {
+                    pdpTopRating: true,
+                    overallRating: true,
+                    ratingCount: true,
+                    reviewCount: true,
+                    ratingDistribution: true,
+                    alternativeOverallRating: false,
+                    addYourRating: true,
+                    newRatingDrawer: true,
+                    filterFeature: true,
+                    aiSummary: true,
+                    aiSummarySection: false,
+                    reviewTitle: true,
+                    themeBreakdown: true,
+                    userReview: true,
+                    userCommentThemes: true,
+                    communityReviews: true,
+                    communityCommentThemes: true,
+                    helpfulButtons: false,
+                    photoReviews: true,
+                    customisationLabel: false,
+                    menuCardRating: true,
+                    menuFilterRating: true
+                }
+            },
+            later: {
+                name: 'Full scope',
+                description: 'Full feature set with all rating and review capabilities',
+                features: {
+                    pdpTopRating: true,
+                    overallRating: true,
+                    ratingCount: true,
+                    reviewCount: true,
+                    ratingDistribution: true,
+                    alternativeOverallRating: false,
+                    addYourRating: true,
+                    newRatingDrawer: true,
+                    filterFeature: true,
+                    aiSummary: true,
+                    aiSummarySection: false,
+                    reviewTitle: true,
+                    themeBreakdown: true,
+                    userReview: true,
+                    userCommentThemes: true,
+                    communityReviews: true,
+                    communityCommentThemes: true,
+                    helpfulButtons: true,
+                    photoReviews: true,
+                    customisationLabel: true,
+                    menuCardRating: true,
+                    menuFilterRating: true
+                }
+            }
+        };
+
+        let currentMilestone = 'later';
+        const iframe = document.getElementById('prototypeFrame');
+
+        // Initialize
+        applyMilestone('later');
+
+        // Milestone button handlers
+        document.querySelectorAll('.milestone-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const milestone = btn.dataset.milestone;
+                currentMilestone = milestone;
+                updateActiveMilestone();
+                applyMilestone(milestone);
+            });
+        });
+
+        // Toggle handlers
+        document.querySelectorAll('.toggle-switch').forEach(toggle => {
+            toggle.addEventListener('click', () => {
+                if (toggle.classList.contains('disabled')) return;
+
+                toggle.classList.toggle('active');
+                const feature = toggle.dataset.feature;
+                const state = toggle.classList.contains('active');
+
+                // Handle parent-child relationships
+                if (feature === 'overallRating') {
+                    const children = ['ratingCount', 'reviewCount'];
+                    children.forEach(child => {
+                        const childToggle = document.querySelector(`[data-feature="${child}"]`);
+                        if (childToggle) {
+                            if (state) {
+                                childToggle.classList.remove('disabled');
+                            } else {
+                                childToggle.classList.add('disabled');
+                                childToggle.classList.remove('active');
+                            }
+                        }
+                    });
+                }
+
+                if (feature === 'userReview') {
+                    const childToggle = document.querySelector('[data-feature="userCommentThemes"]');
+                    if (childToggle) {
+                        if (state) {
+                            childToggle.classList.remove('disabled');
+                        } else {
+                            childToggle.classList.add('disabled');
+                            childToggle.classList.remove('active');
+                        }
+                    }
+                }
+
+                if (feature === 'communityReviews') {
+                    const childToggle = document.querySelector('[data-feature="communityCommentThemes"]');
+                    if (childToggle) {
+                        if (state) {
+                            childToggle.classList.remove('disabled');
+                        } else {
+                            childToggle.classList.add('disabled');
+                            childToggle.classList.remove('active');
+                        }
+                    }
+                }
+
+                // Mutual exclusivity for AI Summary
+                if (feature === 'aiSummary' && state) {
+                    const aiSectionToggle = document.querySelector('[data-feature="aiSummarySection"]');
+                    if (aiSectionToggle) {
+                        aiSectionToggle.classList.remove('active');
+                    }
+                } else if (feature === 'aiSummarySection' && state) {
+                    const aiSummaryToggle = document.querySelector('[data-feature="aiSummary"]');
+                    if (aiSummaryToggle) {
+                        aiSummaryToggle.classList.remove('active');
+                    }
+                }
+
+                // Send to iframe
+                sendFeatureUpdate();
+            });
+        });
+
+        function applyMilestone(milestone) {
+            const preset = milestonePresets[milestone];
+            if (!preset) return;
+
+            updateContext(preset);
+
+            // Update all toggles
+            Object.keys(preset.features).forEach(feature => {
+                const toggle = document.querySelector(`[data-feature="${feature}"]`);
+                if (toggle) {
+                    if (preset.features[feature]) {
+                        toggle.classList.add('active');
+                    } else {
+                        toggle.classList.remove('active');
+                    }
+                }
+            });
+
+            // Handle disabled states for child features
+            const overallRatingOn = preset.features.overallRating;
+            ['ratingCount', 'reviewCount'].forEach(child => {
+                const toggle = document.querySelector(`[data-feature="${child}"]`);
+                if (toggle) {
+                    if (overallRatingOn) {
+                        toggle.classList.remove('disabled');
+                    } else {
+                        toggle.classList.add('disabled');
+                    }
+                }
+            });
+
+            const userReviewOn = preset.features.userReview;
+            const userThemeToggle = document.querySelector('[data-feature="userCommentThemes"]');
+            if (userThemeToggle) {
+                if (userReviewOn) {
+                    userThemeToggle.classList.remove('disabled');
+                } else {
+                    userThemeToggle.classList.add('disabled');
+                }
+            }
+
+            const communityReviewsOn = preset.features.communityReviews;
+            const communityThemeToggle = document.querySelector('[data-feature="communityCommentThemes"]');
+            if (communityThemeToggle) {
+                if (communityReviewsOn) {
+                    communityThemeToggle.classList.remove('disabled');
+                } else {
+                    communityThemeToggle.classList.add('disabled');
+                }
+            }
+
+            // Send to iframe
+            iframe.contentWindow.postMessage({
+                type: 'initFeatures',
+                features: preset.features
+            }, '*');
+        }
+
+        function updateActiveMilestone() {
+            document.querySelectorAll('.milestone-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.dataset.milestone === currentMilestone) {
+                    btn.classList.add('active');
+                }
+            });
+        }
+
+        function updateContext(preset) {
+            document.getElementById('contextTitle').textContent = preset.name;
+            document.getElementById('contextDesc').textContent = preset.description;
+        }
+
+        function sendFeatureUpdate() {
+            const features = {};
+            document.querySelectorAll('.toggle-switch').forEach(toggle => {
+                const feature = toggle.dataset.feature;
+                features[feature] = toggle.classList.contains('active');
+            });
+
+            iframe.contentWindow.postMessage({
+                type: 'featureToggle',
+                allFeatures: features
+            }, '*');
+        }
+    </script>
+    </div> <!-- End main-content -->
+</body>
+</html>

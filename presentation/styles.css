@@ -332,11 +332,11 @@ html, body {
 }
 
 .solution-sidebar {
-    width: 280px;
-    min-width: 280px;
+    width: 480px;
+    min-width: 480px;
     background: #f7f6f3;
     border-left: 1px solid #e8e7e4;
-    padding: 152px 24px 80px 24px;
+    padding: 152px 32px 80px 32px;
 }
 
 .sidebar-item {
@@ -349,7 +349,7 @@ html, body {
 
 .sidebar-label {
     font-size: 11px;
-    font-weight: 500;
+    font-weight: 600;
     color: #91918e;
     text-transform: uppercase;
     letter-spacing: 0.5px;
@@ -357,7 +357,7 @@ html, body {
 }
 
 .sidebar-value {
-    font-size: 14px;
+    font-size: 13px;
     line-height: 1.6;
     color: #37352f;
 }
@@ -441,14 +441,21 @@ html, body {
 }
 
 .page.prototype-page .solution-sidebar {
-    padding-top: 80px;
+    padding-top: 48px;
+    padding-bottom: 48px;
+    padding-left: 32px;
+    padding-right: 32px;
     height: 100%;
     overflow-y: auto;
     flex-shrink: 0;
 }
 
 .page.prototype-page .sidebar-item {
-    margin-bottom: 32px;
+    margin-bottom: 0;
+}
+
+.page.prototype-page .context-content {
+    gap: 24px 32px;
 }
 
 @media (max-width: 1024px) {
@@ -471,6 +478,11 @@ html, body {
         border-top: 1px solid #e8e7e4;
         padding: 32px 48px;
     }
+
+    .context-content {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
 }
 
 /* Context Section */
@@ -478,14 +490,22 @@ html, body {
 }
 
 .context-content {
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 28px 32px;
 }
 
 .context-block {
-    padding-bottom: 20px;
-    border-bottom: 1px solid #e8e7e4;
+    padding: 0;
+    border-bottom: none;
+    background: white;
+    padding: 16px;
+    border-radius: 8px;
+    border: 1px solid #e8e7e4;
+}
+
+.context-block.full-width {
+    grid-column: 1 / -1;
 }
 
 .context-block:last-child {
@@ -498,6 +518,8 @@ html, body {
     font-weight: 600;
     color: #37352f;
     margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
 }
 
 .context-block p {
@@ -514,22 +536,29 @@ html, body {
 .context-block ul {
     margin: 8px 0 0 0;
     padding-left: 18px;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 6px;
+}
+
+.context-block ul.two-column {
+    grid-template-columns: 1fr 1fr;
+    gap: 6px 12px;
 }
 
 .context-block li {
-    font-size: 13px;
+    font-size: 12px;
     line-height: 1.6;
     color: #37352f;
-    margin-bottom: 6px;
-}
-
-.context-block li:last-child {
     margin-bottom: 0;
 }
 
 .context-block strong {
     font-weight: 600;
     color: #37352f;
+    font-size: 12px;
+    display: block;
+    margin: 10px 0 6px 0;
 }
 
 /* Questions Dropdown */
@@ -539,9 +568,10 @@ html, body {
     justify-content: space-between;
     cursor: pointer;
     user-select: none;
-    padding: 6px 0;
+    padding: 8px 0;
     border-radius: 4px;
     transition: background 0.2s ease;
+    margin-top: 4px;
 }
 
 .questions-header:hover {
@@ -550,46 +580,40 @@ html, body {
 
 .questions-header h4 {
     margin-bottom: 0;
+    font-size: 13px;
 }
 
 .toggle-icon {
-    font-size: 12px;
+    font-size: 11px;
     color: #91918e;
-    transition: transform 0.3s ease;
     margin-left: 8px;
 }
 
-.toggle-icon.open {
-    transform: rotate(180deg);
-}
-
 .questions-content {
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.4s ease;
-}
-
-.questions-content.open {
-    max-height: 1500px;
+    margin-top: 12px;
 }
 
 .question-item {
-    margin-top: 12px;
-    padding: 12px;
+    margin-bottom: 12px;
+    padding: 12px 14px;
     background: #fafaf9;
     border-radius: 6px;
 }
 
+.question-item:last-child {
+    margin-bottom: 0;
+}
+
 .question-item strong {
     display: block;
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 600;
     color: #37352f;
     margin-bottom: 6px;
 }
 
 .question-item p {
-    font-size: 13px;
+    font-size: 12px;
     line-height: 1.6;
     color: #656565;
     margin: 0;

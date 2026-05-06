@@ -18,8 +18,54 @@
             font-family: 'Raleway', sans-serif;
             background-color: #f5f5f5;
             display: flex;
-            flex-direction: row-reverse;
+            flex-direction: column;
             height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Navigation Bar */
+        .top-nav {
+            background: white;
+            border-bottom: 1px solid #E5E7EB;
+            padding: 0;
+            z-index: 200;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+            flex-shrink: 0;
+        }
+
+        .nav-container {
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 0 48px;
+            display: flex;
+            align-items: center;
+            gap: 32px;
+        }
+
+        .nav-link {
+            padding: 20px 0;
+            text-decoration: none;
+            color: #6B7280;
+            font-size: 0.875rem;
+            font-weight: 500;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .nav-link:hover {
+            color: #024426;
+        }
+
+        .nav-link.active {
+            color: #024426;
+            border-bottom-color: #024426;
+        }
+
+        .main-wrapper {
+            display: flex;
+            flex-direction: row-reverse;
+            flex: 1;
             overflow: hidden;
         }
 
@@ -71,6 +117,19 @@
             border-bottom: none;
         }
 
+        .feature-toggle.child-feature {
+            padding-left: 20px;
+            background: #fafafa;
+        }
+
+        .feature-toggle.child-feature .feature-label {
+            font-size: 13px;
+        }
+
+        .feature-toggle.child-feature .feature-description {
+            font-size: 11px;
+        }
+
         .feature-info {
             flex: 1;
         }
@@ -118,6 +177,79 @@
             left: 22px;
         }
 
+        .toggle-switch.locked {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .milestone-selector {
+            margin-bottom: 24px;
+            padding-bottom: 24px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .milestone-selector-title {
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: #656565;
+            margin-bottom: 12px;
+            letter-spacing: 0.5px;
+        }
+
+        .milestone-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .milestone-btn {
+            padding: 10px 16px;
+            background: #f5f5f5;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            cursor: pointer;
+            font-family: 'Raleway', sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            color: #242424;
+            transition: all 0.2s;
+            text-align: left;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .milestone-btn:hover {
+            background: #ebebeb;
+            border-color: #d0d0d0;
+        }
+
+        .milestone-btn.active {
+            background: #067a46;
+            color: white;
+            border-color: #067a46;
+        }
+
+        .milestone-refresh-icon {
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+            opacity: 0.7;
+            transition: opacity 0.2s, transform 0.2s;
+            flex-shrink: 0;
+            margin-left: 8px;
+        }
+
+        .milestone-refresh-icon:hover {
+            opacity: 1;
+            transform: rotate(90deg);
+        }
+
+        .milestone-btn.active .milestone-refresh-icon {
+            filter: brightness(0) invert(1);
+        }
+
         .prototype-frame {
             flex: 1;
             background: #e8e8e8;
@@ -134,12 +266,88 @@
     </style>
 </head>
 <body>
-    <div class="control-panel">
-        <h2>Feature Controls</h2>
-        <p>Toggle features to see how they affect the milestone 1 experience</p>
+    <!-- Navigation Bar -->
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="community-rating-presentation.html" class="nav-link">Overview</a>
+            <a href="milestone-breakdown.html" class="nav-link">Milestone</a>
+            <a href="prototype-enhanced.html" class="nav-link active">Prototype</a>
+            <a href="edge-cases.html" class="nav-link">Edge Cases</a>
+        </div>
+    </nav>
 
+    <div class="main-wrapper">
+    <div class="control-panel">
+        <div class="milestone-selector">
+            <div class="milestone-selector-title">MILESTONE VIEW</div>
+            <div class="milestone-buttons">
+                <button class="milestone-btn" data-milestone="m1">
+                    <span>Milestone 1</span>
+                    <svg class="milestone-refresh-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M14 8C14 11.3137 11.3137 14 8 14C4.68629 14 2 11.3137 2 8C2 4.68629 4.68629 2 8 2C9.84869 2 11.5154 2.82866 12.6318 4.13177M12.6318 4.13177V2M12.6318 4.13177H10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+                <button class="milestone-btn" data-milestone="m2">
+                    <span>Milestone 2</span>
+                    <svg class="milestone-refresh-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M14 8C14 11.3137 11.3137 14 8 14C4.68629 14 2 11.3137 2 8C2 4.68629 4.68629 2 8 2C9.84869 2 11.5154 2.82866 12.6318 4.13177M12.6318 4.13177V2M12.6318 4.13177H10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+                <button class="milestone-btn" data-milestone="m3">
+                    <span>Milestone 3</span>
+                    <svg class="milestone-refresh-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M14 8C14 11.3137 11.3137 14 8 14C4.68629 14 2 11.3137 2 8C2 4.68629 4.68629 2 8 2C9.84869 2 11.5154 2.82866 12.6318 4.13177M12.6318 4.13177V2M12.6318 4.13177H10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+                <button class="milestone-btn" data-milestone="full">
+                    <span>Full Scope</span>
+                    <svg class="milestone-refresh-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M14 8C14 11.3137 11.3137 14 8 14C4.68629 14 2 11.3137 2 8C2 4.68629 4.68629 2 8 2C9.84869 2 11.5154 2.82866 12.6318 4.13177M12.6318 4.13177V2M12.6318 4.13177H10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+                <button class="milestone-btn active" data-milestone="adjust">
+                    <span>Adjust Features</span>
+                </button>
+            </div>
+        </div>
+        <h2 id="controlPanelTitle">Feature Controls</h2>
+        <p id="controlPanelDescription">Toggle features to customize the experience</p>
+
+        <!-- Group 1: Menu Browser -->
         <div class="feature-group">
-            <div class="feature-group-title">Recipe reviews section</div>
+            <div class="feature-group-title">Menu Browser</div>
+            <div class="feature-toggle">
+                <div class="feature-info">
+                    <div class="feature-label">Rating shown on product card</div>
+                    <div class="feature-description">Show rating and review count on recipe cards</div>
+                </div>
+                <div class="toggle-switch active" data-feature="menuCardRating"></div>
+            </div>
+            <div class="feature-toggle">
+                <div class="feature-info">
+                    <div class="feature-label">Filter with rating</div>
+                    <div class="feature-description">Enable filter icon for rating-based filtering</div>
+                </div>
+                <div class="toggle-switch active" data-feature="menuFilterRating"></div>
+            </div>
+        </div>
+
+        <!-- Group 2: Product Detail Page -->
+        <div class="feature-group">
+            <div class="feature-group-title">Product Detail Page</div>
+            <div class="feature-toggle">
+                <div class="feature-info">
+                    <div class="feature-label">Rating shown on top of PDP</div>
+                    <div class="feature-description">Show rating below header photo on detail page</div>
+                </div>
+                <div class="toggle-switch active" data-feature="pdpTopRating"></div>
+            </div>
+        </div>
+
+        <!-- Group 3: Recipe Review Section -->
+        <div class="feature-group">
+            <div class="feature-group-title">Recipe Review Section</div>
+            <h3 style="font-size: 11px; font-weight: 600; text-transform: uppercase; color: #656565; margin: 12px 0 8px 0; letter-spacing: 0.5px;">Rating Overview</h3>
             <div class="feature-toggle">
                 <div class="feature-info">
                     <div class="feature-label">Overall Rating Section</div>
@@ -147,14 +355,14 @@
                 </div>
                 <div class="toggle-switch active" data-feature="overallRating"></div>
             </div>
-            <div class="feature-toggle">
+            <div class="feature-toggle child-feature">
                 <div class="feature-info">
                     <div class="feature-label">Rating Count</div>
                     <div class="feature-description">Show rating count (e.g. 23k ratings)</div>
                 </div>
                 <div class="toggle-switch active" data-feature="ratingCount"></div>
             </div>
-            <div class="feature-toggle">
+            <div class="feature-toggle child-feature">
                 <div class="feature-info">
                     <div class="feature-label">Review Count</div>
                     <div class="feature-description">Show review count (e.g. 402 reviews)</div>
@@ -167,6 +375,29 @@
                     <div class="feature-description">Show rating distribution bar graph</div>
                 </div>
                 <div class="toggle-switch active" data-feature="ratingDistribution"></div>
+            </div>
+            <div class="feature-toggle">
+                <div class="feature-info">
+                    <div class="feature-label">Alternative overall rating</div>
+                    <div class="feature-description">Show alternative rating design at top (replaces main version)</div>
+                </div>
+                <div class="toggle-switch" data-feature="alternativeOverallRating"></div>
+            </div>
+
+            <h3 style="font-size: 11px; font-weight: 600; text-transform: uppercase; color: #656565; margin: 20px 0 8px 0; letter-spacing: 0.5px;">Interaction Features</h3>
+            <div class="feature-toggle">
+                <div class="feature-info">
+                    <div class="feature-label">Add your rating</div>
+                    <div class="feature-description">Show rating prompt banner for unrated recipes</div>
+                </div>
+                <div class="toggle-switch active" data-feature="addYourRating"></div>
+            </div>
+            <div class="feature-toggle">
+                <div class="feature-info">
+                    <div class="feature-label">New rating drawer</div>
+                    <div class="feature-description">Use new drawer with thumbs up/down (OFF = old version with pills)</div>
+                </div>
+                <div class="toggle-switch active" data-feature="newRatingDrawer"></div>
             </div>
             <div class="feature-toggle">
                 <div class="feature-info">
@@ -184,15 +415,24 @@
             </div>
             <div class="feature-toggle">
                 <div class="feature-info">
-                    <div class="feature-label">Add your rating</div>
-                    <div class="feature-description">Show rating prompt banner for unrated recipes</div>
+                    <div class="feature-label">AI summary section</div>
+                    <div class="feature-description">Show full AI summary under overall rating (replaces button)</div>
                 </div>
-                <div class="toggle-switch active" data-feature="addYourRating"></div>
+                <div class="toggle-switch" data-feature="aiSummarySection"></div>
+            </div>
+
+            <h3 style="font-size: 11px; font-weight: 600; text-transform: uppercase; color: #656565; margin: 20px 0 8px 0; letter-spacing: 0.5px;">Review Display</h3>
+            <div class="feature-toggle">
+                <div class="feature-info">
+                    <div class="feature-label">Review title</div>
+                    <div class="feature-description">Show "Highlighted reviews" heading with info tooltip</div>
+                </div>
+                <div class="toggle-switch active" data-feature="reviewTitle"></div>
             </div>
             <div class="feature-toggle">
                 <div class="feature-info">
                     <div class="feature-label">Theme Breakdown</div>
-                    <div class="feature-description">Show positive/negative theme pills</div>
+                    <div class="feature-description">Show positive/negative theme pills above reviews</div>
                 </div>
                 <div class="toggle-switch active" data-feature="themeBreakdown"></div>
             </div>
@@ -203,12 +443,26 @@
                 </div>
                 <div class="toggle-switch active" data-feature="userReview"></div>
             </div>
+            <div class="feature-toggle child-feature">
+                <div class="feature-info">
+                    <div class="feature-label">Comment themes for users</div>
+                    <div class="feature-description">Show like/dislike pills inside your review card</div>
+                </div>
+                <div class="toggle-switch active" data-feature="userCommentThemes"></div>
+            </div>
             <div class="feature-toggle">
                 <div class="feature-info">
                     <div class="feature-label">Community Reviews</div>
-                    <div class="feature-description">Show reviews from other users (not yours)</div>
+                    <div class="feature-description">Show reviews from other users</div>
                 </div>
                 <div class="toggle-switch active" data-feature="communityReviews"></div>
+            </div>
+            <div class="feature-toggle child-feature">
+                <div class="feature-info">
+                    <div class="feature-label">Comment themes for community</div>
+                    <div class="feature-description">Show like/dislike pills inside community review cards</div>
+                </div>
+                <div class="toggle-switch active" data-feature="communityCommentThemes"></div>
             </div>
             <div class="feature-toggle">
                 <div class="feature-info">
@@ -225,34 +479,155 @@
                 <div class="toggle-switch active" data-feature="photoReviews"></div>
             </div>
         </div>
-
-        <div class="feature-group">
-            <div class="feature-group-title">Alternative for milestone</div>
-            <div class="feature-toggle">
-                <div class="feature-info">
-                    <div class="feature-label">AI summary section</div>
-                    <div class="feature-description">Show full AI summary under overall rating (replaces button)</div>
-                </div>
-                <div class="toggle-switch" data-feature="aiSummarySection"></div>
-            </div>
-            <div class="feature-toggle">
-                <div class="feature-info">
-                    <div class="feature-label">Alternative overall rating</div>
-                    <div class="feature-description">Show alternative rating design at top (replaces main version)</div>
-                </div>
-                <div class="toggle-switch" data-feature="alternativeOverallRating"></div>
-            </div>
-        </div>
     </div>
 
     <div class="prototype-frame">
         <iframe id="prototypeFrame" src="../q2-prototype-working version.html#menu"></iframe>
     </div>
+    </div><!-- end main-wrapper -->
 
     <script>
         // Feature toggle handler
         const toggles = document.querySelectorAll('.toggle-switch');
         const iframe = document.getElementById('prototypeFrame');
+
+        // Milestone state
+        let currentMilestone = 'adjust';
+        let togglesLocked = false;
+
+        // Milestone presets
+        const milestonePresets = {
+            m1: {
+                name: 'Milestone 1',
+                description: 'Core rating display with basic community reviews',
+                locked: false,
+                features: {
+                    // PDP & Overall Rating
+                    pdpTopRating: true,
+                    overallRating: true,
+                    ratingCount: true,
+                    reviewCount: true,
+                    ratingDistribution: false,
+                    alternativeOverallRating: false,
+                    // Interaction
+                    addYourRating: true,
+                    newRatingDrawer: false,
+                    filterFeature: false,
+                    aiSummary: false,
+                    aiSummarySection: false,
+                    // Reviews
+                    reviewTitle: true,
+                    themeBreakdown: false,
+                    userReview: true,
+                    userCommentThemes: false,
+                    communityReviews: true,
+                    communityCommentThemes: false,
+                    helpfulButtons: false,
+                    photoReviews: false,
+                    // Menu
+                    menuCardRating: false,
+                    menuFilterRating: false
+                }
+            },
+            m2: {
+                name: 'Milestone 2',
+                description: 'Adds rating distribution, AI summary, and comment themes',
+                locked: false,
+                features: {
+                    // All M1 features
+                    pdpTopRating: true,
+                    overallRating: true,
+                    ratingCount: true,
+                    reviewCount: true,
+                    ratingDistribution: true, // NEW in M2
+                    alternativeOverallRating: false,
+                    // Interaction
+                    addYourRating: true,
+                    newRatingDrawer: false,
+                    filterFeature: false,
+                    aiSummary: true, // NEW in M2 (AI summary CTA button)
+                    aiSummarySection: false,
+                    // Reviews
+                    reviewTitle: true,
+                    themeBreakdown: false,
+                    userReview: true,
+                    userCommentThemes: false,
+                    communityReviews: true,
+                    communityCommentThemes: true, // NEW in M2
+                    helpfulButtons: false,
+                    photoReviews: false,
+                    // Menu
+                    menuCardRating: true, // NEW in M2
+                    menuFilterRating: false
+                }
+            },
+            m3: {
+                name: 'Milestone 3',
+                description: 'Adds filtering, theme overview, photos, and new rating drawer',
+                locked: false,
+                features: {
+                    // All M1 & M2 features
+                    pdpTopRating: true,
+                    overallRating: true,
+                    ratingCount: true,
+                    reviewCount: true,
+                    ratingDistribution: true,
+                    alternativeOverallRating: false,
+                    // Interaction
+                    addYourRating: true,
+                    newRatingDrawer: true,
+                    filterFeature: true, // NEW in M3
+                    aiSummary: true,
+                    aiSummarySection: false,
+                    // Reviews
+                    reviewTitle: true,
+                    themeBreakdown: true, // NEW in M3 (comment theme overview)
+                    userReview: true,
+                    userCommentThemes: true, // NEW in M3
+                    communityReviews: true,
+                    communityCommentThemes: true,
+                    helpfulButtons: false,
+                    photoReviews: true, // NEW in M3
+                    // Menu
+                    menuCardRating: true,
+                    menuFilterRating: true // NEW in M3
+                }
+            },
+            full: {
+                name: 'Full Scope',
+                description: 'Complete feature set with all rating and review capabilities',
+                locked: false,
+                features: {
+                    overallRating: true,
+                    ratingCount: true,
+                    reviewCount: true,
+                    ratingDistribution: true,
+                    filterFeature: true,
+                    aiSummary: true,
+                    aiSummarySection: false,
+                    alternativeOverallRating: false,
+                    addYourRating: true,
+                    newRatingDrawer: true,
+                    themeBreakdown: true,
+                    reviewTitle: true,
+                    userReview: true,
+                    userCommentThemes: true,
+                    communityReviews: true,
+                    communityCommentThemes: true,
+                    helpfulButtons: true,
+                    photoReviews: true,
+                    menuCardRating: true,
+                    menuFilterRating: true,
+                    pdpTopRating: true
+                }
+            },
+            adjust: {
+                name: 'Adjust Features',
+                description: 'Manually toggle individual features to explore different combinations',
+                locked: false,
+                features: null
+            }
+        };
 
         // Feature state
         const featureState = {
@@ -265,17 +640,109 @@
             aiSummarySection: false,
             alternativeOverallRating: false,
             addYourRating: true,
+            newRatingDrawer: true,
             themeBreakdown: true,
+            reviewTitle: true,
             userReview: true,
+            userCommentThemes: true,
             communityReviews: true,
+            communityCommentThemes: true,
             helpfulButtons: true,
             photoReviews: true,
+            menuCardRating: true,
+            menuFilterRating: true,
+            pdpTopRating: true,
         };
 
         // Define parent-child feature relationships
         const featureHierarchy = {
-            overallRating: ['ratingCount', 'reviewCount', 'aiSummary']
+            overallRating: ['ratingCount', 'reviewCount', 'aiSummary'],
+            userReview: ['userCommentThemes'],
+            communityReviews: ['communityCommentThemes']
         };
+
+        // Milestone selection function
+        function selectMilestone(milestone) {
+            currentMilestone = milestone;
+            const preset = milestonePresets[milestone];
+            const titleElement = document.getElementById('controlPanelTitle');
+            const descriptionElement = document.getElementById('controlPanelDescription');
+
+            // Update active button state
+            const milestoneButtons = document.querySelectorAll('.milestone-btn');
+            milestoneButtons.forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.milestone === milestone);
+            });
+
+            // Toggles are always unlocked now
+            togglesLocked = false;
+            toggles.forEach(toggle => {
+                toggle.classList.remove('locked');
+            });
+
+            // Update title and description
+            if (milestone !== 'adjust') {
+                titleElement.textContent = preset.name + ' Features';
+            } else {
+                titleElement.textContent = 'Feature Controls';
+            }
+            descriptionElement.textContent = preset.description;
+
+            // Apply feature preset if features are defined
+            if (preset.features) {
+                applyPreset(preset.features);
+            }
+        }
+
+        // Function to apply a preset configuration
+        function applyPreset(features) {
+            Object.keys(features).forEach(feature => {
+                featureState[feature] = features[feature];
+                const toggle = document.querySelector(`[data-feature="${feature}"]`);
+                if (toggle) {
+                    toggle.classList.toggle('active', features[feature]);
+                }
+            });
+
+            // Send to iframe
+            iframe.contentWindow.postMessage({
+                type: 'initFeatures',
+                features: featureState
+            }, '*');
+        }
+
+        // Function to reset to current milestone preset
+        function resetToPreset() {
+            if (currentMilestone === 'adjust') {
+                return; // No preset to reset to in adjust mode
+            }
+            const preset = milestonePresets[currentMilestone];
+            if (preset.features) {
+                applyPreset(preset.features);
+            }
+        }
+
+        // Milestone button click handlers
+        const milestoneButtons = document.querySelectorAll('.milestone-btn');
+        milestoneButtons.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                // Check if click was on refresh icon
+                if (e.target.closest('.milestone-refresh-icon')) {
+                    return; // Let the refresh icon handler handle it
+                }
+                const milestone = btn.dataset.milestone;
+                selectMilestone(milestone);
+            });
+        });
+
+        // Refresh icon click handlers
+        const refreshIcons = document.querySelectorAll('.milestone-refresh-icon');
+        refreshIcons.forEach(icon => {
+            icon.addEventListener('click', (e) => {
+                e.stopPropagation(); // Prevent button click
+                resetToPreset();
+            });
+        });
 
         toggles.forEach(toggle => {
             toggle.addEventListener('click', () => {
@@ -348,6 +815,9 @@
                 console.log('Sent initial feature state to iframe');
             }, 500);
         });
+
+        // Initialize with Adjust Features mode
+        selectMilestone('adjust');
     </script>
 </body>
 </html>

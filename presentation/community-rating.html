@@ -8,6 +8,324 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Milestone Timeline Styles */
+        .milestone-timeline-container {
+            padding: 60px 40px 80px;
+            max-width: 1400px;
+            margin: 0 auto;
+            background: #ffffff;
+            min-height: 100vh;
+            overflow-y: auto;
+        }
+
+        .timeline-header {
+            margin-bottom: 80px;
+            text-align: center;
+        }
+
+        .timeline-header h1 {
+            font-family: 'Raleway', sans-serif;
+            font-size: 36px;
+            font-weight: 700;
+            color: #242424;
+            margin: 0 0 12px 0;
+        }
+
+        .timeline-header p {
+            font-family: 'Raleway', sans-serif;
+            font-size: 18px;
+            font-weight: 400;
+            color: #656565;
+            margin: 0;
+        }
+
+        .timeline {
+            position: relative;
+            display: flex;
+            align-items: stretch;
+            gap: 40px;
+            justify-content: center;
+        }
+
+        .timeline-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+            max-width: 280px;
+            position: relative;
+        }
+
+        .timeline-marker {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 28px;
+            position: relative;
+        }
+
+        .timeline-dot {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #067a46;
+            border: 3px solid #ffffff;
+            box-shadow: 0 0 0 2px #067a46;
+            z-index: 2;
+            flex-shrink: 0;
+        }
+
+        .timeline-line {
+            position: absolute;
+            left: calc(100% + 10px);
+            width: 40px;
+            top: 50%;
+            transform: translateY(-50%);
+            height: 2px;
+            background: #e0e0e0;
+            z-index: 1;
+        }
+
+        .timeline-item:last-child .timeline-line {
+            display: none;
+        }
+
+        .timeline-content {
+            flex: 1;
+            width: 100%;
+            background: #fafafa;
+            border-radius: 12px;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border: 1px solid #f0f0f0;
+        }
+
+        .timeline-badge {
+            display: inline-block;
+            padding: 6px 16px;
+            background: #067a46;
+            color: white;
+            font-family: 'Raleway', sans-serif;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            border-radius: 20px;
+            margin-bottom: 16px;
+        }
+
+        .timeline-badge.later {
+            background: #7a6a4f;
+        }
+
+        .timeline-badge.full-scope {
+            background: #067a46;
+            padding: 8px 20px;
+            font-size: 14px;
+            box-shadow: 0 2px 8px rgba(6, 122, 70, 0.3);
+        }
+
+        .timeline-content h3 {
+            font-family: 'Raleway', sans-serif;
+            font-size: 18px;
+            font-weight: 700;
+            color: #242424;
+            margin: 0 0 12px 0;
+            text-align: center;
+        }
+
+        .builds-on {
+            font-family: 'Raleway', sans-serif;
+            font-size: 12px;
+            font-weight: 500;
+            color: #656565;
+            margin: 0 0 20px 0;
+            text-align: center;
+        }
+
+        .feature-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            width: 100%;
+        }
+
+        .feature-list li {
+            font-family: 'Raleway', sans-serif;
+            font-size: 14px;
+            font-weight: 400;
+            color: #242424;
+            padding: 10px 12px;
+            background: white;
+            border-radius: 6px;
+            margin-bottom: 6px;
+            border: 1px solid #e8e8e8;
+        }
+
+        .feature-list li:last-child {
+            margin-bottom: 0;
+        }
+
+        .feature-list.new-features li {
+            color: #242424;
+        }
+
+        .milestone-goal {
+            width: 100%;
+            margin-bottom: 24px;
+        }
+
+        .goal-section {
+            margin-bottom: 16px;
+        }
+
+        .goal-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .goal-section h4 {
+            font-family: 'Raleway', sans-serif;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: #067a46;
+            margin: 0 0 6px 0;
+            letter-spacing: 0.5px;
+        }
+
+        .goal-section p {
+            font-family: 'Raleway', sans-serif;
+            font-size: 13px;
+            font-weight: 400;
+            color: #242424;
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        .feature-section {
+            width: 100%;
+            margin-top: 24px;
+            padding-top: 24px;
+            border-top: 2px solid #e8e8e8;
+        }
+
+        .feature-section h4 {
+            font-family: 'Raleway', sans-serif;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: #656565;
+            margin: 0 0 12px 0;
+            letter-spacing: 0.5px;
+            text-align: center;
+        }
+
+        /* Make timeline responsive */
+        @media (max-width: 1024px) {
+            .milestone-timeline-container {
+                padding: 40px 24px;
+            }
+
+            .timeline {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .timeline-item {
+                flex-direction: row;
+                align-items: flex-start;
+                margin-bottom: 40px;
+            }
+
+            .timeline-marker {
+                flex-direction: column;
+                width: auto;
+                margin-bottom: 0;
+                margin-right: 24px;
+            }
+
+            .timeline-dot {
+                margin: 0;
+            }
+
+            .timeline-line {
+                width: 2px;
+                height: 100%;
+                min-height: 100px;
+                left: auto;
+                top: 100%;
+                transform: none;
+                background: #e0e0e0;
+            }
+
+            .timeline-content {
+                text-align: left;
+            }
+
+            .timeline-content h3 {
+                font-size: 16px;
+                text-align: left;
+            }
+
+            .builds-on {
+                text-align: left;
+            }
+
+            .timeline-item {
+                max-width: none;
+            }
+
+            .goal-section h4 {
+                font-size: 11px;
+            }
+
+            .goal-section p {
+                font-size: 12px;
+            }
+
+            .feature-section h4 {
+                text-align: left;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .timeline-header h1 {
+                font-size: 28px;
+            }
+
+            .timeline-header p {
+                font-size: 16px;
+            }
+
+            .timeline-content {
+                padding: 20px;
+            }
+
+            .timeline-content h3 {
+                font-size: 16px;
+            }
+
+            .goal-section {
+                margin-bottom: 12px;
+            }
+
+            .goal-section h4 {
+                font-size: 10px;
+            }
+
+            .goal-section p {
+                font-size: 12px;
+            }
+
+            .feature-section {
+                margin-top: 16px;
+                padding-top: 16px;
+            }
+        }
+    </style>
 </head>
 <body>
     <div class="app">
@@ -33,11 +351,11 @@
                         </a>
                         <div class="nav-dropdown open">
                             <a href="#" class="nav-sub-item" data-page="milestone-1">
-                                <span class="nav-sub-item-text">milestone 1</span>
+                                <span class="nav-sub-item-text">HelloFresh</span>
                                 <span class="nav-refresh-icon" data-page="milestone-1" title="Refresh and restart">↻</span>
                             </a>
                             <a href="#" class="nav-sub-item" data-page="milestone-2">
-                                <span class="nav-sub-item-text">milestone 2</span>
+                                <span class="nav-sub-item-text">Factor</span>
                                 <span class="nav-refresh-icon" data-page="milestone-2" title="Refresh and restart">↻</span>
                             </a>
                         </div>
@@ -73,19 +391,19 @@
                                 <div class="context-block">
                                     <h4>Proposed Solution</h4>
                                     <p>Display community ratings prominently throughout the meal selection journey as social proof, providing users with reliable signals to make confident decisions faster.</p>
-                                    <p><strong>Key touchpoints:</strong> Recipe cards (browse view), recipe detail pages, post-cooking experience</p>
+                                    <p><strong>Key touchpoints:</strong> Recipe cards (browse view), recipe detail pages</p>
                                 </div>
 
                                 <div class="context-block">
                                     <h4>Success Metrics</h4>
-                                    <p><strong>Selection Confidence (Primary)</strong></p>
+                                    <strong>Selection Confidence (Primary)</strong>
                                     <ul>
                                         <li>Time to complete meal selection</li>
                                         <li>Menu completion rate (% users who finalize box)</li>
                                         <li>Meal variety score (diversity of selections)</li>
-                                        <li>Recipe trial rate (% users trying new vs repeat recipes)</li>
+                                        <li>Recipe trial rate (% users trying new vs repeat)</li>
                                     </ul>
-                                    <p><strong>Business Impact (Secondary)</strong></p>
+                                    <strong>Business Impact (Secondary)</strong>
                                     <ul>
                                         <li>AOV (Average Order Value)</li>
                                         <li>AOR (Add-On Rate)</li>
@@ -97,7 +415,7 @@
                                 <div class="context-block">
                                     <h4>Rating Engagement Bet</h4>
                                     <p>By explicitly showcasing how ratings help the community make better choices, users will be motivated to contribute. Displaying users' own past ratings creates personal value and reinforces rating behavior.</p>
-                                    <p><strong>Engagement Metrics:</strong></p>
+                                    <strong>Engagement Metrics</strong>
                                     <ul>
                                         <li>Rating submission rate (% delivered meals rated)</li>
                                         <li>Review addition rate (ratings with text)</li>
@@ -106,12 +424,12 @@
                                     </ul>
                                 </div>
 
-                                <div class="context-block">
+                                <div class="context-block full-width">
                                     <div class="questions-header" onclick="toggleQuestions()">
-                                        <h4>Open Questions for Leadership</h4>
-                                        <span class="toggle-icon" id="questionsToggle">▼</span>
+                                        <h4>Questions to Discuss</h4>
+                                        <span class="toggle-icon" id="questionsToggle">▶</span>
                                     </div>
-                                    <div class="questions-content" id="questionsContent">
+                                    <div class="questions-content" id="questionsContent" style="display: none;">
                                         <div class="question-item">
                                             <strong>Strategic Priority</strong>
                                             <p>Should we prioritize volume (many ratings, few reviews) or depth (detailed reviews)? Quality reviews are more helpful for decision-making but harder to obtain.</p>
@@ -146,30 +464,194 @@
 
             <!-- Milestone Breakdown Page -->
             <div class="page prototype-page" id="milestone-breakdown">
-                <div class="solution-layout">
-                    <div class="prototype-frame">
-                        <iframe src="../q2-prototype-working version.html" title="Milestone Breakdown Prototype"></iframe>
+                <div class="milestone-timeline-container">
+                    <div class="timeline-header">
+                        <h1>Feature Roadmap: Milestone Evolution</h1>
+                        <p>How community rating features evolve from MVP to full scope experience</p>
                     </div>
-                    <aside class="solution-sidebar">
-                        <div class="sidebar-item">
-                            <div class="sidebar-label">Feature name</div>
-                            <div class="sidebar-value">milestone breakdown</div>
-                        </div>
-                        <div class="sidebar-item">
-                            <div class="sidebar-label">Hypothesis</div>
-                            <div class="sidebar-value">If we provide rating entry points at contextually relevant moments, then we will increase rating submission volume because users can share feedback when they're naturally engaged and their experience is fresh.</div>
-                        </div>
-                        <div class="sidebar-item">
-                            <div class="sidebar-label">View in prototype</div>
-                            <div class="sidebar-value">
-                                Explore rating entry points across multiple touchpoints:
-                                <ul>
-                                    <li><strong>milestone 1:</strong> Rate during or after cooking experience</li>
-                                    <li><strong>milestone 2:</strong> Rate completed meals from order history</li>
-                                </ul>
+
+                    <div class="timeline">
+                        <!-- Milestone 1 -->
+                        <div class="timeline-item">
+                            <div class="timeline-marker">
+                                <div class="timeline-dot"></div>
+                                <div class="timeline-line"></div>
+                            </div>
+                            <div class="timeline-content">
+                                <div class="timeline-badge">Milestone 1</div>
+                                <h3>Foundation: Establish Trust</h3>
+
+                                <div class="milestone-goal">
+                                    <div class="goal-section">
+                                        <h4>Problem</h4>
+                                        <p>Users face decision paralysis with 20+ weekly recipes and lack trusted signals for confident meal selection.</p>
+                                    </div>
+
+                                    <div class="goal-section">
+                                        <h4>Goal</h4>
+                                        <p>Establish ratings as a reliable decision-making tool and create baseline rating behavior.</p>
+                                    </div>
+
+                                    <div class="goal-section">
+                                        <h4>Track</h4>
+                                        <p>Rating submission rate, time to menu completion, recipe trial rate (new vs repeat)</p>
+                                    </div>
+
+                                    <div class="goal-section">
+                                        <h4>Signal</h4>
+                                        <p>Success: Increased rating rate, faster menu completion. Risk: Low engagement, negative feedback dominance</p>
+                                    </div>
+                                </div>
+
+                                <div class="feature-section">
+                                    <h4>Features</h4>
+                                    <ul class="feature-list">
+                                        <li>PDP top rating display</li>
+                                        <li>Overall rating section</li>
+                                        <li>Rating prompt banner</li>
+                                        <li>Community reviews (subset defined by cookbook)</li>
+                                        <li>User review card</li>
+                                        <li>Old rating drawer</li>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
-                    </aside>
+
+                        <!-- Milestone 2 -->
+                        <div class="timeline-item">
+                            <div class="timeline-marker">
+                                <div class="timeline-dot"></div>
+                                <div class="timeline-line"></div>
+                            </div>
+                            <div class="timeline-content">
+                                <div class="timeline-badge">Milestone 2</div>
+                                <h3>Insights: Deepen Understanding</h3>
+                                <p class="builds-on">Builds on M1</p>
+
+                                <div class="milestone-goal">
+                                    <div class="goal-section">
+                                        <h4>Problem</h4>
+                                        <p>Users need more context beyond star ratings to understand why recipes are highly rated and what makes them work.</p>
+                                    </div>
+
+                                    <div class="goal-section">
+                                        <h4>Goal</h4>
+                                        <p>Provide deeper insights through distribution data, AI summaries, and thematic analysis to drive informed choices.</p>
+                                    </div>
+
+                                    <div class="goal-section">
+                                        <h4>Track</h4>
+                                        <p>AI summary engagement, theme click-through, rating distribution interaction, menu browse patterns</p>
+                                    </div>
+
+                                    <div class="goal-section">
+                                        <h4>Signal</h4>
+                                        <p>Success: Increased variety in selections, higher recipe trial rate. Risk: Information overload, AI summary trust issues</p>
+                                    </div>
+                                </div>
+
+                                <div class="feature-section">
+                                    <h4>New Features</h4>
+                                    <ul class="feature-list new-features">
+                                        <li>Rating distribution</li>
+                                        <li>AI summary CTA</li>
+                                        <li>Comment themes</li>
+                                        <li>Menu card ratings</li>
+                                        <li>Community reviews (new logic for subset)</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Milestone 3 -->
+                        <div class="timeline-item">
+                            <div class="timeline-marker">
+                                <div class="timeline-dot"></div>
+                                <div class="timeline-line"></div>
+                            </div>
+                            <div class="timeline-content">
+                                <div class="timeline-badge">Milestone 3</div>
+                                <h3>Rich Content: Personalize Discovery</h3>
+                                <p class="builds-on">Builds on M1 + M2</p>
+
+                                <div class="milestone-goal">
+                                    <div class="goal-section">
+                                        <h4>Problem</h4>
+                                        <p>Users want to find recipes matching specific preferences (taste, difficulty, dietary) and see visual proof before selection.</p>
+                                    </div>
+
+                                    <div class="goal-section">
+                                        <h4>Goal</h4>
+                                        <p>Enable self-service discovery through filtering, visual content, and improved rating UX to match personal preferences.</p>
+                                    </div>
+
+                                    <div class="goal-section">
+                                        <h4>Track</h4>
+                                        <p>Filter usage, photo review engagement, rating completion rate (new drawer), menu filter adoption, theme filter patterns</p>
+                                    </div>
+
+                                    <div class="goal-section">
+                                        <h4>Signal</h4>
+                                        <p>Success: Higher satisfaction scores, reduced skip rate. Risk: Filter bias creates echo chamber, photo requirements slow submissions</p>
+                                    </div>
+                                </div>
+
+                                <div class="feature-section">
+                                    <h4>New Features</h4>
+                                    <ul class="feature-list new-features">
+                                        <li>Filters (rating & themes)</li>
+                                        <li>Theme overview</li>
+                                        <li>Use photo captured from cookbook flow</li>
+                                        <li>New rating drawer</li>
+                                        <li>Menu filters</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Later -->
+                        <div class="timeline-item">
+                            <div class="timeline-marker">
+                                <div class="timeline-dot"></div>
+                            </div>
+                            <div class="timeline-content">
+                                <div class="timeline-badge later">Later</div>
+                                <h3>Future: Community Engagement</h3>
+                                <p class="builds-on">Data-driven enhancements</p>
+
+                                <div class="milestone-goal">
+                                    <div class="goal-section">
+                                        <h4>Problem</h4>
+                                        <p>To be determined based on M1-M3 performance data and observed user engagement patterns.</p>
+                                    </div>
+
+                                    <div class="goal-section">
+                                        <h4>Goal</h4>
+                                        <p>Enhance community quality and reduce noise through moderation tools and engagement mechanics.</p>
+                                    </div>
+
+                                    <div class="goal-section">
+                                        <h4>Track</h4>
+                                        <p>Review quality metrics, spam/fake review reports, helpful button usage, community moderation effectiveness</p>
+                                    </div>
+
+                                    <div class="goal-section">
+                                        <h4>Signal</h4>
+                                        <p>Success: Improved review quality perception, reduced support tickets. Risk: Over-moderation dampens honest feedback</p>
+                                    </div>
+                                </div>
+
+                                <div class="feature-section">
+                                    <h4>Potential Features</h4>
+                                    <ul class="feature-list new-features">
+                                        <li>Helpful/Report buttons</li>
+                                        <li>Photo from feedback</li>
+                                        <li>Engagement features based on user behavior</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -187,7 +669,7 @@
                     <aside class="solution-sidebar">
                         <div class="sidebar-item">
                             <div class="sidebar-label">Feature name</div>
-                            <div class="sidebar-value">milestone 2</div>
+                            <div class="sidebar-value">Factor</div>
                         </div>
                         <div class="sidebar-item">
                             <div class="sidebar-label">Description</div>
@@ -210,8 +692,13 @@
             const content = document.getElementById('questionsContent');
             const icon = document.getElementById('questionsToggle');
 
-            content.classList.toggle('open');
-            icon.classList.toggle('open');
+            if (content.style.display === 'none') {
+                content.style.display = 'block';
+                icon.textContent = '▼';
+            } else {
+                content.style.display = 'none';
+                icon.textContent = '▶';
+            }
         }
     </script>
 </body>

@@ -120,8 +120,8 @@
         .timeline-marker {
             display: flex;
             align-items: center;
-            justify-content: center;
-            margin-bottom: 28px;
+            gap: 12px;
+            margin-bottom: 20px;
             position: relative;
         }
 
@@ -174,7 +174,8 @@
             text-transform: uppercase;
             letter-spacing: 0.8px;
             border-radius: 20px;
-            margin-bottom: 16px;
+            white-space: nowrap;
+            flex-shrink: 0;
         }
 
         .timeline-badge.later {
@@ -187,6 +188,7 @@
             color: var(--text);
             margin: 0 0 12px 0;
             text-align: center;
+            margin-top: 0;
         }
 
         .builds-on {
@@ -240,6 +242,39 @@
             letter-spacing: 0.5px;
         }
 
+        .goal-section.collapsible h4 {
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            user-select: none;
+        }
+
+        .goal-section.collapsible h4:hover {
+            opacity: 0.8;
+        }
+
+        .arrow-icon {
+            width: 12px;
+            height: 12px;
+            transition: transform 0.2s ease;
+            flex-shrink: 0;
+        }
+
+        .arrow-icon.expanded {
+            transform: rotate(180deg);
+        }
+
+        .collapsible-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .collapsible-content.expanded {
+            max-height: 200px;
+        }
+
         .goal-section p {
             font-size: 0.8125rem;
             color: var(--text);
@@ -262,6 +297,76 @@
             margin: 0 0 12px 0;
             letter-spacing: 0.5px;
             text-align: center;
+        }
+
+        /* Current State Section */
+        .current-state-section {
+            margin-top: 80px;
+            padding-top: 60px;
+            border-top: 2px solid var(--border);
+        }
+
+        .current-state-section h2 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--text);
+            margin: 0 0 8px 0;
+        }
+
+        .current-state-section .subtitle {
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: var(--primary);
+            letter-spacing: 0.5px;
+            margin: 0 0 24px 0;
+        }
+
+        .current-state-content {
+            background: var(--bg);
+            border-radius: 12px;
+            padding: 32px;
+            border: 1px solid var(--border);
+        }
+
+        .current-state-content h3 {
+            font-size: 1.125rem;
+            font-weight: 700;
+            color: var(--text);
+            margin: 0 0 16px 0;
+        }
+
+        .current-state-content p {
+            font-size: 0.9375rem;
+            color: var(--text);
+            line-height: 1.7;
+            margin: 0 0 16px 0;
+        }
+
+        .current-state-content p:last-child {
+            margin-bottom: 0;
+        }
+
+        .current-state-content ul {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 16px 0;
+        }
+
+        .current-state-content ul li {
+            font-size: 0.9375rem;
+            color: var(--text);
+            padding: 8px 0 8px 24px;
+            position: relative;
+            line-height: 1.6;
+        }
+
+        .current-state-content ul li:before {
+            content: "•";
+            position: absolute;
+            left: 8px;
+            color: var(--primary-light);
+            font-weight: 700;
         }
 
         /* Responsive */
@@ -297,10 +402,18 @@
                 width: auto;
                 margin-bottom: 0;
                 margin-right: 24px;
+                gap: 12px;
+                align-items: flex-start;
             }
 
             .timeline-dot {
                 margin: 0;
+            }
+
+            .timeline-badge {
+                font-size: 10px;
+                padding: 4px 12px;
+                align-self: flex-start;
             }
 
             .timeline-line {
@@ -329,6 +442,15 @@
             .feature-section h4 {
                 text-align: left;
             }
+
+            .current-state-section {
+                margin-top: 60px;
+                padding-top: 40px;
+            }
+
+            .current-state-content {
+                padding: 24px;
+            }
         }
 
         @media (max-width: 768px) {
@@ -346,6 +468,18 @@
 
             .timeline-content {
                 padding: 20px;
+            }
+
+            .current-state-section h2 {
+                font-size: 1.5rem;
+            }
+
+            .current-state-content {
+                padding: 20px;
+            }
+
+            .current-state-content h3 {
+                font-size: 1rem;
             }
         }
     </style>
@@ -365,7 +499,7 @@
     <div class="milestone-timeline-container">
         <div class="timeline-header">
             <h1>Feature Roadmap: Milestone Evolution</h1>
-            <p>How community rating features evolve from MVP to full scope experience</p>
+            <p>Timeline is defined with backend work; frontend is lightweight and can move fast. Features evolve from MVP to full scope experience.</p>
         </div>
 
         <div class="timeline">
@@ -373,10 +507,10 @@
             <div class="timeline-item">
                 <div class="timeline-marker">
                     <div class="timeline-dot"></div>
+                    <div class="timeline-badge">Milestone 1 • 1-2 weeks</div>
                     <div class="timeline-line"></div>
                 </div>
                 <div class="timeline-content">
-                    <div class="timeline-badge">Milestone 1</div>
                     <h3>Foundation: Establish Trust</h3>
 
                     <div class="milestone-goal">
@@ -390,14 +524,28 @@
                             <p>Establish ratings as a reliable decision-making tool and create baseline rating behavior.</p>
                         </div>
 
-                        <div class="goal-section">
-                            <h4>Track</h4>
-                            <p>Rating submission rate, time to menu completion, recipe trial rate (new vs repeat)</p>
+                        <div class="goal-section collapsible">
+                            <h4>
+                                <svg class="arrow-icon" viewBox="0 0 16 16" fill="currentColor">
+                                    <path d="M8 11L3 6h10l-5 5z"/>
+                                </svg>
+                                Track
+                            </h4>
+                            <div class="collapsible-content">
+                                <p>Rating submission rate, time to menu completion, recipe trial rate (new vs repeat)</p>
+                            </div>
                         </div>
 
-                        <div class="goal-section">
-                            <h4>Signal</h4>
-                            <p>Success: Increased rating rate, faster menu completion. Risk: Low engagement, negative feedback dominance</p>
+                        <div class="goal-section collapsible">
+                            <h4>
+                                <svg class="arrow-icon" viewBox="0 0 16 16" fill="currentColor">
+                                    <path d="M8 11L3 6h10l-5 5z"/>
+                                </svg>
+                                Signal
+                            </h4>
+                            <div class="collapsible-content">
+                                <p>Success: Increased rating rate, faster menu completion. Risk: Low engagement, negative feedback dominance</p>
+                            </div>
                         </div>
                     </div>
 
@@ -419,10 +567,10 @@
             <div class="timeline-item">
                 <div class="timeline-marker">
                     <div class="timeline-dot"></div>
+                    <div class="timeline-badge">Milestone 2 • 3-6 weeks</div>
                     <div class="timeline-line"></div>
                 </div>
                 <div class="timeline-content">
-                    <div class="timeline-badge">Milestone 2</div>
                     <h3>Insights: Deepen Understanding</h3>
                     <p class="builds-on">Builds on M1</p>
 
@@ -437,14 +585,28 @@
                             <p>Provide deeper insights through distribution data, AI summaries, and thematic analysis to drive informed choices.</p>
                         </div>
 
-                        <div class="goal-section">
-                            <h4>Track</h4>
-                            <p>AI summary engagement, theme click-through, rating distribution interaction, menu browse patterns</p>
+                        <div class="goal-section collapsible">
+                            <h4>
+                                <svg class="arrow-icon" viewBox="0 0 16 16" fill="currentColor">
+                                    <path d="M8 11L3 6h10l-5 5z"/>
+                                </svg>
+                                Track
+                            </h4>
+                            <div class="collapsible-content">
+                                <p>AI summary engagement, theme click-through, rating distribution interaction, menu browse patterns</p>
+                            </div>
                         </div>
 
-                        <div class="goal-section">
-                            <h4>Signal</h4>
-                            <p>Success: Increased variety in selections, higher recipe trial rate. Risk: Information overload, AI summary trust issues</p>
+                        <div class="goal-section collapsible">
+                            <h4>
+                                <svg class="arrow-icon" viewBox="0 0 16 16" fill="currentColor">
+                                    <path d="M8 11L3 6h10l-5 5z"/>
+                                </svg>
+                                Signal
+                            </h4>
+                            <div class="collapsible-content">
+                                <p>Success: Increased variety in selections, higher recipe trial rate. Risk: Information overload, AI summary trust issues</p>
+                            </div>
                         </div>
                     </div>
 
@@ -453,9 +615,7 @@
                         <ul class="feature-list">
                             <li>Rating distribution</li>
                             <li>AI summary CTA</li>
-                            <li>Comment themes</li>
-                            <li>Menu card ratings</li>
-                            <li>Community reviews (new logic for subset)</li>
+                            <li>Menu card showing ratings</li>
                         </ul>
                     </div>
                 </div>
@@ -465,41 +625,55 @@
             <div class="timeline-item">
                 <div class="timeline-marker">
                     <div class="timeline-dot"></div>
+                    <div class="timeline-badge">Milestone 3 • 5-8 weeks</div>
                     <div class="timeline-line"></div>
                 </div>
                 <div class="timeline-content">
-                    <div class="timeline-badge">Milestone 3</div>
-                    <h3>Rich Content: Personalize Discovery</h3>
+                    <h3>Filtering & Discovery</h3>
                     <p class="builds-on">Builds on M1 + M2</p>
 
                     <div class="milestone-goal">
                         <div class="goal-section">
                             <h4>Problem</h4>
-                            <p>Users want to find recipes matching specific preferences (taste, difficulty, dietary) and see visual proof before selection.</p>
+                            <p>Users want to find recipes matching specific preferences and filter by ratings, but lack tools to efficiently discover what they're looking for.</p>
                         </div>
 
                         <div class="goal-section">
                             <h4>Goal</h4>
-                            <p>Enable self-service discovery through filtering, visual content, and improved rating UX to match personal preferences.</p>
+                            <p>Enable self-service discovery through rating filters, comment themes, and improved rating UX to match personal preferences.</p>
                         </div>
 
-                        <div class="goal-section">
-                            <h4>Track</h4>
-                            <p>Filter usage, photo review engagement, rating completion rate (new drawer), menu filter adoption, theme filter patterns</p>
+                        <div class="goal-section collapsible">
+                            <h4>
+                                <svg class="arrow-icon" viewBox="0 0 16 16" fill="currentColor">
+                                    <path d="M8 11L3 6h10l-5 5z"/>
+                                </svg>
+                                Track
+                            </h4>
+                            <div class="collapsible-content">
+                                <p>Filter usage, rating completion rate (new drawer), menu filter adoption, comment theme engagement</p>
+                            </div>
                         </div>
 
-                        <div class="goal-section">
-                            <h4>Signal</h4>
-                            <p>Success: Higher satisfaction scores, reduced skip rate. Risk: Filter bias creates echo chamber, photo requirements slow submissions</p>
+                        <div class="goal-section collapsible">
+                            <h4>
+                                <svg class="arrow-icon" viewBox="0 0 16 16" fill="currentColor">
+                                    <path d="M8 11L3 6h10l-5 5z"/>
+                                </svg>
+                                Signal
+                            </h4>
+                            <div class="collapsible-content">
+                                <p>Success: Higher satisfaction scores, reduced skip rate. Risk: Filter bias creates echo chamber, complex UI reduces adoption</p>
+                            </div>
                         </div>
                     </div>
 
                     <div class="feature-section">
                         <h4>New Features</h4>
                         <ul class="feature-list">
-                            <li>Filters (rating & themes)</li>
-                            <li>Theme overview</li>
-                            <li>Use photo captured from cookbook flow</li>
+                            <li>Community reviews (new logic for subset)</li>
+                            <li>Comment themes in review cards</li>
+                            <li>Filters for rating</li>
                             <li>New rating drawer</li>
                             <li>Menu filters</li>
                         </ul>
@@ -507,35 +681,108 @@
                 </div>
             </div>
 
-            <!-- Later -->
+            <!-- Milestone 4 -->
             <div class="timeline-item">
                 <div class="timeline-marker">
                     <div class="timeline-dot"></div>
+                    <div class="timeline-badge">Milestone 4 • 3-6 weeks</div>
+                    <div class="timeline-line"></div>
                 </div>
                 <div class="timeline-content">
-                    <div class="timeline-badge later">Later</div>
-                    <h3>Future: Community Engagement</h3>
-                    <p class="builds-on">Data-driven enhancements</p>
+                    <h3>Rich Content: Enhanced Personalization</h3>
+                    <p class="builds-on">Builds on M1 + M2 + M3</p>
 
                     <div class="milestone-goal">
                         <div class="goal-section">
                             <h4>Problem</h4>
-                            <p>To be determined based on M1-M3 performance data and observed user engagement patterns.</p>
+                            <p>Users want deeper thematic insights and visual proof before selecting recipes, but lack comprehensive filtering and enhanced AI understanding.</p>
                         </div>
 
                         <div class="goal-section">
                             <h4>Goal</h4>
-                            <p>Enhance community quality and reduce noise through moderation tools and engagement mechanics.</p>
+                            <p>Provide rich visual content, comprehensive theme filtering, and improved AI summarization to enable confident, personalized recipe discovery.</p>
+                        </div>
+
+                        <div class="goal-section collapsible">
+                            <h4>
+                                <svg class="arrow-icon" viewBox="0 0 16 16" fill="currentColor">
+                                    <path d="M8 11L3 6h10l-5 5z"/>
+                                </svg>
+                                Track
+                            </h4>
+                            <div class="collapsible-content">
+                                <p>Photo review engagement, theme filter usage, theme overview interaction, AI summary quality metrics, recipe trial diversity</p>
+                            </div>
+                        </div>
+
+                        <div class="goal-section collapsible">
+                            <h4>
+                                <svg class="arrow-icon" viewBox="0 0 16 16" fill="currentColor">
+                                    <path d="M8 11L3 6h10l-5 5z"/>
+                                </svg>
+                                Signal
+                            </h4>
+                            <div class="collapsible-content">
+                                <p>Success: Increased variety in selections, higher recipe trial rate. Risk: Photo requirements slow submissions, theme complexity confuses users</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="feature-section">
+                        <h4>New Features</h4>
+                        <ul class="feature-list">
+                            <li>Theme overview</li>
+                            <li>Filter for themes</li>
+                            <li>Use photo captured from cookbook flow</li>
+                            <li>Updated AI overview (improved comment summarization logic)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Milestone 5 -->
+            <div class="timeline-item">
+                <div class="timeline-marker">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-badge later">Milestone 5 • Data-driven</div>
+                </div>
+                <div class="timeline-content">
+                    <h3>Community Engagement</h3>
+                    <p class="builds-on">Defined based on user engagement data</p>
+
+                    <div class="milestone-goal">
+                        <div class="goal-section">
+                            <h4>Problem</h4>
+                            <p>To be determined based on M1-M4 performance data and observed user engagement patterns.</p>
                         </div>
 
                         <div class="goal-section">
-                            <h4>Track</h4>
-                            <p>Review quality metrics, spam/fake review reports, helpful button usage, community moderation effectiveness</p>
+                            <h4>Goal</h4>
+                            <p>Enhance community quality and reduce noise through moderation tools and engagement mechanics. Scope and features determined by user engagement data and decision to scale up or not.</p>
                         </div>
 
-                        <div class="goal-section">
-                            <h4>Signal</h4>
-                            <p>Success: Improved review quality perception, reduced support tickets. Risk: Over-moderation dampens honest feedback</p>
+                        <div class="goal-section collapsible">
+                            <h4>
+                                <svg class="arrow-icon" viewBox="0 0 16 16" fill="currentColor">
+                                    <path d="M8 11L3 6h10l-5 5z"/>
+                                </svg>
+                                Track
+                            </h4>
+                            <div class="collapsible-content">
+                                <p>Review quality metrics, spam/fake review reports, helpful button usage, community moderation effectiveness</p>
+                            </div>
+                        </div>
+
+                        <div class="goal-section collapsible">
+                            <h4>
+                                <svg class="arrow-icon" viewBox="0 0 16 16" fill="currentColor">
+                                    <path d="M8 11L3 6h10l-5 5z"/>
+                                </svg>
+                                Signal
+                            </h4>
+                            <div class="collapsible-content">
+                                <p>Success: Improved review quality perception, reduced support tickets. Risk: Over-moderation dampens honest feedback</p>
+                            </div>
                         </div>
                     </div>
 
@@ -543,13 +790,50 @@
                         <h4>Potential Features</h4>
                         <ul class="feature-list">
                             <li>Helpful/Report buttons</li>
-                            <li>Photo from feedback</li>
-                            <li>Engagement features based on user behavior</li>
+                            <li>Photo from recipe feedback</li>
+                            <li>Additional engagement features based on user behavior</li>
                         </ul>
                     </div>
                 </div>
             </div>
         </div>
+
+        <!-- Current State Section -->
+        <div class="current-state-section">
+            <p class="subtitle">Current Progress</p>
+            <h2>Exploration & Technical Discovery</h2>
+
+            <div class="current-state-content">
+                <h3>Content Hub Integration</h3>
+                <p>Investigating how to integrate the Content Hub into our rating system. The Content Hub provides:</p>
+                <ul>
+                    <li>Community rating aggregation</li>
+                    <li>Subset of reviews with concrete logic for filtering and display</li>
+                </ul>
+
+                <h3 style="margin-top: 24px;">Current Availability</h3>
+                <p><strong>Now:</strong> Content Hub is available only for English-speaking countries and meal kit products (not Factor).</p>
+                <p><strong>End of Q2:</strong> Expected expansion to non-English-speaking countries and Factor products.</p>
+            </div>
+        </div>
     </div>
+
+    <script>
+        // Toggle collapsible sections
+        document.addEventListener('DOMContentLoaded', function() {
+            const collapsibleSections = document.querySelectorAll('.goal-section.collapsible h4');
+
+            collapsibleSections.forEach(header => {
+                header.addEventListener('click', function() {
+                    const content = this.nextElementSibling;
+                    const arrow = this.querySelector('.arrow-icon');
+
+                    // Toggle expanded class
+                    content.classList.toggle('expanded');
+                    arrow.classList.toggle('expanded');
+                });
+            });
+        });
+    </script>
 </body>
 </html>

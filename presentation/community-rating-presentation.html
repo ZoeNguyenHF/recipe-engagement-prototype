@@ -302,6 +302,7 @@
             text-align: center;
             border: 1px solid var(--border);
             box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            position: relative;
         }
 
         .metric-value {
@@ -315,6 +316,21 @@
             font-size: 0.875rem;
             color: var(--text-muted);
             line-height: 1.5;
+        }
+
+        .benchmark-badge {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #E0F2FE;
+            color: #0369A1;
+            font-size: 0.7rem;
+            font-weight: 600;
+            padding: 4px 10px;
+            border-radius: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         /* Footer */
@@ -457,6 +473,7 @@
 
             <div class="metrics-grid">
                 <div class="metric-card">
+                    <span class="benchmark-badge">Benchmark</span>
                     <div class="metric-value">+270%</div>
                     <div class="metric-label">Conversion lift from displaying community ratings (Spiegel Research)</div>
                 </div>
@@ -481,7 +498,7 @@
         <div class="container">
             <span class="section-number">Part 2</span>
             <h2 class="section-title">A Bet for Rating Engagement</h2>
-            <p class="section-subtitle">Users stop rating because they don't see the value. Displaying community ratings closes the loop and creates a virtuous cycle.</p>
+            <p class="section-subtitle">Users stop rating because they don't see the value. When we show community ratings, they see the loop close—their feedback helps others choose, which makes them want to contribute more.</p>
 
             <div class="overview-grid">
                 <div class="overview-card problem">
@@ -517,6 +534,7 @@
 
             <div class="metrics-grid" style="grid-template-columns: repeat(2, 1fr);">
                 <div class="metric-card">
+                    <span class="benchmark-badge">Benchmark</span>
                     <div class="metric-value">+28%</div>
                     <div class="metric-label">More user ratings when community ratings are visible (Netflix benchmark)</div>
                 </div>

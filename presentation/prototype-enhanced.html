@@ -93,6 +93,15 @@
             gap: 10px;
         }
 
+        .milestone-grid.five-items {
+            grid-template-columns: repeat(3, 1fr);
+        }
+
+        .milestone-grid.five-items .milestone-btn {
+            font-size: 0.75rem;
+            padding: 10px 12px;
+        }
+
         .milestone-btn {
             padding: 12px 14px;
             background: white;
@@ -344,6 +353,196 @@
             height: calc(100vh - 61px);
             overflow: hidden;
         }
+
+        /* Annotation Button */
+        .annotation-button {
+            width: 100%;
+            padding: 12px 16px;
+            background: white;
+            border: 1px solid #D1D5DB;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.8125rem;
+            font-weight: 500;
+            color: #6B7280;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .annotation-button:hover {
+            background: #F9FAFB;
+            border-color: #9CA3AF;
+        }
+
+        .annotation-button.active {
+            background: #F3F4F6;
+            color: #374151;
+            border-color: #9CA3AF;
+        }
+
+        .annotation-icon {
+            font-size: 1rem;
+        }
+
+        /* Annotation Panel */
+        .annotation-panel {
+            position: fixed;
+            left: 20px;
+            top: 100px;
+            width: 280px;
+            max-height: calc(100vh - 140px);
+            pointer-events: auto;
+            z-index: 150;
+            display: none;
+            padding: 20px;
+            overflow-y: auto;
+            overflow-x: hidden;
+            background: rgba(249, 250, 251, 0.95);
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+            backdrop-filter: blur(10px);
+            border: 1px solid #E5E7EB;
+        }
+
+        .annotation-panel.active {
+            display: block;
+        }
+
+        .annotation-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 16px;
+            pointer-events: none;
+            animation: fadeIn 0.3s ease-out;
+            position: relative;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .annotation-number {
+            width: 28px;
+            height: 28px;
+            background: #6B7280;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.8125rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            flex-shrink: 0;
+        }
+
+        .annotation-label {
+            background: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 0.8125rem;
+            font-weight: 500;
+            color: #374151;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+            border: 1px solid #E5E7EB;
+            flex: 1;
+        }
+
+        .annotation-label-desc {
+            font-size: 0.6875rem;
+            font-weight: 400;
+            color: #9CA3AF;
+            margin-top: 2px;
+        }
+
+        .annotation-connector {
+            display: none;
+        }
+
+        .prototype-frame {
+            position: relative;
+        }
+
+        /* Scrollbar for annotation panel */
+        .annotation-panel::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .annotation-panel::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .annotation-panel::-webkit-scrollbar-thumb {
+            background: #c1c1c1;
+            border-radius: 2px;
+        }
+
+        /* Collapsible Feature Control Section */
+        .collapsible-section {
+            margin-bottom: 24px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            overflow: hidden;
+            background: white;
+        }
+
+        .collapsible-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 20px;
+            cursor: pointer;
+            background: #F9FAFB;
+            transition: background 0.2s;
+            user-select: none;
+        }
+
+        .collapsible-header:hover {
+            background: #F3F4F6;
+        }
+
+        .collapsible-header-title {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--text);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .collapsible-arrow {
+            font-size: 1rem;
+            color: var(--text-muted);
+            transition: transform 0.3s ease;
+        }
+
+        .collapsible-section.expanded .collapsible-arrow {
+            transform: rotate(180deg);
+        }
+
+        .collapsible-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            padding: 0 24px;
+        }
+
+        .collapsible-section.expanded .collapsible-content {
+            max-height: 3000px;
+            padding: 20px 24px 24px;
+        }
     </style>
 </head>
 <body>
@@ -351,9 +550,9 @@
     <nav class="top-nav">
         <div class="nav-container">
             <a href="community-rating-presentation.html" class="nav-link">Overview</a>
-            <a href="milestone-breakdown.html" class="nav-link">Milestone</a>
             <a href="prototype-enhanced.html" class="nav-link active">Prototype</a>
             <a href="edge-cases.html" class="nav-link">Edge Cases</a>
+            <a href="milestone-breakdown.html" class="nav-link">Milestone</a>
         </div>
     </nav>
 
@@ -370,7 +569,7 @@
             <!-- Milestone Selector -->
             <div class="milestone-section">
                 <div class="section-label">Milestone View</div>
-                <div class="milestone-grid">
+                <div class="milestone-grid five-items">
                     <button class="milestone-btn" data-milestone="m1">
                         <span>Milestone 1</span>
                         <span class="milestone-refresh">↻</span>
@@ -383,8 +582,12 @@
                         <span>Milestone 3</span>
                         <span class="milestone-refresh">↻</span>
                     </button>
-                    <button class="milestone-btn active" data-milestone="later">
-                        <span>Full scope</span>
+                    <button class="milestone-btn" data-milestone="m4">
+                        <span>Milestone 4</span>
+                        <span class="milestone-refresh">↻</span>
+                    </button>
+                    <button class="milestone-btn active" data-milestone="m5">
+                        <span>Milestone 5</span>
                         <span class="milestone-refresh">↻</span>
                     </button>
                 </div>
@@ -398,8 +601,21 @@
                 </div>
             </div>
 
-            <!-- PDP & Overall Rating Features -->
-            <div class="feature-group">
+            <!-- Feature Annotation Button -->
+            <button class="annotation-button" id="annotationToggle">
+                <span class="annotation-icon">📍</span>
+                <span>Show Feature Annotations</span>
+            </button>
+
+            <!-- Collapsible Feature Control -->
+            <div class="collapsible-section" id="featureControlSection">
+                <div class="collapsible-header">
+                    <div class="collapsible-header-title">Feature Control</div>
+                    <div class="collapsible-arrow">▼</div>
+                </div>
+                <div class="collapsible-content">
+                    <!-- PDP & Overall Rating Features -->
+                    <div class="feature-group">
                 <div class="feature-group-title">PDP & Overall Rating</div>
 
                 <div class="feature-toggle">
@@ -592,12 +808,23 @@
                     </div>
                     <div class="toggle-switch" data-feature="menuFilterRating"></div>
                 </div>
+
+                <div class="feature-toggle">
+                    <div class="feature-info">
+                        <div class="feature-label">Top Rated Label</div>
+                        <div class="feature-description">Show "Your top rated" badge on product photos</div>
+                    </div>
+                    <div class="toggle-switch active" data-feature="topRatedBadge"></div>
+                </div>
+            </div>
+                </div>
             </div>
         </div>
     </div>
 
     <!-- Prototype Frame -->
     <div class="prototype-frame">
+        <div class="annotation-panel" id="annotationPanel"></div>
         <iframe id="prototypeFrame" src="../q2-prototype-working version.html#menu"></iframe>
     </div>
 
@@ -629,12 +856,13 @@
                     photoReviews: false,
                     customisationLabel: false,
                     menuCardRating: false,
-                    menuFilterRating: false
+                    menuFilterRating: false,
+                    topRatedBadge: true
                 }
             },
             m2: {
                 name: 'Milestone 2',
-                description: 'Adds rating distribution, AI summary, and comment themes',
+                description: 'Adds rating distribution, AI summary CTA, and menu card ratings',
                 features: {
                     pdpTopRating: true,
                     overallRating: true,
@@ -652,17 +880,47 @@
                     userReview: true,
                     userCommentThemes: false,
                     communityReviews: true,
+                    communityCommentThemes: false,
+                    helpfulButtons: false,
+                    photoReviews: false,
+                    customisationLabel: false,
+                    menuCardRating: true,
+                    menuFilterRating: false,
+                    topRatedBadge: true
+                }
+            },
+            m3: {
+                name: 'Milestone 3',
+                description: 'Adds comment themes, new rating drawer, rating filters, and menu filters',
+                features: {
+                    pdpTopRating: true,
+                    overallRating: true,
+                    ratingCount: true,
+                    reviewCount: true,
+                    ratingDistribution: true,
+                    alternativeOverallRating: false,
+                    addYourRating: true,
+                    newRatingDrawer: true,
+                    filterFeature: true,
+                    aiSummary: true,
+                    aiSummarySection: false,
+                    reviewTitle: true,
+                    themeBreakdown: false,
+                    userReview: true,
+                    userCommentThemes: true,
+                    communityReviews: true,
                     communityCommentThemes: true,
                     helpfulButtons: false,
                     photoReviews: false,
                     customisationLabel: false,
                     menuCardRating: true,
-                    menuFilterRating: false
+                    menuFilterRating: true,
+                    topRatedBadge: true
                 }
             },
-            m3: {
-                name: 'Milestone 3',
-                description: 'Adds filters, photo reviews, theme breakdown, and new rating drawer',
+            m4: {
+                name: 'Milestone 4',
+                description: 'Adds theme breakdown, photo reviews, and enhanced AI summarization',
                 features: {
                     pdpTopRating: true,
                     overallRating: true,
@@ -685,12 +943,13 @@
                     photoReviews: true,
                     customisationLabel: false,
                     menuCardRating: true,
-                    menuFilterRating: true
+                    menuFilterRating: true,
+                    topRatedBadge: true
                 }
             },
-            later: {
-                name: 'Full scope',
-                description: 'Full feature set with all rating and review capabilities',
+            m5: {
+                name: 'Milestone 5',
+                description: 'Community engagement: helpful/report buttons and additional features',
                 features: {
                     pdpTopRating: true,
                     overallRating: true,
@@ -713,16 +972,17 @@
                     photoReviews: true,
                     customisationLabel: true,
                     menuCardRating: true,
-                    menuFilterRating: true
+                    menuFilterRating: true,
+                    topRatedBadge: true
                 }
             }
         };
 
-        let currentMilestone = 'later';
+        let currentMilestone = 'm5';
         const iframe = document.getElementById('prototypeFrame');
 
         // Initialize
-        applyMilestone('later');
+        applyMilestone('m5');
 
         // Milestone button handlers
         document.querySelectorAll('.milestone-btn').forEach(btn => {
@@ -798,6 +1058,11 @@
 
                 // Send to iframe
                 sendFeatureUpdate();
+
+                // Update annotations after feature toggle
+                setTimeout(() => {
+                    updateAnnotations();
+                }, 50);
             });
         });
 
@@ -857,6 +1122,11 @@
                 type: 'initFeatures',
                 features: preset.features
             }, '*');
+
+            // Update annotations after milestone change
+            setTimeout(() => {
+                updateAnnotations();
+            }, 50);
         }
 
         function updateActiveMilestone() {
@@ -885,6 +1155,172 @@
                 allFeatures: features
             }, '*');
         }
+
+        // Feature Annotation System
+        let annotationsVisible = false;
+
+        // Map features to their labels and descriptions
+        const featureAnnotations = {
+            pdpTopRating: {
+                label: 'PDP Top Rating',
+                desc: 'Rating at page top'
+            },
+            overallRating: {
+                label: 'Overall Rating',
+                desc: 'Star rating & score'
+            },
+            ratingCount: {
+                label: 'Rating Count',
+                desc: 'Number of ratings'
+            },
+            reviewCount: {
+                label: 'Review Count',
+                desc: 'Written reviews count'
+            },
+            ratingDistribution: {
+                label: 'Rating Distribution',
+                desc: '5-1 star breakdown'
+            },
+            alternativeOverallRating: {
+                label: 'Alt Overall Rating',
+                desc: 'Alternative display'
+            },
+            addYourRating: {
+                label: 'Add Your Rating',
+                desc: 'Submit rating button'
+            },
+            newRatingDrawer: {
+                label: 'New Rating Drawer',
+                desc: 'Theme-based submission'
+            },
+            filterFeature: {
+                label: 'Filter Reviews',
+                desc: 'Filter by star rating'
+            },
+            aiSummary: {
+                label: 'AI Summary CTA',
+                desc: 'View AI summary button'
+            },
+            aiSummarySection: {
+                label: 'AI Summary Section',
+                desc: 'Expanded AI content'
+            },
+            themeBreakdown: {
+                label: 'Theme Breakdown',
+                desc: 'Common feedback themes'
+            },
+            userReview: {
+                label: 'User Review',
+                desc: 'Your own review'
+            },
+            userCommentThemes: {
+                label: 'User Comment Themes',
+                desc: 'Like/dislike pills'
+            },
+            communityReviews: {
+                label: 'Community Reviews',
+                desc: 'Other users reviews'
+            },
+            communityCommentThemes: {
+                label: 'Community Themes',
+                desc: 'Community like/dislike'
+            },
+            helpfulButtons: {
+                label: 'Helpful & Report',
+                desc: 'Review interactions'
+            },
+            photoReviews: {
+                label: 'Photo Reviews',
+                desc: 'User-submitted photos'
+            },
+            customisationLabel: {
+                label: 'Customisation Label',
+                desc: 'Protein customisation'
+            },
+            menuCardRating: {
+                label: 'Menu Card Rating',
+                desc: 'Rating on menu cards'
+            },
+            menuFilterRating: {
+                label: 'Menu Filter Rating',
+                desc: 'Filter menu by rating'
+            }
+        };
+
+        function updateAnnotations() {
+            const panel = document.getElementById('annotationPanel');
+            panel.innerHTML = '';
+
+            if (!annotationsVisible) return;
+
+            // Add header
+            const header = document.createElement('div');
+            header.style.cssText = 'font-size: 0.8125rem; font-weight: 600; color: #6B7280; margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.5px;';
+            header.textContent = 'Active Features';
+            panel.appendChild(header);
+
+            const activeFeatures = [];
+            document.querySelectorAll('.toggle-switch').forEach(toggle => {
+                const feature = toggle.dataset.feature;
+                if (toggle.classList.contains('active') && featureAnnotations[feature]) {
+                    activeFeatures.push({
+                        id: feature,
+                        ...featureAnnotations[feature]
+                    });
+                }
+            });
+
+            if (activeFeatures.length === 0) {
+                const empty = document.createElement('div');
+                empty.style.cssText = 'font-size: 0.8125rem; color: var(--text-muted); text-align: center; padding: 20px 0;';
+                empty.textContent = 'No features active';
+                panel.appendChild(empty);
+                return;
+            }
+
+            activeFeatures.forEach((feature, index) => {
+                const item = document.createElement('div');
+                item.className = 'annotation-item';
+
+                item.innerHTML = `
+                    <div class="annotation-number">${index + 1}</div>
+                    <div class="annotation-label">
+                        <div>${feature.label}</div>
+                        <div class="annotation-label-desc">${feature.desc}</div>
+                    </div>
+                `;
+
+                panel.appendChild(item);
+            });
+        }
+
+        // Toggle annotation button
+        document.getElementById('annotationToggle').addEventListener('click', function() {
+            annotationsVisible = !annotationsVisible;
+            const panel = document.getElementById('annotationPanel');
+            const button = this;
+
+            if (annotationsVisible) {
+                panel.classList.add('active');
+                button.classList.add('active');
+                button.innerHTML = '<span class="annotation-icon">📍</span><span>Hide Feature Annotations</span>';
+            } else {
+                panel.classList.remove('active');
+                button.classList.remove('active');
+                button.innerHTML = '<span class="annotation-icon">📍</span><span>Show Feature Annotations</span>';
+            }
+
+            updateAnnotations();
+        });
+
+        // Initialize milestone on load
+        applyMilestone(currentMilestone);
+
+        // Collapsible section handler
+        document.querySelector('.collapsible-header').addEventListener('click', function() {
+            const section = document.getElementById('featureControlSection');
+            section.classList.toggle('expanded');
+        });
     </script>
     </div> <!-- End main-content -->
 </body>

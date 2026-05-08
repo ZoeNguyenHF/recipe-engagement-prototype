@@ -187,7 +187,7 @@
             font-weight: 700;
             color: var(--text);
             margin: 0 0 12px 0;
-            text-align: center;
+            text-align: left;
             margin-top: 0;
         }
 
@@ -196,7 +196,7 @@
             font-weight: 500;
             color: var(--text-muted);
             margin: 0 0 20px 0;
-            text-align: center;
+            text-align: left;
         }
 
         .feature-list {
@@ -206,14 +206,37 @@
             width: 100%;
         }
 
+        .timeline {
+            counter-reset: feature-counter;
+        }
+
         .feature-list li {
             font-size: 0.875rem;
             color: var(--text);
-            padding: 10px 12px;
+            padding: 10px 12px 10px 42px;
             background: white;
             border-radius: 6px;
             margin-bottom: 6px;
             border: 1px solid var(--border);
+            position: relative;
+            counter-increment: feature-counter;
+        }
+
+        .feature-list li::before {
+            content: counter(feature-counter);
+            position: absolute;
+            left: 12px;
+            top: 10px;
+            width: 22px;
+            height: 22px;
+            background: #6B7280;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 600;
         }
 
         .feature-list li:last-child {
@@ -489,9 +512,9 @@
     <nav class="top-nav">
         <div class="nav-container">
             <a href="community-rating-presentation.html" class="nav-link">Overview</a>
-            <a href="milestone-breakdown.html" class="nav-link active">Milestone</a>
             <a href="prototype-enhanced.html" class="nav-link">Prototype</a>
             <a href="edge-cases.html" class="nav-link">Edge Cases</a>
+            <a href="milestone-breakdown.html" class="nav-link active">Milestone</a>
         </div>
     </nav>
 
@@ -791,7 +814,7 @@
                         <ul class="feature-list">
                             <li>Helpful/Report buttons</li>
                             <li>Photo from recipe feedback</li>
-                            <li>Additional engagement features based on user behavior</li>
+                            <li>Engagement feature, rating for addon, etc.</li>
                         </ul>
                     </div>
                 </div>

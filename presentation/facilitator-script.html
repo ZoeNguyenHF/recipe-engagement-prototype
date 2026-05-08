@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Facilitator Script - Community Rating Presentation</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #024426;
+            --primary-light: #067a46;
+            --accent: #c8f542;
+            --bg: #F9FAFB;
+            --card-bg: #FFFFFF;
+            --text: #1A1A2E;
+            --text-muted: #6B7280;
+            --border: #E5E7EB;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #024426 0%, #067a46 100%);
+            color: white;
+            padding: 32px 40px;
+            border-radius: 12px 12px 0 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .header .meta {
+            font-size: 0.875rem;
+            opacity: 0.9;
+        }
+
+        .time-tracker {
+            display: flex;
+            gap: 16px;
+            margin-top: 16px;
+            font-size: 0.8125rem;
+        }
+
+        .time-tracker div {
+            background: rgba(255,255,255,0.2);
+            padding: 6px 12px;
+            border-radius: 6px;
+        }
+
+        .content {
+            background: white;
+            padding: 40px;
+            border-radius: 0 0 12px 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+
+        .section {
+            margin-bottom: 48px;
+            padding-bottom: 48px;
+            border-bottom: 3px solid var(--border);
+        }
+
+        .section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: baseline;
+            gap: 16px;
+            margin-bottom: 24px;
+            padding: 20px;
+            background: linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%);
+            border-left: 4px solid #3B82F6;
+            border-radius: 8px;
+        }
+
+        .section-number {
+            font-size: 0.875rem;
+            font-weight: 700;
+            color: #1E40AF;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1E3A8A;
+            flex: 1;
+        }
+
+        .section-time {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #3B82F6;
+            background: white;
+            padding: 4px 12px;
+            border-radius: 6px;
+        }
+
+        .script-block {
+            background: #F0FDF4;
+            border-left: 4px solid #10B981;
+            padding: 20px 24px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+
+        .script-block h4 {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #065F46;
+            margin-bottom: 12px;
+        }
+
+        .script-block p {
+            font-size: 1.0625rem;
+            line-height: 1.8;
+            color: var(--text);
+            margin-bottom: 12px;
+        }
+
+        .script-block p:last-child {
+            margin-bottom: 0;
+        }
+
+        .script-block em {
+            font-style: italic;
+            color: #059669;
+            font-weight: 500;
+        }
+
+        .action-block {
+            background: #FEF3C7;
+            border-left: 4px solid #F59E0B;
+            padding: 16px 20px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+
+        .action-block h4 {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #92400E;
+            margin-bottom: 8px;
+        }
+
+        .action-block p {
+            font-size: 0.9375rem;
+            color: #78350F;
+            margin: 0;
+        }
+
+        .action-block ul {
+            margin: 8px 0 0 20px;
+            font-size: 0.9375rem;
+            color: #78350F;
+        }
+
+        .action-block li {
+            margin-bottom: 4px;
+        }
+
+        .response-block {
+            background: #FEF2F2;
+            border-left: 4px solid #EF4444;
+            padding: 16px 20px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+
+        .response-block h4 {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #991B1B;
+            margin-bottom: 8px;
+        }
+
+        .response-block p {
+            font-size: 0.9375rem;
+            color: #7F1D1D;
+            margin-bottom: 8px;
+        }
+
+        .response-block p:last-child {
+            margin-bottom: 0;
+        }
+
+        .tip-block {
+            background: #EFF6FF;
+            border: 2px dashed #3B82F6;
+            padding: 16px 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+
+        .tip-block h4 {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #1E40AF;
+            margin-bottom: 8px;
+        }
+
+        .tip-block p {
+            font-size: 0.875rem;
+            color: #1E3A8A;
+            margin: 0;
+        }
+
+        .checklist {
+            background: white;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .checklist h4 {
+            font-size: 0.875rem;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 12px;
+        }
+
+        .checklist ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .checklist li {
+            padding: 8px 0 8px 32px;
+            position: relative;
+            font-size: 0.9375rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .checklist li:last-child {
+            border-bottom: none;
+        }
+
+        .checklist li::before {
+            content: '☐';
+            position: absolute;
+            left: 0;
+            font-size: 1.25rem;
+            color: var(--text-muted);
+        }
+
+        .slide-reference {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            padding: 3px 10px;
+            border-radius: 6px;
+            font-size: 0.8125rem;
+            font-weight: 600;
+            margin-right: 8px;
+        }
+
+        .timing-note {
+            color: #3B82F6;
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+
+        .pause-indicator {
+            display: inline-block;
+            background: #FEF3C7;
+            color: #92400E;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.8125rem;
+            font-weight: 600;
+            margin: 0 4px;
+        }
+
+        .stakeholder-tag {
+            display: inline-block;
+            background: #DBEAFE;
+            color: #1E40AF;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.8125rem;
+            font-weight: 500;
+            margin-right: 4px;
+        }
+
+        .critical-moment {
+            background: #7C3AED;
+            color: white;
+            padding: 20px 24px;
+            border-radius: 8px;
+            margin: 24px 0;
+        }
+
+        .critical-moment h4 {
+            font-size: 0.875rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+            opacity: 0.9;
+        }
+
+        .critical-moment p {
+            font-size: 1rem;
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            .header {
+                position: static;
+            }
+            .section {
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎯 Facilitator Script: Community Rating Leadership Review</h1>
+            <div class="meta">Speaker notes with exact talking points • Total runtime: 35-40 minutes</div>
+            <div class="time-tracker">
+                <div>⏱️ Part 1: The Case (8 min)</div>
+                <div>⏱️ Part 2: Prototype (7 min)</div>
+                <div>⏱️ Part 3: Edge Cases (20 min)</div>
+                <div>⏱️ Part 4: Close (3 min)</div>
+            </div>
+        </div>
+
+        <div class="content">
+
+            <!-- PRE-MEETING -->
+            <div class="section">
+                <div class="section-header">
+                    <span class="section-number">Pre-Meeting</span>
+                    <span class="section-title">Setup & Preparation</span>
+                    <span class="section-time">Before Session</span>
+                </div>
+
+                <div class="checklist">
+                    <h4>📋 Pre-Meeting Checklist (24 hours before)</h4>
+                    <ul>
+                        <li>Send decision document to all attendees with subject: "3 Decisions Needed: Community Rating Edge Cases"</li>
+                        <li>Pre-wire key stakeholders (15-min calls):
+                            <ul style="margin: 8px 0 0 20px;">
+                                <li><span class="stakeholder-tag">Personalization Lead</span> Address "will ratings override our algorithm?" concern</li>
+                                <li><span class="stakeholder-tag">Revenue Lead</span> Get them excited about +270% lift data</li>
+                                <li><span class="stakeholder-tag">Quality Lead</span> Discuss proposed thresholds for rating display</li>
+                            </ul>
+                        </li>
+                        <li>Test prototype in browser - ensure all toggles work</li>
+                        <li>Have edge-cases.html open in separate browser tab</li>
+                        <li>Print one-page decision summary for yourself</li>
+                        <li>Prepare "parking lot" doc for off-topic items</li>
+                    </ul>
+                </div>
+
+                <div class="tip-block">
+                    <h4>💡 Room Setup</h4>
+                    <p>Position yourself where you can easily see all faces. Have a whiteboard or digital doc visible for capturing decisions in real-time. This isn't a "watch the presenter" meeting - it's a working session.</p>
+                </div>
+
+                <div class="action-block">
+                    <h4>🎯 Your Goal</h4>
+                    <p>Leave with 3-4 documented decisions, no blockers to M1 development, and clear DRI for any follow-ups. You are NOT asking for permission - you're gathering strategic input on execution details.</p>
+                </div>
+            </div>
+
+            <!-- PART 1: THE CASE -->
+            <div class="section">
+                <div class="section-header">
+                    <span class="section-number">Part 1</span>
+                    <span class="section-title">The Case: Business Impact & The Ask</span>
+                    <span class="section-time">8 minutes</span>
+                </div>
+
+                <div class="action-block">
+                    <h4>🖥️ What to Display</h4>
+                    <p><span class="slide-reference">SLIDE</span> community-rating-presentation.html - scroll to metrics sections</p>
+                </div>
+
+                <div class="script-block">
+                    <h4>📢 Opening (2 min)</h4>
+                    <p>"Good morning. Thanks for making time. Before we dive into how we're building this, let me frame why it matters and what we need from this session."</p>
+                    <p><span class="pause-indicator">PAUSE - SCROLL TO METRICS</span></p>
+                    <p>"The business case for community ratings is validated. <em>Point to metrics</em> 270% conversion lift from displaying ratings - that's industry benchmark from Spiegel Research. 19 to 22 percentage point lift on Box 2 retention - that's our strongest causal retention lever. And we saw 43% higher add-to-cart rate when we tested ratings in the top recipe widget."</p>
+                    <p>"The prototype is built. <em>Gesture forward</em> You'll see it in a moment - it works, it's ready to test."</p>
+                    <p>"Leadership has greenlit this initiative. We're moving forward."</p>
+                </div>
+
+                <div class="critical-moment">
+                    <h4>⚡ CRITICAL FRAMING MOMENT</h4>
+                    <p>"What we need from you today: <strong>strategic decisions on three edge case scenarios</strong> that define HOW we display ratings. These decisions unblock M1 development. That's why we're here - to make those decisions together."</p>
+                </div>
+
+                <div class="script-block">
+                    <h4>📢 Problem + Solution (3 min)</h4>
+                    <p>"Quick context on the problem we're solving - you've seen this in the pre-read, so I'll be brief."</p>
+                    <p>"Two core problems: <em>Hold up one finger</em> Customers lack confidence in meal selection, especially as menus expand. They don't trust the system to preselect for them, but they feel overwhelmed selecting themselves. <em>Hold up second finger</em> About 80% of customers never rate a single recipe. The pattern is 'early then stop' - they rate initially, then stop when they don't see the value."</p>
+                    <p>"One solution addresses both: <em>Lean forward slightly</em> Display community ratings during meal selection. This gives customers social proof to make confident choices, AND it closes the feedback loop - they see their ratings helping others, which motivates more rating."</p>
+                    <p>"It's a self-reinforcing flywheel. Decision confidence drives rating behavior, rating behavior creates more social proof, more social proof drives more confidence. That's the hypothesis."</p>
+                </div>
+
+                <div class="action-block">
+                    <h4>🎯 Check the Room</h4>
+                    <p>Scan for nodding heads or confused looks. If someone looks puzzled, pause and ask: "Any questions on the problem framing before we see the prototype?"</p>
+                </div>
+
+                <div class="script-block">
+                    <h4>📢 The Ask (3 min)</h4>
+                    <p>"Here's specifically what we need to decide today. <em>Count on fingers</em> Three edge case scenarios:"</p>
+                    <p>"<strong>One:</strong> How do we handle new recipes that have zero or very low rating volume? Do we display the rating section, hide it, or take another approach?"</p>
+                    <p>"<strong>Two:</strong> What happens when a low-rated meal appears in personalized recommendations? Do we show the community rating that might undermine the recommendation, or handle it differently?"</p>
+                    <p>"<strong>Three:</strong> How do we display ratings when there's a big gap between someone's personal rating and the community rating?"</p>
+                    <p><span class="pause-indicator">PAUSE 3 SECONDS</span></p>
+                    <p>"These aren't hypotheticals - these situations will happen daily once we launch. The decisions we make define the customer experience and affect different business outcomes. <em>Make eye contact with key stakeholders</em> Revenue, personalization, quality - all three are in tension here. That's why we need strategic input from this group."</p>
+                    <p>"Everything you'll see today is decision-ready. We've researched the options, built the prototypes, mapped the trade-offs. <em>Lean back, open posture</em> Your role is to provide strategic direction on which trade-offs we should prioritize."</p>
+                </div>
+
+                <div class="response-block">
+                    <h4>🛡️ If Someone Says: "Let's just test everything"</h4>
+                    <p><strong>Response:</strong> "Absolutely open to testing - that's built into the M1 plan. But we need to build a baseline first. We can't test all permutations simultaneously. Which solution should be our default hypothesis that we build and test first?"</p>
+                </div>
+
+                <div class="response-block">
+                    <h4>🛡️ If Someone Says: "Don't we need more data first?"</h4>
+                    <p><strong>Response:</strong> "What specific data would change your perspective on [the edge case]? <span class="pause-indicator">PAUSE</span> We have industry benchmarks, our own widget test results, and 12 out of 12 customers in research asking for this. What additional data would help you feel comfortable making a directional decision today?"</p>
+                </div>
+            </div>
+
+            <!-- PART 2: PROTOTYPE -->
+            <div class="section">
+                <div class="section-header">
+                    <span class="section-number">Part 2</span>
+                    <span class="section-title">Experience Walkthrough</span>
+                    <span class="section-time">7 minutes</span>
+                </div>
+
+                <div class="action-block">
+                    <h4>🖥️ What to Display</h4>
+                    <p><span class="slide-reference">SLIDE</span> prototype-enhanced.html - Open in full screen, M1 toggle ON</p>
+                </div>
+
+                <div class="script-block">
+                    <h4>📢 Setup (1 min)</h4>
+                    <p>"Let me show you what customers will experience. This is a working prototype - everything you're about to see is functional."</p>
+                    <p><em>Show control panel on left side</em></p>
+                    <p>"These toggles let me show different milestones. For now, we're looking at M1 - the minimum viable version. <em>Ensure M1 is selected</em> This is what we'd launch first to test the hypothesis."</p>
+                </div>
+
+                <div class="script-block">
+                    <h4>📢 Demo Walkthrough (4 min)</h4>
+                    <p>"Walk with me through a customer journey."</p>
+                    <p><em>Scroll slowly through the mobile screen showing recipe cards</em></p>
+                    <p>"Customer opens their meal selection. <em>Point to rating stars</em> Community ratings appear on recipe cards - 4.5 stars, 1.2k ratings. This is the core experience. Social proof at the point of decision."</p>
+                    <p>"<em>Point to sort/filter controls</em> They can sort by highest rated if they want - puts community favorites at the top. Or filter by minimum rating threshold."</p>
+                    <p>"<em>Scroll to a highly-rated recipe</em> When they see a 4.8-star recipe with 3,000 ratings, that's a strong signal. Less decision friction. More confidence to click 'Add to box.'"</p>
+                    <p><span class="pause-indicator">PAUSE - LET THEM ABSORB</span></p>
+                    <p>"Now, <em>gesture to indicate time passing</em> they cook the meal. After cooking, they're prompted to rate it. <em>Click or gesture to rating interface</em> They give it 5 stars. That rating goes into the community pool."</p>
+                    <p>"The next customer who sees this recipe sees 4.8 stars with one more rating counted. <em>Make circular gesture with hand</em> That's the flywheel. Their contribution becomes social proof for others. They see the value of rating because they see it working."</p>
+                </div>
+
+                <div class="tip-block">
+                    <h4>💡 Demo Technique</h4>
+                    <p>Scroll slowly. Pause on key screens for 3-4 seconds. Make eye contact while explaining, not while looking at screen. Let silence sit after showing the rating flywheel - it's powerful.</p>
+                </div>
+
+                <div class="critical-moment">
+                    <h4>⚡ ADDRESS PERSONALIZATION CONCERN PROACTIVELY</h4>
+                    <p>"Important note for <span class="stakeholder-tag">Personalization team</span>: This works WITH our recommendation engine, not instead of it. <em>Gesture broadly</em> Everything appearing on this screen is already filtered by our algorithm based on taste profile, dietary needs, past behavior. Ratings help customers choose WITHIN those personalized recommendations. Think of it as: algorithm narrows 80 recipes down to 20 options, ratings help choose from those 20."</p>
+                </div>
+
+                <div class="script-block">
+                    <h4>📢 Pause for Reactions (2 min)</h4>
+                    <p>"Quick reactions before we get into edge cases? <span class="pause-indicator">PAUSE 5 SECONDS</span> Especially interested if anyone has concerns about how this interacts with personalization..."</p>
+                </div>
+
+                <div class="action-block">
+                    <h4>🎯 Manage This Moment</h4>
+                    <ul>
+                        <li>If someone gives positive reaction: "Great - appreciate that. Let's carry that forward as we look at edge cases."</li>
+                        <li>If someone raises concern: Listen fully, acknowledge, then: "Good point - let's see if the edge case solutions address that."</li>
+                        <li>If someone tries to derail into details: "Excellent question - let me capture that for implementation discussion. <em>Write it on parking lot</em> For today, I need strategic direction on the three edge cases. Let's dive in."</li>
+                    </ul>
+                </div>
+
+                <div class="response-block">
+                    <h4>🛡️ If <span class="stakeholder-tag">Personalization Stakeholder</span> Pushes Back</h4>
+                    <p><strong>Response:</strong> "I hear the concern about ratings potentially overriding your algorithm. Let me be direct: we're not replacing personalization logic - we're making it more transparent. Right now, customers don't understand WHY something is recommended. Ratings give context. And the data backs this up - those 12 customers in research specifically said they want ratings reflected in recommendations. They're asking us to show this."</p>
+                </div>
+            </div>
+
+            <!-- PART 3: EDGE CASES -->
+            <div class="section">
+                <div class="section-header">
+                    <span class="section-number">Part 3</span>
+                    <span class="section-title">Edge Case Decisions</span>
+                    <span class="section-time">18-20 minutes</span>
+                </div>
+
+                <div class="action-block">
+                    <h4>🖥️ What to Display</h4>
+                    <p><span class="slide-reference">SLIDE</span> edge-cases.html - All sections collapsed, expand one at a time</p>
+                </div>
+
+                <div class="script-block">
+                    <h4>📢 Framework Setup (1 min)</h4>
+                    <p>"Alright. Decision time. <em>Open edge-cases.html</em> I'm going to walk through each edge case systematically. For each one, I'll show you the scenario, the options we've considered with pros and cons, and our recommended approach - marked 'PROPOSED.' Then we'll make a decision before moving to the next one."</p>
+                    <p>"I need clear direction from this group on which option to build. If you disagree with the proposed approach, tell me what you'd prefer and why. <em>Lean forward</em> Let's keep debate focused and make decisions."</p>
+                </div>
+
+                <div class="tip-block">
+                    <h4>💡 Pacing Strategy</h4>
+                    <p>Edge Cases 1A and 1B should go fast (3-4 min each). Edge Case 2 is where you'll spend time (6-7 min) because it's the highest tension. Edge Case 3 is a quick confirmation (3 min).</p>
+                </div>
+
+                <!-- EDGE CASE 1A -->
+                <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--primary); margin: 32px 0 16px 0;">Edge Case 1A: Low Volume - New Recipes (5-6 min)</h3>
+
+                <div class="action-block">
+                    <h4>🖥️ Action</h4>
+                    <p>Click to expand "Edge Case 1A" section. Let them see the visual issue with new recipes showing low rating counts.</p>
+                </div>
+
+                <div class="script-block">
+                    <h4>📢 Frame the Scenario (30 sec)</h4>
+                    <p>"First edge case: <em>Gesture to screen</em> We launch a NEW recipe. Zero ratings on day one. Maybe 2 ratings by day two. It appears in meal selection. Question: Do we show the rating section with zero or low counts, hide it entirely until we hit a threshold, or do something else?"</p>
+                </div>
+
+                <div class="script-block">
+                    <h4>📢 Surface the Tension (30 sec)</h4>
+                    <p>"Here's the tension: <span class="stakeholder-tag">Revenue perspective</span> - hiding ratings loses that 270% conversion lift. We're leaving money on the table. <span class="stakeholder-tag">Quality perspective</span> - showing 2 ratings feels unreliable. Poor customer experience. Both are valid concerns."</p>
+                </div>
+
+                <div class="script-block">
+                    <h4>📢 Walk Through Solutions (2 min)</h4>
+                    <p><em>Scroll to Solution 1</em></p>
+                    <p>"Our proposed approach - Solution 1: Display the rating section but with a 'New - Be the first to rate' label. <em>Point to visual</em> Empty stars, clear signaling that this is new."</p>
+                    <p>"Pros: Turns zero ratings into an engagement opportunity. Transparent about status. Drives the flywheel from day one because we're explicitly asking early adopters to rate. Cons: There's no social proof yet, obviously. And it requires elegant UI treatment."</p>
+                    <p><span class="pause-indicator">PAUSE - SCROLL TO SOLUTION 2</span></p>
+                    <p>"Alternative - Solution 2: Hide the rating section entirely until we collect 15 or more ratings. <em>Gesture to threshold</em> Conservative approach."</p>
+                    <p>"Pros: Protects quality bar. No confusing low-volume data. Cons: We delay the conversion benefit for potentially weeks. We slow rating collection because no one knows to rate these recipes. And we create an inconsistent experience - some recipes show ratings, some don't."</p>
+                </div>
+
+                <div class="critical-moment">
+                    <h4>⚡ DECISION FORCING (3 min)</h4>
+                    <p>"Show of hands: Who supports Solution 1 - display with 'New' label? <span class="pause-indicator">PAUSE - COUNT HANDS</span>"</p>
+                    <p>"Who prefers Solution 2 - hide until 15 ratings? <span class="pause-indicator">PAUSE - COUNT HANDS</span>"</p>
+                    <p>"Anyone strongly opposed to Solution 1? <span class="pause-indicator">PAUSE 5 SECONDS</span>"</p>
+                </div>
+
+                <div class="action-block">
+                    <h4>🎯 If There's Debate</h4>
+                    <ul>
+                        <li>Let it run for 60-90 seconds max</li>
+                        <li>Identify who's speaking - which stakeholder concern are they representing?</li>
+                        <li>Ask directly: "<span class="stakeholder-tag">Name</span>, what would you need to see to feel comfortable with Solution 1?"</li>
+                        <li>If stuck, offer: "Can we test both in M1 with a 50/50 split?" (Have this ready as backup)</li>
+                    </ul>
+                </div>
+
+                <div class="script-block">
+                    <h4>📢 Document Decision</h4>
+                    <p>"Okay, I'm hearing <em>[majority preference]</em>. <span class="stakeholder-tag">Name</span>, can you confirm that's aligned with your perspective? <span class="pause-indicator">WAIT FOR CONFIRMATION</span> Great. Documented: Solution [X] for new recipes. <em>Type it visibly or write on whiteboard</em> Moving on."</p>
+                </div>
+
+                <div class="response-block">
+                    <h4>🛡️ If <span class="stakeholder-tag">Quality Lead</span> Resists Showing Low Ratings</h4>
+                    <p><strong>Response:</strong> "I understand protecting quality experience. What if we add a minimum threshold - say, don't show any numerical rating until 5 ratings, but DO show 'New - Be first to rate' from day one? That way we're not displaying potentially unreliable 1-rating scores, but we're still driving engagement. Would that address your concern?"</p>
+                </div>
+
+                <!-- EDGE CASE 1B -->
+                <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--primary); margin: 32px 0 16px 0;">Edge Case 1B: Low Volume - Premium Recipes (4-5 min)</h3>
+
+                <div class="action-block">
+                    <h4>🖥️ Action</h4>
+                    <p>Click to expand "Edge Case 1B" section.</p>
+                </div>
+
+                <div class="script-block">
+                    <h4>📢 Frame the Scenario (30 sec)</h4>
+                    <p>"Related scenario: PREMIUM recipes. <em>Gesture to screen</em> 8 ratings, 4.2 stars, been live for 6 weeks. It's a successful, high-quality recipe. But low volume because smaller audience - premium has inherent volume constraints. Same question: display or hide?"</p>
+                </div>
+
+                <div class="script-block">
+                    <h4>📢 Fast-Track If 1A Approved (1 min)</h4>
+                    <p>"If we're comfortable showing 'New - Be first to rate' for recipes with zero ratings, same logic applies here. We'd show the rating with a 'PREMIUM' badge. <em>Point to visual</em> Maintains premium positioning, shows available social proof."</p>
+                    <p>"Anyone see a reason to treat premium differently than new recipes? <span class="pause-indicator">PAUSE 5 SECONDS</span> No? <em>Scan room</em> Okay, confirmed - same approach for premium. Moving on."</p>
+                </div>
+
+                <div class="action-block">
+                    <h4>🎯 If There's Resistance</h4>
+                    <p>Someone may say "premium needs special handling." If so:</p>
+                </div>
+
+                <div class="script-block">
+                    <h4>📢 Address Premium Positioning Concern</h4>
+                    <p>"I hear the concern about premium positioning. Let me reframe: Not showing ratings doesn't make recipes MORE premium - it just hides social proof from premium customers who may particularly value 'people like me' validation. <em>Point to Solution 1 visual</em> This maintains premium feel with the badge while showing transparency. That's consistent with premium brand values - quality and honesty."</p>
+                </div>
+
+                <!-- EDGE CASE 2 -->
+                <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--primary); margin: 32px 0 16px 0;">Edge Case 2: Low-Rated Meals in Recommendations (6-7 min)</h3>
+
+                <div class="tip-block">
+                    <h4>💡 This is the High-Tension Decision</h4>
+                    <p>Expect debate. This is where personalization and transparency collide. Go slower. Let people talk. Your job is to facilitate toward a decision, not to win.</p>
+                </div>
+
+                <div class="action-block">
+                    <h4>🖥️ Action</h4>
+                    <p>Click to expand "Edge Case 2" section. Let visual load fully before speaking.</p>
+                </div>
+
+                <div class="script-block">
+                    <h4>📢 Frame the Scenario (1 min)</h4>
+                    <p>"Harder scenario. <em>Point to screen</em> A meal with 2.1 stars - 1,200 ratings, so this is statistically reliable data - appears in 'Top Picks for You' because our algorithm knows YOU love it. Your taste profile, your history, your dietary needs - the algorithm is confident this is right for you even though the community rated it low."</p>
+                    <p>"Do we show the 2.1-star rating in that context? Or handle it differently?"</p>
+                    <p><span class="pause-indicator">PAUSE 3 SECONDS</span></p>
+                    <p>"<em>Make eye contact around room</em> This is where personalization and transparency collide. Let's talk through it."</p>
+                </div>
+
+                <div class="script-block">
+                    <h4>📢 Walk Through Solutions (2.5 min)</h4>
+                    <p><em>Scroll to Solution 1</em></p>
+                    <p>"Solution 1: Hide community rating in 'Top Picks' zones. Don't show the stars at all when something appears in a personalized recommendation section."</p>
+                    <p>"Pros: Protects personalization confidence. No customer confusion. Algorithm maintains authority. Cons: <em>Pause for effect</em> It feels like we're hiding information. Customers notice missing data - they're not stupid. And it creates inconsistent experience."</p>
+                    <p><em>Scroll to Solution 2</em></p>
+                    <p>"Solution 2: Show with personal context. Display '2.1 stars community, but you rated similar recipes 5 stars.' <em>Point to visual</em> Full transparency, explains WHY we're recommending despite low rating."</p>
+                    <p>"Pros: Transparent. Educates customers about how personalization works. Cons: May still undermine confidence in the recommendation. Some customers might ignore their own history and reject based on community rating."</p>
+                    <p><span class="pause-indicator">PAUSE - SCROLL TO SOLUTION 3</span></p>
+                    <p>"Solution 3 - our proposal: Visual differentiation. <em>Point to green box and badge</em> Green highlighted box, 'Your top rated' badge. No community star rating displayed in this specific zone."</p>
+                    <p>"Pros: Clear 'this is personalized FOR YOU' signal. Doesn't hide data - the rating is visible elsewhere on the page if they click in. Maintains recommendation confidence. Cons: Inconsistent star display. Customers may wonder why stars are missing from Top Picks."</p>
+                </div>
+
+                <div class="critical-moment">
+                    <h4>⚡ DECISION FORCING (3 min)</h4>
+                    <p>"This is a values decision about what we prioritize: algorithm confidence versus customer transparency. <span class="pause-indicator">PAUSE 3 SECONDS</span>"</p>
+                    <p>"<span class="stakeholder-tag">Personalization Lead</span>, what's your comfort level with Solution 3 - the green highlighting without stars?"</p>
+                    <p><span class="pause-indicator">WAIT FOR RESPONSE - DO NOT FILL SILENCE</span></p>
+                </div>
+
+                <div class="action-block">
+                    <h4>🎯 Manage the Discussion</h4>
+                    <ul>
+                        <li>If Personalization Lead supports Solution 3: Lock it in quickly and move on</li>
+                        <li>If they prefer Solution 1 (hide rating): Ask Revenue Lead their perspective</li>
+                        <li>If they prefer Solution 2 (show with context): Ask if they're concerned it undermines recommendations</li>
+                        <li>Let debate run for 2-3 minutes, then force decision</li>
+                    </ul>
+                </div>
+
+                <div class="script-block">
+                    <h4>📢 Close the Decision</h4>
+                    <p>"I'm hearing <em>[summarize positions]</em>. Here's what I propose: We proceed with Solution 3 for M1 - green highlighting, no stars in Top Picks zone. We monitor feedback closely in the first two weeks. If we see customers confused or recommendations suffering, we have Solution 1 as a rollback option built into the feature flag. Can we align on that approach? <em>Look directly at Personalization Lead</em> Does that work for you?"</p>
+                    <p><span class="pause-indicator">WAIT FOR AGREEMENT</span></p>
+                    <p>"Confirmed: Solution 3 with monitoring. <em>Document it</em> Next edge case."</p>
+                </div>
+
+                <div class="response-block">
+                    <h4>🛡️ If <span class="stakeholder-tag">Personalization Lead</span> Says "This Undermines Our Work"</h4>
+                    <p><strong>Response:</strong> "I hear that concern. Let me push back gently: customers ALREADY don't understand your recommendations. We hear 'why is this in my box?' all the time. Solution 3 doesn't undermine personalization - it contextualizes it. The green box and 'Your top rated' badge say 'trust us, this is for YOU even if the crowd disagrees.' That's actually STRONGER messaging for personalization than what we have today. And we're not showing the conflicting rating right there - we're visually differentiating. Thoughts?"</p>
+                </div>
+
+                <div class="response-block">
+                    <h4>🛡️ If <span class="stakeholder-tag">Revenue Lead</span> Pushes for Solution 2 (Show Everything)</h4>
+                    <p><strong>Response:</strong> "I appreciate the transparency instinct. My concern with Solution 2 is we undercut our own recommendations, which are a core retention driver. That 19-22pp Box 2 retention effect comes from good meal selection - if customers start ignoring Top Picks because they see low community ratings, we hurt retention more than we gain in transparency. Solution 3 gives visual signal without undercutting. Make sense?"</p>
+                </div>
+
+                <!-- EDGE CASE 3 -->
+                <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--primary); margin: 32px 0 16px 0;">Edge Case 3: Personal vs Community Conflict (4 min)</h3>
+
+                <div class="action-block">
+                    <h4>🖥️ Action</h4>
+                    <p>Click to expand "Edge Case 3" section.</p>
+                </div>
+
+                <div class="script-block">
+                    <h4>📢 Frame the Scenario (30 sec)</h4>
+                    <p>"Last one - this should be straightforward. <em>Gesture to screen</em> In 'Your Ratings' history view - this is a customer looking at their own past ratings - a recipe shows: You rated 5 stars, community rated 2.1 stars with 1,200 reviews. How do we display this?"</p>
+                </div>
+
+                <div class="script-block">
+                    <h4>📢 Fast-Track This (1.5 min)</h4>
+                    <p>"This is the customer's personal history, so their rating should dominate. <em>Point to Solution 1</em> Proposed: Display '5 stars - Your rating' large and prominent, then '2.1 stars (1.2k) Community' smaller and secondary. Personal rating first, community for context."</p>
+                    <p>"Anyone disagree with prioritizing personal rating in personal history views? <span class="pause-indicator">PAUSE 5 SECONDS</span> <em>Scan room</em> No? Aligned. That's decision three."</p>
+                </div>
+
+                <div class="action-block">
+                    <h4>🎯 If Someone Raises Objection</h4>
+                    <p>Unlikely, but if so: "What's the concern with showing personal rating first in a personal history context? <span class="pause-indicator">WAIT FOR ANSWER</span> [Address specific concern, but this should be quick]"</p>
+                </div>
+            </div>
+
+            <!-- PART 4: CLOSE -->
+            <div class="section">
+                <div class="section-header">
+                    <span class="section-number">Part 4</span>
+                    <span class="section-title">Recap & Next Steps</span>
+                    <span class="section-time">3 minutes</span>
+                </div>
+
+                <div class="script-block">
+                    <h4>📢 Recap Decisions (1 min)</h4>
+                    <p>"Let me recap what we decided - making sure I captured this correctly. <em>Look at notes/whiteboard</em>"</p>
+                    <p>"<strong>Edge Case 1A - New recipes:</strong> [State decision]. <em>Pause for confirmation nods</em>"</p>
+                    <p>"<strong>Edge Case 1B - Premium recipes:</strong> [State decision]. <em>Pause</em>"</p>
+                    <p>"<strong>Edge Case 2 - Low-rated recommendations:</strong> [State decision]. <em>Make eye contact with Personalization Lead</em>"</p>
+                    <p>"<strong>Edge Case 3 - Personal vs community:</strong> [State decision]."</p>
+                    <p>"Any corrections or clarifications? <span class="pause-indicator">PAUSE 3 SECONDS</span> No? Great."</p>
+                </div>
+
+                <div class="critical-moment">
+                    <h4>⚡ LOCK IN THE DECISIONS</h4>
+                    <p>"<span class="stakeholder-tag">Assign Name</span>, can you send meeting notes with these four decisions documented by end of day today? I'll provide screenshots of the approved solutions. Engineering needs this to start development tomorrow."</p>
+                    <p><span class="pause-indicator">WAIT FOR EXPLICIT COMMITMENT</span></p>
+                </div>
+
+                <div class="script-block">
+                    <h4>📢 M1 Timeline (1 min - if time permits)</h4>
+                    <p>"With these decisions, M1 is scoped and ready. Quick look at what happens next. <em>Switch to milestone-breakdown.html if time, otherwise describe verbally</em>"</p>
+                    <p>"M1 includes core rating display, the edge case handling we just decided, and basic sorting/filtering. Controlled rollout to a percentage of customers. Built-in A/B testing to validate business impact. Timeline is approximately <em>[X weeks]</em> to customer-facing test."</p>
+                    <p>"M2 and beyond include optimization based on M1 learnings - things like rating quality mechanisms, deeper personalization integration, additional features. But those are dependent on M1 results. First, we validate the hypothesis."</p>
+                </div>
+
+                <div class="script-block">
+                    <h4>📢 Final Check (30 sec)</h4>
+                    <p>"Any final concerns or blockers before we proceed to development? <span class="pause-indicator">PAUSE 5 SECONDS</span>"</p>
+                    <p>"<em>If concerns raised, address briefly or assign to parking lot</em>"</p>
+                    <p>"<em>If no concerns</em> Excellent. Appreciate everyone's time and input. These decisions unblock us to move forward. Thank you."</p>
+                </div>
+
+                <div class="action-block">
+                    <h4>🎯 Immediate Post-Meeting Actions</h4>
+                    <ul>
+                        <li>Send thank-you email within 1 hour with decision summary</li>
+                        <li>Attach screenshots of approved solutions from edge-cases.html</li>
+                        <li>Tag assigned note-taker for EOD documentation</li>
+                        <li>Brief engineering team on decisions before COB</li>
+                        <li>Update any stakeholders who couldn't attend</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- BACKUP RESPONSES -->
+            <div class="section">
+                <div class="section-header">
+                    <span class="section-number">Appendix</span>
+                    <span class="section-title">Backup Responses to Common Objections</span>
+                    <span class="section-time">Reference Only</span>
+                </div>
+
+                <div class="response-block">
+                    <h4>🛡️ "What if ratings are manipulated or fake?"</h4>
+                    <p><strong>Response:</strong> "Valid concern. M2 includes rating quality mechanisms - verified purchases only, outlier detection, reporting tools. Industry data shows manipulation is less than 1% in systems with verified purchase requirements. We can implement reporting mechanism from M1 day one if that addresses the concern. Does that work?"</p>
+                </div>
+
+                <div class="response-block">
+                    <h4>🛡️ "How does this affect Menu team's recipe selection?"</h4>
+                    <p><strong>Response:</strong> "This actually helps Menu team. You'll see what resonates versus what doesn't, much faster feedback loop. Low-rated recipes surface quickly, you can investigate whether it's recipe quality, photography, description, or just niche taste. More data to inform menu decisions."</p>
+                </div>
+
+                <div class="response-block">
+                    <h4>🛡️ "What's the rollout risk? What if this backfires?"</h4>
+                    <p><strong>Response:</strong> "M1 is controlled rollout to a percentage of customers - we're not flipping this on for everyone at once. Built-in A/B testing to validate business impact. And we have feature flags - if we see issues, we can turn it off within hours. Low technical risk, high learning opportunity."</p>
+                </div>
+
+                <div class="response-block">
+                    <h4>🛡️ "But Netflix/Uber/[Other Company] does [Different Approach]"</h4>
+                    <p><strong>Response:</strong> "Great benchmark - we studied them extensively. Netflix faced the same personalization-versus-transparency question. They landed on [describe their approach]. Our context is different because [explain key difference in meal kit business]. We adapted their pattern rather than copying it directly. Appreciate the comparison - it validates we're thinking about the right problems."</p>
+                </div>
+
+                <div class="response-block">
+                    <h4>🛡️ "We need more time to think about this"</h4>
+                    <p><strong>Response:</strong> "I respect that. What specifically do you need more time to evaluate? <span class="pause-indicator">PAUSE - LISTEN</span> Is there additional data, or a specific scenario you want to think through? I want to make sure we're addressing the real concern. We can schedule a follow-up, but I need to understand what would change between now and then so we don't just defer the decision."</p>
+                </div>
+
+                <div class="response-block">
+                    <h4>🛡️ "This feels rushed"</h4>
+                    <p><strong>Response:</strong> "I hear that it feels fast. Let me reframe: We've been researching this for [X months]. The prototype has been available for [X weeks]. The pre-read went out 24 hours ago. The business case is validated. What we're doing today isn't rushing a decision on WHETHER to do this - that decision is made. We're making execution decisions on HOW to handle edge cases. That's appropriate level of detail for this group. What specific aspect feels too rushed?"</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div style="text-align: center; padding: 40px 20px; color: var(--text-muted); font-size: 0.875rem;">
+        <p><strong>Remember:</strong> You're not asking for permission. You're gathering strategic input on execution details.</p>
+        <p style="margin-top: 8px;">This is a decision meeting. Act accordingly.</p>
+    </div>
+</body>
+</html>

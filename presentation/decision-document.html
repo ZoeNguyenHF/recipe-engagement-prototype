@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Decision Document - Community Rating Edge Cases</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #024426;
+            --primary-light: #067a46;
+            --accent: #c8f542;
+            --bg: #FAFBFC;
+            --card-bg: #FFFFFF;
+            --text: #1A1A2E;
+            --text-muted: #6B7280;
+            --border: #E5E7EB;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 48px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+
+        .header {
+            border-bottom: 3px solid var(--primary);
+            padding-bottom: 24px;
+            margin-bottom: 32px;
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 8px;
+        }
+
+        .header .meta {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+        }
+
+        .alert-box {
+            background: #FEF3C7;
+            border-left: 4px solid #F59E0B;
+            padding: 16px 20px;
+            margin-bottom: 32px;
+            border-radius: 4px;
+        }
+
+        .alert-box strong {
+            color: #92400E;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .alert-box p {
+            color: #78350F;
+            font-size: 0.9375rem;
+            margin: 0;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text);
+            margin: 40px 0 16px 0;
+            padding-top: 24px;
+            border-top: 2px solid var(--border);
+        }
+
+        h2:first-of-type {
+            border-top: none;
+            padding-top: 0;
+            margin-top: 0;
+        }
+
+        h3 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin: 24px 0 12px 0;
+        }
+
+        p {
+            margin-bottom: 16px;
+            font-size: 0.9375rem;
+        }
+
+        .decision-box {
+            background: #F0FDF4;
+            border: 2px solid #10B981;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .decision-box h4 {
+            font-size: 0.875rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #065F46;
+            margin-bottom: 12px;
+        }
+
+        .decision-box p {
+            font-size: 1rem;
+            color: var(--text);
+            margin: 0;
+            line-height: 1.7;
+        }
+
+        .options-grid {
+            display: grid;
+            gap: 12px;
+            margin: 16px 0;
+        }
+
+        .option-item {
+            background: white;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            padding: 16px;
+            position: relative;
+        }
+
+        .option-item.proposed {
+            border-color: var(--primary);
+            background: #F0FDF4;
+        }
+
+        .option-item.proposed::before {
+            content: 'PROPOSED';
+            position: absolute;
+            top: -10px;
+            right: 16px;
+            background: var(--primary);
+            color: white;
+            padding: 2px 10px;
+            border-radius: 4px;
+            font-size: 0.6875rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .option-item strong {
+            color: var(--text);
+            display: block;
+            margin-bottom: 6px;
+            font-size: 0.9375rem;
+        }
+
+        .option-item p {
+            margin: 0;
+            font-size: 0.875rem;
+            color: var(--text-muted);
+        }
+
+        .pros-cons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 8px;
+            font-size: 0.8125rem;
+        }
+
+        .pros-cons div {
+            padding: 8px;
+            border-radius: 4px;
+        }
+
+        .pros {
+            background: #F0FDF4;
+            color: #065F46;
+        }
+
+        .cons {
+            background: #FEF2F2;
+            color: #991B1B;
+        }
+
+        .pros strong, .cons strong {
+            display: block;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+
+        .context-box {
+            background: #EFF6FF;
+            border-left: 4px solid #3B82F6;
+            padding: 16px 20px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+
+        .context-box p {
+            margin: 0;
+            font-size: 0.875rem;
+            color: #1E40AF;
+        }
+
+        .metric-highlight {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+
+        .footer {
+            margin-top: 40px;
+            padding-top: 24px;
+            border-top: 2px solid var(--border);
+            font-size: 0.875rem;
+            color: var(--text-muted);
+        }
+
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            .container {
+                box-shadow: none;
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Decision Document: Community Rating Edge Cases</h1>
+            <div class="meta">
+                Pre-Read for Leadership Review Session • 30-45 minutes • Q2 2026
+            </div>
+        </div>
+
+        <div class="alert-box">
+            <strong>Decisions Needed</strong>
+            <p>This session requires 3-4 strategic decisions on edge case handling to proceed with M1 development. All options are researched, prototyped, and ready for implementation. Your role: provide strategic direction on customer experience trade-offs.</p>
+        </div>
+
+        <h2>Context: Why This Matters</h2>
+
+        <p>Community ratings are validated to drive business impact. The prototype is built. The initiative is greenlit. Before we proceed to M1 development, we need strategic alignment on how to handle edge case scenarios.</p>
+
+        <div class="context-box">
+            <p><strong>Business Impact:</strong> <span class="metric-highlight">+270%</span> conversion lift from displaying ratings (industry) • <span class="metric-highlight">+19-22pp</span> Box 2 retention effect • <span class="metric-highlight">+43%</span> add-to-cart rate with ratings visible</p>
+        </div>
+
+        <h3>The Challenge</h3>
+        <p>While the core experience is straightforward (show community ratings during meal selection), three edge case scenarios require strategic decisions that balance:</p>
+        <ul style="margin-left: 20px; margin-bottom: 20px; font-size: 0.9375rem;">
+            <li style="margin-bottom: 8px;"><strong>Revenue optimization</strong> - Converting browsers to purchasers</li>
+            <li style="margin-bottom: 8px;"><strong>Personalization integrity</strong> - Maintaining trust in our recommendation engine</li>
+            <li style="margin-bottom: 8px;"><strong>Rating quality</strong> - Ensuring credible, useful social proof</li>
+        </ul>
+
+        <h2>Decision 1: Low Volume - New Recipes</h2>
+
+        <h3>Scenario</h3>
+        <p>A NEW recipe launches with 0-5 ratings. It appears in meal selection. Do we display the low/zero rating, hide the rating section entirely, or take another approach?</p>
+
+        <h3>Why This Matters</h3>
+        <p><strong>Revenue concern:</strong> Hiding ratings loses conversion opportunity (+270% lift). <strong>Quality concern:</strong> Showing unreliable ratings (2 reviews) creates poor experience. <strong>Engagement concern:</strong> We need early adopters to rate these recipes to build credibility.</p>
+
+        <div class="options-grid">
+            <div class="option-item proposed">
+                <strong>Solution 1: Display with "New - Be the first to rate" label</strong>
+                <p>Show rating section with empty stars and clear signaling that this is a new recipe.</p>
+                <div class="pros-cons">
+                    <div class="pros">
+                        <strong>Pros</strong>
+                        Turns zero ratings into engagement opportunity • Transparent about recipe status • Drives flywheel from day 1
+                    </div>
+                    <div class="cons">
+                        <strong>Cons</strong>
+                        No social proof yet • Requires elegant UI treatment
+                    </div>
+                </div>
+            </div>
+
+            <div class="option-item">
+                <strong>Solution 2: Hide rating until 15+ ratings collected</strong>
+                <p>Don't show rating section at all until minimum threshold is reached.</p>
+                <div class="pros-cons">
+                    <div class="pros">
+                        <strong>Pros</strong>
+                        Protects quality bar • No confusing low-volume data • Conservative approach
+                    </div>
+                    <div class="cons">
+                        <strong>Cons</strong>
+                        Delays conversion benefit • Slows rating collection • Inconsistent experience
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="decision-box">
+            <h4>Decision Needed</h4>
+            <p>Do we prioritize <strong>engagement & transparency</strong> (Solution 1: display with label) or <strong>quality threshold</strong> (Solution 2: hide until 15+ ratings)?</p>
+        </div>
+
+        <h2>Decision 2: Low Volume - Premium Recipes</h2>
+
+        <h3>Scenario</h3>
+        <p>A PREMIUM recipe has 8 ratings (4.2★) after 6 weeks because smaller audience. It's a successful, high-quality recipe but lacks rating volume. Same question: display or hide?</p>
+
+        <h3>Why This Matters</h3>
+        <p>Premium recipes inherently have lower volume due to smaller market segment. If we hide ratings until high volume, premium may never show ratings. Yet premium customers may particularly value social proof from "people like me."</p>
+
+        <div class="context-box">
+            <p><strong>Note:</strong> If Decision 1 = Solution 1 (display with label for new recipes), same logic likely applies here. This becomes a fast confirmation rather than a separate debate.</p>
+        </div>
+
+        <div class="decision-box">
+            <h4>Decision Needed</h4>
+            <p>Should premium recipes follow the same logic as new recipes, or require different handling to maintain premium positioning?</p>
+        </div>
+
+        <h2>Decision 3: Low-Rated Meals in Personalized Recommendations</h2>
+
+        <h3>Scenario</h3>
+        <p>A meal with 2.1★ (1,200 ratings) appears in "Top Picks for You" because our algorithm knows YOU love it (you've rated similar recipes 5★). Do we show the low community rating in this personalized context?</p>
+
+        <h3>Why This Matters</h3>
+        <p><strong>This is where personalization and transparency collide.</strong> Hiding the rating protects our recommendation engine but feels like we're hiding information. Showing the rating maintains transparency but might undermine customer trust in personalized picks.</p>
+
+        <div class="options-grid">
+            <div class="option-item">
+                <strong>Solution 1: Hide community rating in "Top Picks" zone</strong>
+                <p>Don't display community ratings for meals in personalized recommendation sections.</p>
+                <div class="pros-cons">
+                    <div class="pros">
+                        <strong>Pros</strong>
+                        Protects personalization confidence • No customer confusion • Algorithm maintains authority
+                    </div>
+                    <div class="cons">
+                        <strong>Cons</strong>
+                        Feels like hiding information • Inconsistent experience • Customers notice missing data
+                    </div>
+                </div>
+            </div>
+
+            <div class="option-item">
+                <strong>Solution 2: Show with personal context</strong>
+                <p>Display: "2.1★ (1.2k) Community | You rated similar recipes 5★"</p>
+                <div class="pros-cons">
+                    <div class="pros">
+                        <strong>Pros</strong>
+                        Full transparency • Explains the recommendation • Educates customers about personalization
+                    </div>
+                    <div class="cons">
+                        <strong>Cons</strong>
+                        May still undermine recommendation • Requires customer understanding of logic
+                    </div>
+                </div>
+            </div>
+
+            <div class="option-item proposed">
+                <strong>Solution 3: Visual differentiation without stars</strong>
+                <p>Green highlighted box + "Your top rated" badge. No community star rating displayed in this zone.</p>
+                <div class="pros-cons">
+                    <div class="pros">
+                        <strong>Pros</strong>
+                        Clear "this is personalized" signal • Doesn't hide data (visible elsewhere) • Maintains recommendation confidence
+                    </div>
+                    <div class="cons">
+                        <strong>Cons</strong>
+                        Inconsistent star display • Customers may wonder why stars are missing
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="decision-box">
+            <h4>Decision Needed</h4>
+            <p>This is a <strong>values decision</strong> about algorithm confidence vs. customer transparency. Which matters more in personalized recommendation contexts?</p>
+        </div>
+
+        <h2>Decision 4: Personal vs Community Rating Conflict</h2>
+
+        <h3>Scenario</h3>
+        <p>In "Your Ratings" history view, a recipe shows: You rated 5★, Community rated 2.1★ (1.2k). How do we display this on the card?</p>
+
+        <h3>Why This Matters</h3>
+        <p>This is the simplest decision - it's the customer's personal history, so their rating should dominate. But we need to confirm: do we show community rating at all in this context?</p>
+
+        <div class="options-grid">
+            <div class="option-item proposed">
+                <strong>Solution 1: Personal rating primary, community secondary</strong>
+                <p>Display: "5★ Your rating | 2.1★ (1.2k) Community" - Personal rating larger and first.</p>
+                <div class="pros-cons">
+                    <div class="pros">
+                        <strong>Pros</strong>
+                        Respects personal perspective • Provides context • Transparent about difference
+                    </div>
+                    <div class="cons">
+                        <strong>Cons</strong>
+                        Slightly more complex UI • May prompt "why is mine different?" questions
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="decision-box">
+            <h4>Decision Needed</h4>
+            <p>Confirm that personal rating takes priority in personal history contexts. (Low controversy - likely quick alignment.)</p>
+        </div>
+
+        <h2>What Happens After These Decisions</h2>
+
+        <p>With strategic direction on these four scenarios, M1 development can proceed immediately. The implementation is scoped, prototyped, and ready to build. Timeline to customer-facing test: ~[X weeks from decisions].</p>
+
+        <h3>What You'll See in the Meeting</h3>
+        <ul style="margin-left: 20px; margin-bottom: 20px; font-size: 0.9375rem;">
+            <li style="margin-bottom: 8px;"><strong>Business case recap</strong> (5 min) - Data you've seen before, tightly summarized</li>
+            <li style="margin-bottom: 8px;"><strong>Prototype walkthrough</strong> (7 min) - Working demo to ground the conversation</li>
+            <li style="margin-bottom: 8px;"><strong>Edge case decisions</strong> (20 min) - Deep dive on each scenario with facilitated decision-making</li>
+            <li style="margin-bottom: 8px;"><strong>Next steps</strong> (3 min) - M1 timeline and rollout plan</li>
+        </ul>
+
+        <h3>How to Prepare</h3>
+        <p><strong>If you have strong opinions on any edge case, please review the full prototype and edge case page before the meeting:</strong></p>
+        <ul style="margin-left: 20px; font-size: 0.9375rem;">
+            <li style="margin-bottom: 8px;">Interactive prototype: [link to prototype-enhanced.html]</li>
+            <li style="margin-bottom: 8px;">Full edge case details: [link to edge-cases.html]</li>
+        </ul>
+
+        <div class="alert-box" style="margin-top: 32px;">
+            <strong>Key Mindset for the Meeting</strong>
+            <p>This is a <strong>decision meeting</strong>, not a pitch meeting. The initiative is approved. We're seeking strategic direction on execution details that affect customer experience and business outcomes.</p>
+        </div>
+
+        <div class="footer">
+            <p><strong>Questions before the meeting?</strong> Contact [Your Name] at [Your Email]</p>
+            <p style="margin-top: 8px;">Community Rating Initiative • HelloFresh Consumer UX • Q2 2026</p>
+        </div>
+    </div>
+</body>
+</html>

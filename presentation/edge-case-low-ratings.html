@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edge Case: Low Ratings in Recommendations</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #024426;
+            --primary-light: #067a46;
+            --accent: #c8f542;
+            --bg: #FAFBFC;
+            --card-bg: #FFFFFF;
+            --text: #1A1A2E;
+            --text-muted: #6B7280;
+            --border: #E5E7EB;
+            --warning: #F59E0B;
+            --danger: #DC2626;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            padding: 40px 24px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 12px;
+        }
+
+        .subtitle {
+            font-size: 1.125rem;
+            color: var(--text-muted);
+            margin-bottom: 40px;
+        }
+
+        .problem-section {
+            background: #FEF2F2;
+            border: 2px solid var(--danger);
+            border-radius: 12px;
+            padding: 32px;
+            margin-bottom: 48px;
+        }
+
+        .problem-section h2 {
+            color: var(--danger);
+            font-size: 1.5rem;
+            margin-bottom: 16px;
+        }
+
+        .problem-visual {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-top: 24px;
+        }
+
+        .phone-mockup {
+            background: #fff;
+            border-radius: 24px;
+            padding: 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .phone-screen {
+            background: #f8f8f8;
+            border-radius: 16px;
+            padding: 16px;
+        }
+
+        .swimlane-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 12px;
+        }
+
+        .recipe-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .recipe-image {
+            width: 100%;
+            height: 140px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.875rem;
+        }
+
+        .recipe-info {
+            padding: 12px;
+        }
+
+        .recipe-name {
+            font-weight: 600;
+            font-size: 0.875rem;
+            margin-bottom: 6px;
+        }
+
+        .rating-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: #FEF2F2;
+            border: 1px solid #DC2626;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #DC2626;
+        }
+
+        .rating-badge.good {
+            background: #F0FDF4;
+            border-color: #16A34A;
+            color: #16A34A;
+        }
+
+        .star {
+            color: #F59E0B;
+        }
+
+        .solutions-grid {
+            display: grid;
+            gap: 32px;
+            margin-top: 48px;
+        }
+
+        .solution-card {
+            background: white;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 32px;
+            transition: all 0.3s;
+        }
+
+        .solution-card.recommended {
+            border-color: var(--primary);
+            box-shadow: 0 4px 16px rgba(2, 68, 38, 0.1);
+        }
+
+        .solution-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .solution-number {
+            width: 40px;
+            height: 40px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.25rem;
+        }
+
+        .solution-card.recommended .solution-number {
+            background: var(--primary);
+        }
+
+        .solution-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .recommended-badge {
+            background: var(--accent);
+            color: var(--primary);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .solution-description {
+            color: var(--text-muted);
+            margin-bottom: 24px;
+        }
+
+        .solution-visual {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin: 24px 0;
+            padding: 20px;
+            background: var(--bg);
+            border-radius: 8px;
+        }
+
+        .pros-cons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-top: 24px;
+        }
+
+        .pros, .cons {
+            padding: 16px;
+            border-radius: 8px;
+        }
+
+        .pros {
+            background: #F0FDF4;
+            border: 1px solid #16A34A;
+        }
+
+        .cons {
+            background: #FEF2F2;
+            border: 1px solid #DC2626;
+        }
+
+        .pros h4, .cons h4 {
+            font-size: 0.875rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            letter-spacing: 0.5px;
+        }
+
+        .pros h4 {
+            color: #16A34A;
+        }
+
+        .cons h4 {
+            color: #DC2626;
+        }
+
+        .pros ul, .cons ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .pros li, .cons li {
+            font-size: 0.8125rem;
+            margin-bottom: 6px;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .pros li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #16A34A;
+            font-weight: 700;
+        }
+
+        .cons li:before {
+            content: "✗";
+            position: absolute;
+            left: 0;
+            color: #DC2626;
+            font-weight: 700;
+        }
+
+        .mini-card {
+            background: white;
+            border-radius: 8px;
+            padding: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.06);
+        }
+
+        .mini-card-img {
+            width: 100%;
+            height: 80px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 6px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            color: white;
+        }
+
+        .mini-card-title {
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .hidden-rating {
+            opacity: 0.3;
+            text-decoration: line-through;
+        }
+
+        .label-badge {
+            background: #FFF7ED;
+            border: 1px solid #F59E0B;
+            color: #B45309;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.625rem;
+            font-weight: 600;
+            display: inline-block;
+            margin-top: 4px;
+        }
+
+        .comparison-note {
+            background: #EFF6FF;
+            border-left: 4px solid #3B82F6;
+            padding: 16px;
+            margin-top: 16px;
+            border-radius: 4px;
+        }
+
+        .comparison-note strong {
+            color: #1E40AF;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚨 Critical Edge Case: Low Ratings in Recommendations</h1>
+        <p class="subtitle">What happens when poorly-rated recipes appear in high-visibility recommendation contexts?</p>
+
+        <!-- Problem Section -->
+        <div class="problem-section">
+            <h2>The Problem</h2>
+            <p style="margin-bottom: 16px;">When we show community ratings, low-rated recipes (e.g., 2.5★) may appear in contexts where users expect only "recommended" or "curated" recipes:</p>
+
+            <div class="problem-visual">
+                <div class="phone-mockup">
+                    <div class="phone-screen">
+                        <div class="swimlane-title">Top 20 This Week</div>
+                        <div class="recipe-card">
+                            <div class="recipe-image">Recipe Image</div>
+                            <div class="recipe-info">
+                                <div class="recipe-name">Spicy Chicken Stir-Fry</div>
+                                <div class="rating-badge">
+                                    <span class="star">★</span> 2.5 (47 ratings)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <p style="margin-top: 12px; font-size: 0.875rem; color: var(--danger); font-weight: 600;">
+                        ❌ Cognitive dissonance: "Top 20" but 2.5 stars?
+                    </p>
+                </div>
+
+                <div class="phone-mockup">
+                    <div class="phone-screen">
+                        <div class="swimlane-title">For You</div>
+                        <div class="recipe-card">
+                            <div class="recipe-image">Recipe Image</div>
+                            <div class="recipe-info">
+                                <div class="recipe-name">Veggie Pasta Primavera</div>
+                                <div class="rating-badge">
+                                    <span class="star">★</span> 2.8 (32 ratings)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <p style="margin-top: 12px; font-size: 0.875rem; color: var(--danger); font-weight: 600;">
+                        ❌ Trust erosion: "Why is HF recommending this?"
+                    </p>
+                </div>
+            </div>
+
+            <p style="margin-top: 24px; font-weight: 600;">
+                <strong>Risk:</strong> Users lose trust in HelloFresh curation, question recommendation quality, reduce overall meal selection confidence
+            </p>
+        </div>
+
+        <!-- Solutions -->
+        <div class="solutions-grid">
+            <!-- Solution 1 -->
+            <div class="solution-card">
+                <div class="solution-header">
+                    <div class="solution-number">1</div>
+                    <div class="solution-title">Hide Ratings in Recommendation Contexts</div>
+                </div>
+                <p class="solution-description">
+                    Don't show community ratings in "Top 20", "For You", or preselected meals. Only show ratings in menu browse and detail pages.
+                </p>
+
+                <div class="solution-visual">
+                    <div class="mini-card">
+                        <div class="mini-card-img">Top 20 Card</div>
+                        <div class="mini-card-title">Spicy Chicken</div>
+                        <div class="hidden-rating">
+                            <span class="star">★</span> 2.5 (hidden)
+                        </div>
+                    </div>
+                    <div class="mini-card">
+                        <div class="mini-card-img">Menu Browse</div>
+                        <div class="mini-card-title">Spicy Chicken</div>
+                        <div class="rating-badge">
+                            <span class="star">★</span> 2.5 (47)
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pros-cons">
+                    <div class="pros">
+                        <h4>Pros</h4>
+                        <ul>
+                            <li>Eliminates cognitive dissonance</li>
+                            <li>Protects brand trust</li>
+                            <li>Simple to implement (CSS only)</li>
+                        </ul>
+                    </div>
+                    <div class="cons">
+                        <h4>Cons</h4>
+                        <ul>
+                            <li>Reduces rating visibility</li>
+                            <li>Users may feel deceived later</li>
+                            <li>Doesn't solve root cause</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Solution 2 -->
+            <div class="solution-card">
+                <div class="solution-header">
+                    <div class="solution-number">2</div>
+                    <div class="solution-title">Rating-Weighted Algorithm</div>
+                </div>
+                <p class="solution-description">
+                    Update recommendation algorithms to factor in rating scores. Low-rated recipes (&lt;3.5★) are automatically deprioritized.
+                </p>
+
+                <div class="solution-visual">
+                    <div class="mini-card">
+                        <div class="mini-card-img">Algorithm</div>
+                        <div class="mini-card-title">High-Rated Recipe</div>
+                        <div class="rating-badge good">
+                            <span class="star">★</span> 4.5 × 1.2
+                        </div>
+                    </div>
+                    <div class="mini-card">
+                        <div class="mini-card-img">Algorithm</div>
+                        <div class="mini-card-title">Low-Rated Recipe</div>
+                        <div class="rating-badge">
+                            <span class="star">★</span> 2.5 × 0.7
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pros-cons">
+                    <div class="pros">
+                        <h4>Pros</h4>
+                        <ul>
+                            <li>Improves recommendation quality</li>
+                            <li>Aligns with user expectations</li>
+                            <li>Incentivizes recipe improvements</li>
+                        </ul>
+                    </div>
+                    <div class="cons">
+                        <h4>Cons</h4>
+                        <ul>
+                            <li>Requires backend algorithm changes</li>
+                            <li>May conflict with business goals</li>
+                            <li>3-4 weeks implementation time</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Solution 3 -->
+            <div class="solution-card">
+                <div class="solution-header">
+                    <div class="solution-number">3</div>
+                    <div class="solution-title">Dynamic Threshold per Context</div>
+                </div>
+                <p class="solution-description">
+                    Show ratings BUT apply minimum thresholds: "Top 20" only shows if ≥4.0★, "For You" only if ≥3.5★, Menu browse always shows.
+                </p>
+
+                <div class="solution-visual">
+                    <div class="mini-card">
+                        <div class="mini-card-img">Top 20</div>
+                        <div class="mini-card-title">Recipe A</div>
+                        <div class="rating-badge good">
+                            <span class="star">★</span> 4.2 ✓ shown
+                        </div>
+                    </div>
+                    <div class="mini-card">
+                        <div class="mini-card-img">Top 20</div>
+                        <div class="mini-card-title">Recipe B</div>
+                        <div class="hidden-rating">
+                            <span class="star">★</span> 3.2 ✗ hidden
+                        </div>
+                    </div>
+                    <div class="mini-card">
+                        <div class="mini-card-img">Menu Browse</div>
+                        <div class="mini-card-title">Recipe B</div>
+                        <div class="rating-badge">
+                            <span class="star">★</span> 3.2 ✓ shown
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pros-cons">
+                    <div class="pros">
+                        <h4>Pros</h4>
+                        <ul>
+                            <li>Context-aware solution</li>
+                            <li>Protects high-visibility areas</li>
+                            <li>Frontend-only (1-2 weeks)</li>
+                        </ul>
+                    </div>
+                    <div class="cons">
+                        <h4>Cons</h4>
+                        <ul>
+                            <li>Inconsistent UX</li>
+                            <li>Users notice selective hiding</li>
+                            <li>Doesn't address root cause</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Solution 4 -->
+            <div class="solution-card">
+                <div class="solution-header">
+                    <div class="solution-number">4</div>
+                    <div class="solution-title">Transparent Labeling</div>
+                </div>
+                <p class="solution-description">
+                    Show ALL ratings but add context labels: "New recipe", "Recommended based on your preferences", with info tooltips explaining recommendation logic.
+                </p>
+
+                <div class="solution-visual">
+                    <div class="mini-card">
+                        <div class="mini-card-img">Top 20 Card</div>
+                        <div class="mini-card-title">Spicy Chicken</div>
+                        <div class="rating-badge">
+                            <span class="star">★</span> 2.5 (47)
+                        </div>
+                        <div class="label-badge">Trending order volume</div>
+                    </div>
+                </div>
+
+                <div class="pros-cons">
+                    <div class="pros">
+                        <h4>Pros</h4>
+                        <ul>
+                            <li>Full transparency</li>
+                            <li>Educates users on algo</li>
+                            <li>Consistent UX</li>
+                        </ul>
+                    </div>
+                    <div class="cons">
+                        <h4>Cons</h4>
+                        <ul>
+                            <li>May not prevent negative reaction</li>
+                            <li>Requires careful copywriting</li>
+                            <li>Users may ignore explanations</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Solution 5 - RECOMMENDED -->
+            <div class="solution-card recommended">
+                <div class="solution-header">
+                    <div class="solution-number">5</div>
+                    <div class="solution-title">Hybrid: Threshold + Algorithm</div>
+                    <div class="recommended-badge">✓ Recommended</div>
+                </div>
+                <p class="solution-description">
+                    <strong>Phased approach:</strong><br>
+                    <strong>M1:</strong> Use dynamic thresholds (Solution 3) for immediate protection<br>
+                    <strong>M2:</strong> Add "New recipe" / "Limited ratings" labels<br>
+                    <strong>M3:</strong> Implement rating-weighted algorithm (Solution 2)
+                </p>
+
+                <div class="solution-visual">
+                    <div class="mini-card">
+                        <div class="mini-card-img">M1</div>
+                        <div class="mini-card-title">Top 20</div>
+                        <div class="hidden-rating">
+                            <span class="star">★</span> 2.5 hidden
+                        </div>
+                        <div style="font-size: 0.625rem; color: var(--text-muted); margin-top: 4px;">if &lt;4.0★</div>
+                    </div>
+                    <div class="mini-card">
+                        <div class="mini-card-img">M2</div>
+                        <div class="mini-card-title">New Recipe</div>
+                        <div class="rating-badge good">
+                            <span class="star">★</span> 4.1 (8)
+                        </div>
+                        <div class="label-badge">New recipe</div>
+                    </div>
+                    <div class="mini-card">
+                        <div class="mini-card-img">M3</div>
+                        <div class="mini-card-title">Algorithm</div>
+                        <div class="rating-badge good">
+                            <span class="star">★</span> 4.5
+                        </div>
+                        <div style="font-size: 0.625rem; color: var(--text-muted); margin-top: 4px;">Auto-prioritized</div>
+                    </div>
+                </div>
+
+                <div class="pros-cons">
+                    <div class="pros">
+                        <h4>Pros</h4>
+                        <ul>
+                            <li>Immediate protection + long-term fix</li>
+                            <li>Gradual transition with A/B testing</li>
+                            <li>Balanced approach</li>
+                            <li>Each phase builds on previous</li>
+                        </ul>
+                    </div>
+                    <div class="cons">
+                        <h4>Cons</h4>
+                        <ul>
+                            <li>Most complex (frontend + backend)</li>
+                            <li>Longer full implementation timeline</li>
+                            <li>Requires cross-team coordination</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="comparison-note">
+                    <strong>Why Hybrid?</strong><br>
+                    Provides immediate brand protection (M1) while building sustainable solution (M3). M2 bridges the gap by adding transparency for edge cases. Allows iterative learning and adjustment based on real user behavior.
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

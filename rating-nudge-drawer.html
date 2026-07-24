@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rating Nudge Drawer</title>
+  <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      background-color: #e8e8e8;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .phone-frame {
+      width: 375px;
+      height: 812px;
+      background: #f5f5f0;
+      border-radius: 40px;
+      overflow: hidden;
+      position: relative;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    }
+
+    /* Status Bar */
+    .status-bar {
+      background: #024426;
+      color: white;
+      padding: 12px 20px 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    /* Header */
+    .header {
+      background: #067a46;
+      color: white;
+      padding: 16px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .header h1 {
+      font-size: 24px;
+      font-weight: 700;
+    }
+
+    .header-icons {
+      display: flex;
+      gap: 16px;
+    }
+
+    .icon-btn {
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+    }
+
+    /* Hero Banner */
+    .hero-banner {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+    }
+
+    /* Content Area */
+    .content-area {
+      background: #faf8f3;
+      border-radius: 20px 20px 0 0;
+      margin-top: -20px;
+      position: relative;
+      z-index: 1;
+      padding: 20px;
+      height: calc(812px - 52px - 180px - 80px);
+      overflow-y: auto;
+    }
+
+    .content-area::-webkit-scrollbar {
+      display: none;
+    }
+
+    /* Delivery Card */
+    .delivery-card {
+      background: white;
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 16px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .delivery-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .delivery-date {
+      font-size: 18px;
+      font-weight: 700;
+      color: #242424;
+    }
+
+    .delivery-status {
+      background: #e0d9cb;
+      padding: 4px 12px;
+      border-radius: 16px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #024426;
+    }
+
+    .delivery-message {
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 16px;
+    }
+
+    /* Recipe Grid */
+    .recipe-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .recipe-thumb {
+      width: 100%;
+      height: 100px;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+
+    /* Actions */
+    .delivery-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .action-btn {
+      flex: 1;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .action-btn-primary {
+      background: #232323;
+      color: white;
+    }
+
+    .action-btn-secondary {
+      background: transparent;
+      color: #242424;
+      border: 1px solid #c1c1c1;
+    }
+
+    /* Bottom Nav */
+    .bottom-nav {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: #e0d9cb;
+      display: flex;
+      justify-content: space-around;
+      padding: 12px 0;
+      border-top: 1px solid #c1c1c1;
+    }
+
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      padding: 8px 16px;
+      color: #656565;
+      font-size: 11px;
+    }
+
+    .nav-item.active {
+      color: #024426;
+    }
+
+    /* Drawer Overlay */
+    .drawer-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s, visibility 0.3s;
+      z-index: 100;
+    }
+
+    .drawer-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    /* Rating Drawer - EXACT FIGMA DESIGN */
+    .rating-drawer {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: #faf8f3;
+      border-radius: 8px 8px 0 0;
+      transform: translateY(100%);
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 101;
+      height: 475px;
+      box-shadow: 0 0 0 rgba(0, 0, 0, 0.2);
+    }
+
+    .rating-drawer.active {
+      transform: translateY(0);
+    }
+
+    /* Drag Handle */
+    .drag-handle {
+      position: absolute;
+      width: 40px;
+      height: 6px;
+      background: #e0e0e0;
+      border-radius: 4px;
+      left: 175.5px;
+      top: 24px;
+    }
+
+    /* Scattered Images Container - EXACT FROM FIGMA */
+    .scattered-container {
+      position: absolute;
+      left: 11px;
+      top: 53px;
+      width: 362.855px;
+      height: 346.855px;
+    }
+
+    .scattered-image {
+      position: absolute;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .image-inner {
+      position: relative;
+    }
+
+    .image-border {
+      position: absolute;
+      inset: 0;
+      border: 10px solid #efe9de;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .image-border img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 12px;
+    }
+
+    /* Exact positions from Figma */
+    .img-1 {
+      left: 218px;
+      top: 202px;
+      width: 144.855px;
+      height: 144.855px;
+    }
+    .img-1 .image-inner {
+      transform: rotate(15.19deg);
+      width: 118.048px;
+      height: 118.048px;
+    }
+
+    .img-2 {
+      left: 117px;
+      top: 209px;
+      width: 127.539px;
+      height: 127.539px;
+    }
+    .img-2 .image-inner {
+      transform: rotate(2.18deg);
+      width: 122.952px;
+      height: 122.952px;
+    }
+
+    .img-3 {
+      left: 6px;
+      top: 206px;
+      width: 125.454px;
+      height: 125.454px;
+    }
+    .img-3 .image-inner {
+      transform: rotate(10.37deg);
+      width: 107.806px;
+      height: 107.806px;
+    }
+
+    .img-4 {
+      left: 165px;
+      top: 103px;
+      width: 141.266px;
+      height: 141.266px;
+    }
+    .img-4 .image-inner {
+      transform: rotate(-11.41deg);
+      width: 119.914px;
+      height: 119.914px;
+    }
+
+    .img-5 {
+      left: 223.47px;
+      top: 48.47px;
+      width: 132.291px;
+      height: 132.291px;
+    }
+    .img-5 .image-inner {
+      transform: rotate(7.41deg);
+      width: 118.048px;
+      height: 118.048px;
+    }
+
+    .img-6 {
+      left: 0;
+      top: 21px;
+      width: 138.968px;
+      height: 138.968px;
+    }
+    .img-6 .image-inner {
+      transform: rotate(-11.35deg);
+      width: 118.048px;
+      height: 118.048px;
+    }
+
+    .img-7 {
+      left: 54px;
+      top: 112px;
+      width: 124.709px;
+      height: 124.709px;
+    }
+    .img-7 .image-inner {
+      transform: rotate(9.88deg);
+      width: 107.806px;
+      height: 107.806px;
+    }
+
+    .img-8 {
+      left: 110px;
+      top: 0;
+      width: 141.388px;
+      height: 141.388px;
+    }
+    .img-8 .image-inner {
+      transform: rotate(12.88deg);
+      width: 118.048px;
+      height: 118.048px;
+    }
+  </style>
+</head>
+<body>
+  <div class="phone-frame">
+    <!-- Status Bar -->
+    <div class="status-bar">
+      <span>9:41</span>
+      <span>📶 📡 🔋</span>
+    </div>
+
+    <!-- Header -->
+    <div class="header">
+      <h1>For you</h1>
+      <div class="header-icons">
+        <button class="icon-btn">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+            <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
+          </svg>
+        </button>
+        <button class="icon-btn">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+            <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Hero Banner -->
+    <img src="https://images.unsplash.com/photo-1606787366850-de6330128bfc?w=800&q=80" alt="Dining" class="hero-banner">
+
+    <!-- Content Area -->
+    <div class="content-area">
+      <!-- Delivered Box -->
+      <div class="delivery-card">
+        <div class="delivery-header">
+          <div class="delivery-date">Sat, Jul. 8</div>
+          <div class="delivery-status">Delivered</div>
+        </div>
+        <div class="delivery-message">Dig in now! Your box was delivered on Tue, Jul. 8, 9:00 AM.</div>
+
+        <div class="recipe-grid">
+          <img src="recipes/HelloFresh Main Image.jpg" alt="Recipe" class="recipe-thumb">
+          <img src="recipes/HelloFresh Main High.jpg" alt="Recipe" class="recipe-thumb">
+          <img src="recipes/HelloFresh Main High (1).jpg" alt="Recipe" class="recipe-thumb">
+          <img src="recipes/HelloFresh Main High (2).jpg" alt="Recipe" class="recipe-thumb">
+        </div>
+
+        <div class="delivery-actions">
+          <button class="action-btn action-btn-primary" onclick="openDrawer()">Rate</button>
+          <button class="action-btn action-btn-secondary">Track</button>
+          <button class="action-btn action-btn-secondary">Get help</button>
+        </div>
+      </div>
+
+      <!-- Upcoming Box -->
+      <div class="delivery-card">
+        <div class="delivery-header">
+          <div class="delivery-date">Sat, Jul. 15</div>
+          <div class="delivery-status">6 days to edit</div>
+        </div>
+
+        <div class="recipe-grid">
+          <img src="recipes/HelloFresh Main Image (1).jpg" alt="Recipe" class="recipe-thumb">
+          <img src="recipes/HelloFresh Main Image (2).jpg" alt="Recipe" class="recipe-thumb">
+          <img src="recipes/HelloFresh Main Image (3).jpg" alt="Recipe" class="recipe-thumb">
+          <img src="recipes/HelloFresh Main Image (4).jpg" alt="Recipe" class="recipe-thumb">
+        </div>
+
+        <div class="delivery-actions">
+          <button class="action-btn action-btn-primary">Select meals</button>
+          <button class="action-btn action-btn-secondary">Reschedule</button>
+          <button class="action-btn action-btn-secondary">Skip</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <div class="bottom-nav">
+      <button class="nav-item active">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+          <polyline points="9 22 9 12 15 12 15 22"/>
+        </svg>
+        <span>Home</span>
+      </button>
+      <button class="nav-item">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="9" cy="21" r="1"/>
+          <circle cx="20" cy="21" r="1"/>
+          <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+        </svg>
+        <span>Menu</span>
+      </button>
+      <button class="nav-item">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+          <circle cx="12" cy="7" r="4"/>
+        </svg>
+        <span>Account</span>
+      </button>
+    </div>
+
+    <!-- Drawer Overlay -->
+    <div class="drawer-overlay" onclick="closeDrawer()"></div>
+
+    <!-- Rating Drawer with EXACT Figma Design -->
+    <div class="rating-drawer">
+      <div class="drag-handle"></div>
+
+      <!-- Scattered Images Container with EXACT positions from Figma -->
+      <div class="scattered-container">
+        <!-- Image 1 - Bottom right -->
+        <div class="scattered-image img-1">
+          <div class="image-inner">
+            <div class="image-border">
+              <img src="https://www.figma.com/api/mcp/asset/24e80fa1-9917-49e9-a506-1cfeb0b909c5" alt="Recipe">
+            </div>
+          </div>
+        </div>
+
+        <!-- Image 2 - Bottom center -->
+        <div class="scattered-image img-2">
+          <div class="image-inner">
+            <div class="image-border">
+              <img src="https://www.figma.com/api/mcp/asset/60ada41e-63d2-4fc7-bfa8-4db626e901c6" alt="Recipe">
+            </div>
+          </div>
+        </div>
+
+        <!-- Image 3 - Bottom left -->
+        <div class="scattered-image img-3">
+          <div class="image-inner">
+            <div class="image-border">
+              <img src="https://www.figma.com/api/mcp/asset/60ada41e-63d2-4fc7-bfa8-4db626e901c6" alt="Recipe">
+            </div>
+          </div>
+        </div>
+
+        <!-- Image 4 - Middle center -->
+        <div class="scattered-image img-4">
+          <div class="image-inner">
+            <div class="image-border">
+              <img src="https://www.figma.com/api/mcp/asset/60ada41e-63d2-4fc7-bfa8-4db626e901c6" alt="Recipe">
+            </div>
+          </div>
+        </div>
+
+        <!-- Image 5 - Top right -->
+        <div class="scattered-image img-5">
+          <div class="image-inner">
+            <div class="image-border">
+              <img src="https://www.figma.com/api/mcp/asset/24e80fa1-9917-49e9-a506-1cfeb0b909c5" alt="Recipe">
+            </div>
+          </div>
+        </div>
+
+        <!-- Image 6 - Top left -->
+        <div class="scattered-image img-6">
+          <div class="image-inner">
+            <div class="image-border">
+              <img src="https://www.figma.com/api/mcp/asset/24e80fa1-9917-49e9-a506-1cfeb0b909c5" alt="Recipe">
+            </div>
+          </div>
+        </div>
+
+        <!-- Image 7 - Middle left -->
+        <div class="scattered-image img-7">
+          <div class="image-inner">
+            <div class="image-border">
+              <img src="https://www.figma.com/api/mcp/asset/60ada41e-63d2-4fc7-bfa8-4db626e901c6" alt="Recipe">
+            </div>
+          </div>
+        </div>
+
+        <!-- Image 8 - Top center -->
+        <div class="scattered-image img-8">
+          <div class="image-inner">
+            <div class="image-border">
+              <img src="https://www.figma.com/api/mcp/asset/24e80fa1-9917-49e9-a506-1cfeb0b909c5" alt="Recipe">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function openDrawer() {
+      document.querySelector('.drawer-overlay').classList.add('active');
+      document.querySelector('.rating-drawer').classList.add('active');
+    }
+
+    function closeDrawer() {
+      document.querySelector('.drawer-overlay').classList.remove('active');
+      document.querySelector('.rating-drawer').classList.remove('active');
+    }
+  </script>
+</body>
+</html>

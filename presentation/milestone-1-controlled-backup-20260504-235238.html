@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Milestone 1 - Feature Controls</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Raleway', sans-serif;
+            background-color: #f5f5f5;
+            display: flex;
+            flex-direction: row-reverse;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .control-panel {
+            width: 320px;
+            background: white;
+            padding: 24px;
+            overflow-y: auto;
+            box-shadow: -2px 0 8px rgba(0, 0, 0, 0.1);
+            z-index: 100;
+        }
+
+        .control-panel h2 {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #242424;
+        }
+
+        .control-panel p {
+            font-size: 14px;
+            color: #656565;
+            margin-bottom: 24px;
+            line-height: 1.5;
+        }
+
+        .feature-group {
+            margin-bottom: 24px;
+        }
+
+        .feature-group-title {
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: #656565;
+            margin-bottom: 12px;
+            letter-spacing: 0.5px;
+        }
+
+        .feature-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .feature-toggle:last-child {
+            border-bottom: none;
+        }
+
+        .feature-info {
+            flex: 1;
+        }
+
+        .feature-label {
+            font-size: 14px;
+            color: #242424;
+            font-weight: 500;
+        }
+
+        .feature-description {
+            font-size: 12px;
+            color: #656565;
+            margin-top: 4px;
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 44px;
+            height: 24px;
+            background: #e0e0e0;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: background 0.3s;
+            flex-shrink: 0;
+        }
+
+        .toggle-switch.active {
+            background: #067a46;
+        }
+
+        .toggle-switch::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: white;
+            top: 2px;
+            left: 2px;
+            transition: left 0.3s;
+        }
+
+        .toggle-switch.active::after {
+            left: 22px;
+        }
+
+        .prototype-frame {
+            flex: 1;
+            background: #e8e8e8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .prototype-frame iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="control-panel">
+        <h2>Feature Controls</h2>
+        <p>Toggle features to see how they affect the milestone 1 experience</p>
+
+        <div class="feature-group">
+            <div class="feature-group-title">Recipe reviews section</div>
+            <div class="feature-toggle">
+                <div class="feature-info">
+                    <div class="feature-label">Overall Rating Section</div>
+                    <div class="feature-description">Show aggregate rating with star and counts</div>
+                </div>
+                <div class="toggle-switch active" data-feature="overallRating"></div>
+            </div>
+            <div class="feature-toggle">
+                <div class="feature-info">
+                    <div class="feature-label">Rating Count</div>
+                    <div class="feature-description">Show rating count (e.g. 23k ratings)</div>
+                </div>
+                <div class="toggle-switch active" data-feature="ratingCount"></div>
+            </div>
+            <div class="feature-toggle">
+                <div class="feature-info">
+                    <div class="feature-label">Review Count</div>
+                    <div class="feature-description">Show review count (e.g. 402 reviews)</div>
+                </div>
+                <div class="toggle-switch active" data-feature="reviewCount"></div>
+            </div>
+            <div class="feature-toggle">
+                <div class="feature-info">
+                    <div class="feature-label">Rating Distribution</div>
+                    <div class="feature-description">Show rating distribution bar graph</div>
+                </div>
+                <div class="toggle-switch active" data-feature="ratingDistribution"></div>
+            </div>
+            <div class="feature-toggle">
+                <div class="feature-info">
+                    <div class="feature-label">Filter</div>
+                    <div class="feature-description">Enable filtering by ratings and themes</div>
+                </div>
+                <div class="toggle-switch active" data-feature="filterFeature"></div>
+            </div>
+            <div class="feature-toggle">
+                <div class="feature-info">
+                    <div class="feature-label">AI Summary</div>
+                    <div class="feature-description">Display AI-generated review summary</div>
+                </div>
+                <div class="toggle-switch active" data-feature="aiSummary"></div>
+            </div>
+            <div class="feature-toggle">
+                <div class="feature-info">
+                    <div class="feature-label">Add your rating</div>
+                    <div class="feature-description">Show rating prompt banner for unrated recipes</div>
+                </div>
+                <div class="toggle-switch active" data-feature="addYourRating"></div>
+            </div>
+            <div class="feature-toggle">
+                <div class="feature-info">
+                    <div class="feature-label">Theme Breakdown</div>
+                    <div class="feature-description">Show positive/negative theme pills</div>
+                </div>
+                <div class="toggle-switch active" data-feature="themeBreakdown"></div>
+            </div>
+            <div class="feature-toggle">
+                <div class="feature-info">
+                    <div class="feature-label">Your Last Review</div>
+                    <div class="feature-description">Display user's previous review card</div>
+                </div>
+                <div class="toggle-switch active" data-feature="userReview"></div>
+            </div>
+            <div class="feature-toggle">
+                <div class="feature-info">
+                    <div class="feature-label">Community Reviews</div>
+                    <div class="feature-description">Show reviews from other users (not yours)</div>
+                </div>
+                <div class="toggle-switch active" data-feature="communityReviews"></div>
+            </div>
+            <div class="feature-toggle">
+                <div class="feature-info">
+                    <div class="feature-label">Helpful and report</div>
+                    <div class="feature-description">Show helpful button and report flag on reviews</div>
+                </div>
+                <div class="toggle-switch active" data-feature="helpfulButtons"></div>
+            </div>
+            <div class="feature-toggle">
+                <div class="feature-info">
+                    <div class="feature-label">Photo Reviews</div>
+                    <div class="feature-description">Display user-submitted photos</div>
+                </div>
+                <div class="toggle-switch active" data-feature="photoReviews"></div>
+            </div>
+        </div>
+
+        <div class="feature-group">
+            <div class="feature-group-title">Alternative for milestone</div>
+            <div class="feature-toggle">
+                <div class="feature-info">
+                    <div class="feature-label">AI summary section</div>
+                    <div class="feature-description">Show full AI summary under overall rating</div>
+                </div>
+                <div class="toggle-switch" data-feature="aiSummarySection"></div>
+            </div>
+            <div class="feature-toggle">
+                <div class="feature-info">
+                    <div class="feature-label">Mini rating distribution</div>
+                    <div class="feature-description">Show compact rating bars (non-clickable)</div>
+                </div>
+                <div class="toggle-switch" data-feature="miniRatingDistribution"></div>
+            </div>
+            <div class="feature-toggle">
+                <div class="feature-info">
+                    <div class="feature-label">Alternative overall rating</div>
+                    <div class="feature-description">Show alternative rating design at top</div>
+                </div>
+                <div class="toggle-switch" data-feature="alternativeOverallRating"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="prototype-frame">
+        <iframe id="prototypeFrame" src="../q2-prototype-working version.html#menu"></iframe>
+    </div>
+
+    <script>
+        // Feature toggle handler
+        const toggles = document.querySelectorAll('.toggle-switch');
+        const iframe = document.getElementById('prototypeFrame');
+
+        // Feature state
+        const featureState = {
+            overallRating: true,
+            ratingCount: true,
+            reviewCount: true,
+            ratingDistribution: true,
+            filterFeature: true,
+            aiSummary: true,
+            addYourRating: true,
+            themeBreakdown: true,
+            userReview: true,
+            communityReviews: true,
+            helpfulButtons: true,
+            photoReviews: true,
+            aiSummarySection: false,
+            miniRatingDistribution: false,
+            alternativeOverallRating: false,
+        };
+
+        // Define relationships between alternative and main features
+        const featureRelationships = {
+            aiSummarySection: 'aiSummary',
+            miniRatingDistribution: 'ratingDistribution',
+            alternativeOverallRating: 'overallRating'
+        };
+
+        toggles.forEach(toggle => {
+            toggle.addEventListener('click', () => {
+                toggle.classList.toggle('active');
+                const feature = toggle.dataset.feature;
+                const isActive = toggle.classList.contains('active');
+
+                featureState[feature] = isActive;
+
+                // If this is an alternative feature being enabled, disable the main feature
+                if (isActive && featureRelationships[feature]) {
+                    const mainFeature = featureRelationships[feature];
+                    featureState[mainFeature] = false;
+
+                    // Find and update the main feature toggle UI
+                    const mainToggle = document.querySelector(`[data-feature="${mainFeature}"]`);
+                    if (mainToggle) {
+                        mainToggle.classList.remove('active');
+                    }
+                }
+
+                // If this is an alternative feature being disabled, enable the main feature
+                if (!isActive && featureRelationships[feature]) {
+                    const mainFeature = featureRelationships[feature];
+                    featureState[mainFeature] = true;
+
+                    // Find and update the main feature toggle UI
+                    const mainToggle = document.querySelector(`[data-feature="${mainFeature}"]`);
+                    if (mainToggle) {
+                        mainToggle.classList.add('active');
+                    }
+                }
+
+                // Send message to iframe with updated feature state
+                iframe.contentWindow.postMessage({
+                    type: 'featureToggle',
+                    feature: feature,
+                    isActive: isActive,
+                    allFeatures: featureState
+                }, '*');
+
+                console.log(`Feature ${feature} toggled to: ${isActive}`);
+            });
+        });
+
+        // Send initial state when iframe loads
+        iframe.addEventListener('load', () => {
+            setTimeout(() => {
+                iframe.contentWindow.postMessage({
+                    type: 'initFeatures',
+                    features: featureState
+                }, '*');
+                console.log('Sent initial feature state to iframe');
+            }, 500);
+        });
+    </script>
+</body>
+</html>

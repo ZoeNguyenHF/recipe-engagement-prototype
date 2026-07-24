@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Loader</title>
+</head>
+<body>
+    <h1>Testing Prototype Load</h1>
+    <div id="status">Loading...</div>
+    
+    <iframe 
+        id="testFrame" 
+        src="q2-prototype-working%20version.html#menu" 
+        style="width: 400px; height: 800px; border: 2px solid #ccc;"
+        onload="frameLoaded()"
+        onerror="frameError()">
+    </iframe>
+    
+    <script>
+        function frameLoaded() {
+            document.getElementById('status').innerHTML = '✓ Frame loaded successfully';
+            document.getElementById('status').style.color = 'green';
+            
+            // Check if React app rendered
+            setTimeout(() => {
+                const iframe = document.getElementById('testFrame');
+                try {
+                    const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+                    const root = iframeDoc.getElementById('root');
+                    if (root && root.children.length > 0) {
+                        document.getElementById('status').innerHTML += '<br>✓ React app rendered!';
+                    } else {
+                        document.getElementById('status').innerHTML += '<br>✗ React app did not render';
+                        document.getElementById('status').style.color = 'orange';
+                    }
+                } catch(e) {
+                    document.getElementById('status').innerHTML += '<br>✗ Cannot access iframe: ' + e.message;
+                }
+            }, 2000);
+        }
+        
+        function frameError() {
+            document.getElementById('status').innerHTML = '✗ Frame failed to load';
+            document.getElementById('status').style.color = 'red';
+        }
+    </script>
+</body>
+</html>

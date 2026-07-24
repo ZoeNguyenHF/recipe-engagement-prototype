@@ -825,7 +825,7 @@
     <!-- Prototype Frame -->
     <div class="prototype-frame">
         <div class="annotation-panel" id="annotationPanel"></div>
-        <iframe id="prototypeFrame" src="../q2-prototype-working version.html#menu"></iframe>
+        <iframe id="prototypeFrame" src="../q2-prototype-working%20version.html#menu"></iframe>
     </div>
 
     <script>
@@ -980,9 +980,13 @@
 
         let currentMilestone = 'm5';
         const iframe = document.getElementById('prototypeFrame');
+        let iframeReady = false;
 
-        // Initialize
-        applyMilestone('m5');
+        // Wait for iframe to load before initializing
+        iframe.addEventListener('load', () => {
+            iframeReady = true;
+            applyMilestone('m5');
+        });
 
         // Milestone button handlers
         document.querySelectorAll('.milestone-btn').forEach(btn => {
@@ -1117,11 +1121,13 @@
                 }
             }
 
-            // Send to iframe
-            iframe.contentWindow.postMessage({
-                type: 'initFeatures',
-                features: preset.features
-            }, '*');
+            // Send to iframe (only if loaded)
+            if (iframeReady) {
+                iframe.contentWindow.postMessage({
+                    type: 'initFeatures',
+                    features: preset.features
+                }, '*');
+            }
 
             // Update annotations after milestone change
             setTimeout(() => {
@@ -1150,10 +1156,12 @@
                 features[feature] = toggle.classList.contains('active');
             });
 
-            iframe.contentWindow.postMessage({
-                type: 'featureToggle',
-                allFeatures: features
-            }, '*');
+            if (iframeReady) {
+                iframe.contentWindow.postMessage({
+                    type: 'featureToggle',
+                    allFeatures: features
+                }, '*');
+            }
         }
 
         // Feature Annotation System

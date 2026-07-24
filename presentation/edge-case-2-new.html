@@ -1,0 +1,1212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edge Case 2 - Preview</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #024426;
+            --primary-light: #067a46;
+            --accent: #c8f542;
+            --secondary: #1A1A2E;
+            --bg: #FAFBFC;
+            --card-bg: #FFFFFF;
+            --text: #1A1A2E;
+            --text-muted: #6B7280;
+            --border: #E5E7EB;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 48px;
+        }
+
+        .section {
+            padding: 80px 0;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: var(--text);
+        }
+
+        .section-subtitle {
+            color: var(--text-muted);
+            font-size: 1.125rem;
+            margin-bottom: 48px;
+            line-height: 1.6;
+        }
+
+        .section-number {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--primary);
+            letter-spacing: 2px;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 40px;
+            border: 1px solid var(--border);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            margin-bottom: 48px;
+        }
+
+        .card-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 32px;
+            color: var(--text);
+            line-height: 1.4;
+        }
+
+        .visual-container {
+            background: #F9FAFB;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 32px;
+            margin-bottom: 32px;
+        }
+
+        .visual-section-title {
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: var(--text);
+        }
+
+        .pros-cons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+
+        .pros-cons-title {
+            color: #059669;
+            font-weight: 700;
+            font-size: 0.875rem;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .pros-cons.cons .pros-cons-title {
+            color: #DC2626;
+        }
+
+        .pros-cons ul {
+            margin: 0;
+            padding-left: 20px;
+            font-size: 0.9375rem;
+            color: #374151;
+            line-height: 1.7;
+        }
+
+        .pros-cons li {
+            margin-bottom: 8px;
+        }
+
+        .note {
+            margin-top: 16px;
+            font-size: 0.9375rem;
+            color: #374151;
+            line-height: 1.7;
+        }
+    </style>
+</head>
+<body>
+    <div class="section">
+        <div class="container">
+            <!-- Edge Case 1A -->
+            <h1 class="section-title">Edge Case 1A: Low Volume Credibility — New Recipes</h1>
+            <p class="section-subtitle">New recipes with very few ratings may display unreliable scores, making it harder for customers to make confident decisions.</p>
+
+            <!-- Issue Section 1A -->
+            <div style="margin-bottom: 80px;">
+                <div class="card">
+                    <div class="section-number">Issue</div>
+                    <h3 class="card-title">Issue when displaying ratings with low volume</h3>
+
+                    <div class="visual-container">
+                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 32px;">
+                            <!-- Card 1 -->
+                            <div style="background: white; border: 1.5px solid #1A1A2E; border-radius: 6px; overflow: hidden;">
+                                <div style="position: relative; height: 140px; background: #D1D5DB;">
+                                    <div style="position: absolute; bottom: 8px; left: 8px; background: #6B7280; color: white; padding: 4px 10px; border-radius: 4px; font-size: 0.6875rem; font-weight: 600;">NEW</div>
+                                </div>
+                                <div style="padding: 16px; border-top: 1.5px solid #1A1A2E;">
+                                    <div style="font-weight: 600; font-size: 0.875rem; color: #1A1A2E;">2.1 ★ (2)</div>
+                                </div>
+                                <div style="padding: 16px; display: flex; justify-content: center; align-items: center;">
+                                    <button style="border: 1.5px solid #1A1A2E; background: white; padding: 8px 32px; border-radius: 4px; font-size: 0.875rem; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif;">Add</button>
+                                </div>
+                            </div>
+                            <!-- Card 2 -->
+                            <div style="background: white; border: 1.5px solid #1A1A2E; border-radius: 6px; overflow: hidden;">
+                                <div style="position: relative; height: 140px; background: #D1D5DB;">
+                                    <div style="position: absolute; bottom: 8px; left: 8px; background: #6B7280; color: white; padding: 4px 10px; border-radius: 4px; font-size: 0.6875rem; font-weight: 600;">NEW</div>
+                                </div>
+                                <div style="padding: 16px; border-top: 1.5px solid #1A1A2E;">
+                                    <div style="font-weight: 600; font-size: 0.875rem; color: #1A1A2E;">4.6 ★ (2)</div>
+                                </div>
+                                <div style="padding: 16px; display: flex; justify-content: center; align-items: center;">
+                                    <button style="border: 1.5px solid #1A1A2E; background: white; padding: 8px 32px; border-radius: 4px; font-size: 0.875rem; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif;">Add</button>
+                                </div>
+                            </div>
+                            <!-- Card 3 -->
+                            <div style="background: white; border: 1.5px solid #1A1A2E; border-radius: 6px; overflow: hidden;">
+                                <div style="position: relative; height: 140px; background: #D1D5DB;">
+                                    <div style="position: absolute; bottom: 8px; left: 8px; background: #6B7280; color: white; padding: 4px 10px; border-radius: 4px; font-size: 0.6875rem; font-weight: 600;">NEW</div>
+                                </div>
+                                <div style="padding: 16px; border-top: 1.5px solid #1A1A2E;">
+                                    <div style="font-weight: 600; font-size: 0.875rem; color: #1A1A2E;">5.0 ★ (1)</div>
+                                </div>
+                                <div style="padding: 16px; display: flex; justify-content: center; align-items: center;">
+                                    <button style="border: 1.5px solid #1A1A2E; background: white; padding: 8px 32px; border-radius: 4px; font-size: 0.875rem; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif;">Add</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="background: white; border: 1px solid #E5E7EB; padding: 20px; border-radius: 6px;">
+                            <div style="font-weight: 700; font-size: 0.75rem; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; color: #6B7280;">RISK</div>
+                            <div style="font-size: 0.9375rem; margin-bottom: 8px; color: #1A1A2E; line-height: 1.6;">New recipes with very few ratings may display unreliable scores, making it harder for customers to make confident decisions.</div>
+                            <div style="color: #DC2626; font-style: italic; font-size: 0.9375rem; line-height: 1.6;">"I'd be more likely to choose a recipe with a 4.5 rating from 12 reviews than a perfect 5.0 rating from only 2 reviews."</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Solution 1 - 1A -->
+            <div class="card">
+                <div class="section-number">Solution 1</div>
+                <h3 class="card-title">Show only when there are at least 5 reviews (Baymard recommendation)</h3>
+
+                <div class="visual-container" style="margin-bottom: 32px;">
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;">
+                        <div style="background: white; border: 1.5px solid #1A1A2E; border-radius: 6px; overflow: hidden;">
+                            <div style="position: relative; height: 140px; background: #D1D5DB;">
+                                <div style="position: absolute; bottom: 8px; left: 8px; background: #6B7280; color: white; padding: 4px 10px; border-radius: 4px; font-size: 0.6875rem; font-weight: 600;">NEW</div>
+                            </div>
+                            <div style="padding: 16px; border-top: 1.5px solid #1A1A2E;">
+                                <div style="font-weight: 600; font-size: 0.875rem; color: #1A1A2E;">2.1 ★ (5)</div>
+                            </div>
+                            <div style="padding: 16px; display: flex; justify-content: center; align-items: center;">
+                                <button style="border: 1.5px solid #1A1A2E; background: white; padding: 8px 32px; border-radius: 4px; font-size: 0.875rem; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif;">Add</button>
+                            </div>
+                        </div>
+                        <div style="background: white; border: 1.5px solid #1A1A2E; border-radius: 6px; overflow: hidden;">
+                            <div style="position: relative; height: 140px; background: #D1D5DB;">
+                                <div style="position: absolute; bottom: 8px; left: 8px; background: #6B7280; color: white; padding: 4px 10px; border-radius: 4px; font-size: 0.6875rem; font-weight: 600;">NEW</div>
+                            </div>
+                            <div style="padding: 16px; border-top: 1.5px solid #1A1A2E;">
+                                <div style="font-weight: 600; font-size: 0.875rem; color: #1A1A2E;">4.6 ★ (5)</div>
+                            </div>
+                            <div style="padding: 16px; display: flex; justify-content: center; align-items: center;">
+                                <button style="border: 1.5px solid #1A1A2E; background: white; padding: 8px 32px; border-radius: 4px; font-size: 0.875rem; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif;">Add</button>
+                            </div>
+                        </div>
+                        <div style="background: white; border: 1.5px solid #1A1A2E; border-radius: 6px; overflow: hidden;">
+                            <div style="position: relative; height: 140px; background: #D1D5DB;">
+                                <div style="position: absolute; bottom: 8px; left: 8px; background: #6B7280; color: white; padding: 4px 10px; border-radius: 4px; font-size: 0.6875rem; font-weight: 600;">NEW</div>
+                            </div>
+                            <div style="padding: 16px; border-top: 1.5px solid #1A1A2E;">
+                                <div style="font-weight: 600; font-size: 0.875rem; color: #1A1A2E;">5.0 ★ (5)</div>
+                            </div>
+                            <div style="padding: 16px; display: flex; justify-content: center; align-items: center;">
+                                <button style="border: 1.5px solid #1A1A2E; background: white; padding: 8px 32px; border-radius: 4px; font-size: 0.875rem; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif;">Add</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pros-cons">
+                    <div>
+                        <div class="pros-cons-title">Pros</div>
+                        <ul>
+                            <li>Reduces bias with minimum viable sample size</li>
+                            <li>Fewer cases of missing ratings compared to higher threshold</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <div class="pros-cons-title" style="color: #DC2626;">Cons</div>
+                        <ul>
+                            <li>May display low rating before they stabilize</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Solution 2 - 1A -->
+            <div class="card">
+                <div class="section-number">Solution 2</div>
+                <h3 class="card-title">Show only when there are at least 10 reviews for low rating</h3>
+
+                <div class="visual-container" style="margin-bottom: 32px;">
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;">
+                        <div style="background: white; border: 1.5px solid #1A1A2E; border-radius: 6px; overflow: hidden;">
+                            <div style="position: relative; height: 140px; background: #D1D5DB;">
+                                <div style="position: absolute; bottom: 8px; left: 8px; background: #6B7280; color: white; padding: 4px 10px; border-radius: 4px; font-size: 0.6875rem; font-weight: 600;">NEW</div>
+                            </div>
+                            <div style="padding: 16px; border-top: 1.5px solid #1A1A2E;">
+                                <div style="font-weight: 600; font-size: 0.875rem; color: #1A1A2E;">2.1 ★ (10)</div>
+                            </div>
+                            <div style="padding: 16px; display: flex; justify-content: center; align-items: center;">
+                                <button style="border: 1.5px solid #1A1A2E; background: white; padding: 8px 32px; border-radius: 4px; font-size: 0.875rem; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif;">Add</button>
+                            </div>
+                        </div>
+                        <div style="background: white; border: 1.5px solid #1A1A2E; border-radius: 6px; overflow: hidden;">
+                            <div style="position: relative; height: 140px; background: #D1D5DB;">
+                                <div style="position: absolute; bottom: 8px; left: 8px; background: #6B7280; color: white; padding: 4px 10px; border-radius: 4px; font-size: 0.6875rem; font-weight: 600;">NEW</div>
+                            </div>
+                            <div style="padding: 16px; border-top: 1.5px solid #1A1A2E;">
+                                <div style="font-weight: 600; font-size: 0.875rem; color: #1A1A2E;">4.6 ★ (5)</div>
+                            </div>
+                            <div style="padding: 16px; display: flex; justify-content: center; align-items: center;">
+                                <button style="border: 1.5px solid #1A1A2E; background: white; padding: 8px 32px; border-radius: 4px; font-size: 0.875rem; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif;">Add</button>
+                            </div>
+                        </div>
+                        <div style="background: white; border: 1.5px solid #1A1A2E; border-radius: 6px; overflow: hidden;">
+                            <div style="position: relative; height: 140px; background: #D1D5DB;">
+                                <div style="position: absolute; bottom: 8px; left: 8px; background: #6B7280; color: white; padding: 4px 10px; border-radius: 4px; font-size: 0.6875rem; font-weight: 600;">NEW</div>
+                            </div>
+                            <div style="padding: 16px; border-top: 1.5px solid #1A1A2E;">
+                                <div style="font-weight: 600; font-size: 0.875rem; color: #1A1A2E;">5.0 ★ (5)</div>
+                            </div>
+                            <div style="padding: 16px; display: flex; justify-content: center; align-items: center;">
+                                <button style="border: 1.5px solid #1A1A2E; background: white; padding: 8px 32px; border-radius: 4px; font-size: 0.875rem; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif;">Add</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pros-cons">
+                    <div>
+                        <div class="pros-cons-title">Pros</div>
+                        <ul>
+                            <li>Prevents a few bad reviews from hurting trust too early</li>
+                            <li>Higher confidence before showing negative signals</li>
+                            <li>Still allows positive social proof to appear early</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <div class="pros-cons-title" style="color: #DC2626;">Cons</div>
+                        <ul>
+                            <li>Can feel biased toward positive ratings</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Edge Case 1B -->
+            <div style="margin-top: 120px;">
+                <h1 class="section-title">Edge Case 1B: Low Volume Credibility — Premium Recipes</h1>
+                <p class="section-subtitle">Low ratings on premium meals with very few reviews may disproportionately reduce customer willingness to purchase higher-priced meals.</p>
+
+                <!-- Issue Section 1B -->
+                <div style="margin-bottom: 80px; margin-top: 48px;">
+                    <div class="card">
+                        <div class="section-number">Issue</div>
+                        <h3 class="card-title">Issue when displaying low volume ratings for premium recipes</h3>
+
+                        <div class="visual-container">
+                            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 32px;">
+                                <!-- Card 1 -->
+                                <div style="background: white; border: 1.5px solid #1A1A2E; border-radius: 6px; overflow: hidden;">
+                                    <div style="position: relative; height: 140px; background: #D1D5DB;">
+                                        <div style="position: absolute; bottom: 8px; left: 8px; background: #6B7280; color: white; padding: 4px 10px; border-radius: 4px; font-size: 0.6875rem; font-weight: 600;">PREMIUM</div>
+                                    </div>
+                                    <div style="padding: 16px; border-top: 1.5px solid #1A1A2E;">
+                                        <div style="font-weight: 600; font-size: 0.875rem; color: #1A1A2E; margin-bottom: 12px;">2.1 ★ (2)</div>
+                                        <div style="display: flex; align-items: center; gap: 8px; font-size: 0.75rem; color: #6B7280;">
+                                            <span>👤 2</span>
+                                            <span style="font-weight: 600; color: #1A1A2E;">+ $4,99</span>
+                                            <span>pro portion</span>
+                                        </div>
+                                    </div>
+                                    <div style="padding: 16px; display: flex; justify-content: center; align-items: center;">
+                                        <button style="border: 1.5px solid #1A1A2E; background: white; padding: 8px 32px; border-radius: 4px; font-size: 0.875rem; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif;">Add</button>
+                                    </div>
+                                </div>
+                                <!-- Card 2 -->
+                                <div style="background: white; border: 1.5px solid #1A1A2E; border-radius: 6px; overflow: hidden;">
+                                    <div style="position: relative; height: 140px; background: #D1D5DB;">
+                                        <div style="position: absolute; bottom: 8px; left: 8px; background: #6B7280; color: white; padding: 4px 10px; border-radius: 4px; font-size: 0.6875rem; font-weight: 600;">PREMIUM</div>
+                                    </div>
+                                    <div style="padding: 16px; border-top: 1.5px solid #1A1A2E;">
+                                        <div style="font-weight: 600; font-size: 0.875rem; color: #1A1A2E; margin-bottom: 12px;">4.6 ★ (2)</div>
+                                        <div style="display: flex; align-items: center; gap: 8px; font-size: 0.75rem; color: #6B7280;">
+                                            <span>👤 2</span>
+                                            <span style="font-weight: 600; color: #1A1A2E;">+ $4,99</span>
+                                            <span>pro portion</span>
+                                        </div>
+                                    </div>
+                                    <div style="padding: 16px; display: flex; justify-content: center; align-items: center;">
+                                        <button style="border: 1.5px solid #1A1A2E; background: white; padding: 8px 32px; border-radius: 4px; font-size: 0.875rem; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif;">Add</button>
+                                    </div>
+                                </div>
+                                <!-- Card 3 -->
+                                <div style="background: white; border: 1.5px solid #1A1A2E; border-radius: 6px; overflow: hidden;">
+                                    <div style="position: relative; height: 140px; background: #D1D5DB;">
+                                        <div style="position: absolute; bottom: 8px; left: 8px; background: #6B7280; color: white; padding: 4px 10px; border-radius: 4px; font-size: 0.6875rem; font-weight: 600;">PREMIUM</div>
+                                    </div>
+                                    <div style="padding: 16px; border-top: 1.5px solid #1A1A2E;">
+                                        <div style="font-weight: 600; font-size: 0.875rem; color: #1A1A2E; margin-bottom: 12px;">5.0 ★ (1)</div>
+                                        <div style="display: flex; align-items: center; gap: 8px; font-size: 0.75rem; color: #6B7280;">
+                                            <span>👤 2</span>
+                                            <span style="font-weight: 600; color: #1A1A2E;">+ $4,99</span>
+                                            <span>pro portion</span>
+                                        </div>
+                                    </div>
+                                    <div style="padding: 16px; display: flex; justify-content: center; align-items: center;">
+                                        <button style="border: 1.5px solid #1A1A2E; background: white; padding: 8px 32px; border-radius: 4px; font-size: 0.875rem; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif;">Add</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div style="background: white; border: 1px solid #E5E7EB; padding: 20px; border-radius: 6px;">
+                                <div style="font-weight: 700; font-size: 0.75rem; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; color: #6B7280;">RISK</div>
+                                <div style="font-size: 0.9375rem; margin-bottom: 8px; color: #1A1A2E; line-height: 1.6;">Low ratings on premium meals with very few reviews may disproportionately reduce customer willingness to purchase higher-priced meals.</div>
+                                <div style="color: #DC2626; font-style: italic; font-size: 0.9375rem; line-height: 1.6;">"If I'm paying extra for a premium meal, a low rating from only a few reviews would make me hesitate to order it."</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Solution 1 - 1B -->
+                <div class="card">
+                    <div class="section-number">Solution 1</div>
+                    <h3 class="card-title">Keep as the same threshold as standard recipe</h3>
+
+                    <div class="visual-container" style="margin-bottom: 32px;">
+                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;">
+                            <div style="background: white; border: 1.5px solid #1A1A2E; border-radius: 6px; overflow: hidden;">
+                                <div style="position: relative; height: 140px; background: #D1D5DB;">
+                                    <div style="position: absolute; bottom: 8px; left: 8px; background: #6B7280; color: white; padding: 4px 10px; border-radius: 4px; font-size: 0.6875rem; font-weight: 600;">PREMIUM</div>
+                                </div>
+                                <div style="padding: 16px; border-top: 1.5px solid #1A1A2E;">
+                                    <div style="font-weight: 600; font-size: 0.875rem; color: #1A1A2E; margin-bottom: 12px;">2.1 ★ (5)</div>
+                                    <div style="display: flex; align-items: center; gap: 8px; font-size: 0.75rem; color: #6B7280;">
+                                        <span>👤 2</span>
+                                        <span style="font-weight: 600; color: #1A1A2E;">+ $4,99</span>
+                                        <span>pro portion</span>
+                                    </div>
+                                </div>
+                                <div style="padding: 16px; display: flex; justify-content: center; align-items: center;">
+                                    <button style="border: 1.5px solid #1A1A2E; background: white; padding: 8px 32px; border-radius: 4px; font-size: 0.875rem; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif;">Add</button>
+                                </div>
+                            </div>
+                            <div style="background: white; border: 1.5px solid #1A1A2E; border-radius: 6px; overflow: hidden;">
+                                <div style="position: relative; height: 140px; background: #D1D5DB;">
+                                    <div style="position: absolute; bottom: 8px; left: 8px; background: #6B7280; color: white; padding: 4px 10px; border-radius: 4px; font-size: 0.6875rem; font-weight: 600;">PREMIUM</div>
+                                </div>
+                                <div style="padding: 16px; border-top: 1.5px solid #1A1A2E;">
+                                    <div style="font-weight: 600; font-size: 0.875rem; color: #1A1A2E; margin-bottom: 12px;">4.6 ★ (5)</div>
+                                    <div style="display: flex; align-items: center; gap: 8px; font-size: 0.75rem; color: #6B7280;">
+                                        <span>👤 2</span>
+                                        <span style="font-weight: 600; color: #1A1A2E;">+ $4,99</span>
+                                        <span>pro portion</span>
+                                    </div>
+                                </div>
+                                <div style="padding: 16px; display: flex; justify-content: center; align-items: center;">
+                                    <button style="border: 1.5px solid #1A1A2E; background: white; padding: 8px 32px; border-radius: 4px; font-size: 0.875rem; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif;">Add</button>
+                                </div>
+                            </div>
+                            <div style="background: white; border: 1.5px solid #1A1A2E; border-radius: 6px; overflow: hidden;">
+                                <div style="position: relative; height: 140px; background: #D1D5DB;">
+                                    <div style="position: absolute; bottom: 8px; left: 8px; background: #6B7280; color: white; padding: 4px 10px; border-radius: 4px; font-size: 0.6875rem; font-weight: 600;">PREMIUM</div>
+                                </div>
+                                <div style="padding: 16px; border-top: 1.5px solid #1A1A2E;">
+                                    <div style="font-weight: 600; font-size: 0.875rem; color: #1A1A2E; margin-bottom: 12px;">5.0 ★ (5)</div>
+                                    <div style="display: flex; align-items: center; gap: 8px; font-size: 0.75rem; color: #6B7280;">
+                                        <span>👤 2</span>
+                                        <span style="font-weight: 600; color: #1A1A2E;">+ $4,99</span>
+                                        <span>pro portion</span>
+                                    </div>
+                                </div>
+                                <div style="padding: 16px; display: flex; justify-content: center; align-items: center;">
+                                    <button style="border: 1.5px solid #1A1A2E; background: white; padding: 8px 32px; border-radius: 4px; font-size: 0.875rem; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif;">Add</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pros-cons">
+                        <div>
+                            <div class="pros-cons-title">Pros</div>
+                            <ul>
+                                <li>Simple and consistent</li>
+                                <li>Feels fair and transparent across all meals</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <div class="pros-cons-title" style="color: #DC2626;">Cons</div>
+                            <ul>
+                                <li>Premium meals may be more sensitive to early low ratings</li>
+                                <li>Could negatively impact upsell conversion</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Solution 2 - 1B -->
+                <div class="card">
+                    <div class="section-number">Solution 2</div>
+                    <h3 class="card-title">Raise the threshold for low rating of premium recipes</h3>
+
+                    <div class="visual-container" style="margin-bottom: 32px;">
+                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;">
+                            <div style="background: white; border: 1.5px solid #1A1A2E; border-radius: 6px; overflow: hidden;">
+                                <div style="position: relative; height: 140px; background: #D1D5DB;">
+                                    <div style="position: absolute; bottom: 8px; left: 8px; background: #6B7280; color: white; padding: 4px 10px; border-radius: 4px; font-size: 0.6875rem; font-weight: 600;">PREMIUM</div>
+                                </div>
+                                <div style="padding: 16px; border-top: 1.5px solid #1A1A2E;">
+                                    <div style="font-weight: 600; font-size: 0.875rem; color: #1A1A2E; margin-bottom: 12px;">2.1 ★ (10)</div>
+                                    <div style="display: flex; align-items: center; gap: 8px; font-size: 0.75rem; color: #6B7280;">
+                                        <span>👤 2</span>
+                                        <span style="font-weight: 600; color: #1A1A2E;">+ $4,99</span>
+                                        <span>pro portion</span>
+                                    </div>
+                                </div>
+                                <div style="padding: 16px; display: flex; justify-content: center; align-items: center;">
+                                    <button style="border: 1.5px solid #1A1A2E; background: white; padding: 8px 32px; border-radius: 4px; font-size: 0.875rem; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif;">Add</button>
+                                </div>
+                            </div>
+                            <div style="background: white; border: 1.5px solid #1A1A2E; border-radius: 6px; overflow: hidden;">
+                                <div style="position: relative; height: 140px; background: #D1D5DB;">
+                                    <div style="position: absolute; bottom: 8px; left: 8px; background: #6B7280; color: white; padding: 4px 10px; border-radius: 4px; font-size: 0.6875rem; font-weight: 600;">PREMIUM</div>
+                                </div>
+                                <div style="padding: 16px; border-top: 1.5px solid #1A1A2E;">
+                                    <div style="font-weight: 600; font-size: 0.875rem; color: #1A1A2E; margin-bottom: 12px;">4.6 ★ (5)</div>
+                                    <div style="display: flex; align-items: center; gap: 8px; font-size: 0.75rem; color: #6B7280;">
+                                        <span>👤 2</span>
+                                        <span style="font-weight: 600; color: #1A1A2E;">+ $4,99</span>
+                                        <span>pro portion</span>
+                                    </div>
+                                </div>
+                                <div style="padding: 16px; display: flex; justify-content: center; align-items: center;">
+                                    <button style="border: 1.5px solid #1A1A2E; background: white; padding: 8px 32px; border-radius: 4px; font-size: 0.875rem; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif;">Add</button>
+                                </div>
+                            </div>
+                            <div style="background: white; border: 1.5px solid #1A1A2E; border-radius: 6px; overflow: hidden;">
+                                <div style="position: relative; height: 140px; background: #D1D5DB;">
+                                    <div style="position: absolute; bottom: 8px; left: 8px; background: #6B7280; color: white; padding: 4px 10px; border-radius: 4px; font-size: 0.6875rem; font-weight: 600;">PREMIUM</div>
+                                </div>
+                                <div style="padding: 16px; border-top: 1.5px solid #1A1A2E;">
+                                    <div style="font-weight: 600; font-size: 0.875rem; color: #1A1A2E; margin-bottom: 12px;">5.0 ★ (5)</div>
+                                    <div style="display: flex; align-items: center; gap: 8px; font-size: 0.75rem; color: #6B7280;">
+                                        <span>👤 2</span>
+                                        <span style="font-weight: 600; color: #1A1A2E;">+ $4,99</span>
+                                        <span>pro portion</span>
+                                    </div>
+                                </div>
+                                <div style="padding: 16px; display: flex; justify-content: center; align-items: center;">
+                                    <button style="border: 1.5px solid #1A1A2E; background: white; padding: 8px 32px; border-radius: 4px; font-size: 0.875rem; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif;">Add</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pros-cons">
+                        <div>
+                            <div class="pros-cons-title">Pros</div>
+                            <ul>
+                                <li>Protects conversion on upsell-driving recipes</li>
+                                <li>Supports premium perception and merchandising goals</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <div class="pros-cons-title" style="color: #DC2626;">Cons</div>
+                            <ul>
+                                <li>Create inconsistency between premium and regular recipes</li>
+                                <li>Can feel less transparent or trustworthy</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Edge Case 2 -->
+            <div style="margin-top: 120px;">
+                <h1 class="section-title">Edge Case 2: Low Rate in Recommendation — Pre-selected Meals and Menu Top Positions</h1>
+                <p class="section-subtitle">Customers may avoid or distrust meals that display low ratings in key recommendation positions.</p>
+
+            <!-- Issue Section -->
+            <div style="margin-bottom: 180px;">
+                <div class="card">
+                    <div class="section-number">Issue</div>
+                    <h3 class="card-title">Issue when display community rating</h3>
+
+                    <div class="visual-container" style="padding-bottom: 140px;">
+                        <!-- Selected for you section -->
+                        <h4 class="visual-section-title">Selected for you</h4>
+                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 40px;">
+                            <!-- Card 1 -->
+                            <div style="background: white; border: 1.5px solid #1A1A2E; border-radius: 6px; overflow: hidden;">
+                                <div style="height: 80px; background: #D1D5DB;"></div>
+                                <div style="padding: 10px; border-top: 1.5px solid #1A1A2E; border-bottom: 1.5px solid #1A1A2E;">
+                                    <div style="font-weight: 600; font-size: 0.8125rem; color: #1A1A2E;">4.6 ★ (1.2k)</div>
+                                </div>
+                                <div style="background: #1A1A2E; color: white; padding: 10px; display: flex; align-items: center; justify-content: space-between; font-size: 0.6875rem;">
+                                    <span style="font-size: 1rem; font-weight: 600;">−</span>
+                                    <div style="text-align: center;">
+                                        <div style="font-weight: 500; font-size: 0.75rem;">1 in your box</div>
+                                        <div style="font-size: 0.625rem; opacity: 0.7;">(2 servings)</div>
+                                    </div>
+                                    <span style="font-size: 1rem; font-weight: 600;">+</span>
+                                </div>
+                            </div>
+                            <!-- Card 2 with risk callout -->
+                            <div style="position: relative;">
+                                <div style="background: white; border: 1.5px solid #1A1A2E; border-radius: 6px; overflow: hidden;">
+                                    <div style="height: 80px; background: #D1D5DB;"></div>
+                                    <div style="padding: 10px; border-top: 1.5px solid #1A1A2E; border-bottom: 1.5px solid #1A1A2E;">
+                                        <div style="font-weight: 600; font-size: 0.8125rem; color: #1A1A2E;">1.2 ★ (1.2k)</div>
+                                    </div>
+                                    <div style="background: #1A1A2E; color: white; padding: 10px; display: flex; align-items: center; justify-content: space-between; font-size: 0.6875rem;">
+                                        <span style="font-size: 1rem; font-weight: 600;">−</span>
+                                        <div style="text-align: center;">
+                                            <div style="font-weight: 500; font-size: 0.75rem;">1 in your box</div>
+                                            <div style="font-size: 0.625rem; opacity: 0.7;">(2 servings)</div>
+                                        </div>
+                                        <span style="font-size: 1rem; font-weight: 600;">+</span>
+                                    </div>
+                                </div>
+                                <!-- Risk callout -->
+                                <div style="position: absolute; top: 100%; left: 50%; transform: translateX(-50%); margin-top: 16px; background: white; border: 1px solid #E5E7EB; padding: 16px; border-radius: 6px; width: 220%; max-width: 420px; z-index: 10; box-shadow: 0 4px 12px rgba(0,0,0,0.08);">
+                                    <div style="font-weight: 700; font-size: 0.6875rem; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; color: #6B7280;">RISK</div>
+                                    <div style="font-size: 0.8125rem; margin-bottom: 8px; color: #1A1A2E; line-height: 1.5;">Pre-selected meals that display low ratings creates distrust to users</div>
+                                    <div style="color: #DC2626; font-style: italic; font-size: 0.8125rem; line-height: 1.5;">"Why you recommend me food that is poorly rated?"</div>
+                                </div>
+                            </div>
+                            <!-- Card 3 -->
+                            <div style="background: white; border: 1.5px solid #1A1A2E; border-radius: 6px; overflow: hidden;">
+                                <div style="height: 80px; background: #D1D5DB;"></div>
+                                <div style="padding: 10px; border-top: 1.5px solid #1A1A2E; border-bottom: 1.5px solid #1A1A2E;">
+                                    <div style="font-weight: 600; font-size: 0.8125rem; color: #1A1A2E;">4.1 ★ (1.2k)</div>
+                                </div>
+                                <div style="background: #1A1A2E; color: white; padding: 10px; display: flex; align-items: center; justify-content: space-between; font-size: 0.6875rem;">
+                                    <span style="font-size: 1rem; font-weight: 600;">−</span>
+                                    <div style="text-align: center;">
+                                        <div style="font-weight: 500; font-size: 0.75rem;">1 in your box</div>
+                                        <div style="font-size: 0.625rem; opacity: 0.7;">(2 servings)</div>
+                                    </div>
+                                    <span style="font-size: 1rem; font-weight: 600;">+</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- This week's menu section -->
+                        <h4 class="visual-section-title" style="margin-top: 48px;">This week's menu</h4>
+                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;">
+                            <!-- Menu Card 1 -->
+                            <div style="background: white; border: 1.5px solid #1A1A2E; border-radius: 6px; overflow: hidden;">
+                                <div style="height: 80px; background: #D1D5DB;"></div>
+                                <div style="padding: 10px; border-top: 1.5px solid #1A1A2E; border-bottom: 1.5px solid #1A1A2E;">
+                                    <div style="font-weight: 600; font-size: 0.8125rem; color: #1A1A2E;">4.6 ★ (1.2k)</div>
+                                </div>
+                                <div style="padding: 10px; display: flex; justify-content: center; align-items: center;">
+                                    <button style="border: 1.5px solid #1A1A2E; background: white; padding: 6px 24px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif;">Add</button>
+                                </div>
+                            </div>
+                            <!-- Menu Card 2 with risk callout -->
+                            <div style="position: relative;">
+                                <div style="background: white; border: 1.5px solid #1A1A2E; border-radius: 6px; overflow: hidden;">
+                                    <div style="height: 80px; background: #D1D5DB;"></div>
+                                    <div style="padding: 10px; border-top: 1.5px solid #1A1A2E; border-bottom: 1.5px solid #1A1A2E;">
+                                        <div style="font-weight: 600; font-size: 0.8125rem; color: #1A1A2E;">1.2 ★ (1.2k)</div>
+                                    </div>
+                                    <div style="padding: 10px; display: flex; justify-content: center; align-items: center;">
+                                        <button style="border: 1.5px solid #1A1A2E; background: white; padding: 6px 24px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif;">Add</button>
+                                    </div>
+                                </div>
+                                <!-- Risk callout -->
+                                <div style="position: absolute; top: 100%; left: 50%; transform: translateX(-50%); margin-top: 16px; background: white; border: 1px solid #E5E7EB; padding: 16px; border-radius: 6px; width: 220%; max-width: 420px; z-index: 10; box-shadow: 0 4px 12px rgba(0,0,0,0.08);">
+                                    <div style="font-weight: 700; font-size: 0.6875rem; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; color: #6B7280;">RISK</div>
+                                    <div style="font-size: 0.8125rem; margin-bottom: 8px; color: #1A1A2E; line-height: 1.5;">Meals on top of menu has low rating create a negative sentiment to users.</div>
+                                    <div style="color: #DC2626; font-style: italic; font-size: 0.8125rem; line-height: 1.5;">"I'm excited to choose food, but I see meals that are poorly rated here, I wouldn't want that..."</div>
+                                </div>
+                            </div>
+                            <!-- Menu Card 3 -->
+                            <div style="background: white; border: 1.5px solid #1A1A2E; border-radius: 6px; overflow: hidden;">
+                                <div style="height: 80px; background: #D1D5DB;"></div>
+                                <div style="padding: 10px; border-top: 1.5px solid #1A1A2E; border-bottom: 1.5px solid #1A1A2E;">
+                                    <div style="font-weight: 600; font-size: 0.8125rem; color: #1A1A2E;">3.2 ★ (1.2k)</div>
+                                </div>
+                                <div style="padding: 10px; display: flex; justify-content: center; align-items: center;">
+                                    <button style="border: 1.5px solid #1A1A2E; background: white; padding: 6px 24px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif;">Add</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Solution 1 -->
+            <div class="card">
+                <div class="section-number">Solution 1</div>
+                <h3 class="card-title">No show low-rating (below 3) in pre-selection product card and Menu top positions</h3>
+
+                <div style="display: grid; grid-template-columns: 1.5fr 1fr; gap: 32px; margin-bottom: 32px;">
+                    <!-- Left: Cards view -->
+                    <div class="visual-container">
+                        <h4 class="visual-section-title">Selected for you</h4>
+                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 32px;">
+                            <div style="background: white; border: 1.5px solid #1A1A2E; border-radius: 5px; overflow: hidden;">
+                                <div style="height: 50px; background: #D1D5DB;"></div>
+                                <div style="padding: 8px; border-top: 1.5px solid #1A1A2E; font-size: 0.6875rem; font-weight: 600; min-height: 28px; display: flex; align-items: center;">4.6★ (1.2k)</div>
+                                <div style="background: #1A1A2E; color: white; padding: 6px; text-align: center; font-size: 0.5625rem; min-height: 32px; display: flex; flex-direction: column; justify-content: center;"><div style="font-weight: 500;">1 in your box</div><div style="opacity: 0.7;">(2 servings)</div></div>
+                            </div>
+                            <div style="background: white; border: 1.5px solid #1A1A2E; border-radius: 5px; overflow: hidden;">
+                                <div style="height: 50px; background: #D1D5DB;"></div>
+                                <div style="padding: 8px; border-top: 1.5px solid #1A1A2E; font-size: 0.6875rem; font-weight: 600; min-height: 28px;"></div>
+                                <div style="background: #1A1A2E; color: white; padding: 6px; text-align: center; font-size: 0.5625rem; min-height: 32px; display: flex; flex-direction: column; justify-content: center;"><div style="font-weight: 500;">1 in your box</div><div style="opacity: 0.7;">(2 servings)</div></div>
+                            </div>
+                            <div style="background: white; border: 1.5px solid #1A1A2E; border-radius: 5px; overflow: hidden;">
+                                <div style="height: 50px; background: #D1D5DB;"></div>
+                                <div style="padding: 8px; border-top: 1.5px solid #1A1A2E; font-size: 0.6875rem; font-weight: 600; min-height: 28px; display: flex; align-items: center;">4.1★ (1.2k)</div>
+                                <div style="background: #1A1A2E; color: white; padding: 6px; text-align: center; font-size: 0.5625rem; min-height: 32px; display: flex; flex-direction: column; justify-content: center;"><div style="font-weight: 500;">1 in your box</div><div style="opacity: 0.7;">(2 servings)</div></div>
+                            </div>
+                        </div>
+
+                        <h4 class="visual-section-title">This week's menu</h4>
+                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;">
+                            <div style="background: white; border: 1.5px solid #1A1A2E; border-radius: 5px; overflow: hidden;">
+                                <div style="height: 50px; background: #D1D5DB;"></div>
+                                <div style="padding: 8px; border-top: 1.5px solid #1A1A2E; font-size: 0.6875rem; font-weight: 600; min-height: 28px;"></div>
+                                <div style="padding: 6px; text-align: center; min-height: 32px; display: flex; justify-content: center; align-items: center;"><button style="border: 1.5px solid #1A1A2E; background: white; padding: 4px 14px; border-radius: 3px; font-size: 0.625rem; font-weight: 600; font-family: 'Inter', sans-serif;">Add</button></div>
+                            </div>
+                            <div style="background: white; border: 1.5px solid #1A1A2E; border-radius: 5px; overflow: hidden;">
+                                <div style="height: 50px; background: #D1D5DB;"></div>
+                                <div style="padding: 8px; border-top: 1.5px solid #1A1A2E; font-size: 0.6875rem; font-weight: 600; min-height: 28px; display: flex; align-items: center;">4.8★ (1.2k)</div>
+                                <div style="padding: 6px; text-align: center; min-height: 32px; display: flex; justify-content: center; align-items: center;"><button style="border: 1.5px solid #1A1A2E; background: white; padding: 4px 14px; border-radius: 3px; font-size: 0.625rem; font-weight: 600; font-family: 'Inter', sans-serif;">Add</button></div>
+                            </div>
+                            <div style="background: white; border: 1.5px solid #1A1A2E; border-radius: 5px; overflow: hidden;">
+                                <div style="height: 50px; background: #D1D5DB;"></div>
+                                <div style="padding: 8px; border-top: 1.5px solid #1A1A2E; font-size: 0.6875rem; font-weight: 600; min-height: 28px; display: flex; align-items: center;">3.2★ (1.2k)</div>
+                                <div style="padding: 6px; text-align: center; min-height: 32px; display: flex; justify-content: center; align-items: center;"><button style="border: 1.5px solid #1A1A2E; background: white; padding: 4px 14px; border-radius: 3px; font-size: 0.625rem; font-weight: 600; font-family: 'Inter', sans-serif;">Add</button></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right: Product card vs detail -->
+                    <div class="visual-container">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                            <div>
+                                <div style="font-size: 0.75rem; font-weight: 600; margin-bottom: 12px; color: #4B5563;">Product card</div>
+                                <div style="background: white; border: 1.5px solid #1A1A2E; border-radius: 5px; overflow: hidden;">
+                                    <div style="height: 60px; background: #D1D5DB;"></div>
+                                    <div style="padding: 8px; border-top: 1.5px solid #1A1A2E; font-size: 0.6875rem; font-weight: 600; min-height: 28px;"></div>
+                                    <div style="background: #1A1A2E; color: white; padding: 6px; text-align: center; font-size: 0.5625rem; min-height: 32px; display: flex; flex-direction: column; justify-content: center;"><div style="font-weight: 500;">1 in your box</div><div style="opacity: 0.7;">(2 servings)</div></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div style="font-size: 0.75rem; font-weight: 600; margin-bottom: 12px; color: #4B5563;">Product detail</div>
+                                <div style="background: white; border: 1.5px solid #1A1A2E; border-radius: 5px; overflow: hidden;">
+                                    <div style="height: 80px; background: #D1D5DB;"></div>
+                                    <div style="padding: 12px; border-top: 1.5px solid #1A1A2E; font-size: 0.6875rem; font-weight: 600; min-height: 36px; display: flex; align-items: center;">2.1 ★ (1.2k)</div>
+                                    <div style="padding: 12px; min-height: 150px;"></div>
+                                    <div style="background: #1A1A2E; color: white; padding: 6px; text-align: center; font-size: 0.5625rem; min-height: 32px; display: flex; flex-direction: column; justify-content: center; border-top: 1.5px solid #1A1A2E;"><div style="font-weight: 500;">1 in your box</div><div style="opacity: 0.7;">(2 servings)</div></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pros/Cons -->
+                <div class="pros-cons">
+                    <div>
+                        <div class="pros-cons-title">Pros</div>
+                        <ul>
+                            <li>Reduce negative sentiment when users review pre-selected meals and start browsing Menu</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <div class="pros-cons-title" style="color: #DC2626;">Cons</div>
+                        <ul>
+                            <li>Inconsistent of show/hide rating among meals which users can discover in detail page anyway</li>
+                        </ul>
+                        <div class="note">→ Selective hiding hurts trust. <span style="color: #DC2626; font-weight: 600;">We recommend not to go with this approach.</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Solution 2 -->
+            <div class="card">
+                <div class="section-number">Solution 2</div>
+                <h3 class="card-title">No show rating in Menu card</h3>
+
+                <div style="display: grid; grid-template-columns: 1.5fr 1fr; gap: 32px; margin-bottom: 32px;">
+                    <!-- Left: Cards view -->
+                    <div class="visual-container">
+                        <h4 class="visual-section-title">Selected for you</h4>
+                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 32px;">
+                            <div style="background: white; border: 1.5px solid #1A1A2E; border-radius: 5px; overflow: hidden;">
+                                <div style="position: relative; height: 50px; background: #D1D5DB;">
+                                    <div style="position: absolute; bottom: 4px; left: 4px; background: #6B7280; color: white; padding: 2px 5px; border-radius: 3px; font-size: 0.5rem; font-weight: 600;">Your top rated</div>
+                                </div>
+                                <div style="padding: 8px; border-top: 1.5px solid #1A1A2E; font-size: 0.6875rem; font-weight: 600; min-height: 28px;"></div>
+                                <div style="background: #1A1A2E; color: white; padding: 6px; text-align: center; font-size: 0.5625rem; min-height: 32px; display: flex; flex-direction: column; justify-content: center;"><div style="font-weight: 500;">1 in your box</div><div style="opacity: 0.7;">(2 servings)</div></div>
+                            </div>
+                            <div style="background: white; border: 1.5px solid #1A1A2E; border-radius: 5px; overflow: hidden;">
+                                <div style="height: 50px; background: #D1D5DB;"></div>
+                                <div style="padding: 8px; border-top: 1.5px solid #1A1A2E; font-size: 0.6875rem; font-weight: 600; min-height: 28px;"></div>
+                                <div style="background: #1A1A2E; color: white; padding: 6px; text-align: center; font-size: 0.5625rem; min-height: 32px; display: flex; flex-direction: column; justify-content: center;"><div style="font-weight: 500;">1 in your box</div><div style="opacity: 0.7;">(2 servings)</div></div>
+                            </div>
+                            <div style="background: white; border: 1.5px solid #1A1A2E; border-radius: 5px; overflow: hidden;">
+                                <div style="height: 50px; background: #D1D5DB;"></div>
+                                <div style="padding: 8px; border-top: 1.5px solid #1A1A2E; font-size: 0.6875rem; font-weight: 600; min-height: 28px;"></div>
+                                <div style="background: #1A1A2E; color: white; padding: 6px; text-align: center; font-size: 0.5625rem; min-height: 32px; display: flex; flex-direction: column; justify-content: center;"><div style="font-weight: 500;">1 in your box</div><div style="opacity: 0.7;">(2 servings)</div></div>
+                            </div>
+                        </div>
+
+                        <h4 class="visual-section-title">This week's menu</h4>
+                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;">
+                            <div style="background: white; border: 1.5px solid #1A1A2E; border-radius: 5px; overflow: hidden;">
+                                <div style="height: 50px; background: #D1D5DB;"></div>
+                                <div style="padding: 8px; border-top: 1.5px solid #1A1A2E; font-size: 0.6875rem; font-weight: 600; min-height: 28px;"></div>
+                                <div style="padding: 6px; text-align: center; min-height: 32px; display: flex; justify-content: center; align-items: center;"><button style="border: 1.5px solid #1A1A2E; background: white; padding: 4px 14px; border-radius: 3px; font-size: 0.625rem; font-weight: 600; font-family: 'Inter', sans-serif;">Add</button></div>
+                            </div>
+                            <div style="background: white; border: 1.5px solid #1A1A2E; border-radius: 5px; overflow: hidden;">
+                                <div style="position: relative; height: 50px; background: #D1D5DB;">
+                                    <div style="position: absolute; bottom: 4px; left: 4px; background: #6B7280; color: white; padding: 2px 5px; border-radius: 3px; font-size: 0.5rem; font-weight: 600;">Popular</div>
+                                </div>
+                                <div style="padding: 8px; border-top: 1.5px solid #1A1A2E; font-size: 0.6875rem; font-weight: 600; min-height: 28px;"></div>
+                                <div style="padding: 6px; text-align: center; min-height: 32px; display: flex; justify-content: center; align-items: center;"><button style="border: 1.5px solid #1A1A2E; background: white; padding: 4px 14px; border-radius: 3px; font-size: 0.625rem; font-weight: 600; font-family: 'Inter', sans-serif;">Add</button></div>
+                            </div>
+                            <div style="background: white; border: 1.5px solid #1A1A2E; border-radius: 5px; overflow: hidden;">
+                                <div style="height: 50px; background: #D1D5DB;"></div>
+                                <div style="padding: 8px; border-top: 1.5px solid #1A1A2E; font-size: 0.6875rem; font-weight: 600; min-height: 28px;"></div>
+                                <div style="padding: 6px; text-align: center; min-height: 32px; display: flex; justify-content: center; align-items: center;"><button style="border: 1.5px solid #1A1A2E; background: white; padding: 4px 14px; border-radius: 3px; font-size: 0.625rem; font-weight: 600; font-family: 'Inter', sans-serif;">Add</button></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right: Product card vs detail -->
+                    <div class="visual-container">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                            <div>
+                                <div style="font-size: 0.75rem; font-weight: 600; margin-bottom: 12px; color: #4B5563;">Product card</div>
+                                <div style="background: white; border: 1.5px solid #1A1A2E; border-radius: 5px; overflow: hidden;">
+                                    <div style="height: 60px; background: #D1D5DB;"></div>
+                                    <div style="padding: 8px; border-top: 1.5px solid #1A1A2E; font-size: 0.6875rem; font-weight: 600; min-height: 28px;"></div>
+                                    <div style="background: #1A1A2E; color: white; padding: 6px; text-align: center; font-size: 0.5625rem; min-height: 32px; display: flex; flex-direction: column; justify-content: center;"><div style="font-weight: 500;">1 in your box</div><div style="opacity: 0.7;">(2 servings)</div></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div style="font-size: 0.75rem; font-weight: 600; margin-bottom: 12px; color: #4B5563;">Product detail</div>
+                                <div style="background: white; border: 1.5px solid #1A1A2E; border-radius: 5px; overflow: hidden;">
+                                    <div style="height: 80px; background: #D1D5DB;"></div>
+                                    <div style="padding: 12px; border-top: 1.5px solid #1A1A2E; font-size: 0.6875rem; font-weight: 600; min-height: 36px; display: flex; align-items: center;">2.1 ★ (1.2k)</div>
+                                    <div style="padding: 12px; min-height: 150px;"></div>
+                                    <div style="background: #1A1A2E; color: white; padding: 6px; text-align: center; font-size: 0.5625rem; min-height: 32px; display: flex; flex-direction: column; justify-content: center; border-top: 1.5px solid #1A1A2E;"><div style="font-weight: 500;">1 in your box</div><div style="opacity: 0.7;">(2 servings)</div></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pros/Cons -->
+                <div class="pros-cons">
+                    <div>
+                        <div class="pros-cons-title">Pros</div>
+                        <ul>
+                            <li>Reduce negative sentiment* when users review pre-selected meals and start browsing Menu</li>
+                            <li>Ensure consistency of not showing rating in all cards</li>
+                            <li>Ratings become secondary information for interested users</li>
+                            <li>Rely on labels with rating indicator (your top rated, popular) to guide meal choice decision without adding more info</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <div class="pros-cons-title" style="color: #DC2626;">Cons</div>
+                        <ul>
+                            <li>Reduces visibility of ratings as one decision factor</li>
+                        </ul>
+                        <div class="note" style="font-style: italic;">*Users can still see the rating in detail page, so <span style="text-decoration: underline;">without integrating rating to recommendation logic</span>, the negative sentiment will still be there when users visit detail page</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Solution 3 -->
+            <div class="card">
+                <div class="section-number">Solution 3</div>
+                <h3 class="card-title">Exclude low-rating (below 3) from pre-selected meals and Menu top position</h3>
+
+                <div style="display: grid; grid-template-columns: 1.5fr 1fr; gap: 32px; margin-bottom: 32px;">
+                    <!-- Left: Cards view -->
+                    <div class="visual-container">
+                        <h4 class="visual-section-title">Selected for you</h4>
+                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 32px;">
+                            <div style="background: white; border: 1.5px solid #1A1A2E; border-radius: 5px; overflow: hidden;">
+                                <div style="height: 50px; background: #D1D5DB;"></div>
+                                <div style="padding: 8px; border-top: 1.5px solid #1A1A2E; font-size: 0.6875rem; font-weight: 600; min-height: 28px; display: flex; align-items: center;">4.6★ (1.2k)</div>
+                                <div style="background: #1A1A2E; color: white; padding: 6px; text-align: center; font-size: 0.5625rem; min-height: 32px; display: flex; flex-direction: column; justify-content: center;"><div style="font-weight: 500;">1 in your box</div><div style="opacity: 0.7;">(2 servings)</div></div>
+                            </div>
+                            <div style="background: white; border: 1.5px solid #1A1A2E; border-radius: 5px; overflow: hidden;">
+                                <div style="position: relative; height: 50px; background: #D1D5DB;">
+                                    <div style="position: absolute; bottom: 4px; left: 4px; background: #6B7280; color: white; padding: 2px 5px; border-radius: 3px; font-size: 0.5rem; font-weight: 600;">Popular</div>
+                                </div>
+                                <div style="padding: 8px; border-top: 1.5px solid #1A1A2E; font-size: 0.6875rem; font-weight: 600; min-height: 28px; display: flex; align-items: center;">4.8★ (1.2k)</div>
+                                <div style="background: #1A1A2E; color: white; padding: 6px; text-align: center; font-size: 0.5625rem; min-height: 32px; display: flex; flex-direction: column; justify-content: center;"><div style="font-weight: 500;">1 in your box</div><div style="opacity: 0.7;">(2 servings)</div></div>
+                            </div>
+                            <div style="background: white; border: 1.5px solid #1A1A2E; border-radius: 5px; overflow: hidden;">
+                                <div style="height: 50px; background: #D1D5DB;"></div>
+                                <div style="padding: 8px; border-top: 1.5px solid #1A1A2E; font-size: 0.6875rem; font-weight: 600; min-height: 28px; display: flex; align-items: center;">4.1★ (1.2k)</div>
+                                <div style="background: #1A1A2E; color: white; padding: 6px; text-align: center; font-size: 0.5625rem; min-height: 32px; display: flex; flex-direction: column; justify-content: center;"><div style="font-weight: 500;">1 in your box</div><div style="opacity: 0.7;">(2 servings)</div></div>
+                            </div>
+                        </div>
+
+                        <h4 class="visual-section-title">This week's menu</h4>
+                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;">
+                            <div style="background: white; border: 1.5px solid #1A1A2E; border-radius: 5px; overflow: hidden;">
+                                <div style="position: relative; height: 50px; background: #D1D5DB;">
+                                    <div style="position: absolute; bottom: 4px; left: 4px; background: #6B7280; color: white; padding: 2px 5px; border-radius: 3px; font-size: 0.5rem; font-weight: 600;">Your top rated</div>
+                                </div>
+                                <div style="padding: 8px; border-top: 1.5px solid #1A1A2E; font-size: 0.6875rem; font-weight: 600; min-height: 28px; display: flex; align-items: center;">3.8★ (1.2k)</div>
+                                <div style="padding: 6px; text-align: center; min-height: 32px; display: flex; justify-content: center; align-items: center;"><button style="border: 1.5px solid #1A1A2E; background: white; padding: 4px 14px; border-radius: 3px; font-size: 0.625rem; font-weight: 600; font-family: 'Inter', sans-serif;">Add</button></div>
+                            </div>
+                            <div style="background: white; border: 1.5px solid #1A1A2E; border-radius: 5px; overflow: hidden;">
+                                <div style="height: 50px; background: #D1D5DB;"></div>
+                                <div style="padding: 8px; border-top: 1.5px solid #1A1A2E; font-size: 0.6875rem; font-weight: 600; min-height: 28px; display: flex; align-items: center;">4.0★ (1.2k)</div>
+                                <div style="padding: 6px; text-align: center; min-height: 32px; display: flex; justify-content: center; align-items: center;"><button style="border: 1.5px solid #1A1A2E; background: white; padding: 4px 14px; border-radius: 3px; font-size: 0.625rem; font-weight: 600; font-family: 'Inter', sans-serif;">Add</button></div>
+                            </div>
+                            <div style="background: white; border: 1.5px solid #1A1A2E; border-radius: 5px; overflow: hidden;">
+                                <div style="position: relative; height: 50px; background: #D1D5DB;">
+                                    <div style="position: absolute; bottom: 4px; left: 4px; background: #6B7280; color: white; padding: 2px 5px; border-radius: 3px; font-size: 0.5rem; font-weight: 600;">Popular</div>
+                                </div>
+                                <div style="padding: 8px; border-top: 1.5px solid #1A1A2E; font-size: 0.6875rem; font-weight: 600; min-height: 28px; display: flex; align-items: center;">5.0★ (1.2k)</div>
+                                <div style="padding: 6px; text-align: center; min-height: 32px; display: flex; justify-content: center; align-items: center;"><button style="border: 1.5px solid #1A1A2E; background: white; padding: 4px 14px; border-radius: 3px; font-size: 0.625rem; font-weight: 600; font-family: 'Inter', sans-serif;">Add</button></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right: Product card vs detail -->
+                    <div class="visual-container">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                            <div>
+                                <div style="font-size: 0.75rem; font-weight: 600; margin-bottom: 12px; color: #4B5563;">Product card</div>
+                                <div style="background: white; border: 1.5px solid #1A1A2E; border-radius: 5px; overflow: hidden;">
+                                    <div style="height: 60px; background: #D1D5DB;"></div>
+                                    <div style="padding: 8px; border-top: 1.5px solid #1A1A2E; font-size: 0.6875rem; font-weight: 600; min-height: 28px; display: flex; align-items: center;">4.6★ (1.2k)</div>
+                                    <div style="background: #1A1A2E; color: white; padding: 6px; text-align: center; font-size: 0.5625rem; min-height: 32px; display: flex; flex-direction: column; justify-content: center;"><div style="font-weight: 500;">1 in your box</div><div style="opacity: 0.7;">(2 servings)</div></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div style="font-size: 0.75rem; font-weight: 600; margin-bottom: 12px; color: #4B5563;">Product detail</div>
+                                <div style="background: white; border: 1.5px solid #1A1A2E; border-radius: 5px; overflow: hidden;">
+                                    <div style="height: 80px; background: #D1D5DB;"></div>
+                                    <div style="padding: 12px; border-top: 1.5px solid #1A1A2E; font-size: 0.6875rem; font-weight: 600; min-height: 36px; display: flex; align-items: center;">4.6 ★ (1.2k)</div>
+                                    <div style="padding: 12px; min-height: 150px;"></div>
+                                    <div style="background: #1A1A2E; color: white; padding: 6px; text-align: center; font-size: 0.5625rem; min-height: 32px; display: flex; flex-direction: column; justify-content: center; border-top: 1.5px solid #1A1A2E;"><div style="font-weight: 500;">1 in your box</div><div style="opacity: 0.7;">(2 servings)</div></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pros/Cons -->
+                <div class="pros-cons">
+                    <div>
+                        <div class="pros-cons-title">Pros</div>
+                        <ul>
+                            <li>Consistency and transparency for showing community rating</li>
+                            <li>Build trust with users that we recommend meals that are highly rated</li>
+                            <li>Rating as a visible factor for selecting meals</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <div class="pros-cons-title" style="color: #DC2626;">Cons</div>
+                        <ul>
+                            <li>Changes current pre-selection logic which may impact revenue if cost efficiency of pre-selected meals is a factor</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- Edge Case 3 -->
+            <div style="margin-top: 120px;">
+                <h1 class="section-title">Edge Case 3: Conflicting Personal vs Community Rating</h1>
+                <p class="section-subtitle">When personal ratings differ significantly from community ratings, users may experience confusion about which rating to trust.</p>
+
+                <!-- Issue Section 3 -->
+                <div style="margin-bottom: 80px; margin-top: 48px;">
+                    <div class="card">
+                        <div class="section-number">Issue</div>
+                        <h3 class="card-title">Issue when personal and community ratings conflict</h3>
+
+                        <div style="display: grid; grid-template-columns: 0.8fr 1fr; gap: 32px;">
+                            <!-- Left: Visual -->
+                            <div class="visual-container">
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                                    <div>
+                                        <div style="font-size: 0.75rem; font-weight: 600; margin-bottom: 12px; color: #4B5563;">Product card</div>
+                                        <div style="background: white; border: 1.5px solid #1A1A2E; border-radius: 6px; overflow: hidden;">
+                                            <div style="position: relative; height: 100px; background: #D1D5DB;">
+                                                <div style="position: absolute; bottom: 6px; left: 6px; background: #6B7280; color: white; padding: 3px 8px; border-radius: 3px; font-size: 0.625rem; font-weight: 600;">5★ Your top rated</div>
+                                            </div>
+                                            <div style="padding: 12px; border-top: 1.5px solid #1A1A2E;">
+                                                <div style="font-weight: 600; font-size: 0.8125rem; color: #1A1A2E;">2.1 ★ (1.2k)</div>
+                                            </div>
+                                            <div style="background: #1A1A2E; color: white; padding: 8px; text-align: center; font-size: 0.625rem; border-top: 1.5px solid #1A1A2E;">
+                                                <div style="font-weight: 500;">1 in your box</div>
+                                                <div style="opacity: 0.7;">(2 servings)</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div style="font-size: 0.75rem; font-weight: 600; margin-bottom: 12px; color: #4B5563;">Product detail</div>
+                                        <div style="background: white; border: 1.5px solid #1A1A2E; border-radius: 6px; overflow: hidden;">
+                                            <div style="position: relative; height: 140px; background: #D1D5DB;">
+                                                <div style="position: absolute; bottom: 6px; left: 6px; background: #6B7280; color: white; padding: 3px 8px; border-radius: 3px; font-size: 0.625rem; font-weight: 600;">5★ Your top rated</div>
+                                            </div>
+                                            <div style="padding: 12px; border-top: 1.5px solid #1A1A2E;">
+                                                <div style="font-weight: 600; font-size: 0.8125rem; color: #1A1A2E; margin-bottom: 8px;">2.1 ★ (1.2k)</div>
+                                                <div style="height: 100px;"></div>
+                                            </div>
+                                            <div style="background: #1A1A2E; color: white; padding: 8px; text-align: center; font-size: 0.625rem; border-top: 1.5px solid #1A1A2E;">
+                                                <div style="font-weight: 500;">1 in your box</div>
+                                                <div style="opacity: 0.7;">(2 servings)</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Right: Content -->
+                            <div style="display: flex; align-items: center;">
+                                <div style="background: white; border: 1px solid #E5E7EB; padding: 20px; border-radius: 6px;">
+                                    <div style="font-weight: 700; font-size: 0.75rem; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; color: #6B7280;">RISK</div>
+                                    <div style="font-size: 0.9375rem; margin-bottom: 8px; color: #1A1A2E; line-height: 1.6;">When personal ratings differ significantly from community ratings, users may experience confusion about which rating to trust.</div>
+                                    <div style="color: #DC2626; font-style: italic; font-size: 0.9375rem; line-height: 1.6;">"This is marked as my top-rated dish, but the community rating is really low. Should I trust it?"</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Solution 1 - 3 -->
+                <div class="card">
+                    <div class="section-number">Solution 1</div>
+                    <h3 class="card-title">Keep as it is and monitor impact</h3>
+
+                    <div style="display: grid; grid-template-columns: 0.8fr 1fr; gap: 32px; margin-bottom: 32px;">
+                        <!-- Left: Visual -->
+                        <div class="visual-container">
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                                <div>
+                                    <div style="font-size: 0.75rem; font-weight: 600; margin-bottom: 12px; color: #4B5563;">Product card</div>
+                                    <div style="background: white; border: 1.5px solid #1A1A2E; border-radius: 6px; overflow: hidden;">
+                                        <div style="position: relative; height: 100px; background: #D1D5DB;">
+                                            <div style="position: absolute; bottom: 6px; left: 6px; background: #6B7280; color: white; padding: 3px 8px; border-radius: 3px; font-size: 0.625rem; font-weight: 600;">5★ Your top rated</div>
+                                        </div>
+                                        <div style="padding: 12px; border-top: 1.5px solid #1A1A2E;">
+                                            <div style="font-weight: 600; font-size: 0.8125rem; color: #1A1A2E;">2.1 ★ (1.2k)</div>
+                                        </div>
+                                        <div style="background: #1A1A2E; color: white; padding: 8px; text-align: center; font-size: 0.625rem; border-top: 1.5px solid #1A1A2E;">
+                                            <div style="font-weight: 500;">1 in your box</div>
+                                            <div style="opacity: 0.7;">(2 servings)</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div style="font-size: 0.75rem; font-weight: 600; margin-bottom: 12px; color: #4B5563;">Product detail</div>
+                                    <div style="background: white; border: 1.5px solid #1A1A2E; border-radius: 6px; overflow: hidden;">
+                                        <div style="position: relative; height: 140px; background: #D1D5DB;">
+                                            <div style="position: absolute; bottom: 6px; left: 6px; background: #6B7280; color: white; padding: 3px 8px; border-radius: 3px; font-size: 0.625rem; font-weight: 600;">5★ Your top rated</div>
+                                        </div>
+                                        <div style="padding: 12px; border-top: 1.5px solid #1A1A2E;">
+                                            <div style="font-weight: 600; font-size: 0.8125rem; color: #1A1A2E; margin-bottom: 8px;">2.1 ★ (1.2k)</div>
+                                            <div style="height: 100px;"></div>
+                                        </div>
+                                        <div style="background: #1A1A2E; color: white; padding: 8px; text-align: center; font-size: 0.625rem; border-top: 1.5px solid #1A1A2E;">
+                                            <div style="font-weight: 500;">1 in your box</div>
+                                            <div style="opacity: 0.7;">(2 servings)</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Right: Content -->
+                        <div style="display: flex; align-items: center;">
+                            <div style="background: #F9FAFB; border: 1px solid #E5E7EB; padding: 20px; border-radius: 8px;">
+                                <div style="font-size: 0.875rem; color: #1A1A2E; line-height: 1.6; font-style: italic;">Both personal rating badge and community rating are visible on product cards and detail pages</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pros-cons">
+                        <div>
+                            <div class="pros-cons-title">Pros</div>
+                            <ul>
+                                <li>Keep the personal rating label that is proven to work well</li>
+                                <li>Keep prioritisation to personal rating which matters more for HF products</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <div class="pros-cons-title" style="color: #DC2626;">Cons</div>
+                            <ul>
+                                <li>Potential confusion if personal rating conflicts strongly with community</li>
+                                <li>Cognitive load of having 2 rating info in product card</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Solution 2 - 3 -->
+                <div class="card">
+                    <div class="section-number">Solution 2</div>
+                    <h3 class="card-title">Display only personal rating in product card</h3>
+                    <p style="color: var(--text-muted); font-size: 0.9375rem; margin-bottom: 32px; font-style: italic;">(follow solution 2 of edge case 2 - not showing community rating on Menu card)</p>
+
+                    <div style="display: grid; grid-template-columns: 0.8fr 1fr; gap: 32px; margin-bottom: 32px;">
+                        <!-- Left: Visual -->
+                        <div class="visual-container">
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                                <div>
+                                    <div style="font-size: 0.75rem; font-weight: 600; margin-bottom: 12px; color: #4B5563;">Product card</div>
+                                    <div style="background: white; border: 1.5px solid #1A1A2E; border-radius: 6px; overflow: hidden;">
+                                        <div style="position: relative; height: 100px; background: #D1D5DB;">
+                                            <div style="position: absolute; bottom: 6px; left: 6px; background: #6B7280; color: white; padding: 3px 8px; border-radius: 3px; font-size: 0.625rem; font-weight: 600;">5★ Your top rated</div>
+                                        </div>
+                                        <div style="padding: 12px; border-top: 1.5px solid #1A1A2E; min-height: 40px;">
+                                        </div>
+                                        <div style="background: #1A1A2E; color: white; padding: 8px; text-align: center; font-size: 0.625rem; border-top: 1.5px solid #1A1A2E;">
+                                            <div style="font-weight: 500;">1 in your box</div>
+                                            <div style="opacity: 0.7;">(2 servings)</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div style="font-size: 0.75rem; font-weight: 600; margin-bottom: 12px; color: #4B5563;">Product detail</div>
+                                    <div style="background: white; border: 1.5px solid #1A1A2E; border-radius: 6px; overflow: hidden;">
+                                        <div style="position: relative; height: 140px; background: #D1D5DB;">
+                                            <div style="position: absolute; bottom: 6px; left: 6px; background: #6B7280; color: white; padding: 3px 8px; border-radius: 3px; font-size: 0.625rem; font-weight: 600;">5★ Your top rated</div>
+                                        </div>
+                                        <div style="padding: 12px; border-top: 1.5px solid #1A1A2E;">
+                                            <div style="font-weight: 600; font-size: 0.8125rem; color: #1A1A2E; margin-bottom: 8px;">2.1 ★ (1.2k)</div>
+                                            <div style="height: 100px;"></div>
+                                        </div>
+                                        <div style="background: #1A1A2E; color: white; padding: 8px; text-align: center; font-size: 0.625rem; border-top: 1.5px solid #1A1A2E;">
+                                            <div style="font-weight: 500;">1 in your box</div>
+                                            <div style="opacity: 0.7;">(2 servings)</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Right: Content -->
+                        <div style="display: flex; align-items: center;">
+                            <div style="background: #F9FAFB; border: 1px solid #E5E7EB; padding: 20px; border-radius: 8px;">
+                                <div style="font-size: 0.875rem; color: #1A1A2E; line-height: 1.6; font-style: italic;">Only personal rating badge visible on product card. Community rating shown in detail page.</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pros-cons">
+                        <div>
+                            <div class="pros-cons-title">Pros</div>
+                            <ul>
+                                <li>Reduces cognitive load with one clear rating per card</li>
+                                <li>Avoids confusion when personal and community ratings conflict</li>
+                                <li>Users see more detail of both rating when land on product detail where they can be more focused</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <div class="pros-cons-title" style="color: #DC2626;">Cons</div>
+                            <ul>
+                                <li>Reduce visibility of community rating</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Solution 3 - 3 -->
+                <div class="card">
+                    <div class="section-number">Solution 3</div>
+                    <h3 class="card-title">Display only community rating in product card</h3>
+
+                    <div style="display: grid; grid-template-columns: 0.8fr 1fr; gap: 32px; margin-bottom: 32px;">
+                        <!-- Left: Visual -->
+                        <div class="visual-container">
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                                <div>
+                                    <div style="font-size: 0.75rem; font-weight: 600; margin-bottom: 12px; color: #4B5563;">Product card</div>
+                                    <div style="background: white; border: 1.5px solid #1A1A2E; border-radius: 6px; overflow: hidden;">
+                                        <div style="height: 100px; background: #D1D5DB;"></div>
+                                        <div style="padding: 12px; border-top: 1.5px solid #1A1A2E;">
+                                            <div style="font-weight: 600; font-size: 0.8125rem; color: #1A1A2E;">2.1 ★ (1.2k)</div>
+                                        </div>
+                                        <div style="background: #1A1A2E; color: white; padding: 8px; text-align: center; font-size: 0.625rem; border-top: 1.5px solid #1A1A2E;">
+                                            <div style="font-weight: 500;">1 in your box</div>
+                                            <div style="opacity: 0.7;">(2 servings)</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div style="font-size: 0.75rem; font-weight: 600; margin-bottom: 12px; color: #4B5563;">Product detail</div>
+                                    <div style="background: white; border: 1.5px solid #1A1A2E; border-radius: 6px; overflow: hidden;">
+                                        <div style="height: 140px; background: #D1D5DB;"></div>
+                                        <div style="padding: 12px; border-top: 1.5px solid #1A1A2E;">
+                                            <div style="font-weight: 600; font-size: 0.75rem; color: #1A1A2E; margin-bottom: 4px; white-space: nowrap;">2.1 ★ (1.2k) <span style="color: #6B7280;">|</span> Your rating <span style="color: #1A1A2E;">5★</span></div>
+                                            <div style="height: 100px;"></div>
+                                        </div>
+                                        <div style="background: #1A1A2E; color: white; padding: 8px; text-align: center; font-size: 0.625rem; border-top: 1.5px solid #1A1A2E;">
+                                            <div style="font-weight: 500;">1 in your box</div>
+                                            <div style="opacity: 0.7;">(2 servings)</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Right: Content -->
+                        <div style="display: flex; align-items: center;">
+                            <div style="background: #F9FAFB; border: 1px solid #E5E7EB; padding: 20px; border-radius: 8px;">
+                                <div style="font-size: 0.875rem; color: #1A1A2E; line-height: 1.6; font-style: italic;">Only community rating visible on product card. Personal rating shown inline in detail page.</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pros-cons">
+                        <div>
+                            <div class="pros-cons-title">Pros</div>
+                            <ul>
+                                <li>Follows industry standard, community ratings are the norm across e-commerce</li>
+                                <li>Reduces cognitive load with one clear rating per card</li>
+                                <li>Avoids confusion when personal and community ratings conflict</li>
+                                <li>Menu organization (categories/swimlanes) provides personalization without cluttering cards</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <div class="pros-cons-title" style="color: #DC2626;">Cons</div>
+                            <ul>
+                                <li>This approach undermine personal recommendation that HF users care for</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

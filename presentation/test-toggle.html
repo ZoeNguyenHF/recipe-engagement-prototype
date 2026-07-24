@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Toggle Test</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; }
+        .toggle {
+            display: inline-block;
+            width: 50px;
+            height: 25px;
+            background: #ccc;
+            border-radius: 15px;
+            cursor: pointer;
+            position: relative;
+        }
+        .toggle.active { background: #067a46; }
+        .toggle::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: white;
+            border-radius: 50%;
+            top: 2.5px;
+            left: 2.5px;
+            transition: left 0.3s;
+        }
+        .toggle.active::after { left: 27.5px; }
+
+        .test-box {
+            width: 200px;
+            height: 100px;
+            background: #bbf06a;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Feature Toggle Test</h1>
+    <p>Click toggle to hide/show green box:</p>
+    <div class="toggle active" id="testToggle"></div>
+    <div class="test-box" id="testBox"></div>
+
+    <script>
+        const toggle = document.getElementById('testToggle');
+        const box = document.getElementById('testBox');
+
+        toggle.addEventListener('click', () => {
+            toggle.classList.toggle('active');
+            const isActive = toggle.classList.contains('active');
+            box.style.display = isActive ? 'block' : 'none';
+            console.log('Toggle:', isActive);
+        });
+    </script>
+</body>
+</html>
